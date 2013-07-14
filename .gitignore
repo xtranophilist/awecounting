@@ -1,2 +1,3 @@
 *.pyc
 *~
+acubor/settings_secret.py
