@@ -29,6 +29,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+
 class Company(models.Model):
     name = models.CharField(max_length=254)
     location = models.TextField()
