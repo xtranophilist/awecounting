@@ -43,3 +43,9 @@ class User(AbstractBaseUser):
         return self.username
 
     objects = UserManager()
+
+
+class Company(models.Model):
+    name = models.CharField(max_length=254)
+    location = models.TextField()
+    type_of_business = models.CharField(max_length=254)
