@@ -1,0 +1,33 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>{% block title %}{% endblock %}</title>
+    <script src="http://localhost/static/jquery.js"></script>
+    <script src="http://localhost/static/ko-debug.js"></script>
+    <script src="http://localhost/static/base.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://localhost/static/base.css">
+
+    {% block head_end %}{% endblock %}
+</head>
+<body>
+    <header>
+        <div class="right">
+            {% if user.is_authenticated %}
+            Logged in as <a href="/user/{{user.username}}">{{user.username}}</a>
+            | <a href="/user/logout">Logout</a>
+            {% else %}
+            <a href="/user/login">Login</a>
+            {% endif %}
+        </div>
+        <h1><a href="/">Reelphil.com</a></h1>
+        <hr>
+    </header>
+
+    {% block content %}{% endblock %}
+
+    <footer>
+        Copyleft (ↄ) Reelphil - All Rights REVERSED 2013
+    </footer>
+
+</body>
+</html>

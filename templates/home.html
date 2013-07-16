@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block head_end %}
+<script>
+$(document).ready(function () {
+    {% load filters %}
+    activity_data = {{timeline|jsonify}};
+    activity_data.current_user = {{user|user_to_json}};
+    ko.applyBindings(new ActivitiesViewModel(activity_data), document.getElementById('activity_data'));
+
+});
+</script>
+{% endblock %}
+
+
+{% block content %}
+
+{% load filters %}
+
+<div id='activity_data'>
+
+    <div data-bind="foreach: activities">
+        <div class="activity">
+            <a data-bind="text: user.username, attr: {'href':  '/user/' + user.username}"></a>
+            <span data-bind="text: act_text"></span>
+            <a data-bind="text: movie.title, attr: {'href':  '/movie/' + movie.slug, title: movie.full_title }"></a>
+            <span data-bind="text: timestamp"></span>
+            <a data-bind="click: $root.deleteActivity, visible: $root.current_user.username==user.username" href="javascript:void()">Del</a>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
