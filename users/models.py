@@ -44,7 +44,7 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     identifier = models.CharField(max_length=245, null=True)
-    company = models.ForeignKey(Company)
+    company = models.ForeignKey(Company, null=True)
 
     # USERNAME_FIELD = 'username'
     USERNAME_FIELD = 'email'
