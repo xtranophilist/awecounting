@@ -1,3 +1,8 @@
 *.pyc
 *~
+
+gunicorn.log
+gunicorn-error.log
+gunicorn-access.log
+
 acubor/settings_secret.py
