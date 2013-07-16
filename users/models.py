@@ -29,6 +29,14 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
+class Company(models.Model):
+    name = models.CharField(max_length=254)
+    location = models.TextField()
+    type_of_business = models.CharField(max_length=254)
+
+    class Meta:
+        db_table = u'company'
+
 
 class User(AbstractBaseUser):
     full_name = models.CharField(max_length=245)
@@ -36,6 +44,7 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     identifier = models.CharField(max_length=245, null=True)
+    company = models.ForeignKey(Company)
 
     # USERNAME_FIELD = 'username'
     USERNAME_FIELD = 'email'
@@ -48,12 +57,3 @@ class User(AbstractBaseUser):
 
     class Meta:
         db_table = u'user'
-
-
-class Company(models.Model):
-    name = models.CharField(max_length=254)
-    location = models.TextField()
-    type_of_business = models.CharField(max_length=254)
-
-    class Meta:
-        db_table = u'company'
