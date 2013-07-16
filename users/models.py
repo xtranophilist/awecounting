@@ -44,8 +44,14 @@ class User(AbstractBaseUser):
 
     objects = UserManager()
 
+    class Meta:
+        db_table = u'user'
+
 
 class Company(models.Model):
     name = models.CharField(max_length=254)
     location = models.TextField()
     type_of_business = models.CharField(max_length=254)
+
+    class Meta:
+        db_table = u'company'
