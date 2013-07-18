@@ -159,3 +159,7 @@ except ImportError:
 AUTH_USER_MODEL = 'users.User'
 
 ACCOUNT_ACTIVATION_DAYS = 7
+# AUTHENTICATION_BACKENDS = (
+#         'registration_email.auth.EmailBackend',
+#     )
+LOGIN_REDIRECT_URL = '/'

@@ -40,6 +40,7 @@ class Company(models.Model):
 
 
 class User(AbstractBaseUser):
+    username = models.CharField(max_length=50, unique=True)
     full_name = models.CharField(max_length=245)
     email = models.EmailField(verbose_name='email address', max_length=254, unique=True, db_index=True)
     is_active = models.BooleanField(default=True)
@@ -48,7 +49,7 @@ class User(AbstractBaseUser):
     company = models.ForeignKey(Company, null=True)
 
     # USERNAME_FIELD = 'username'
-    USERNAME_FIELD = 'email'
+    USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['full_name']
 
     def __unicode__(self):
