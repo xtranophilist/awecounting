@@ -9,6 +9,7 @@ urlpatterns = patterns('',
     # url(r'^$', 'acubor.views.home', name='home'),
     # url(r'^acubor/', include('acubor.foo.urls')),
     (r'^user/', include('users.urls')),
+    (r'^voucher/', include('voucher.urls')),
     # (r'^user/', include('registration.backends.default.urls')),
 
     # Uncomment the admin/doc line below to enable admin documentation:

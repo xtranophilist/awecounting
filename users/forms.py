@@ -1,6 +1,6 @@
 from django import forms
 from registration.forms import RegistrationForm
-from registration.models import RegistrationProfile
+# from registration.models import RegistrationProfile
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
 # from registration_email.forms import EmailRegistrationForm
