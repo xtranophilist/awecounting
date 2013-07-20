@@ -1,10 +1,10 @@
 from django.conf.urls import patterns, include, url
 from registration.backends.default.views import RegistrationView
 from users.forms import UserRegistrationForm
-# from users.views import web_login
+from users.views import web_login
 
 urlpatterns = patterns('',
-    # url(r'^login/$', web_login, {'template_name': 'registration/login.html'}, name='auth_login'),
+    url(r'^login/$', web_login, {'template_name': 'registration/login.html'}, name='auth_login'),
     url(r'^register/$', RegistrationView.as_view(form_class=UserRegistrationForm, template_name='registration/registration_form.html')),
     # # url(r'^register/$', register, {'backend': 'registration.backends.default.DefaultBackend', 'form_class': UserRegistrationForm}, name='registration_register'),
     # url(r'^$', 'users.views.profile'),
