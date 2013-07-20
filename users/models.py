@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, email, full_name, password=None, identifier=None):
+    def create_user(self, username, email, full_name, password=None, identifier=None):
         if not email:
             raise ValueError('Users must have an email address')
         user = self.model(
@@ -16,11 +16,12 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, email, full_name, password):
+    def create_superuser(self, username, email, full_name, password):
         """
         Creates and saves a superuser with the given email, full name and password.
         """
         user = self.create_user(
+            username,
             email,
             password=password,
             full_name=full_name

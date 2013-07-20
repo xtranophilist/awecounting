@@ -12,6 +12,4 @@ urlpatterns = patterns('',
     # url(r'^auth-error/$', 'users.views.auth_error'),
     (r'^', include('registration.backends.default.urls')),
     # url(r'^(?P<username>[a-zA-Z0-9_.-]+)/$', 'users.views.profile', name='user-detail'),
-
- # url(r'^register/$', users_views.register_user, name='register'),
  )
