@@ -2,4 +2,4 @@ django
 gunicorn
 psycopg2
 south
-
+django-registration
