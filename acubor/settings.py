@@ -87,6 +87,12 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.contrib.auth.context_processors.auth',
+    'django.core.context_processors.static'
+    )
+
+
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -161,7 +167,4 @@ except ImportError:
 AUTH_USER_MODEL = 'users.User'
 
 ACCOUNT_ACTIVATION_DAYS = 7
-# AUTHENTICATION_BACKENDS = (
-#         'registration_email.auth.EmailBackend',
-#     )
 LOGIN_REDIRECT_URL = '/'

@@ -4,6 +4,11 @@
 {% block title %}Login{% endblock %}
 {% block content %}
 
-
+{% if user.is_authenticated %}
+            Logged in as <a href="/user/{{user.username}}">{{user.username}}</a>
+            | <a href="/user/logout">Logout</a>
+            {% else %}
+            <a href="/user/login">Login</a>
+            {% endif %}
 
 {% endblock %}
