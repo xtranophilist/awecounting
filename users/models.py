@@ -37,6 +37,7 @@ class Company(models.Model):
 
     class Meta:
         db_table = u'company'
+        verbose_name_plural = u'Companies'
 
 
 class User(AbstractBaseUser):

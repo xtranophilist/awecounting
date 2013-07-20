@@ -4,7 +4,7 @@ from django.contrib.auth.views import login
 
 
 def index(request):
-    if request.user.is_authenticated:
+    if request.user.is_authenticated():
         return render(request, 'dashboard_index.html')
     return render(request, 'site_index.html', {"registration_form": UserRegistrationForm})
 
