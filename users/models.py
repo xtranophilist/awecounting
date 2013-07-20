@@ -56,6 +56,10 @@ class User(AbstractBaseUser):
     def __unicode__(self):
         return self.username
 
+    def get_short_name(self):
+        # The user is identified by username
+        return self.username
+
     def has_module_perms(self, app_label):
         "Does the user have permissions to view the app `app_label`?"
         # Simplest possible answer: Yes, always
