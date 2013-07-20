@@ -9,67 +9,79 @@
   <link rel="stylesheet" href="http://localhost/acubor_static/font-awesome/css/font-awesome.min.css" />
 
   <!--[if IE 7]>
-    <link rel="stylesheet" href="http://localhost/acubor_static/font-awesome/css/font-awesome-ie7.min.css" />
-    <![endif]-->
+  <link rel="stylesheet" href="http://localhost/acubor_static/font-awesome/css/font-awesome-ie7.min.css" />
+  <![endif]-->
 
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
 
-    <link href="http://localhost/acubor_static/css/w8-responsive.min.css" rel="stylesheet" />
-    <link href="http://localhost/acubor_static/css/w8.min.css" rel="stylesheet" />
-    <link href="http://localhost/acubor_static/css/w8-skins.min.css" rel="stylesheet" />
+  <link href="http://localhost/acubor_static/css/w8-responsive.min.css" rel="stylesheet" />
+  <link href="http://localhost/acubor_static/css/w8.min.css" rel="stylesheet" />
+  <link href="http://localhost/acubor_static/css/w8-skins.min.css" rel="stylesheet" />
 
-    <link href="http://localhost/acubor_static/css/styles.css" rel="stylesheet" />
+  <link href="http://localhost/acubor_static/css/styles.css" rel="stylesheet" />
 
-    <link href="http://localhost/acubor_static/css/base.css" rel="stylesheet" />
+  <link href="http://localhost/acubor_static/css/base.css" rel="stylesheet" />
 
+  {% block head_end %}{% endblock %}
 
-    {% block head_end %}{% endblock %}
-  </head>
-  <body>
+</head>
+<body>
 
-    <div class="navbar navbar-inverse navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="brand" href="#">Acubor</a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-              <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">Payment And Subscriptions</a></li>
-              <li><a href="#contact">Contact Us</a></li>
-              <li><a href="#contact">Get A Demo</a></li>
-            </ul>
-            {% if user.is_authenticated %}
-            <ul class="pull-right">
-              <li>Logged in as <a href="/user/{{user.email}}">{{user.email}}</a></li>
-              <li><a href="/user/logout">Logout</a></li>
-            </ul>
-            {% else %}
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="brand" href="#">Acubor</a>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">Payment And Subscriptions</a></li>
+            <li><a href="#contact">Contact Us</a></li>
+            <li><a href="#contact">Get A Demo</a></li>
+          </ul>
+          {% if user.is_authenticated %}
+          <ul class="pull-right">
+            <li>Logged in as <a href="/user/{{user.email}}">{{user.email}}</a></li>
+            <li><a href="/user/logout">Logout</a></li>
+          </ul>
+          {% else %}
+            <form method="post" action="{% url 'django.contrib.auth.views.login' %}" class="navbar-form header-login pull-right">
+    {% csrf_token %}
+    {% if state %}
+    {{ state }}
+    {% endif %}
+    {% if next %}
+    <input type="hidden" name="next" value="{{ next }}" />
+    {% endif %}
+    <input type="text" class="span2" name="username" value="{{ username }}" required placeholder="Email" />
+    <input type="password" class="span2" name="password" value="" required placeholder="Password" />
 
-            {% endif %}
-          </div><!--/.nav-collapse -->
-        </div>
+    <input type="submit" value="Log In" class="btn" />
+    <br/>
+</form>
+          {% endif %}
+        </div><!--/.nav-collapse -->
       </div>
     </div>
+  </div>
 
-    <div class="outer-container">
-      <div class="container">
+  <div class="outer-container">
+    <div class="container">
       {% block content %}{% endblock %}
     </div>
+  </div>
+
+  <footer class="footer">
+    <div class="container">
+      <p>Designed and built with all the love in the world</p>
+      <p>&copy; Copyrights  All RIghts Reserved Acubor, 2013.</p>
+      <p><a href="http://glyphicons.com">Glyphicons Free</a> licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
     </div>
+  </footer>
 
-    <footer class="footer">
-      <div class="container">
-        <p>Designed and built with all the love in the world</p>
-        <p>&copy; Copyrights  All RIghts Reserved Acubor, 2013.</p>
-        <p><a href="http://glyphicons.com">Glyphicons Free</a> licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
-      </div>
-    </footer>
-
-
-  </body>
-  </html>
+</body>
+</html>
