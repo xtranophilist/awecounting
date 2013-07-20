@@ -45,9 +45,9 @@ class User(AbstractBaseUser):
     email = models.EmailField(verbose_name='email address', max_length=254, unique=True, db_index=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
     identifier = models.CharField(max_length=245, null=True)
     company = models.ForeignKey(Company, null=True)
-
 
     # USERNAME_FIELD = 'username'
     USERNAME_FIELD = 'username'
@@ -55,6 +55,16 @@ class User(AbstractBaseUser):
 
     def __unicode__(self):
         return self.username
+
+    def has_module_perms(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        # Simplest possible answer: Yes, always
+        return True
+
+    def has_perm(self, app_label):
+        "Does the user have permissions to view the app `app_label`?"
+        # Simplest possible answer: Yes, always
+        return True
 
     objects = UserManager()
 
