@@ -44,9 +44,10 @@ class User(AbstractBaseUser):
     full_name = models.CharField(max_length=245)
     email = models.EmailField(verbose_name='email address', max_length=254, unique=True, db_index=True)
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
     identifier = models.CharField(max_length=245, null=True)
     company = models.ForeignKey(Company, null=True)
+
 
     # USERNAME_FIELD = 'username'
     USERNAME_FIELD = 'username'
