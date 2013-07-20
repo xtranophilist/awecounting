@@ -10,24 +10,24 @@
 
   <!--[if IE 7]>
     <link rel="stylesheet" href="http://localhost/acubor_static/font-awesome/css/font-awesome-ie7.min.css" />
-  <![endif]-->
+    <![endif]-->
 
-  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
 
-  <link href="http://localhost/acubor_static/css/w8-responsive.min.css" rel="stylesheet" />
-  <link href="http://localhost/acubor_static/css/w8.min.css" rel="stylesheet" />
-  <link href="http://localhost/acubor_static/css/w8-skins.min.css" rel="stylesheet" />
+    <link href="http://localhost/acubor_static/css/w8-responsive.min.css" rel="stylesheet" />
+    <link href="http://localhost/acubor_static/css/w8.min.css" rel="stylesheet" />
+    <link href="http://localhost/acubor_static/css/w8-skins.min.css" rel="stylesheet" />
 
-  <link href="http://localhost/acubor_static/css/styles.css" rel="stylesheet" />
+    <link href="http://localhost/acubor_static/css/styles.css" rel="stylesheet" />
 
-  <link href="http://localhost/acubor_static/css/base.css" rel="stylesheet" />
+    <link href="http://localhost/acubor_static/css/base.css" rel="stylesheet" />
 
 
-  {% block head_end %}{% endblock %}
-</head>
-<body>
+    {% block head_end %}{% endblock %}
+  </head>
+  <body>
 
-  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-inverse navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
           <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -44,88 +44,24 @@
               <li><a href="#contact">Get A Demo</a></li>
             </ul>
             {% if user.is_authenticated %}
-              <ul class="pull-right">
-                <li>Logged in as <a href="/user/{{user.email}}">{{user.email}}</a></li>
-                <li><a href="/user/logout">Logout</a></li>
-              </ul>
+            <ul class="pull-right">
+              <li>Logged in as <a href="/user/{{user.email}}">{{user.email}}</a></li>
+              <li><a href="/user/logout">Logout</a></li>
+            </ul>
             {% else %}
-                {% block content %}{% endblock %}
+
             {% endif %}
           </div><!--/.nav-collapse -->
         </div>
       </div>
     </div>
 
-        <div class="outer-container">
+    <div class="outer-container">
       <div class="container">
-        <div class="row-fluid">
-            <div class="span6">
-              <div class="acubor-splash">
-                <img src="http://localhost/acubor_static/images/masthead-dashboard.png" alt="">
-              </div>
-            </div>
-            <div class="span6">
-              <div class="border-wrap">
-                <h3>Sign Up and Pay when you are ready</h3>
-                <br>
-                <form class="form-horizontal">
-                  <div class="control-group">
-                    <label class="control-label" for="name">Name of the Company</label>
-                    <div class="controls">
-                      <input class="full-width" type="text" id="name" name="name">
-                    </div>
-                  </div>
-                  <div class="control-group">
-                    <label class="control-label" for="location">Location</label>
-                    <div class="controls">
-                      <input class="full-width" type="text" id="location" name="location">
-                    </div>
-                  </div>
-                  <div class="control-group">
-                    <label class="control-label" for="email">Email</label>
-                    <div class="controls">
-                      <input class="full-width" type="email" id="email" name="email">
-                    </div>
-                  </div>
-                  <div class="control-group">
-                    <label class="control-label" for="password">Password</label>
-                    <div class="controls">
-                      <input class="full-width" type="password" id="password" name="password">
-                    </div>
-                  </div>
-                  <div class="control-group">
-                    <div class="controls">
-                      <button type="submit" class="btn">Sign in</button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-        </div>
-      </div>
-    </div>
-    <div class="container">
-      <div class="row-fluid block-boxes">
-        <div class="span4">
-          <div class="well">
-            <h3>Reports</h3>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi, consequatur, reprehenderit, nemo dolores ea voluptas eius unde debitis at fugit tempora molestias expedita impedit repellendus tenetur fugiat mollitia aperiam neque.
-          </div>
-        </div>
-        <div class="span4">
-          <div class="well">
-            <h3>Reports</h3>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi, consequatur, reprehenderit, nemo dolores ea voluptas eius unde debitis at fugit tempora molestias expedita impedit repellendus tenetur fugiat mollitia aperiam neque.
-          </div>
-        </div>
-        <div class="span4">
-          <div class="well">
-            <h3>Reports</h3>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi, consequatur, reprehenderit, nemo dolores ea voluptas eius unde debitis at fugit tempora molestias expedita impedit repellendus tenetur fugiat mollitia aperiam neque.
-          </div>
-        </div>
+      {% block content %}{% endblock %}
     </div>
     </div>
+
     <footer class="footer">
       <div class="container">
         <p>Designed and built with all the love in the world</p>
@@ -135,9 +71,5 @@
     </footer>
 
 
-    <footer>
-        Copyleft (ↄ) Reelphil - All Rights REVERSED 2013
-    </footer>
-
-</body>
-</html>
+  </body>
+  </html>

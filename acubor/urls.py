@@ -1,5 +1,6 @@
-from django.conf.urls import patterns, include
-from django.views.generic import TemplateView
+from django.conf.urls import patterns, url, include
+from users import views
+# from django.views.generic import TemplateView
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
@@ -7,7 +8,8 @@ from django.views.generic import TemplateView
 
 urlpatterns = patterns('',
     # Examples:
-    ('^$', TemplateView.as_view(template_name='site_index.html')),
+    # ('^$', TemplateView.as_view(template_name='site_index.html')),
+    url(r'^$', views.index, name='index'),
     (r'^user/', include('users.urls')),
     (r'^user/', include('users.urls')),
     (r'^voucher/', include('voucher.urls')),
