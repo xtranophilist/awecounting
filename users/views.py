@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from users.forms import UserRegistrationForm
 from django.contrib.auth.views import login
+from django.contrib.auth import logout as auth_logout
 
 
 def index(request):
@@ -14,3 +15,10 @@ def web_login(request, **kwargs):
         return redirect('/', **kwargs)
     else:
         return login(request, **kwargs)
+
+
+def logout(request, next_page=None):
+    auth_logout(request)
+    if next_page:
+        return redirect(next_page)
+    return redirect('/')
