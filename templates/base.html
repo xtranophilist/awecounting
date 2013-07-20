@@ -1,29 +1,142 @@
 <!DOCTYPE HTML>
 <html>
 <head>
-    <title>{% block title %}{% endblock %}</title>
-    <script src="http://localhost/static/jquery.js"></script>
-    <script src="http://localhost/static/ko-debug.js"></script>
-    <script src="http://localhost/static/base.js"></script>
-    <link rel="stylesheet" type="text/css" href="http://localhost/static/base.css">
+  <title>{% block title %}{% endblock %}</title>
 
-    {% block head_end %}{% endblock %}
+  <link rel="stylesheet" type="text/css" href="http://localhost/acubor_static/css/base.css">
+  <link href="http://localhost/acubor_static/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="http://localhost/acubor_static/css/bootstrap-responsive.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="http://localhost/acubor_static/font-awesome/css/font-awesome.min.css" />
+
+  <!--[if IE 7]>
+    <link rel="stylesheet" href="http://localhost/acubor_static/font-awesome/css/font-awesome-ie7.min.css" />
+  <![endif]-->
+
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
+
+  <link href="http://localhost/acubor_static/css/w8-responsive.min.css" rel="stylesheet" />
+  <link href="http://localhost/acubor_static/css/w8.min.css" rel="stylesheet" />
+  <link href="http://localhost/acubor_static/css/w8-skins.min.css" rel="stylesheet" />
+
+  <link href="http://localhost/acubor_static/css/styles.css" rel="stylesheet" />
+
+  <link href="http://localhost/acubor_static/css/base.css" rel="stylesheet" />
+
+  <script src="http://localhost/acubor_static/js/jquery.js"></script>
+  <script src="http://localhost/acubor_static/js/ko-debug.js"></script>
+  <script src="http://localhost/acubor_static/js/base.js"></script>
+
+  {% block head_end %}{% endblock %}
 </head>
 <body>
-    <header>
-        <div class="right">
-            {% if user.is_authenticated %}
-            Logged in as <a href="/user/{{user.email}}">{{user.email}}</a>
-            | <a href="/user/logout">Logout</a>
-            {% else %}
-            <a href="/user/login">Login</a>
-            {% endif %}
-        </div>
-        <h1><a href="/">Acubor.com</a></h1>
-        <hr>
-    </header>
 
-    {% block content %}{% endblock %}
+  <div class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="#">Acubor</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#about">Payment And Subscriptions</a></li>
+              <li><a href="#contact">Contact Us</a></li>
+              <li><a href="#contact">Get A Demo</a></li>
+            </ul>
+            {% if user.is_authenticated %}
+              <ul class="pull-right">
+                <li>Logged in as <a href="/user/{{user.email}}">{{user.email}}</a></li>
+                <li><a href="/user/logout">Logout</a></li>
+              </ul>
+            {% else %}
+                {% block content %}{% endblock %}
+            {% endif %}
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+        <div class="outer-container">
+      <div class="container">
+        <div class="row-fluid">
+            <div class="span6">
+              <div class="acubor-splash">
+                <img src="http://localhost/acubor_static/images/masthead-dashboard.png" alt="">
+              </div>
+            </div>
+            <div class="span6">
+              <div class="border-wrap">
+                <h3>Sign Up and Pay when you are ready</h3>
+                <br>
+                <form class="form-horizontal">
+                  <div class="control-group">
+                    <label class="control-label" for="name">Name of the Company</label>
+                    <div class="controls">
+                      <input class="full-width" type="text" id="name" name="name">
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <label class="control-label" for="location">Location</label>
+                    <div class="controls">
+                      <input class="full-width" type="text" id="location" name="location">
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <label class="control-label" for="email">Email</label>
+                    <div class="controls">
+                      <input class="full-width" type="email" id="email" name="email">
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <label class="control-label" for="password">Password</label>
+                    <div class="controls">
+                      <input class="full-width" type="password" id="password" name="password">
+                    </div>
+                  </div>
+                  <div class="control-group">
+                    <div class="controls">
+                      <button type="submit" class="btn">Sign in</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="row-fluid block-boxes">
+        <div class="span4">
+          <div class="well">
+            <h3>Reports</h3>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi, consequatur, reprehenderit, nemo dolores ea voluptas eius unde debitis at fugit tempora molestias expedita impedit repellendus tenetur fugiat mollitia aperiam neque.
+          </div>
+        </div>
+        <div class="span4">
+          <div class="well">
+            <h3>Reports</h3>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi, consequatur, reprehenderit, nemo dolores ea voluptas eius unde debitis at fugit tempora molestias expedita impedit repellendus tenetur fugiat mollitia aperiam neque.
+          </div>
+        </div>
+        <div class="span4">
+          <div class="well">
+            <h3>Reports</h3>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi, consequatur, reprehenderit, nemo dolores ea voluptas eius unde debitis at fugit tempora molestias expedita impedit repellendus tenetur fugiat mollitia aperiam neque.
+          </div>
+        </div>
+    </div>
+    </div>
+    <footer class="footer">
+      <div class="container">
+        <p>Designed and built with all the love in the world</p>
+        <p>&copy; Copyrights  All RIghts Reserved Acubor, 2013.</p>
+        <p><a href="http://glyphicons.com">Glyphicons Free</a> licensed under <a href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+      </div>
+    </footer>
+
 
     <footer>
         Copyleft (ↄ) Reelphil - All Rights REVERSED 2013
