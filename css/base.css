@@ -65,11 +65,23 @@ margin-bottom: 0;
 .header-login{
 color: #fff;
 }
-#user_registration_new  p{
+#user_registration_new  p,#user_login_new p{
 display: inline-block;
 color: #fff;
 vertical-align: top;
 }
 #user_registration_new textarea{
   height: 20px;
+}
+.errorlist{
+  position: absolute;
+  list-style: none;
+  display: inline;
+  background: rgba(255, 136, 136, 0.66);
+  margin-left: 90px;
+  font-size: 12px;
+  padding: 0px 4px;
+  border-radius: 2px;
+  color: rgb(255, 255, 255);
+  margin-top: 30px;
 }
