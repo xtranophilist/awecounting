@@ -14,6 +14,11 @@ def web_login(request, **kwargs):
     if request.user.is_authenticated():
         return redirect('/', **kwargs)
     else:
+        if request.method == 'POST':
+            if request.POST.has_key('remember_me'):
+                request.session.set_expiry(1209600) # 2 weeks
+            else:
+                request.session.set_expiry(0)
         return login(request, **kwargs)
 
 
