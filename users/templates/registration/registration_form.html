@@ -1,10 +1,28 @@
 {% extends "base.html" %}
 {% block title %}Register for an account{% endblock %}
+
 {% block content %}
 
-<form method='post' action=''>{% csrf_token %}
+<div class="row">
+<div class="span6">
+<h2 class="intro">Register A Free Account</h2>
+<br>
+<form method='post' action='' id="user_registration_new">{% csrf_token %}
     {{ form.as_p }}
-    <input type="submit" value="Register!" />
+    <br />
+    <input type="submit" value="Register" class="btn" />
 </form>
 
+</div>
+<div class="span6">
+  <h2 class="intro">Features</h2>
+  <br>
+  <ul class="register_feat">
+    <li>&#x2713; Multiple User</li>
+    <li>&#x2713; 10 Modules</li>
+    <li>&#x2713; Reporting System</li>
+    <li>&#x2713; RTMS</li>
+  </ul>
+</div>
+</div>
 {% endblock %}
