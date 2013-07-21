@@ -7,7 +7,7 @@
 <div class="span6">
 <h2 class="intro">Register A Free Account</h2>
 <br>
-<form method='post' action='' id="user_registration_new">{% csrf_token %}
+<form method='post' action='{% url 'registration_register' %}' id="user_registration_new">{% csrf_token %}
     {{ form.as_p }}
     <br />
     <input type="submit" value="Register" class="btn" />
