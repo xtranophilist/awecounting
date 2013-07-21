@@ -39,6 +39,8 @@ class Company(models.Model):
     location = models.TextField()
     type_of_business = models.CharField(max_length=254)
 
+    def __unicode__(self):
+        return self.name
 
     class Meta:
         db_table = u'company'
@@ -86,6 +88,12 @@ class User(AbstractBaseUser):
 
 def handle_new_user(sender, user, request, **kwargs):
     user.full_name = request.POST.get('full_name')
+    company = Company()
+    company.name = request.POST.get('name_of_company')
+    company.location = request.POST.get('location')
+    company.type_of_business = request.POST.get('type_of_business')
+    company.save()
+    user.company = company
     user.save()
     import pdb
     pdb.set_trace()
