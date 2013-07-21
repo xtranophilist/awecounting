@@ -7,8 +7,21 @@
 <div class="span6">
 <h2 class="intro">Register A Free Account</h2>
 <br>
+{% if form.non_field_errors %}
+<div class="alert alert-error">
+{{ form.non_field_errors }}
+</div>
+{% endif %}
+
 <form method='post' action='{% url 'registration_register' %}' id="user_registration_new">{% csrf_token %}
-    {{ form.as_p }}
+
+    {% for field in form %}
+      <div class="control-group">{{ field.label_tag }}{{ field }}
+        {% if field.errors %}
+        <div class="arrow_box">{{ field.errors }}</div>
+        {% endif %}
+      </div>
+    {% endfor %}
     <br />
     <input type="submit" value="Register" class="btn" />
 </form>
@@ -28,7 +41,7 @@
 <script type="text/javascript">
 $(function(){
   $('input').focus(function(){
-    $(this).parent().prev('.errorlist').fadeOut(500, function(){ $(this).remove(); });
+    $(this).parent().prev('.errorlist').fadeOut(500);
   });
 });
 </script>
