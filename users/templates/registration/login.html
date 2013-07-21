@@ -7,20 +7,28 @@
 {% if form.errors %}
 <p>Your username and password didn't match. Please try again.</p>
 {% endif %}
-<a href="{% url 'registration_register' %}" class="btn pull-right">Register</a>
 
-<form method="post" action="{% url 'django.contrib.auth.views.login' %}" class="navbar-form header-login pull-right">
-    {% csrf_token %}
+
+<form method="post" action="{% url 'django.contrib.auth.views.login' %}">{% csrf_token %}
     {% if state %}
     {{ state }}
     {% endif %}
+    <br/>
     {% if next %}
     <input type="hidden" name="next" value="{{ next }}" />
     {% endif %}
-    <input type="text" class="span2" name="username" value="{{ username }}" required placeholder="Email" />
-    <input type="password" class="span2" name="password" value="" required placeholder="Password" />
+    Username:
+    <input type="text" name="username" value="{{ username }}" required /><br />
+    Password:
+    <input type="password" name="password" value="" required /><br />
+    <input type="checkbox" name="remember_me" value="true">Remember Me</input>
 
-    <input type="submit" value="Log In" class="btn" />
+    <input type="submit" value="Log In" />
+
     <br/>
+    OR <a href="{% url 'registration_register' %}">Register</a>
+<a href="{% url 'auth_password_reset' %}">Reset It</a>
 </form>
+
+
 {% endblock %}

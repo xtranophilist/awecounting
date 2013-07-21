@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import Group
 # from django.contrib.auth.models import PermissionsMixin
 
 
@@ -94,10 +95,14 @@ def handle_new_user(sender, user, request, **kwargs):
     company.type_of_business = request.POST.get('type_of_business')
     company.save()
     user.company = company
+    # TODO: Add to group 'Owner'
+    # import pdb
+    # pdb.set_trace()
+    # ownr, created = Group.objects.get_or_create(name='Owner')
+    # ownr.user_set.add(user)
+    # ownr.save()
     user.save()
-    import pdb
-    pdb.set_trace()
-
 
 from registration.signals import user_registered
 user_registered.connect(handle_new_user)
+
