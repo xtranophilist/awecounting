@@ -4,10 +4,13 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 
 
 class UserManager(BaseUserManager):
-    def create_user(self, username, email, full_name, password=None, identifier=None):
+    def create_user(self, username, email, password=None, full_name='', identifier=None):
+        # import pdb
+        # pdb.set_trace()
         if not email:
             raise ValueError('Users must have an email address')
         user = self.model(
+            username=username,
             email=UserManager.normalize_email(email),
             full_name=full_name,
             identifier=identifier,
@@ -16,7 +19,7 @@ class UserManager(BaseUserManager):
         user.save(using=self._db)
         return user
 
-    def create_superuser(self, username, email, full_name, password=None):
+    def create_superuser(self, username, email, password=None, full_name=''):
         """
         Creates and saves a superuser with the given email, full name and password.
         """
@@ -24,7 +27,7 @@ class UserManager(BaseUserManager):
             username,
             email,
             password=password,
-            full_name=full_name
+            full_name=full_name,
         )
         user.is_admin = True
         user.save(using=self._db)
@@ -35,6 +38,7 @@ class Company(models.Model):
     name = models.CharField(max_length=254)
     location = models.TextField()
     type_of_business = models.CharField(max_length=254)
+
 
     class Meta:
         db_table = u'company'
@@ -72,7 +76,20 @@ class User(AbstractBaseUser):
         # Simplest possible answer: Yes, always
         return True
 
+    def email_user(self, subject, message, from_email):
+        pass
+
     objects = UserManager()
 
     class Meta:
         db_table = u'user'
+
+def handle_new_user(sender, user, request, **kwargs):
+    user.full_name = request.POST.get('full_name')
+    user.save()
+    import pdb
+    pdb.set_trace()
+
+
+from registration.signals import user_registered
+user_registered.connect(handle_new_user)
