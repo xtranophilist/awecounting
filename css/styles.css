@@ -51,3 +51,12 @@
   font-weight: 400;
   color: #666;
 }
+.register_feat{
+  list-style: none;
+  font-size: 2em;
+  color: #fff;
+  margin: 0;
+}
+.register_feat li{
+  line-height: 2em;
+}
