@@ -25,4 +25,11 @@
   </ul>
 </div>
 </div>
+<script type="text/javascript">
+$(function(){
+  $('input').focus(function(){
+    $(this).parent().prev('.errorlist').fadeOut(500, function(){ $(this).remove(); });
+  });
+});
+</script>
 {% endblock %}
