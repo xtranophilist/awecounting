@@ -2,9 +2,153 @@
 
 {% block title %}Login{% endblock %}
 {% block content %}
+<div id="page-content" class="clearfix">
+	
+	<div class="page-header position-relative">
+    <h1>
+      Voucher Sales
+    </h1>
+  </div>
 
-<form method='post' action=''>{% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Register!" />
-</form>
+  <div class="row-fluid">
+  	<div class="span12">
+  		<form method='post' action=''>{% csrf_token %}
+  		  <div class="voucher-form">
+
+			  	<div class="voucher-header">
+			  		
+			  		<div class="voucher-info">
+			  			<p class="pull-left">
+			  				{{ form.invoice_no.label_tag }}
+			  				{{ form.invoice_no }}
+			  			</p>
+			  			<p>
+			  				{{ form.reference.label_tag }}
+			  				{{ form.reference }}
+			  			</p>
+			  		</div>
+
+			  		<div class="voucher-details">
+				  		<p class="pull-left">
+				  			{{ form.party.label_tag }}
+			  				{{ form.party }}
+				  		</p>
+				  		<p class="pull-left">
+			  				{{ form.currency.label_tag }}
+			  				{{ form.currency }}
+			  			</p>
+			  		</div>
+			  		<div class="voucher-dates clearfix">
+			  			<p class="pull-left">
+			  				{{ form.date.label_tag }}
+			  				{{ form.date }}
+			  			</p>
+			  			<p class="pull-left">
+			  				<label>Date: </label>
+			  				<input type="text" />	
+			  			</p>
+			  			<p class="pull-left">
+			  				{{ form.due_date.label_tag }}
+			  				{{ form.due_date }}
+			  			</p>
+			  		</div>
+			  	</div>
+
+			  	<div class="voucher-table clearfix">
+			  		<table class="table table-striped table-bordered table-hover" id="voucher_table">
+			  			<thead>
+			  				<tr>
+			  					<th>SN</th>
+			  					<th>Particulars</th>
+			  					<th>Qty</th>
+			  					<th>Rate</th>
+			  					<th>Total</th>
+			  				</tr>
+			  			</thead>
+			  			<tbody>
+	
+			  			</tbody>
+			  			<tfoot>
+			  				<tr>
+			  					<td colspan="3"></td>
+			  					<td>Grand Total</td>
+			  					<td id="grand_total">6578</td>
+			  				</tr>
+			  			</tfoot>
+			  		</table>
+			  	</div>
+
+			  </div>
+			 <input type="submit" value="Submit" class="btn" />
+  	</div>
+  </div>
+</div>
+
+<script src="http://static.acubor.com/js/backbone.js"></script>
+<script type="text/javascript">
+
+var sales_data = {
+	particulars: [
+		{ description: 'Laptop - Dell', qty: 2, rate: 51022.34, amount: 12 },
+		{ description: 'Laptop Bag', qty: 1, rate: 1234, amount: 10 }
+	]
+};
+
+var Voucher = Backbone.Model.extend();
+
+
+var VoucherColl = Backbone.Collection.extend({ 
+	model: Voucher,
+	get_total_amount: function(){
+		var sum = 0
+		$.each(this.models, function(){
+			sum += this.get('amount');
+		});
+		return sum;
+	} 
+
+});
+
+var VoucherView = Backbone.View.extend({
+
+	el: $('#voucher_table'),
+
+	render: function(){
+      $(this.el).find('tbody').append('<tr><td>2</td><td>'+this.model.get('description')+'</td><td>'+this.model.get('qty')+'</td><td>'+this.model.get('rate')+'</td><td>'+this.model.get('amount')+'</td></tr>');
+      return this;
+  }
+
+});
+
+var VoucherListView = Backbone.View.extend({
+	initialize: function(coll){
+      this.collection = coll;
+    },
+	render: function(){
+      var that = this;
+      _.each(this.collection.models, function(item){
+        that.renderParticular(item);
+      },this);
+      $('#grand_total').html(this.grand_total());
+    },
+    renderParticular: function(item){
+      var voucher_view = new VoucherView({
+      model: item
+      });
+      voucher_view.render();
+    },
+
+    grand_total: function(){
+    	return this.collection.get_total_amount();
+    }
+
+});
+
+vv = new VoucherColl(sales_data.particulars);
+
+var voucher_table_view = new VoucherListView(vv);
+voucher_table_view.render();
+
+</script>
+
 {% endblock %}
