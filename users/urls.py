@@ -17,3 +17,6 @@ urlpatterns = patterns('',
     (r'^', include('registration.backends.default.urls')),
     # url(r'^(?P<username>[a-zA-Z0-9_.-]+)/$', 'users.views.profile', name='user-detail'),
  )
+
+# Format suffixes
+urlpatterns = format_suffix_patterns(urlpatterns, allowed=['json', 'api'])
