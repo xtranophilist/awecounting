@@ -2,6 +2,10 @@ from django.shortcuts import render, redirect
 from users.forms import UserRegistrationForm
 from django.contrib.auth.views import login
 from django.contrib.auth import logout as auth_logout
+from rest_framework import viewsets
+from users.serializers import UserSerializer
+from django.contrib.auth import get_user_model
+from rest_framework import generics
 
 
 def index(request):
@@ -27,3 +31,15 @@ def logout(request, next_page=None):
     if next_page:
         return redirect(next_page)
     return redirect('/')
+
+
+class UserViewSet(viewsets.ModelViewSet):
+    """
+    API endpoint that allows users to be viewed or edited.
+    """
+    queryset = get_user_model().objects.all()
+    serializer_class = UserSerializer
+
+class UserList(generics.ListCreateAPIView):
+    model = get_user_model()
+    serializer_class = UserSerializer
