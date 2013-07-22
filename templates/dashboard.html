@@ -130,9 +130,9 @@
 
         <ul class="nav nav-list">
           <li class="active">
-            <a href="index.html">
+            <a href="/voucher/sales">
               <i class="icon-dashboard"></i>
-              <span>Income Bills</span>
+              <span>Sales Voucher</span>
             </a>
           </li>
 
@@ -153,9 +153,9 @@
 
             <ul class="submenu">
               <li>
-                <a href="#">
+                <a href="/voucher/sales">
                   <i class="icon-double-angle-right"></i>
-                  Bank Transactions
+                  Sales Voucher
                 </a>
               </li>
 
@@ -303,15 +303,20 @@
             <div id="main-content" class="clearfix">
         <div id="breadcrumbs">
           <ul class="breadcrumb">
-            <li>
-              <i class="icon-home"></i>
-              <a href="#">Home</a>
 
-              <span class="divider">
+
+
+          {% block breadcrumbs %}
+
+              <li>
+                <i class="icon-home"></i>
+                <a href="{% url "home" %}">Home</a>
+                <span class="divider">
                 <i class="icon-angle-right"></i>
-              </span>
-            </li>
-            <li class="active">Dashboard</li>
+                </span>
+              </li>
+          {% endblock %}
+
           </ul><!--.breadcrumb-->
 
           <div id="nav-search">

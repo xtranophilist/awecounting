@@ -7,7 +7,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     # ('^$', TemplateView.as_view(template_name='site_index.html')),
-    url(r'^$', views.index, name='index'),
+    url(r'^$', views.index, name='home'),
     (r'^user/', include('users.urls')),
     (r'^user/', include('users.urls')),
     (r'^voucher/', include('voucher.urls')),

@@ -1,6 +1,12 @@
 {% extends "dashboard.html" %}
 
-{% block title %}Login{% endblock %}
+{% block title %}Sales Voucher{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+     <li class="active"><a href="{% url "sales-voucher" %}">Sales Voucher</a></li>
+{% endblock %}
+
 {% block content %}
 <div id="page-content" class="clearfix">
 	
