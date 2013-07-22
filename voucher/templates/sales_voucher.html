@@ -24,6 +24,10 @@
 			  	<div class="voucher-header">
 			  		
 			  		<div class="voucher-info">
+                        <p class="pull-left">
+				  			{{ form.party.label_tag }}
+			  				{{ form.party }}
+				  		</p>
 			  			<p class="pull-left">
 			  				{{ form.invoice_no.label_tag }}
 			  				{{ form.invoice_no }}
@@ -35,10 +39,7 @@
 			  		</div>
 
 			  		<div class="voucher-details">
-				  		<p class="pull-left">
-				  			{{ form.party.label_tag }}
-			  				{{ form.party }}
-				  		</p>
+
 				  		<p class="pull-left">
 			  				{{ form.currency.label_tag }}
 			  				{{ form.currency }}
@@ -48,10 +49,6 @@
 			  			<p class="pull-left">
 			  				{{ form.date.label_tag }}
 			  				{{ form.date }}
-			  			</p>
-			  			<p class="pull-left">
-			  				<label>Date: </label>
-			  				<input type="text" />	
 			  			</p>
 			  			<p class="pull-left">
 			  				{{ form.due_date.label_tag }}
@@ -64,11 +61,11 @@
 			  		<table class="table table-striped table-bordered table-hover" id="voucher_table">
 			  			<thead>
 			  				<tr>
-			  					<th>SN</th>
+			  					<th>S.N.</th>
 			  					<th>Particulars</th>
 			  					<th>Qty</th>
 			  					<th>Rate</th>
-			  					<th>Total</th>
+			  					<th>Amount</th>
 			  				</tr>
 			  			</thead>
 			  			<tbody>
