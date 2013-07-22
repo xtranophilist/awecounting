@@ -12,6 +12,7 @@ urlpatterns = patterns('',
     (r'^user/', include('users.urls')),
     (r'^voucher/', include('voucher.urls')),
 
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
     )

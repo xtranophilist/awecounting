@@ -126,6 +126,7 @@ INSTALLED_APPS = (
     'tax',
     'voucher',
     'ledger',
+    'rest_framework',
     'django.contrib.admin',
     'django.contrib.admindocs',
 )
