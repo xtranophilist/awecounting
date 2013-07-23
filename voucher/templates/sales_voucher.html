@@ -9,7 +9,7 @@
 
 {% block content %}
 <div id="page-content" class="clearfix">
-	
+
 	<div class="page-header position-relative">
     <h1>
       Voucher Sales
@@ -22,7 +22,7 @@
   		  <div class="voucher-form">
 
 			  	<div class="voucher-header">
-			  		
+
 			  		<div class="voucher-info">
                         <p class="pull-left">
 				  			{{ form.party.label_tag }}
@@ -69,7 +69,7 @@
 			  				</tr>
 			  			</thead>
 			  			<tbody>
-	
+
 			  			</tbody>
 			  			<tfoot>
 			  				<tr>
@@ -86,72 +86,5 @@
   	</div>
   </div>
 </div>
-
-<script src="http://static.acubor.com/js/backbone.js"></script>
-<script type="text/javascript">
-
-var sales_data = {
-	particulars: [
-		{ description: 'Laptop - Dell', qty: 2, rate: 51022.34, amount: 12 },
-		{ description: 'Laptop Bag', qty: 1, rate: 1234, amount: 10 }
-	]
-};
-
-var Voucher = Backbone.Model.extend();
-
-
-var VoucherColl = Backbone.Collection.extend({ 
-	model: Voucher,
-	get_total_amount: function(){
-		var sum = 0
-		$.each(this.models, function(){
-			sum += this.get('amount');
-		});
-		return sum;
-	} 
-
-});
-
-var VoucherView = Backbone.View.extend({
-
-	el: $('#voucher_table'),
-
-	render: function(){
-      $(this.el).find('tbody').append('<tr><td>2</td><td>'+this.model.get('description')+'</td><td>'+this.model.get('qty')+'</td><td>'+this.model.get('rate')+'</td><td>'+this.model.get('amount')+'</td></tr>');
-      return this;
-  }
-
-});
-
-var VoucherListView = Backbone.View.extend({
-	initialize: function(coll){
-      this.collection = coll;
-    },
-	render: function(){
-      var that = this;
-      _.each(this.collection.models, function(item){
-        that.renderParticular(item);
-      },this);
-      $('#grand_total').html(this.grand_total());
-    },
-    renderParticular: function(item){
-      var voucher_view = new VoucherView({
-      model: item
-      });
-      voucher_view.render();
-    },
-
-    grand_total: function(){
-    	return this.collection.get_total_amount();
-    }
-
-});
-
-vv = new VoucherColl(sales_data.particulars);
-
-var voucher_table_view = new VoucherListView(vv);
-voucher_table_view.render();
-
-</script>
 
 {% endblock %}
