@@ -14,7 +14,7 @@
         $(document).ready(function () {
             {% load filters %}
             json_data = {{data|jsonify}};
-            ko.applyBindings(new Invoice(json_data));
+            ko.applyBindings(new InvoiceViewModel(json_data));
         });
     </script>
 {% endblock %}
@@ -47,8 +47,24 @@
                 {{ form.currency.label_tag }}
                 {{ form.currency }}
 
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Price</th>
+                    </tr>
+                    </thead>
 
+                    <tbody data-bind='foreach: particulars'>
+                    <tr>
+                        <td><input class='required' data-bind='value: name, uniqueName: true' /></td>
+                        <td><input class='required number' data-bind='value: price, uniqueName: true' /></td>
+                        <td><a href='#' data-bind='click: $root.removeParticular'>Delete</a></td>
+                    </tr>
+                    </tbody>
+                </table>
 
+                <button data-bind='click: addParticular'>Add Particular</button>
 
             </form>
 
