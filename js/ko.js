@@ -1,3 +1,10 @@
+function setBinding(id, value) {
+    var el = document.getElementById(id);
+    if (el) {
+        el.setAttribute('data-bind', value);
+    }
+}
+
 
 function InvoiceModel(invoice){
     var self = this;
