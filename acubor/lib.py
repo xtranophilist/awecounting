@@ -1,5 +1,4 @@
 from django.forms import ModelForm
-from django.forms.util import ErrorList
 
 class KOModelForm(ModelForm):
     def __init__(self, *args, **kwargs):
@@ -13,6 +12,3 @@ class KOModelForm(ModelForm):
                 field.widget.attrs['required'] = 'required'
             field.widget.attrs['data-bind'] = 'value: '+name
 
-            # import pdb
-            # pdb.set_trace()
-            # pass
