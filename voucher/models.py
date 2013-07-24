@@ -3,6 +3,7 @@ from inventory.models import Item
 from ledger.models import Account
 from tax.models import TaxScheme
 
+
 class Party(models.Model):
     name = models.CharField(max_length=254)
     address = models.TextField(null=True)
@@ -15,6 +16,10 @@ class Currency(models.Model):
     code = models.CharField(max_length=3)
     name = models.CharField(max_length=100)
     latest_usd_rate = models.FloatField()
+
+    class Meta:
+        verbose_name_plural = u'Currencies'
+
 
 class SalesVoucher(models.Model):
     tax_choices = [('inclusive', 'Tax Inclusive'), ('exclusive', 'Tax Exclusive'), ('no', 'No Tax')]
