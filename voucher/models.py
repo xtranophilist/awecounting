@@ -20,6 +20,9 @@ class Currency(models.Model):
     class Meta:
         verbose_name_plural = u'Currencies'
 
+    def __unicode__(self):
+        return self.code
+
 
 class SalesVoucher(models.Model):
     tax_choices = [('inclusive', 'Tax Inclusive'), ('exclusive', 'Tax Exclusive'), ('no', 'No Tax')]
