@@ -5,16 +5,31 @@ function setBinding(id, value) {
     }
 }
 
-
-function InvoiceModel(invoice){
+function InvoiceViewModel(data){
     var self = this;
-    self.particulars = ko.observableArray(ko.utils.arrayMap(activities, function(item) {
-        return new ParticularModel(item);
+    for (var k in data)
+        self[k]=data[k]
+    self.particulars = ko.observableArray(ko.utils.arrayMap(data.particulars, function(item) {
+        return new ParticularViewModel(item);
     }));
+    self.addParticular = function() {
+        self.particulars.push({
+            name: "",
+            price: ""
+        });
+    };
+    self.removeParticular = function(particular) {
+        self.particulars.remove(particular);
+    };
+    self.save = function(){
+        console.log(self);
+    }
+
+
 }
 
-function ParticularModel(particuar){
+function ParticularViewModel(particular){
     var self = this;
     for(var k in particular)
-        self[k]=particular[k];
+        self[k] = particular[k];
 }
