@@ -10,6 +10,13 @@
 {% block head_end %}
     <script src="http://static.acubor.com/js/knockout.js"></script>
     <script src="http://static.acubor.com/js/ko.js"></script>
+    <script>
+        $(document).ready(function () {
+            {% load filters %}
+            json_data = {{data|jsonify}};
+            ko.applyBindings(new Invoice(json_data));
+        });
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -28,14 +35,14 @@
 
             <form method="post" action="">{% csrf_token %}
 
-                TO:
-                <input type="text" name="party">
+                {{ form.party.label_tag }}
+                {{ form.party }}
 
                 Invoice No:
                 <input type="text" name="invoice_no">
 
-                Reference:
-                <input type="text" name="reference">
+                {{ form.reference.label_tag }}
+                {{ form.reference }}
 
                 {{ form.currency.label_tag }}
                 {{ form.currency }}
