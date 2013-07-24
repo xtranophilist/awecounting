@@ -1,7 +1,8 @@
-from django import forms
+from acubor.lib import KOModelForm
 from models import SalesVoucher
 
-class SalesVoucherForm(forms.ModelForm):
+
+class SalesVoucherForm(KOModelForm):
 
     class Meta:
         model = SalesVoucher
