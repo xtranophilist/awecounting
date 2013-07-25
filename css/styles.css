@@ -64,3 +64,25 @@
 .hand-on-hover{
     cursor: pointer;
 }
+
+.bordered {
+    border: 1px solid #CCCCCC;
+    border-radius: 6px 6px 6px 6px;
+    box-shadow: 0 1px 1px #CCCCCC;
+}
+table {
+    border-spacing: 0;
+    width: 100%;
+}
+
+.bordered td, .bordered th {
+    border-left: 1px solid #CCCCCC;
+    border-top: 1px solid #CCCCCC;
+    padding: 10px;
+    text-align: left;
+}
+
+.bordered th {
+    background-color: #DCE9F9;
+    border-top: medium none;
+}
