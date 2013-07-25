@@ -86,3 +86,7 @@ table {
     background-color: #DCE9F9;
     border-top: medium none;
 }
+
+.bordered tr:hover {
+    background: #fbf8e9;
+}
