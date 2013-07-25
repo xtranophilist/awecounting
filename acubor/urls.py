@@ -3,6 +3,7 @@ from users import views
 # from django.views.generic import TemplateView
 from rest_framework import viewsets, routers
 from django.contrib.auth import get_user_model
+from ledger import views as ledger_view
 
 from django.contrib import admin
 admin.autodiscover()
@@ -25,6 +26,9 @@ urlpatterns = patterns('',
     (r'^user/', include('users.urls')),
     (r'^user/', include('users.urls')),
     (r'^voucher/', include('voucher.urls')),
+
+    # url(r'^account/', ledger_view.CreateAccount, name='create_account'),
+    url(r'^account/$', ledger_view.create, name='create-account'),
 
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^', include(router.urls)),
