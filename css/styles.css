@@ -60,3 +60,7 @@
 .register_feat li{
   line-height: 2em;
 }
+
+.hand-on-hover{
+    cursor: pointer;
+}
