@@ -13,10 +13,7 @@ function InvoiceViewModel(data){
         return new ParticularViewModel(item);
     }));
     self.addParticular = function() {
-        self.particulars.push({
-            name: "",
-            price: ""
-        });
+        self.particulars.push(new ParticularViewModel());
     };
     self.removeParticular = function(particular) {
         self.particulars.remove(particular);
@@ -30,6 +27,8 @@ function InvoiceViewModel(data){
 
 function ParticularViewModel(particular){
     var self = this;
+    self.item_name = ''; //default item name
+    self.price= 0; //default item price
     for(var k in particular)
         self[k] = particular[k];
 }
