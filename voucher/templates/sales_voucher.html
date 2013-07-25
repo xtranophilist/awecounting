@@ -10,10 +10,16 @@
 {% block head_end %}
     <script src="http://static.acubor.com/js/knockout.js"></script>
     <script src="http://static.acubor.com/js/ko.js"></script>
+    <script src="http://static.acubor.com/js/koGrid.js"></script>
+    <link rel="stylesheet" href="http://static.acubor.com/css/koGrid.css" />
     <script>
         $(document).ready(function () {
             {% load filters %}
-            json_data = {{data|jsonify}};
+            var json_data = {{data|jsonify}};
+            json_data.particulars=[
+                {'item_name':'a', price:20}
+            ];
+            console.log(json_data);
             ko.applyBindings(new InvoiceViewModel(json_data));
         });
     </script>
@@ -46,6 +52,8 @@
 
                 {{ form.currency.label_tag }}
                 {{ form.currency }}
+
+                <div data-bind="koGrid: { data: particulars }"></div>
 
                 <table class="bordered">
                     <thead>
