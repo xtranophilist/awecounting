@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     (r'^voucher/', include('voucher.urls')),
     (r'^account/', include('ledger.urls')),
     (r'^tax/', include('tax.urls')),
+    (r'^inventory/', include('inventory.urls')),
 
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^', include(router.urls)),
