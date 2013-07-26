@@ -1874,7 +1874,7 @@
   , select: function () {
       var val = this.$menu.find('.active').attr('data-value')
       this.$element
-        .val(this.updater(val))
+        .text(this.updater(val))
         .change()
       return this.hide()
     }
@@ -1909,7 +1909,7 @@
   , lookup: function (event) {
       var items
 
-      this.query = this.$element.val()
+      this.query = this.$element.val() ? this.$element.val() : this.$element.text();
 
       if (!this.query || this.query.length < this.options.minLength) {
         return this.shown ? this.hide() : this
