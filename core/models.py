@@ -28,7 +28,7 @@ class Currency(models.Model):
 
 class CompanySetting(models.Model):
     company = models.ForeignKey(Company)
-    invoice_prefix = models.CharField(max_length=5)
-    invoice_suffix = models.CharField(max_length=5)
+    invoice_prefix = models.CharField(max_length=5, default='INV-')
+    invoice_suffix = models.CharField(max_length=5, default='')
     default_currency = models.ForeignKey(Currency)
 
