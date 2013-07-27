@@ -3,6 +3,13 @@ $(document).on('mouseup mousedown', '[contenteditable]',function(){
   this.focus();
 });
 
+function compare_by_sn(a,b) {
+  if (a.sn() < b.sn())
+     return -1;
+  if (a.sn() > b.sn())
+    return 1;
+  return 0;
+}
 
 ko.bindingHandlers.editableText = {
     init: function(element, valueAccessor) {
@@ -141,9 +148,14 @@ function InvoiceViewModel(data){
             var prev_sn = prev_model.sn();
             var curr_sn = curr_model.sn();
 
-            curr_model.sn(prev_sn);
             prev_model.sn(curr_sn);
-            
+            curr_model.sn(prev_sn);
+
+            var particulars = self.particulars();
+            var sorted_particuars = particulars.sort(compare_by_sn);
+    
+            self.particulars([]);
+            self.particulars(sorted_particuars);
 
           }
         };
@@ -152,9 +164,13 @@ function InvoiceViewModel(data){
     }
 
     self.addParticular = function() {
-        self.particulars.push(new ParticularViewModel());
+        var new_item_index = self.particulars().length+1;
+        self.particulars.push(new ParticularViewModel({ sn: new_item_index }));
     };
     self.removeParticular = function(particular) {
+        for (var i = particular.sn(); i < self.particulars().length; i++) {
+          self.particulars()[i].sn(self.particulars()[i].sn()-1);
+        };
         self.particulars.remove(particular);
     };
     self.save = function(){
@@ -177,7 +193,6 @@ function ParticularViewModel(particular){
     //default values
     self.item_name = '';
     self.description = '';
-    self.sn = ko.observable(0);
     self.unit_price= ko.observable(0);
     self.quantity = ko.observable(1).extend({ numeric: 2 });
     self.discount = ko.observable(0).extend({ numeric: 2 });
