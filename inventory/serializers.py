@@ -1,12 +1,7 @@
 from rest_framework import serializers
 from models import Item
-from ledger.models import Account
 from tax.serializers import TaxSchemeSerializer
-
-
-class AccountSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Account
+from ledger.serializers import AccountSerializer
 
 
 class ItemSerializer(serializers.ModelSerializer):
