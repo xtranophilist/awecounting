@@ -23,11 +23,7 @@
                 {sn: 3,'item_name':'c', unit_price:20, description: 'The description', quantity: 2, discount: 10}
             ];
 
-            var invoice_instance = new InvoiceViewModel(json_data);
-
-            invoice_instance.activate_ui();
-
-            ko.applyBindings(invoice_instance);
+            ko.applyBindings(new InvoiceViewModel(json_data));
 
         });
     </script>
