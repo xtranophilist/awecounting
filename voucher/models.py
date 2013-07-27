@@ -5,7 +5,7 @@ from tax.models import TaxScheme
 from core.models import Party, Currency
 
 
-class SalesVoucher(models.Model):
+class Invoice(models.Model):
     tax_choices = [('inclusive', 'Tax Inclusive'), ('exclusive', 'Tax Exclusive'), ('no', 'No Tax')]
     party = models.ForeignKey(Party, verbose_name=u'To')
     date = models.DateField()
@@ -25,7 +25,7 @@ class Particular(models.Model):
     discount = models.FloatField()
     account = models.ForeignKey(Account)
     tax_scheme = models.ForeignKey(TaxScheme, verbose_name=u'Tax Rate')
-    sales_voucher = models.ForeignKey(SalesVoucher, related_name='particulars')
+    invoice = models.ForeignKey(Invoice, related_name='particulars')
 
 
 class PurchaseVoucher(models.Model):

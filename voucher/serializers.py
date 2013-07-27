@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from voucher.models import SalesVoucher
+from voucher.models import Invoice
 from voucher.models import Particular
 
 
@@ -8,8 +8,8 @@ class ParticularSerializer(serializers.ModelSerializer):
         model = Particular
 
 
-class SalesVoucherSerializer(serializers.ModelSerializer):
+class InvoiceSerializer(serializers.ModelSerializer):
     particulars = ParticularSerializer()
     
     class Meta:
-        model = SalesVoucher
+        model = Invoice
