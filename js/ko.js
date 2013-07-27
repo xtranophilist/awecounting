@@ -91,8 +91,6 @@ function InvoiceViewModel(data){
 
     var self = this;
 
-    self.to = ko.observable('').extend({ required: "Please enter a first name" });
-
     var item_arr = ["Ahmedabad","Akola","Asansol","Aurangabad","Bangaluru","Baroda","Belgaon","Berhumpur","Calicut","Chennai","Chapra","Cherapunji"];
     self.item_arr = item_arr;
 
@@ -200,8 +198,8 @@ function ParticularViewModel(particular){
         self[k] = ko.observable(particular[k]);
 
     self.amount = ko.computed(function(){
-        var act = self.quantity() * self.unit_price();
-        var amt = act - ((self.discount() * act)/100);
+        var wo_discount = self.quantity() * self.unit_price();
+        var amt = wo_discount - ((self.discount() * wo_discount)/100);
         return amt;
     });
 
