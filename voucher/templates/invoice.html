@@ -14,35 +14,20 @@
         $(document).ready(function () {
 
             {% load filters %}
+
             var json_data = {{data|jsonify}};
 
             json_data.particulars=[
-                {'item_name':'a', unit_price:20, description: 'The description', quantity: 2, discount: 10},
-                {'item_name':'a', unit_price:20, description: 'The description', quantity: 2, discount: 10},
-                {'item_name':'a', unit_price:20, description: 'The description', quantity: 2, discount: 10}
+                {sn: 1,'item_name':'a', unit_price:20, description: 'The description', quantity: 2, discount: 10},
+                {sn: 2,'item_name':'b', unit_price:20, description: 'The description', quantity: 2, discount: 10},
+                {sn: 3,'item_name':'c', unit_price:20, description: 'The description', quantity: 2, discount: 10}
             ];
 
-            ko.applyBindings(new InvoiceViewModel(json_data));
+            var invoice_instance = new InvoiceViewModel(json_data);
 
+            invoice_instance.activate_ui();
 
-            // Return a helper with preserved width of cells
-            var fixHelper = function(e, ui) {
-            ui.children().each(function() {
-            $(this).width($(this).width());
-            });
-            return ui;
-            };
-
-            $("#voucher_table tbody").sortable({ 
-              helper: fixHelper, 
-              handle: '.drag_handle'
-            }).disableSelection();
-
-            $('[contenteditable]').each ( function(){
-                $(this)[0].onmousedown = function() {
-                    this.focus();
-                };
-            });
+            ko.applyBindings(invoice_instance);
 
         });
     </script>
@@ -82,9 +67,10 @@
                 <table class="table table-bordered table-striped acubor_table" id="voucher_table">
                     <thead>
                         <tr>
+                            <th class="span1">SN</th>
                             <th class="span2">Item</th>
                             <th class="span3">Description</th>
-                            <th class="span3">Price</th>
+                            <th class="span2">Price</th>
                             <th class="span1">Quantity</th>
                             <th class="span1">Discount %</th>
                             <th class="span1">Amount</th>
@@ -95,36 +81,37 @@
                     <tbody data-bind='foreach: particulars'>
                         <tr>
                             <td>
-                                <div class="drag_handle"><i class="icon-ellipsis-vertical"></i></div>
+                                <div class="drag_handle"><i class="icon-ellipsis-vertical"></i>
+                                </div><span class="wid-pad pull-left" data-bind="text: sn"> </span>
+                            </td>
+                            <td>
                                 <div contenteditable data-bind="text: item_name, typeahead: true" class="item-complete-box span10 pull-left" ></div>
-                                <a href="#" data-bind="click: show_items" class="show_all_items pull-right"> <i class="icon-chevron-sign-down"></i> </a>
+                                <a href="#" data-bind="click: show_items" class="show_all_items pull-right wid-pad">
+                                    <i class="icon-chevron-sign-down"></i>
+                                </a>
                             </td>
                             <td data-bind="text: description" contenteditable>
                             </td>
                             <td data-bind="editableText: unit_price, numeric: true" contenteditable>
-                                
                             </td>
                             <td contenteditable data-bind="editableText: quantity, numeric: true">
-                                
                             </td>
-                            <td contenteditable data-bind="editableText: discount, numeric: true"></td>
-                            <td data-bind="text: amount()"></td>
-                            <td> <a class="icon-remove-sign" href="#" data-bind="click: $root.removeParticular"></a></td>
+                            <td contenteditable data-bind="editableText: discount, numeric: true">
+                            </td>
+                            <td data-bind="text: amount()">
+                            </td>
+                            <td>
+                                <a class="icon-remove-sign" href="#" data-bind="click: $root.removeParticular"></a>
+                            </td>
                         </tr>
-
                     </tbody>
-
                 </table>
                 <div class="pull-right"><b>Grand Total: </b> <span data-bind="text: grand_total()"></span> </div>
                 <button class="btn" data-bind="click: addParticular">
                     <i class="icon-plus-sign hand-on-hover" ></i> Add New Row
                 </button>
-
-
                 <button data-bind='click: save' class="btn">Save</button>
-
             </form>
-
         </div>
     </div>
     </div>
