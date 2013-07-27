@@ -18,7 +18,7 @@ ko.extenders.numeric = function(target, precision) {
         write: function(newValue) {
             var current = target(),
                 roundingMultiplier = Math.pow(10, precision),
-                newValueAsNum = isNaN(newValue) ? 0 : parseFloat(+newValue),
+                newValueAsNum = isNaN(newValue) ? current : parseFloat(+newValue),
                 valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
 
             //only write if it changed
@@ -52,15 +52,11 @@ function InvoiceViewModel(data){
     var __construct = function() {
         var uber = {render: $.fn.typeahead.Constructor.prototype.render};
         $.extend($.fn.typeahead.Constructor.prototype, { render: function(items) { uber.render.call(this, items); this.$menu.append('<li class="nostyle"><a href="#item_new_form" class="btn" onclick="$(\'#item_new_form\').modal(\'show\')">Add a new item</a></li>'); return this; }});
-//        var item_arr = ["Ahmedabad","Akola","Asansol","Aurangabad","Bangaluru","Baroda","Belgaon","Berhumpur","Calicut","Chennai","Chapra","Cherapunji"];
-//        $('.item-complete-box').typeahead({source: item_arr});
     }();
 
     var self = this;
     for (var k in data)
         self[k]=data[k];
-
-    self.reference= ko.observable(0).extend({ numeric: 2});
 
     self.particulars = ko.observableArray(ko.utils.arrayMap(data.particulars, function(item) {
         return new ParticularViewModel(item);
