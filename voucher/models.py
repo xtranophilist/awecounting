@@ -21,7 +21,7 @@ class Currency(models.Model):
         verbose_name_plural = u'Currencies'
 
     def __unicode__(self):
-        return self.code
+        return self.code + ' - ' + self.name
 
 
 class SalesVoucher(models.Model):
