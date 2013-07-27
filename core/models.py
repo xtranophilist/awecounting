@@ -9,6 +9,9 @@ class Party(models.Model):
     email = models.EmailField(max_length=254)
     fax = models.CharField(max_length=20)
 
+    def __unicode__(self):
+        return self.name
+
     class Meta:
         db_table = 'party'
 
@@ -32,4 +35,9 @@ class CompanySetting(models.Model):
     invoice_suffix = models.CharField(max_length=5, default='')
     invoice_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in unique Invoice #')
     default_currency = models.ForeignKey(Currency)
+
+    def __unicode__(self):
+        return self.company.name
+
+
 
