@@ -1,4 +1,3 @@
-
 $(document).on('mouseup mousedown', '[contenteditable]',function(){
   this.focus();
 });
@@ -10,6 +9,15 @@ function compare_by_sn(a,b) {
     return 1;
   return 0;
 }
+
+ko.bindingHandlers.typeahead = {
+            init: function (element, valueAccessor) {
+                $(element).attr("autocomplete", "off")
+                .typeahead({
+                    'source': ko.utils.unwrapObservable(valueAccessor())
+                });
+            }
+        };
 
 ko.bindingHandlers.editableText = {
     init: function(element, valueAccessor) {
@@ -91,8 +99,7 @@ function InvoiceViewModel(data){
 
     var self = this;
 
-    var item_arr = ["Ahmedabad","Akola","Asansol","Aurangabad","Bangaluru","Baroda","Belgaon","Berhumpur","Calicut","Chennai","Chapra","Cherapunji"];
-    self.item_arr = item_arr;
+    self.items = ["Ahmedabad","Akola","Asansol","Aurangabad","Bangaluru","Baroda","Belgaon","Berhumpur","Calicut","Chennai","Chapra","Cherapunji"];
 
     for (var k in data)
         self[k]=data[k];
@@ -112,19 +119,6 @@ function InvoiceViewModel(data){
         $(this).width($(this).width());
         });
         return ui;
-        };
-
-        ko.bindingHandlers.typeahead = {
-            init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-                var $element = $(element);
-                var allBindings = allBindingsAccessor();
-                var typeaheadArr = ko.utils.unwrapObservable(valueAccessor());
-                
-                $element.attr("autocomplete", "off")
-                .typeahead({
-                    'source': self.item_arr
-                });
-            }
         };
 
         // Drag and sort
