@@ -144,16 +144,18 @@ function InvoiceViewModel(data){
             curr_model.sn(prev_sn);
 
             var particulars = self.particulars();
-            var sorted_particuars = particulars.sort(compare_by_sn);
+            var sorted_particulars = particulars.sort(compare_by_sn);
     
             self.particulars([]);
-            self.particulars(sorted_particuars);
+            self.particulars(sorted_particulars);
 
           }
         };
 
         $("#voucher_table tbody").sortable(sortable_setup).disableSelection();
     }
+
+    self.activate_ui();
 
     self.addParticular = function() {
         var new_item_index = self.particulars().length+1;
