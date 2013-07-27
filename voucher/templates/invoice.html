@@ -24,7 +24,6 @@
 
             ko.applyBindings(new InvoiceViewModel(json_data));
 
-
             // Return a helper with preserved width of cells
             var fixHelper = function(e, ui) {
                 ui.children().each(function() {
@@ -50,13 +49,13 @@
 
 {% block content %}
 
-    {{ data }}
+{{ data }}
 
     <div id="page-content" class="clearfix">
 
         <div class="page-header position-relative">
             <h1>
-                Voucher Sales
+                Invoice
             </h1>
         </div>
 
@@ -69,9 +68,9 @@
 
                 {{ form.invoice_no.label_tag }}
                 <div class="input-append input-prepend input-mini">
-                    <span class="add-on">INV-</span>
+                    <span class="add-on" data-bind="text: read_only.invoice_prefix"></span>
                     {{ form.invoice_no }}
-                    <span class="add-on">a</span>
+                    <span class="add-on" data-bind="text: read_only.invoice_suffix">a</span>
                 </div>
 
 
