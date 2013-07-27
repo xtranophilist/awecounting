@@ -15,7 +15,7 @@
 
             {% load filters %}
             var json_data = {{data|jsonify}};
-            
+
             json_data.particulars=[
                 {'item_name':'a', unit_price:20, description: 'The description', quantity: 2, discount: 10},
                 {'item_name':'a', unit_price:20, description: 'The description', quantity: 2, discount: 10},
@@ -24,18 +24,6 @@
 
             ko.applyBindings(new InvoiceViewModel(json_data));
 
-            var item_arr = ["Ahmedabad","Akola","Asansol","Aurangabad","Bangaluru","Baroda","Belgaon","Berhumpur","Calicut","Chennai","Chapra","Cherapunji"];
-            
-            var uber = {render: $.fn.typeahead.Constructor.prototype.render};
-
-            $.extend($.fn.typeahead.Constructor.prototype, { render: function(items) { uber.render.call(this, items); this.$menu.append('<li class="nostyle"><a href="#item_new_form" class="btn" onclick="$(\'#item_new_form\').modal(\'show\')">Add a new item</a></li>'); return this; }});
-
-            $('.item-complete-box').typeahead({source: item_arr});
-
-            $('.show_all_items').on('click',function(e){
-                e.preventDefault();
-                $(this).parent().find('.item-complete-box').trigger('focus').trigger('keyup');
-            });
 
         });
     </script>
@@ -71,44 +59,44 @@
 
                 <table class="table table-bordered table-striped">
                     <thead>
-                        <tr>
-                            <th>Item</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Discount %</th>
-                            <th>Amount</th>
-                            <th></th>
-                        </tr>
+                    <tr>
+                        <th>Item</th>
+                        <th>Description</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Discount %</th>
+                        <th>Amount</th>
+                        <th></th>
+                    </tr>
                     </thead>
 
                     <tbody data-bind='foreach: particulars'>
-                        <tr>
-                            <td width="200">
-                                <div contenteditable data-bind="text: item_name" class="item-complete-box span11 pull-left"></div>
-                                <a href="#" class="show_all_items pull-right"> <i class="icon-chevron-sign-down"></i> </a>
-                            </td>
-                            <td data-bind="text: description" contenteditable>
-                            </td>
-                            <td data-bind="editableText: unit_price" contenteditable>
-                                
-                            </td>
-                            <td contenteditable data-bind="editableText: quantity">
-                                
-                            </td>
-                            <td contenteditable data-bind="editableText: discount"></td>
-                            <td data-bind="text: amount()"></td>
-                            <td> <a class="icon-remove-sign" href="#" data-bind="click: $root.removeParticular"></a></td>
-                        </tr>
+                    <tr>
+                        <td width="200">
+                            <div contenteditable data-bind="text: item_name" class="item-complete-box span11 pull-left"></div>
+                            <a href="#" data-bind="click: show_items" class="show_all_items pull-right"> <i class="icon-chevron-sign-down"></i> </a>
+                        </td>
+                        <td data-bind="text: description" contenteditable>
+                        </td>
+                        <td data-bind="editableText: unit_price" contenteditable>
+
+                        </td>
+                        <td contenteditable data-bind="editableText: quantity">
+
+                        </td>
+                        <td contenteditable data-bind="editableText: discount"></td>
+                        <td data-bind="text: amount()"></td>
+                        <td> <a class="icon-remove-sign" href="#" data-bind="click: $root.removeParticular"></a></td>
+                    </tr>
 
                     </tbody>
-    
+
                 </table>
                 <div class="pull-right"><b>Grand Total: </b> <span data-bind="text: grand_total()"></span> </div>
                 <button class="btn" data-bind="click: addParticular">
                     <i class="icon-plus-sign hand-on-hover" ></i> Add New Row
                 </button>
-                
+
 
                 <button data-bind='click: save' class="btn">Save</button>
 
@@ -118,27 +106,27 @@
     </div>
     </div>
 
-      <div id="item_new_form" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div id="item_new_form" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-          <h3 id="myModalLabel">Edit Introduction</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Edit Introduction</h3>
         </div>
-      
+
         <div class="modal-body">
-      
-          <form id="InfroText" method="POST">
-      
-          <input type="hidden" name="InfroText" value="1">
-      
-          <table>
-            <tbody><tr><td>Title</td><td><input type="text" name="title" id="title" style="width:300px"><span class="hide help-inline">This is required</span></td></tr>
-            <tr><td>Introudction</td><td><textarea name="contect" style="width:300px;height:100px"></textarea></td></tr>
-          </tbody></table>
-          </form>
+
+            <form id="InfroText" method="POST">
+
+                <input type="hidden" name="InfroText" value="1">
+
+                <table>
+                    <tbody><tr><td>Title</td><td><input type="text" name="title" id="title" style="width:300px"><span class="hide help-inline">This is required</span></td></tr>
+                    <tr><td>Introudction</td><td><textarea name="contect" style="width:300px;height:100px"></textarea></td></tr>
+                    </tbody></table>
+            </form>
         </div>
         <div class="modal-footer">
-          <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-          <button class="btn btn-primary" data-dismiss="modal" id="InfroTextSubmit">Save changes</button>
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button class="btn btn-primary" data-dismiss="modal" id="InfroTextSubmit">Save changes</button>
         </div>
     </div>
 

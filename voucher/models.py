@@ -54,7 +54,3 @@ class PurchaseVoucher(models.Model):
     reference = models.CharField(max_length=100, null=True)
     currency = models.ForeignKey(Currency)
     tax = models.CharField(max_length=10)
-
-
-
-
