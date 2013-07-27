@@ -91,3 +91,7 @@ tbody > tr > td[contenteditable="true"]:focus {
 .wid-pad{
   padding: 5px;
 }
+#id_invoice_no{
+  width: 46px;
+  letter-spacing: 1px;
+}
