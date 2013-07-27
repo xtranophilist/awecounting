@@ -35,13 +35,13 @@
 
 {% block content %}
 
-    {{ data }}
+{{ data }}
 
     <div id="page-content" class="clearfix">
 
         <div class="page-header position-relative">
             <h1>
-                Voucher Sales
+                Invoice
             </h1>
         </div>
 
@@ -52,8 +52,14 @@
                 {{ form.party.label_tag }}
                 {{ form.party }}
 
-                Invoice No:
-                <input type="text" name="invoice_no">
+                {{ form.invoice_no.label_tag }}
+                <div class="input-append input-prepend input-mini">
+                    <span class="add-on" data-bind="text: read_only.invoice_prefix"></span>
+                    {{ form.invoice_no }}
+                    <span class="add-on" data-bind="text: read_only.invoice_suffix">a</span>
+                </div>
+
+
 
                 {{ form.reference.label_tag }}
                 {{ form.reference }}
