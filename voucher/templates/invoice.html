@@ -27,15 +27,15 @@
 
             // Return a helper with preserved width of cells
             var fixHelper = function(e, ui) {
-            ui.children().each(function() {
-            $(this).width($(this).width());
-            });
-            return ui;
+                ui.children().each(function() {
+                    $(this).width($(this).width());
+                });
+                return ui;
             };
 
-            $("#voucher_table tbody").sortable({ 
-              helper: fixHelper, 
-              handle: '.drag_handle'
+            $("#voucher_table tbody").sortable({
+                helper: fixHelper,
+                handle: '.drag_handle'
             }).disableSelection();
 
             $('[contenteditable]').each ( function(){
@@ -67,8 +67,14 @@
                 {{ form.party.label_tag }}
                 {{ form.party }}
 
-                Invoice No:
-                <input type="text" name="invoice_no">
+                {{ form.invoice_no.label_tag }}
+                <div class="input-append input-prepend input-mini">
+                    <span class="add-on">INV-</span>
+                    {{ form.invoice_no }}
+                    <span class="add-on">a</span>
+                </div>
+
+
 
                 {{ form.reference.label_tag }}
                 {{ form.reference }}
@@ -81,36 +87,36 @@
 
                 <table class="table table-bordered table-striped acubor_table" id="voucher_table">
                     <thead>
-                        <tr>
-                            <th class="span2">Item</th>
-                            <th class="span3">Description</th>
-                            <th class="span3">Price</th>
-                            <th class="span1">Quantity</th>
-                            <th class="span1">Discount %</th>
-                            <th class="span1">Amount</th>
-                            <th class="span1"></th>
-                        </tr>
+                    <tr>
+                        <th class="span2">Item</th>
+                        <th class="span3">Description</th>
+                        <th class="span3">Price</th>
+                        <th class="span1">Quantity</th>
+                        <th class="span1">Discount %</th>
+                        <th class="span1">Amount</th>
+                        <th class="span1"></th>
+                    </tr>
                     </thead>
 
                     <tbody data-bind='foreach: particulars'>
-                        <tr>
-                            <td>
-                                <div class="drag_handle"><i class="icon-ellipsis-vertical"></i></div>
-                                <div contenteditable data-bind="text: item_name, typeahead: true" class="item-complete-box span10 pull-left" ></div>
-                                <a href="#" data-bind="click: show_items" class="show_all_items pull-right"> <i class="icon-chevron-sign-down"></i> </a>
-                            </td>
-                            <td data-bind="text: description" contenteditable>
-                            </td>
-                            <td data-bind="editableText: unit_price, numeric: true" contenteditable>
-                                
-                            </td>
-                            <td contenteditable data-bind="editableText: quantity, numeric: true">
-                                
-                            </td>
-                            <td contenteditable data-bind="editableText: discount, numeric: true"></td>
-                            <td data-bind="text: amount()"></td>
-                            <td> <a class="icon-remove-sign" href="#" data-bind="click: $root.removeParticular"></a></td>
-                        </tr>
+                    <tr>
+                        <td>
+                            <div class="drag_handle"><i class="icon-ellipsis-vertical"></i></div>
+                            <div contenteditable data-bind="text: item_name, typeahead: true" class="item-complete-box span10 pull-left" ></div>
+                            <a href="#" data-bind="click: show_items" class="show_all_items pull-right"> <i class="icon-chevron-sign-down"></i> </a>
+                        </td>
+                        <td data-bind="text: description" contenteditable>
+                        </td>
+                        <td data-bind="editableText: unit_price, numeric: true" contenteditable>
+
+                        </td>
+                        <td contenteditable data-bind="editableText: quantity, numeric: true">
+
+                        </td>
+                        <td contenteditable data-bind="editableText: discount, numeric: true"></td>
+                        <td data-bind="text: amount()"></td>
+                        <td> <a class="icon-remove-sign" href="#" data-bind="click: $root.removeParticular"></a></td>
+                    </tr>
 
                     </tbody>
 
