@@ -1,4 +1,5 @@
 from django.db import models
+from users.models import Company
 
 
 class Party(models.Model):
@@ -23,3 +24,11 @@ class Currency(models.Model):
 
     def __unicode__(self):
         return self.code + ' - ' + self.name
+
+
+class CompanySetting(models.Model):
+    company = models.ForeignKey(Company)
+    invoice_prefix = models.CharField(max_length=5)
+    invoice_suffix = models.CharField(max_length=5)
+    default_currency = models.ForeignKey(Currency)
+
