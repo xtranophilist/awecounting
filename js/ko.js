@@ -1,4 +1,23 @@
 
+$(document).on('mouseup mousedown', '[contenteditable]',function(){
+          this.focus();
+        });
+ var item_arr = ["Ahmedabad","Akola","Asansol","Aurangabad","Bangaluru","Baroda","Belgaon","Berhumpur","Calicut","Chennai","Chapra","Cherapunji"];
+// Bind twitter typeahead
+ko.bindingHandlers.typeahead = {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        var $element = $(element);
+        var allBindings = allBindingsAccessor();
+        var typeaheadArr = ko.utils.unwrapObservable(valueAccessor());
+        
+        $element.attr("autocomplete", "off")
+        .typeahead({
+            'source': item_arr
+        });
+    }
+};
+
+
 ko.bindingHandlers.editableText = {
     init: function(element, valueAccessor) {
         $(element).on('blur', function() {
@@ -136,8 +155,7 @@ function ParticularViewModel(particular){
 
     self.show_items = function(data, event){
         event.preventDefault();
-        var item_arr = ["Ahmedabad","Akola","Asansol","Aurangabad","Bangaluru","Baroda","Belgaon","Berhumpur","Calicut","Chennai","Chapra","Cherapunji"];
         var target = (event.currentTarget) ? event.currentTarget : event.srcElement; //for IE <9 compatibility
-        $(target).parent().find('.item-complete-box').typeahead({source: item_arr}).trigger('focus').trigger('keyup');
+        $(target).parent().find('.item-complete-box').trigger('focus').trigger('keyup');
     }
 }
