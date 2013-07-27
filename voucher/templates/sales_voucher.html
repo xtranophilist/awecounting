@@ -37,6 +37,25 @@
                 $(this).parent().find('.item-complete-box').trigger('focus').trigger('keyup');
             });
 
+            // Return a helper with preserved width of cells
+            var fixHelper = function(e, ui) {
+            ui.children().each(function() {
+            $(this).width($(this).width());
+            });
+            return ui;
+            };
+
+            $("#voucher_table tbody").sortable({ 
+              helper: fixHelper, 
+              handle: '.drag_handle'
+            }).disableSelection();
+
+            $('[contenteditable]').each ( function(){
+                $(this)[0].onmousedown = function() {
+                    this.focus();
+                };
+            });
+
         });
     </script>
 {% endblock %}
@@ -69,23 +88,24 @@
                 {{ form.currency.label_tag }}
                 {{ form.currency }}
 
-                <table class="table table-bordered table-striped">
+                <table class="table table-bordered table-striped acubor_table" id="voucher_table">
                     <thead>
                         <tr>
-                            <th>Item</th>
-                            <th>Description</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Discount %</th>
-                            <th>Amount</th>
-                            <th></th>
+                            <th class="span2">Item</th>
+                            <th class="span3">Description</th>
+                            <th class="span3">Price</th>
+                            <th class="span1">Quantity</th>
+                            <th class="span1">Discount %</th>
+                            <th class="span1">Amount</th>
+                            <th class="span1"></th>
                         </tr>
                     </thead>
 
                     <tbody data-bind='foreach: particulars'>
                         <tr>
-                            <td width="200">
-                                <div contenteditable data-bind="text: item_name" class="item-complete-box span11 pull-left"></div>
+                            <td>
+                                <div class="drag_handle"><i class="icon-ellipsis-vertical"></i></div>
+                                <div contenteditable data-bind="text: item_name" class="item-complete-box span10 pull-left" ></div>
                                 <a href="#" class="show_all_items pull-right"> <i class="icon-chevron-sign-down"></i> </a>
                             </td>
                             <td data-bind="text: description" contenteditable>
