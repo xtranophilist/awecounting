@@ -19,6 +19,12 @@ function setBinding(id, value) {
 }
 
 function InvoiceViewModel(data){
+
+    var __construct = function() {
+        var uber = {render: $.fn.typeahead.Constructor.prototype.render};
+        $.extend($.fn.typeahead.Constructor.prototype, { render: function(items) { uber.render.call(this, items); this.$menu.append('<li class="nostyle"><a href="#item_new_form" class="btn" onclick="$(\'#item_new_form\').modal(\'show\')">Add a new item</a></li>'); return this; }});
+    }();
+
     var self = this;
     for (var k in data)
         self[k]=data[k]
@@ -61,4 +67,11 @@ function ParticularViewModel(particular){
         var amt = act - ((self.discount() * act)/100);
         return amt;
     });
+
+    self.show_items = function(data, event){
+        event.preventDefault();
+        var item_arr = ["Ahmedabad","Akola","Asansol","Aurangabad","Bangaluru","Baroda","Belgaon","Berhumpur","Calicut","Chennai","Chapra","Cherapunji"];
+        var target = (event.currentTarget) ? event.currentTarget : event.srcElement;
+        $(target).parent().find('.item-complete-box').trigger('focus').trigger('keyup').typeahead({source: item_arr});
+    }
 }
