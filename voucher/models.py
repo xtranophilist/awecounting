@@ -36,6 +36,7 @@ class SalesVoucher(models.Model):
 
 
 class Particular(models.Model):
+    sn = models.IntegerField()
     item = models.ForeignKey(Item)
     description = models.TextField()
     quantity = models.FloatField(default=1)
