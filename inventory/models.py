@@ -13,3 +13,6 @@ class Item(models.Model):
     sales_price = models.FloatField()
     sales_account = models.ForeignKey(Account, related_name='sales_items')
     sales_tax_scheme = models.ForeignKey(TaxScheme, verbose_name=u'Tax Rate', related_name='sales_items')
+
+    def __unicode__(self):
+        return '[' + self.code + '] ' + self.name

@@ -3,6 +3,7 @@ from models import SalesVoucher
 from django.shortcuts import render
 from voucher.serializers import SalesVoucherSerializer
 
+
 def sales(request):
     sales_voucher = SalesVoucher()
     form = SalesVoucherForm(data=request.POST, instance=sales_voucher)
