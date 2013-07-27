@@ -30,5 +30,6 @@ class CompanySetting(models.Model):
     company = models.ForeignKey(Company)
     invoice_prefix = models.CharField(max_length=5, default='INV-')
     invoice_suffix = models.CharField(max_length=5, default='')
+    invoice_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in unique Invoice #')
     default_currency = models.ForeignKey(Currency)
 
