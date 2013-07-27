@@ -1,3 +1,4 @@
+
 ko.bindingHandlers.editableText = {
     init: function(element, valueAccessor) {
         $(element).on('blur', function() {
@@ -8,6 +9,33 @@ ko.bindingHandlers.editableText = {
     update: function(element, valueAccessor) {
         var value = ko.utils.unwrapObservable(valueAccessor());
         $(element).text(value);
+    }
+};
+
+ko.bindingHandlers.numeric = {
+    init: function(element, valueAccessor) {
+        $(element).on('keydown', function(event) {
+
+            // Allow: backspace, delete, tab, escape, and enter
+            if ( event.keyCode == 46 || event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 27 || event.keyCode == 13 ||
+                // Allow: Ctrl combinations
+                (event.ctrlKey === true) ||
+                //Allow decimal symbol (.)
+                (event.keyCode === 190) ||
+                // Allow: home, end, left, right
+                (event.keyCode >= 35 && event.keyCode <= 39)) {
+                // let it happen, don't do anything
+                return;
+            }
+            else {
+                // Ensure that it is a number and stop the keypress
+                if (event.shiftKey || (event.keyCode < 48 || event.keyCode > 57) && (event.keyCode < 96 || event.keyCode > 105 )) {
+                    event.preventDefault();
+                }
+            }
+        });
+    },
+    update: function(element, valueAccessor) {
     }
 };
 
@@ -55,8 +83,14 @@ function InvoiceViewModel(data){
     }();
 
     var self = this;
+
+
+    self.to = ko.observable('').extend({ required: "Please enter a first name" });
+
     for (var k in data)
         self[k]=data[k];
+
+
 
     self.particulars = ko.observableArray(ko.utils.arrayMap(data.particulars, function(item) {
         return new ParticularViewModel(item);
@@ -64,8 +98,6 @@ function InvoiceViewModel(data){
 
     self.addParticular = function() {
         self.particulars.push(new ParticularViewModel());
-//        var item_arr = ["Ahmedabad","Akola","Asansol","Aurangabad","Bangaluru","Baroda","Belgaon","Berhumpur","Calicut","Chennai","Chapra","Cherapunji"];
-//        $('.item-complete-box').typeahead({source: item_arr});
     };
     self.removeParticular = function(particular) {
         self.particulars.remove(particular);
@@ -85,10 +117,6 @@ function InvoiceViewModel(data){
 }
 
 function ParticularViewModel(particular){
-
-    var __construct = function(){
-        console.log();
-    }();
 
     var self = this;
     //default values
