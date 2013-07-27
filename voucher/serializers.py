@@ -10,5 +10,6 @@ class ParticularSerializer(serializers.ModelSerializer):
 
 class SalesVoucherSerializer(serializers.ModelSerializer):
     particulars = ParticularSerializer()
+    
     class Meta:
         model = SalesVoucher
