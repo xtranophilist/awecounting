@@ -8,6 +8,7 @@ class Party(models.Model):
     phone_no = models.CharField(max_length=20)
     email = models.EmailField(max_length=254)
     fax = models.CharField(max_length=20)
+    company = models.ForeignKey(Company)
 
     def __unicode__(self):
         return self.name

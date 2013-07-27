@@ -3,6 +3,7 @@ from inventory.models import Item
 from ledger.models import Account
 from tax.models import TaxScheme
 from core.models import Party, Currency
+from users.models import Company
 
 
 class Invoice(models.Model):
@@ -14,6 +15,7 @@ class Invoice(models.Model):
     reference = models.CharField(max_length=100, null=True)
     currency = models.ForeignKey(Currency)
     tax = models.CharField(max_length=10, choices=tax_choices, default='inclusive')
+    company = models.ForeignKey(Company)
 
     class Meta:
         db_table = 'invoice'
@@ -39,3 +41,4 @@ class PurchaseVoucher(models.Model):
     reference = models.CharField(max_length=100, null=True)
     currency = models.ForeignKey(Currency)
     tax = models.CharField(max_length=10)
+    company = models.ForeignKey(Company)
