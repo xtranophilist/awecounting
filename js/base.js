@@ -1,14 +1,6 @@
 $(document).on('mouseup mousedown', '[contenteditable]',function(){
-  this.focus();
+    this.focus();
 });
-
-function compare_by_sn(a,b) {
-  if (a.sn() < b.sn())
-     return -1;
-  if (a.sn() > b.sn())
-    return 1;
-  return 0;
-}
 
 function InvoiceViewModel(data){
 
@@ -30,44 +22,50 @@ function InvoiceViewModel(data){
         $.extend($.fn.typeahead.Constructor.prototype, { render: function(items) { uber.render.call(this, items); this.$menu.append('<li class="nostyle"><a href="#item_new_form" class="btn" onclick="$(\'#item_new_form\').modal(\'show\')">Add a new item</a></li>'); return this; }});
 
         var fixHelper = function(e, ui) {
-        ui.children().each(function() {
-        $(this).width($(this).width());
-        });
-        return ui;
+            ui.children().each(function() {
+                $(this).width($(this).width());
+            });
+            return ui;
         };
 
         // Drag and sort
         var startIndex = -1;
         var sortable_setup = {
-          helper: fixHelper, 
-          handle: '.drag_handle',
-          start: function (event, ui) {
-            // item index when the dragging starts
-            startIndex = ui.item.index();
-          },
-          stop: function(event, ui){
-            // get the new location item index
-            var newIndex = ui.item.index();
+            helper: fixHelper,
+            handle: '.drag_handle',
+            start: function (event, ui) {
+                // item index when the dragging starts
+                startIndex = ui.item.index();
+            },
+            stop: function(event, ui){
+                // get the new location item index
+                var newIndex = ui.item.index();
 
-            var prev_model = self.particulars()[startIndex];
-            var curr_model = self.particulars()[newIndex];
+                var prev_model = self.particulars()[startIndex];
+                var curr_model = self.particulars()[newIndex];
 
-            var prev_sn = prev_model.sn();
-            var curr_sn = curr_model.sn();
+                var prev_sn = prev_model.sn();
+                var curr_sn = curr_model.sn();
 
-            prev_model.sn(curr_sn);
-            curr_model.sn(prev_sn);
+                prev_model.sn(curr_sn);
+                curr_model.sn(prev_sn);
 
-            var particulars = self.particulars();
-            var sorted_particulars = particulars.sort(compare_by_sn);
-    
-            self.particulars([]);
-            self.particulars(sorted_particulars);
+                var particulars = self.particulars();
+                var sorted_particulars = particulars.sort(function (a,b) {
+                    if (a.sn() < b.sn())
+                        return -1;
+                    if (a.sn() > b.sn())
+                        return 1;
+                    return 0;
+                });
 
-          }
+                self.particulars([]);
+                self.particulars(sorted_particulars);
+
+            }
         };
 
-        $("#voucher_table tbody").sortable(sortable_setup).disableSelection();
+        $(".table-sortable tbody").sortable(sortable_setup).disableSelection();
     }
 
     self.activate_ui();
@@ -78,7 +76,7 @@ function InvoiceViewModel(data){
     };
     self.removeParticular = function(particular) {
         for (var i = particular.sn(); i < self.particulars().length; i++) {
-          self.particulars()[i].sn(self.particulars()[i].sn()-1);
+            self.particulars()[i].sn(self.particulars()[i].sn()-1);
         };
         self.particulars.remove(particular);
     };
