@@ -15,6 +15,9 @@ class Invoice(models.Model):
     currency = models.ForeignKey(Currency)
     tax = models.CharField(max_length=10, choices=tax_choices, default='inclusive')
 
+    class Meta:
+        db_table = 'invoice'
+
 
 class Particular(models.Model):
     sn = models.IntegerField()
