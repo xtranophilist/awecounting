@@ -12,13 +12,14 @@ class AccountSerializer(serializers.ModelSerializer):
 class TaxSchemeSerializer(serializers.ModelSerializer):
     class Meta:
         model = TaxScheme
+        exclude = ['company']
 
 
 class ItemSerializer(serializers.ModelSerializer):
-    purchase_account = AccountSerializer
-    purchase_tax_scheme = TaxSchemeSerializer
-    sales_account = AccountSerializer
-    sales_tax_scheme = TaxSchemeSerializer
+    purchase_account = AccountSerializer()
+    purchase_tax_scheme = TaxSchemeSerializer()
+    sales_account = AccountSerializer()
+    sales_tax_scheme = TaxSchemeSerializer()
     
     class Meta:
         model = Item
