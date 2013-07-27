@@ -11,6 +11,35 @@ ko.bindingHandlers.editableText = {
     }
 };
 
+ko.extenders.numeric = function(target, precision) {
+    //create a writeable computed observable to intercept writes to our observable
+    var result = ko.computed({
+        read: target,  //always return the original observables value
+        write: function(newValue) {
+            var current = target(),
+                roundingMultiplier = Math.pow(10, precision),
+                newValueAsNum = isNaN(newValue) ? 0 : parseFloat(+newValue),
+                valueToWrite = Math.round(newValueAsNum * roundingMultiplier) / roundingMultiplier;
+
+            //only write if it changed
+            if (valueToWrite !== current) {
+                target(valueToWrite);
+            } else {
+                //if the rounded value is the same, but a different value was written, force a notification for the current field
+                if (newValue !== current) {
+                    target.notifySubscribers(valueToWrite);
+                }
+            }
+        }
+    });
+
+    //initialize with current value to make sure it is rounded appropriately
+    result(target());
+
+    //return the new computed observable
+    return result;
+};
+
 function setBinding(id, value) {
     var el = document.getElementById(id);
     if (el) {
@@ -29,7 +58,9 @@ function InvoiceViewModel(data){
 
     var self = this;
     for (var k in data)
-        self[k]=data[k]
+        self[k]=data[k];
+
+    self.reference= ko.observable(0).extend({ numeric: 2});
 
     self.particulars = ko.observableArray(ko.utils.arrayMap(data.particulars, function(item) {
         return new ParticularViewModel(item);
@@ -37,6 +68,8 @@ function InvoiceViewModel(data){
 
     self.addParticular = function() {
         self.particulars.push(new ParticularViewModel());
+//        var item_arr = ["Ahmedabad","Akola","Asansol","Aurangabad","Bangaluru","Baroda","Belgaon","Berhumpur","Calicut","Chennai","Chapra","Cherapunji"];
+//        $('.item-complete-box').typeahead({source: item_arr});
     };
     self.removeParticular = function(particular) {
         self.particulars.remove(particular);
@@ -56,13 +89,18 @@ function InvoiceViewModel(data){
 }
 
 function ParticularViewModel(particular){
+
+    var __construct = function(){
+        console.log();
+    }();
+
     var self = this;
     //default values
     self.item_name = '';
     self.description = '';
     self.unit_price= ko.observable(0);
-    self.quantity = ko.observable(1);
-    self.discount = ko.observable(0);
+    self.quantity = ko.observable(1).extend({ numeric: 2 });
+    self.discount = ko.observable(0).extend({ numeric: 2 });
     for(var k in particular)
         self[k] = ko.observable(particular[k]);
 
