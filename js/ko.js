@@ -1,21 +1,7 @@
 
 $(document).on('mouseup mousedown', '[contenteditable]',function(){
-          this.focus();
-        });
- var item_arr = ["Ahmedabad","Akola","Asansol","Aurangabad","Bangaluru","Baroda","Belgaon","Berhumpur","Calicut","Chennai","Chapra","Cherapunji"];
-// Bind twitter typeahead
-ko.bindingHandlers.typeahead = {
-    init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
-        var $element = $(element);
-        var allBindings = allBindingsAccessor();
-        var typeaheadArr = ko.utils.unwrapObservable(valueAccessor());
-        
-        $element.attr("autocomplete", "off")
-        .typeahead({
-            'source': item_arr
-        });
-    }
-};
+  this.focus();
+});
 
 
 ko.bindingHandlers.editableText = {
@@ -96,24 +82,74 @@ function setBinding(id, value) {
 
 function InvoiceViewModel(data){
 
-    var __construct = function() {
-        var uber = {render: $.fn.typeahead.Constructor.prototype.render};
-        $.extend($.fn.typeahead.Constructor.prototype, { render: function(items) { uber.render.call(this, items); this.$menu.append('<li class="nostyle"><a href="#item_new_form" class="btn" onclick="$(\'#item_new_form\').modal(\'show\')">Add a new item</a></li>'); return this; }});
-    }();
-
     var self = this;
 
-
     self.to = ko.observable('').extend({ required: "Please enter a first name" });
+
+    var item_arr = ["Ahmedabad","Akola","Asansol","Aurangabad","Bangaluru","Baroda","Belgaon","Berhumpur","Calicut","Chennai","Chapra","Cherapunji"];
+    self.item_arr = item_arr;
 
     for (var k in data)
         self[k]=data[k];
 
-
-
     self.particulars = ko.observableArray(ko.utils.arrayMap(data.particulars, function(item) {
         return new ParticularViewModel(item);
     }));
+
+    self.activate_ui = function(){
+
+        // Typeahead
+        var uber = {render: $.fn.typeahead.Constructor.prototype.render};
+        $.extend($.fn.typeahead.Constructor.prototype, { render: function(items) { uber.render.call(this, items); this.$menu.append('<li class="nostyle"><a href="#item_new_form" class="btn" onclick="$(\'#item_new_form\').modal(\'show\')">Add a new item</a></li>'); return this; }});
+
+        var fixHelper = function(e, ui) {
+        ui.children().each(function() {
+        $(this).width($(this).width());
+        });
+        return ui;
+        };
+
+        ko.bindingHandlers.typeahead = {
+            init: function (element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+                var $element = $(element);
+                var allBindings = allBindingsAccessor();
+                var typeaheadArr = ko.utils.unwrapObservable(valueAccessor());
+                
+                $element.attr("autocomplete", "off")
+                .typeahead({
+                    'source': self.item_arr
+                });
+            }
+        };
+
+        // Drag and sort
+        var startIndex = -1;
+        var sortable_setup = {
+          helper: fixHelper, 
+          handle: '.drag_handle',
+          start: function (event, ui) {
+            // item index when the dragging starts
+            startIndex = ui.item.index();
+          },
+          stop: function(event, ui){
+            // get the new location item index
+            var newIndex = ui.item.index();
+
+            var prev_model = self.particulars()[startIndex];
+            var curr_model = self.particulars()[newIndex];
+
+            var prev_sn = prev_model.sn();
+            var curr_sn = curr_model.sn();
+
+            curr_model.sn(prev_sn);
+            prev_model.sn(curr_sn);
+            
+
+          }
+        };
+
+        $("#voucher_table tbody").sortable(sortable_setup).disableSelection();
+    }
 
     self.addParticular = function() {
         self.particulars.push(new ParticularViewModel());
@@ -141,6 +177,7 @@ function ParticularViewModel(particular){
     //default values
     self.item_name = '';
     self.description = '';
+    self.sn = ko.observable(0);
     self.unit_price= ko.observable(0);
     self.quantity = ko.observable(1).extend({ numeric: 2 });
     self.discount = ko.observable(0).extend({ numeric: 2 });

@@ -71,7 +71,7 @@ tbody > tr > td[contenteditable="true"]:focus {
 }
 .drag_handle{
   float: left;
-  padding: 4px 2px;
+  padding: 5px 2px;
   padding-right: 6px;
   opacity: .6;
   cursor: move;
@@ -84,4 +84,10 @@ tbody > tr > td[contenteditable="true"]:focus {
 .acubor_table th, .acubor_table td {
   padding: 5px;
   vertical-align: middle;
+}
+.item-complete-box{
+  padding: 5px;
+}
+.wid-pad{
+  padding: 5px;
 }
