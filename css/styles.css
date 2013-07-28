@@ -81,7 +81,7 @@ tbody > tr > td[contenteditable="true"]:focus {
 .drag_handle:hover{
   opacity: 1;
 }
-.acubor_table th, .acubor_table td {
+.table-acubor th, .table-acubor td {
   padding: 5px;
   vertical-align: middle;
 }
