@@ -1,13 +1,26 @@
 //Custom Bindings
-
 ko.bindingHandlers.typeahead = {
-            init: function (element, valueAccessor) {
-                $(element).attr("autocomplete", "off")
-                .typeahead({
-                    'source': ko.utils.unwrapObservable(valueAccessor())
-                });
-            }
-        };
+  init: function (element, valueAccessor) {
+      $(element).attr("autocomplete", "off")
+      .typeahead({
+          'source': function(query, process) {
+            objects = [];
+            map = {};
+            var data = ko.utils.unwrapObservable(valueAccessor());
+            $.each(data, function(i, object) {
+                map[object.name] = object;
+                objects.push(object.name);
+            });
+            process(objects);
+          },
+          updater: function(selection){
+            invoice_view_instance.updateParticular(this.$element[0].getAttribute('data-index'), map[selection]);
+            return selection;
+          }
+      });
+  }
+};
+
 
 ko.bindingHandlers.editableText = {
     init: function(element, valueAccessor) {
