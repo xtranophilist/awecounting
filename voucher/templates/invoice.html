@@ -24,7 +24,9 @@
                 {sn: 3,'item_name':'c', unit_price:20, description: 'The description', quantity: 2, discount: 10}
             ];
 
-            ko.applyBindings(new InvoiceViewModel(json_data));
+            window.invoice_view_instance = new InvoiceViewModel(json_data);
+
+            ko.applyBindings(invoice_view_instance);
 
         });
     </script>
@@ -54,8 +56,6 @@
                     <span class="add-on" data-bind="text: read_only.invoice_suffix">a</span>
                 </div>
 
-
-
                 {{ form.reference.label_tag }}
                 {{ form.reference }}
 
@@ -65,7 +65,7 @@
                 {{ form.currency.label_tag }}
                 {{ form.currency }}
 
-                <table class="table table-bordered table-striped table-acubor table-sortable">
+                <table class="table table-bordered table-striped table-acubor table-sortable" id="voucher_table">
                     <thead>
                         <tr>
                             <th class="span1">SN</th>
@@ -86,7 +86,7 @@
                                 </div><span class="wid-pad pull-left" data-bind="text: sn"> </span>
                             </td>
                             <td>
-                                <div contenteditable data-bind="text: item_name, typeahead: $root.items" class="item-complete-box span10 pull-left" ></div>
+                                <div contenteditable data-bind="text: item_name, typeahead: $root.items, attr: {'data-index': sn}" class="item-complete-box span10 pull-left" ></div>
                                 <a href="#" data-bind="click: show_items" class="show_all_items pull-right wid-pad">
                                     <i class="icon-chevron-sign-down"></i>
                                 </a>
