@@ -83,6 +83,11 @@ class User(AbstractBaseUser):
     def email_user(self, subject, message, from_email):
         pass
 
+    def get_company_settings(self):
+        from core.models import CompanySetting
+        return CompanySetting.objects.get(company=self.company)
+
+
     objects = UserManager()
 
     class Meta:

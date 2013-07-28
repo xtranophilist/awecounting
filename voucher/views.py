@@ -1,12 +1,16 @@
 from forms import InvoiceForm
 from models import Invoice
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from voucher.serializers import InvoiceSerializer
-from core.models import CompanySetting
 
 
 def invoice(request):
-    company_setting = CompanySetting.objects.get(company=request.user.company)
+    from core.models import CompanySetting
+    try:
+        company_setting = CompanySetting.objects.get(company=request.user.company)
+    except CompanySetting.DoesNotExist:
+        #TODO Add a flash message
+        return redirect('/settings/company')
     sales_voucher = Invoice()
     form = InvoiceForm(data=request.POST, instance=sales_voucher)
     voucher_data = InvoiceSerializer(sales_voucher).data
