@@ -1,8 +1,10 @@
 from django.conf.urls import patterns, url, include
-from users import views
+from users import views as users_views
+from core import views as core_views
 # from django.views.generic import TemplateView
 from rest_framework import viewsets, routers
 from django.contrib.auth import get_user_model
+
 
 from django.contrib import admin
 admin.autodiscover()
@@ -17,20 +19,21 @@ class UserViewSet(viewsets.ModelViewSet):
 # Routers provide an easy way of automatically determining the URL conf
 router = routers.DefaultRouter()
 router.register(r'users', UserViewSet)
-# router.register(r'groups', GroupViewSet)
 
 urlpatterns = patterns('',
-    # ('^$', TemplateView.as_view(template_name='site_index.html')),
-    url(r'^$', views.index, name='home'),
-    (r'^user/', include('users.urls')),
-    (r'^user/', include('users.urls')),
-    (r'^voucher/', include('voucher.urls')),
-    (r'^account/', include('ledger.urls')),
-    (r'^tax/', include('tax.urls')),
-    (r'^inventory/', include('inventory.urls')),
+                       # ('^$', TemplateView.as_view(template_name='site_index.html')),
+                       url(r'^$', users_views.index, name='home'),
+                       (r'^user/', include('users.urls')),
+                       (r'^user/', include('users.urls')),
+                       (r'^voucher/', include('voucher.urls')),
+                       (r'^account/', include('ledger.urls')),
+                       (r'^tax/', include('tax.urls')),
+                       (r'^inventory/', include('inventory.urls')),
 
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    url(r'^', include(router.urls)),
-    url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^admin/', include(admin.site.urls)),
-    )
+                       url(r'^settings/company/$', core_views.company_settings, name='company_settings'),
+
+                       url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+                       url(r'^', include(router.urls)),
+                       url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+                       url(r'^admin/', include(admin.site.urls)),
+                       )

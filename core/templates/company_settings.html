@@ -1,0 +1,27 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Company Settings{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "company_settings" %}">Company Settings</a></li>
+{% endblock %}
+
+
+
+{% block content %}
+
+    <div class="page-header position-relative">
+        <h1>
+            Company Settings
+        </h1>
+    </div>
+
+    <form method="post" action="">{% csrf_token %}
+
+        {{ form.as_p }}
+
+        <input type="submit" value="Submit" />
+    </form>
+
+{% endblock %}
