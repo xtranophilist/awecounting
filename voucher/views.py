@@ -18,4 +18,11 @@ def invoice(request):
         'invoice_prefix': company_setting.invoice_prefix,
         'invoice_suffix': company_setting.invoice_suffix,
     }
+    import pdb; pdb.set_trace()
+
     return render(request, 'invoice.html', {'form': form, 'data': voucher_data})
+
+def save_invoice(request):
+    params = request.POST
+    # TODO process params
+

@@ -44,7 +44,8 @@
 
         <div class="row-fluid">
 
-            <form method="post" action="">{% csrf_token %}
+            <form method="post" action="">
+                {% csrf_token %}
 
                 {{ form.party.label_tag }}
                 {{ form.party }}
