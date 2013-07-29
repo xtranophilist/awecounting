@@ -1908,10 +1908,9 @@
 
   , lookup: function (event) {
       var items
-
       this.query = this.$element.val() ? this.$element.val() : this.$element.text();
 
-      if (!this.query || this.query.length < this.options.minLength) {
+      if (typeof this.query !== 'string' || this.query.length < this.options.minLength) {
         return this.shown ? this.hide() : this
       }
 
@@ -2161,6 +2160,7 @@
   })
 
 }(window.jQuery);
+
 /* ==========================================================
  * bootstrap-affix.js v2.3.2
  * http://twitter.github.com/bootstrap/javascript.html#affix

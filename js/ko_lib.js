@@ -3,7 +3,8 @@ ko.bindingHandlers.typeahead = {
   init: function (element, valueAccessor) {
       $(element).attr("autocomplete", "off")
       .typeahead({
-          'source': function(query, process) {
+          minLength: 0,
+          source: function(query, process) {
             objects = [];
             map = {};
             var data = ko.utils.unwrapObservable(valueAccessor());
