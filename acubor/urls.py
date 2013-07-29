@@ -34,6 +34,6 @@ urlpatterns = patterns('',
 
                        url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
                        url(r'^', include(router.urls)),
-                       url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-                       url(r'^admin/', include(admin.site.urls)),
+                       url(r'^acubor-admin/doc/', include('django.contrib.admindocs.urls')),
+                       url(r'^acubor-admin/', include(admin.site.urls)),
                        )

@@ -9,6 +9,7 @@ class ParticularSerializer(serializers.ModelSerializer):
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
     particulars = ParticularSerializer()
     
     class Meta:
