@@ -1,3 +1,7 @@
+function get_target(e){
+    return $((e.currentTarget) ? e.currentTarget : e.srcElement); //for IE <9 compatibility
+}
+
 $(document).on('mouseup mousedown', '[contenteditable]',function(){
     this.focus();
 });
@@ -88,9 +92,7 @@ function InvoiceViewModel(data){
         self.particulars.remove(particular);
     };
     self.save = function(item, event){
-        if(document.getElementById('invoice_id') != null)
-            self['id'] = document.getElementById('invoice_id').value
-        var el = $(event.currentTarget)
+        var el = get_target(event);
         el.html('Saving');
         $.post('/voucher/invoice/save/', ko.toJSON(self), function(){  el.html('Save'); });
     }
@@ -133,8 +135,7 @@ function ParticularViewModel(particular){
 
     self.show_items = function(data, event){
         event.preventDefault();
-        var target = (event.currentTarget) ? event.currentTarget : event.srcElement; //for IE <9 compatibility
-        $(target).parent().find('.item-complete-box').trigger('focus').trigger('keyup');
+        get_target(event).parent().find('.item-complete-box').trigger('focus').trigger('keyup');
     }
 }
 
