@@ -23,6 +23,8 @@ def invoice(request):
     return render(request, 'invoice.html', {'form': form, 'data': voucher_data})
 
 def save_invoice(request):
-    params = request.POST
+    import json
+    params = json.loads(request.POST.get('data'))
+    import pdb; pdb.set_trace()
     # TODO process params
 
