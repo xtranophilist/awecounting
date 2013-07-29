@@ -1,7 +1,9 @@
-from south.management.commands import patch_for_test_db_setup
+import json
+
+from django.shortcuts import render, redirect
+
 from forms import InvoiceForm
 from models import Invoice
-from django.shortcuts import render, redirect
 from voucher.serializers import InvoiceSerializer
 
 
@@ -12,19 +14,20 @@ def invoice(request):
     except CompanySetting.DoesNotExist:
         #TODO Add a flash message
         return redirect('/settings/company')
-    sales_voucher = Invoice()
-    form = InvoiceForm(data=request.POST, instance=sales_voucher)
-    voucher_data = InvoiceSerializer(sales_voucher).data
-    voucher_data['read_only'] = {
+    invoice = Invoice()
+    form = InvoiceForm(data=request.POST, instance=invoice)
+    invoice_data = InvoiceSerializer(invoice).data
+    invoice_data['read_only'] = {
         'invoice_prefix': company_setting.invoice_prefix,
         'invoice_suffix': company_setting.invoice_suffix,
-    }
-    return render(request, 'invoice.html', {'form': form, 'data': voucher_data})
+        }
+    return render(request, 'invoice.html', {'form': form, 'data': invoice_data})
+
 
 def save_invoice(request):
-    import json
     params = json.loads(request.body)
-    import pdb
-    pdb.set_trace()
+    form = InvoiceForm(data=params, instance=Invoice())
+    form.save()
+
     # TODO process params
 
