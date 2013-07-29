@@ -22,6 +22,7 @@ function InvoiceViewModel(data){
         return new ParticularViewModel(item);
     }));
 
+    self['csrfmiddlewaretoken'] = $('input[name="csrfmiddlewaretoken"]').val();
 
     self.activate_ui = function(){
 
@@ -88,8 +89,13 @@ function InvoiceViewModel(data){
         };
         self.particulars.remove(particular);
     };
-    self.save = function(){
-        console.log(self);
+    self.save = function(item, event){
+        if(document.getElementById('invoice_id') != null)
+            self['id'] = document.getElementById('invoice_id').value
+        var json = ko.toJSON(self);
+        var el = $(event.currentTarget)
+        el.html('Saving');
+        $.post('/voucher/invoice/save/', JSON.parse(json), function(){  el.html('Save'); });
     }
 
     self.grand_total = function(){
