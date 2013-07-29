@@ -1,3 +1,4 @@
+from south.management.commands import patch_for_test_db_setup
 from forms import InvoiceForm
 from models import Invoice
 from django.shortcuts import render, redirect
@@ -22,7 +23,8 @@ def invoice(request):
 
 def save_invoice(request):
     import json
-    params = json.loads(request.POST.get('data'))
-    import pdb; pdb.set_trace()
+    params = json.loads(request.body)
+    import pdb
+    pdb.set_trace()
     # TODO process params
 
