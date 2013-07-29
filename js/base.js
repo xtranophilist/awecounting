@@ -22,7 +22,7 @@ function InvoiceViewModel(data){
         return new ParticularViewModel(item);
     }));
 
-    self['csrfmiddlewaretoken'] = $('input[name="csrfmiddlewaretoken"]').val();
+//    self['csrfmiddlewaretoken'] = $('input[name="csrfmiddlewaretoken"]').val();
 
     self.activate_ui = function(){
 
@@ -92,10 +92,9 @@ function InvoiceViewModel(data){
     self.save = function(item, event){
         if(document.getElementById('invoice_id') != null)
             self['id'] = document.getElementById('invoice_id').value
-        var json = ko.toJSON(self);
         var el = $(event.currentTarget)
         el.html('Saving');
-        $.post('/voucher/invoice/save/', JSON.parse(json), function(){  el.html('Save'); });
+        $.post('/voucher/invoice/save/', {data: ko.toJSON(self), csrfmiddlewaretoken: $('input[name="csrfmiddlewaretoken"]').val()}, function(){  el.html('Save'); });
     }
 
     self.grand_total = function(){
