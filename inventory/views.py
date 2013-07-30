@@ -19,27 +19,14 @@ def item_form(request, id=None):
             item.save()
     else:
         form = ItemForm(instance=item)
-    base_template = 'modal.html'
+    if request.is_ajax():
+        base_template = 'modal.html'
+    else:
+        base_template = 'dashboard.html'
     return render(request, 'item_form.html', {
         'form': form,
         'base_template': base_template,
     })
-
-# class DetailItem(DetailView):
-#     model = Item
-#
-#
-# class CreateItem(CreateView):
-#     model = Item
-#     success_url = reverse_lazy('list_items')
-#
-#
-# class ListItem(ListView):
-#     model = Item
-#
-#
-# class UpdateItem(UpdateView):
-#     model = Item
 
 
 def items_as_json(request):
