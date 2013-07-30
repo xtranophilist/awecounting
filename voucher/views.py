@@ -2,12 +2,12 @@ import json
 
 from django.shortcuts import render, redirect
 
-from forms import InvoiceForm
-from models import Invoice
-from voucher.serializers import InvoiceSerializer
+from forms import InvoiceForm, PurchaseVoucherForm
+from voucher.models import Invoice, PurchaseVoucher
+from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer
 
 
-def invoice(request):
+def invoice(request, id=None):
     from core.models import CompanySetting
     try:
         company_setting = CompanySetting.objects.get(company=request.user.company)
@@ -44,5 +44,15 @@ def save_invoice(request):
         print form.errors
 
 
-    # TODO process params
+def purchase_voucher(request, id=None):
+    from core.models import CompanySetting
+    try:
+        company_setting = CompanySetting.objects.get(company=request.user.company)
+    except CompanySetting.DoesNotExist:
+        #TODO Add a flash message
+        return redirect('/settings/company')
+    purchase_voucher = PurchaseVoucher()
+    form = PurchaseVoucherForm(data=request.POST, instance=purchase_voucher)
+    purchase_voucher_data = PurchaseVoucherSerializer(purchase_voucher).data
+    return render(request, 'purchase_voucher.html', {'form': form, 'data': purchase_voucher_data})
 

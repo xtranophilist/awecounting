@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from voucher.models import Invoice
+from voucher.models import Invoice, PurchaseVoucher
 from voucher.models import Particular
 
 
@@ -14,3 +14,10 @@ class InvoiceSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Invoice
+
+
+class PurchaseVoucherSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
+
+    class Meta:
+        model = PurchaseVoucher
