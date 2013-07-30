@@ -43,6 +43,7 @@
 		this.isInput = this.element.is('input');
 		this.component = this.element.is('.date') ? this.element.find('.add-on, .btn') : false;
 		this.hasInput = this.component && this.element.find('input').length;
+		this.relative_to = options.relative_to;
 		if(this.component && this.component.length === 0)
 			this.component = false;
 
@@ -76,6 +77,7 @@
 		$(document).on('mousedown', function (e) {
 			// Clicked outside the datepicker, hide it
 			if ($(e.target).closest('.datepicker.datepicker-inline, .datepicker.datepicker-dropdown').length === 0) {
+
 				that.hide();
 			}
 		});
@@ -242,9 +244,13 @@
 					this.hasInput && this.element.find('input').val()
 				)
 			)
-				this.setValue();
+			this.setValue();
 			this.element.trigger({
 				type: 'hide',
+				date: this.date
+			});
+			this.element.trigger({
+				type: 'changeDate',
 				date: this.date
 			});
 		},
@@ -346,10 +352,8 @@
 			} else {
 				date = this.isInput ? this.element.val() : this.element.data('date') || this.element.find('input').val();
 			}
-
-			this.date = DPGlobal.parseDate(date, this.format, this.language);
-
-			if(fromArgs) this.setValue();
+			this.date = DPGlobal.parseDate(date, this.format, this.language, this.relative_to);
+			if(fromArgs) { this.setValue(); }
 
 			if (this.date < this.startDate) {
 				this.viewDate = new Date(this.startDate);
@@ -816,6 +820,7 @@
 	};
 
 	$.fn.datepicker.defaults = {
+		relative_to: null
 	};
 	$.fn.datepicker.Constructor = Datepicker;
 	var dates = $.fn.datepicker.dates = {
@@ -864,7 +869,7 @@
 			}
 			return {separators: separators, parts: parts};
 		},
-		parseDate: function(date, format, language) {
+		parseDate: function(date, format, language, relative_to) {
 			if (date instanceof Date) return date;
 			if (/^[\-+]\d+[dmwy]([\s,]+[\-+]\d+[dmwy])*$/.test(date)) {
 				var part_re = /([\-+]\d+)([dmwy])/,
@@ -889,7 +894,14 @@
 							break;
 					}
 				}
-				return UTCDate(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0);
+				var utc_date = UTCDate(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0);
+				if (relative_to && $(relative_to).val() != "")
+				{
+					// fix computation here
+					var rel_date = new Date( Date.parse( $(relative_to).val(), $(relative_to).attr('date-format') ));
+					utc_date = new Date(rel_date.getTime()+(utc_date - (new Date())) )
+				}
+				return utc_date; 
 			}
 			var parts = date && date.match(this.nonpunctuation) || [],
 				date = new Date(),
