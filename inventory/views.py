@@ -19,7 +19,11 @@ def item_form(request, id=None):
             item.save()
     else:
         form = ItemForm(instance=item)
-    return render(request, 'item_form.html', {'form': form})
+    base_template = 'dashboard.html'
+    return render(request, 'item_form.html', {
+        'form': form,
+        'base_template': base_template,
+    })
 
 # class DetailItem(DetailView):
 #     model = Item
