@@ -875,7 +875,10 @@
 				var part_re = /([\-+]\d+)([dmwy])/,
 					parts = date.match(/([\-+]\d+)([dmwy])/g),
 					part, dir;
-				date = new Date();
+				if (relative_to && $(relative_to).val() != "")
+                    date = new Date($(relative_to).val());
+                else
+                    date = new Date();
 				for (var i=0; i<parts.length; i++) {
 					part = part_re.exec(parts[i]);
 					dir = parseInt(part[1]);
@@ -893,15 +896,10 @@
 							date = Datepicker.prototype.moveYear.call(Datepicker.prototype, date, dir);
 							break;
 					}
+
 				}
 				var utc_date = UTCDate(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0);
-				if (relative_to && $(relative_to).val() != "")
-				{
-					// fix computation here
-					var rel_date = new Date( Date.parse( $(relative_to).val(), $(relative_to).attr('date-format') ));
-					utc_date = new Date(rel_date.getTime()+(utc_date - (new Date())) )
-				}
-				return utc_date; 
+				return utc_date;
 			}
 			var parts = date && date.match(this.nonpunctuation) || [],
 				date = new Date(),
