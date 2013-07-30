@@ -15,8 +15,6 @@ def invoice(request):
         #TODO Add a flash message
         return redirect('/settings/company')
     invoice = Invoice()
-    import pdb
-    pdb.set_trace()
     try:
         last_invoice = Invoice.objects.latest('id')
         new_invoice_no = int(last_invoice.invoice_no)+1

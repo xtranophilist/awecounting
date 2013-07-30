@@ -8,6 +8,8 @@ class Party(models.Model):
     phone_no = models.CharField(max_length=20)
     email = models.EmailField(max_length=254)
     fax = models.CharField(max_length=20)
+    debtor_choices = [(1, 'Good'), (2, 'Bad'), (3, 'Ugly')]
+    debtor_level = models.IntegerField(choices=debtor_choices, default=1)
     company = models.ForeignKey(Company)
 
     def __unicode__(self):
