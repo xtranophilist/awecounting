@@ -65,9 +65,9 @@
 
             {{ form.invoice_no.label_tag }}
             <div class="input-append input-prepend input-mini">
-                <span class="add-on" data-bind="text: read_only.invoice_prefix"></span>
+                <span class="add-on" data-bind="text: read_only.invoice_prefix, visible: read_only.invoice_prefix"></span>
                 {{ form.invoice_no }}
-                <span class="add-on" data-bind="text: read_only.invoice_suffix">a</span>
+                <span class="add-on" data-bind="text: read_only.invoice_suffix, visible: read_only.invoice_suffix"></span>
             </div>
 
             {{ form.reference.label_tag }}
