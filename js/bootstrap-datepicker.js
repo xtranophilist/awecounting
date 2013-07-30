@@ -875,10 +875,13 @@
 				var part_re = /([\-+]\d+)([dmwy])/,
 					parts = date.match(/([\-+]\d+)([dmwy])/g),
 					part, dir;
-				if (relative_to && $(relative_to).val() != "")
+				if (relative_to && $(relative_to).val() != ""){
                     date = new Date($(relative_to).val());
-                else
+                    date.setUTCDate(date.getUTCDate() + 1)
+                }
+                else{
                     date = new Date();
+                }
 				for (var i=0; i<parts.length; i++) {
 					part = part_re.exec(parts[i]);
 					dir = parseInt(part[1]);
