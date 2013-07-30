@@ -24,6 +24,7 @@ def invoice(request):
                              + str(new_invoice_no)
     except:
         invoice.invoice_no = ''
+    invoice.currency = company_setting.default_currency
     form = InvoiceForm(data=request.POST, instance=invoice)
     invoice_data = InvoiceSerializer(invoice).data
     invoice_data['read_only'] = {
