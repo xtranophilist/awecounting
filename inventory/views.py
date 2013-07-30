@@ -19,7 +19,7 @@ def item_form(request, id=None):
             item.save()
     else:
         form = ItemForm(instance=item)
-    base_template = 'dashboard.html'
+    base_template = 'modal.html'
     return render(request, 'item_form.html', {
         'form': form,
         'base_template': base_template,
