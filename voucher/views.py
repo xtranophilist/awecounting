@@ -15,6 +15,15 @@ def invoice(request):
         #TODO Add a flash message
         return redirect('/settings/company')
     invoice = Invoice()
+    import pdb
+    pdb.set_trace()
+    try:
+        last_invoice = Invoice.objects.latest('id')
+        new_invoice_no = int(last_invoice.invoice_no)+1
+        invoice.invoice_no = "0" * (int(company_setting.invoice_digit_count) - str(new_invoice_no).__len__()) \
+                             + str(new_invoice_no)
+    except:
+        invoice.invoice_no = ''
     form = InvoiceForm(data=request.POST, instance=invoice)
     invoice_data = InvoiceSerializer(invoice).data
     invoice_data['read_only'] = {
@@ -27,7 +36,14 @@ def invoice(request):
 def save_invoice(request):
     params = json.loads(request.body)
     form = InvoiceForm(data=params, instance=Invoice())
-    form.save()
+    if form.is_valid():
+        invoice = form.save(commit=False)
+        # invoice.party_id = 1
+        invoice.company = request.user.company
+        invoice.save()
+    else:
+        print form.errors
+
 
     # TODO process params
 
