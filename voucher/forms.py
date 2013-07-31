@@ -22,7 +22,8 @@ class PurchaseVoucherForm(KOModelForm):
     due_date = forms.DateField(widget=KOModelForm.DateTypeInput(attrs={'class': 'due-date'}))
     attachment = forms.FileField(
         label='Add an attachment',
-        help_text=''
+        help_text='',
+        required=False,
     )
 
     class Meta:

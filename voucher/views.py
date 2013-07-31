@@ -51,10 +51,16 @@ def purchase_voucher(request, id=None):
     except CompanySetting.DoesNotExist:
         #TODO Add a flash message
         return redirect('/settings/company')
-    # newdoc = PurchaseVoucher(docfile = request.FILES['docfile'])
-    # newdoc.save()
-    # # Redirect to the document list after POST
     # return HttpResponseRedirect(reverse('myapp.views.list'))
+    if request.POST:
+        form = PurchaseVoucherForm(request.POST, request.FILES)
+        import pdb
+        pdb.set_trace()
+        if form.is_valid():
+            voucher = form.save(commit=False)
+            voucher.attachment = request.FILES['attachment']
+            voucher.company = request.user.company
+            voucher.save()
     purchase_voucher = PurchaseVoucher()
     form = PurchaseVoucherForm(data=request.POST, instance=purchase_voucher)
     purchase_voucher_data = PurchaseVoucherSerializer(purchase_voucher).data
