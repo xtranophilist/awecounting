@@ -18,12 +18,6 @@
 
             var json_data = {{data|jsonify}};
 
-            json_data.particulars=[
-                {sn: 1,'item_name':'a', unit_price:20, description: 'The description', quantity: 2, discount: 10},
-                {sn: 2,'item_name':'b', unit_price:20, description: 'The description', quantity: 2, discount: 10},
-                {sn: 3,'item_name':'c', unit_price:20, description: 'The description', quantity: 2, discount: 10}
-            ];
-
             window.invoice_view_instance = new InvoiceViewModel(json_data);
 
             ko.applyBindings(invoice_view_instance);
@@ -56,15 +50,6 @@
             <div class="span3">
                 {{ form.party.label_tag }}
                 {{ form.party }}
-            </div>
-
-            <div class="span3">
-                {{ form.invoice_no.label_tag }}
-                <div class="input-append input-prepend input-mini">
-                    <span class="add-on" data-bind="text: read_only.invoice_prefix, visible: read_only.invoice_prefix"></span>
-                    {{ form.invoice_no }}
-                    <span class="add-on" data-bind="text: read_only.invoice_suffix, visible: read_only.invoice_suffix"></span>
-                </div>
             </div>
 
             <div class="span3">
@@ -148,28 +133,5 @@
         </div>
     </form>
 
-    <div id="item_new_form" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Edit Introduction</h3>
-        </div>
-
-        <div class="modal-body">
-
-            <form id="InfroText" method="POST">
-
-                <input type="hidden" name="InfroText" value="1">
-
-                <table>
-                    <tbody><tr><td>Title</td><td><input type="text" name="title" id="title" style="width:300px"><span class="hide help-inline">This is required</span></td></tr>
-                    <tr><td>Introduction</td><td><textarea name="contact" style="width:300px;height:100px"></textarea></td></tr>
-                    </tbody></table>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-            <button class="btn btn-primary" data-dismiss="modal" id="InfroTextSubmit">Save changes</button>
-        </div>
-    </div>
 
 {% endblock %}

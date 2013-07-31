@@ -40,5 +40,6 @@ class PurchaseVoucher(models.Model):
     # invoice_no = models.CharField(max_length=20)
     reference = models.CharField(max_length=100, null=True)
     currency = models.ForeignKey(Currency)
-    tax = models.CharField(max_length=10)
+    tax_choices = [('inclusive', 'Tax Inclusive'), ('exclusive', 'Tax Exclusive'), ('no', 'No Tax')]
+    tax = models.CharField(max_length=10, choices=tax_choices, default='inclusive')
     company = models.ForeignKey(Company)
