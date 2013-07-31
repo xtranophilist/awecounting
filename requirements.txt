@@ -4,4 +4,3 @@ psycopg2
 south
 django-registration
 djangorestframework
-https://github.com/bartTC/django-attachments/zipball/master
