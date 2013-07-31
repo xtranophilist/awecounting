@@ -42,7 +42,7 @@
         </h1>
     </div>
 
-    <form method="post" action="">
+    <form method="post"  enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="row-fluid">
@@ -78,6 +78,10 @@
                 {{ form.currency.label_tag }}
                 {{ form.currency }}
             </div>
+
+            {{ form.attachment.label_tag }}
+            {{ form.attachment.errors }}
+                {{ form.attachment }}
 
         </div>
         <br />
@@ -129,7 +133,7 @@
             <button class="btn" data-bind="click: addParticular">
                 <i class="icon-plus-sign hand-on-hover" ></i> Add New Row
             </button>
-            <button data-bind='click: save' class="btn">Save</button>
+            <button type="submit" class="btn">Save</button>
         </div>
     </form>
 

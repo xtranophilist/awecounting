@@ -42,4 +42,5 @@ class PurchaseVoucher(models.Model):
     currency = models.ForeignKey(Currency)
     tax_choices = [('inclusive', 'Tax Inclusive'), ('exclusive', 'Tax Exclusive'), ('no', 'No Tax')]
     tax = models.CharField(max_length=10, choices=tax_choices, default='inclusive')
+    attachment = models.FileField(upload_to='pv/%Y/%m/%d')
     company = models.ForeignKey(Company)

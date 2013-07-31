@@ -20,6 +20,10 @@ class PurchaseVoucherForm(KOModelForm):
     currency = forms.ModelChoiceField(Currency.objects.all(), empty_label=None)
     date = forms.DateField(widget=KOModelForm.DateTypeInput(attrs={'class': 'date-picker'}))
     due_date = forms.DateField(widget=KOModelForm.DateTypeInput(attrs={'class': 'due-date'}))
+    attachment = forms.FileField(
+        label='Add an attachment',
+        help_text=''
+    )
 
     class Meta:
         model = PurchaseVoucher
