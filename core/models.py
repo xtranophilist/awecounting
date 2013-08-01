@@ -4,12 +4,12 @@ from users.models import Company
 
 class Party(models.Model):
     name = models.CharField(max_length=254)
-    address = models.TextField(null=True)
-    phone_no = models.CharField(max_length=20)
-    email = models.EmailField(max_length=254)
-    fax = models.CharField(max_length=20)
+    address = models.TextField(null=True, blank=True)
+    phone_no = models.CharField(max_length=20, null=True, blank=True)
+    email = models.EmailField(max_length=254, null=True, blank=True)
+    fax = models.CharField(max_length=20, null=True, blank=True)
     debtor_choices = [(1, 'Good'), (2, 'Bad'), (3, 'Ugly')]
-    debtor_level = models.IntegerField(choices=debtor_choices, default=1)
+    debtor_level = models.IntegerField(choices=debtor_choices, default=1, null=True, blank=True)
     company = models.ForeignKey(Company)
 
     def __unicode__(self):
