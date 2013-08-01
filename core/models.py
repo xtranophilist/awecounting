@@ -18,7 +18,6 @@ class BankAccount(models.Model):
         super(BankAccount, self).save(*args, **kwargs)
 
 
-
 class Party(models.Model):
     name = models.CharField(max_length=254)
     address = models.TextField(null=True, blank=True)
