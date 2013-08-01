@@ -1,5 +1,22 @@
 from django.db import models
 from users.models import Company
+from ledger.models import Account
+
+
+class BankAccount(models.Model):
+    bank_name = models.CharField(max_length=254)
+    ac_no = models.IntegerField()
+    branch_name = models.CharField(max_length=254, blank=True, null=True)
+    account = models.ForeignKey(Account)
+
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        if is_new:
+            account = Account(code=self.ac_no, name=self.bank_name)
+            account.save()
+            self.account = account
+        super(BankAccount, self).save(*args, **kwargs)
+
 
 
 class Party(models.Model):
