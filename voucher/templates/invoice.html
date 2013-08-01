@@ -48,7 +48,7 @@
         </h1>
     </div>
 
-    <form method="post" action="">
+    <form method="post" action="#" data-bind='submit: save' >
         {% csrf_token %}
 
         <div class="row-fluid">
@@ -144,7 +144,7 @@
             <button class="btn" data-bind="click: addParticular">
                 <i class="icon-plus-sign hand-on-hover" ></i> Add New Row
             </button>
-            <button data-bind='click: save' class="btn">Save</button>
+            <input class="btn" type="submit" value="Save" />
         </div>
     </form>
 
