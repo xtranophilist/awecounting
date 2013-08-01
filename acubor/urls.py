@@ -34,7 +34,6 @@ urlpatterns = patterns('',
                        url(r'^party/create/$', core_views.party_form, name='create_party'),
                        url(r'^party/(?P<id>[0-9]+)/$', core_views.party_form, name='update_party'),
 
-                       (r'^attachments/', include('attachments.urls')),
                        url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
                        url(r'^', include(router.urls)),
                        url(r'^acubor-admin/doc/', include('django.contrib.admindocs.urls')),
