@@ -103,3 +103,29 @@ class DayPayroll(models.Model):
     head = models.CharField(max_length=254)
     total_taxable = models.FloatField()
     tax = models.FloatField()
+
+
+class DayJournal(models.model):
+    date = models.DateField()
+    company = models.ForeignKey(Company)
+    day_cash_sales = models.ForeignKey(DayCashSales)
+    day_cash_purchase = models.ForeignKey(DayCashPurchase)
+    day_cash_receipt = models.ForeignKey(DayCashReceipt)
+    day_cash_payment = models.ForeignKey(DayCashPayment)
+    day_credit_sales = models.ForeignKey(DayCreditSales)
+    day_credit_purchase = models.ForeignKey(DayCreditPurchase)
+    day_credit_expense = models.ForeignKey(DayCreditExpense)
+    day_credit_income = models.ForeignKey(DayCreditIncome)
+    day_summary_cash = models.ForeignKey(DaySummaryCash)
+    day_summary_equivalent = models.ForeignKey(DaySummaryEquivalent)
+    day_summary_bank = models.ForeignKey(DaySummaryBank)
+    day_summary_sales_tax = models.ForeignKey(DaySummarySalesTax)
+    day_summary_inventory = models.ForeignKey(DaySummaryInventory)
+    day_payroll = models.ForeignKey(DayPayroll)
+
+    class Meta:
+        db_table = 'journal_day'
+
+
+
+
