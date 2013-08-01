@@ -11,8 +11,6 @@ class DayCashSales(models.Model):
     item = models.ForeignKey(Item)
     quantity = models.FloatField()
     amount = models.FloatField()
-    date = models.DateField()
-    company = models.ForeignKey(Company)
 
 
 class DayCashPurchase(models.Model):
@@ -20,16 +18,12 @@ class DayCashPurchase(models.Model):
     item = models.ForeignKey(Item)
     quantity = models.FloatField()
     amount = models.FloatField()
-    date = models.DateField()
-    company = models.ForeignKey(Company)
 
 
 class DayCashReceipt(models.Model):
     sn = models.IntegerField()
     account = models.ForeignKey(Account)
     amount = models.FloatField()
-    date = models.DateField()
-    company = models.ForeignKey(Company)
 
 
 class DayCashPayment(models.Model):
@@ -37,8 +31,6 @@ class DayCashPayment(models.Model):
     account = models.ForeignKey(Account)
     quantity = models.FloatField()
     amount = models.FloatField()
-    date = models.DateField()
-    company = models.ForeignKey(Company)
 
 
 class DayCreditSales(models.Model):
@@ -47,8 +39,6 @@ class DayCreditSales(models.Model):
     account = models.ForeignKey(Account)
     quantity = models.FloatField()
     amount = models.FloatField()
-    date = models.DateField()
-    company = models.ForeignKey(Company)
 
 
 class DayCreditPurchase(models.Model):
@@ -57,8 +47,6 @@ class DayCreditPurchase(models.Model):
     account = models.ForeignKey(Account)
     quantity = models.FloatField()
     amount = models.FloatField()
-    date = models.DateField()
-    company = models.ForeignKey(Company)
 
 
 class DayCreditExpense(models.Model):
@@ -66,8 +54,6 @@ class DayCreditExpense(models.Model):
     item = models.ForeignKey(Item)
     account = models.ForeignKey(Account)
     amount = models.FloatField()
-    date = models.DateField()
-    company = models.ForeignKey(Company)
 
 
 class DayCreditIncome(models.Model):
@@ -75,14 +61,10 @@ class DayCreditIncome(models.Model):
     item = models.ForeignKey(Item)
     account = models.ForeignKey(Account)
     amount = models.FloatField()
-    date = models.DateField()
-    company = models.ForeignKey(Company)
 
 
 class DaySummaryCash(models.Model):
     actual = models.FloatField()
-    date = models.DateField()
-    company = models.ForeignKey(Company)
 
 
 class DaySummaryEquivalent(models.Model):
@@ -90,8 +72,6 @@ class DaySummaryEquivalent(models.Model):
     item = models.ForeignKey(Item)
     inward = models.FloatField()
     outward = models.FloatField()
-    date = models.DateField()
-    company = models.ForeignKey(Company)
 
 
 class DaySummaryBank(models.Model):
