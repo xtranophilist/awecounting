@@ -15,6 +15,14 @@ class Party(models.Model):
     def __unicode__(self):
         return self.name
 
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        if is_new:
+            account = Account(code=self.ac_no, name=self.bank_name)
+            account.save()
+            self.account = account
+        super(Party, self).save(*args, **kwargs)
+
     class Meta:
         db_table = 'party'
 
