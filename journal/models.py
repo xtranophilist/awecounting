@@ -105,7 +105,7 @@ class DayPayroll(models.Model):
     tax = models.FloatField()
 
 
-class DayJournal(models.model):
+class DayJournal(models.Model):
     date = models.DateField()
     company = models.ForeignKey(Company)
     day_cash_sales = models.ForeignKey(DayCashSales)
