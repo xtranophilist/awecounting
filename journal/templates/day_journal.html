@@ -8,7 +8,7 @@
 {% endblock %}
 
 {% block head_end %}
-    <script src="http://static.acubor.com/js/knockout.js"></script>
+    <script src="http://static.acubor.com/js/vendors/knockout.js"></script>
     <script src="http://static.acubor.com/js/ko_lib.js"></script>
     <script src="http://static.acubor.com/js/base.js"></script>
     <script>
@@ -27,11 +27,11 @@
 
     <div class="page-header position-relative">
         <h1>
-            Day Journal
+            Day Journal for {{ journal.date }}
         </h1>
     </div>
 
-    {{journal.day_cash_payment|jsonify}}
+    {{journal.day_cash_sales|jsonify}}
 
     <form method="post" action="#" data-bind='submit: save' >
         {% csrf_token %}

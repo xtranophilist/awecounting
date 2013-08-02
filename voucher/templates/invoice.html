@@ -8,9 +8,10 @@
 {% endblock %}
 
 {% block head_end %}
-    <script src="http://static.acubor.com/js/knockout.js"></script>
+    <script src="http://static.acubor.com/js/vendors/knockout.js"></script>
     <script src="http://static.acubor.com/js/ko_lib.js"></script>
     <script src="http://static.acubor.com/js/base.js"></script>
+    <script src="http://static.acubor.com/js/invoice.js"></script>
     <script>
         $(document).ready(function () {
 
@@ -18,11 +19,11 @@
 
             var json_data = {{data|jsonify}};
 
-            json_data.particulars=[
-                {sn: 1,'item_name':'a', unit_price:20, description: 'The description', quantity: 2, discount: 10},
-                {sn: 2,'item_name':'b', unit_price:20, description: 'The description', quantity: 2, discount: 10},
-                {sn: 3,'item_name':'c', unit_price:20, description: 'The description', quantity: 2, discount: 10}
-            ];
+{#            json_data.particulars=[#}
+{#                {sn: 1,'item_name':'a', unit_price:20, description: 'The description', quantity: 2, discount: 10},#}
+{#                {sn: 2,'item_name':'b', unit_price:20, description: 'The description', quantity: 2, discount: 10},#}
+{#                {sn: 3,'item_name':'c', unit_price:20, description: 'The description', quantity: 2, discount: 10}#}
+{#            ];#}
 
             window.invoice_view_instance = new InvoiceViewModel(json_data);
 

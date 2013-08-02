@@ -4,8 +4,8 @@
   <title>{% block title %}{% endblock %}</title>
 
   <link rel="stylesheet" type="text/css" href="http://static.acubor.com/css/base.css">
-  <link href="http://static.acubor.com/css/bootstrap.min.css" rel="stylesheet" />
-  <link href="http://static.acubor.com/css/bootstrap-responsive.min.css" rel="stylesheet" />
+  <link href="http://static.acubor.com/css/vendors/bootstrap.min.css" rel="stylesheet" />
+  <link href="http://static.acubor.com/css/vendors/bootstrap-responsive.min.css" rel="stylesheet" />
 
   <!--[if IE 7]>
   <link rel="stylesheet" href="http://static.acubor.com/font-awesome/css/font-awesome-ie7.min.css" />
@@ -16,10 +16,10 @@
   <link href="http://static.acubor.com/css/styles.css" rel="stylesheet" />
 
   <link href="http://static.acubor.com/css/base.css" rel="stylesheet" />
-  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
-  <script type="text/javascript">
-    window.jQuery || document.write("<script src='http://static.acubor.com/js/jquery.min.js'>"+"<"+"/script>");
-  </script>
+  <script src="http://static.acubor.com/js/vendors/jquery.min.js"></script>
+{#  <script type="text/javascript">#}
+{#    window.jQuery || document.write("<script src='http://static.acubor.com/js/jquery.min.js'>"+"<"+"/script>");#}
+{#  </script>#}
   {% block head_end %}{% endblock %}
 
 </head>
