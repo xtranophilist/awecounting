@@ -1,4 +1,5 @@
-body{ padding-top: 62px; font-family: 'Open Sans', helvetica, arial;}
+body{ font-family: 'Open Sans', helvetica, arial;}
+.fixed-header{ padding-top: 62px; }
 h2.intro{ color: #fff;}
 .navbar-inverse .navbar-inner{
 padding: 8px 0px;
@@ -108,4 +109,8 @@ height: 20px;
   border-width: 7px;
   left: 50%;
   margin-left: -7px;
+}
+#page-content .page-header:first-child h1{
+  margin: 0;
+  font-weight: bold;
 }
