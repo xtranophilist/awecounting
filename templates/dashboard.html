@@ -4,9 +4,9 @@
     <title>{% block title %}{% endblock %}</title>
 
     <link rel="stylesheet" type="text/css" href="http://static.acubor.com/css/base.css">
-    <link href="http://static.acubor.com/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="http://static.acubor.com/css/bootstrap-responsive.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="http://static.acubor.com/font-awesome/css/font-awesome.min.css" />
+    <link href="http://static.acubor.com/css/vendors/bootstrap.min.css" rel="stylesheet" />
+    <link href="http://static.acubor.com/css/vendors/bootstrap-responsive.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="http://static.acubor.com/css/font-awesome/css/font-awesome.min.css" />
 
     <!--[if IE 7]>
   <link rel="stylesheet" href="http://static.acubor.com/font-awesome/css/font-awesome-ie7.min.css" />
@@ -14,11 +14,11 @@
 
     <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400,300" />
 
-    <link href="http://static.acubor.com/css/w8-responsive.min.css" rel="stylesheet" />
-    <link href="http://static.acubor.com/css/w8.min.css" rel="stylesheet" />
-    <link href="http://static.acubor.com/css/w8-skins.min.css" rel="stylesheet" />
+    <link href="http://static.acubor.com/css/vendors/w8-responsive.min.css" rel="stylesheet" />
+    <link href="http://static.acubor.com/css/vendors/w8.min.css" rel="stylesheet" />
+    <link href="http://static.acubor.com/css/vendors/w8-skins.min.css" rel="stylesheet" />
 
-    <link href="http://static.acubor.com/css/datepicker.css" rel="stylesheet" />
+    <link href="http://static.acubor.com/css/vendors/datepicker.css" rel="stylesheet" />
 
     <link href="http://static.acubor.com/css/styles.css" rel="stylesheet" />
 
@@ -29,25 +29,22 @@
     {#  <script type="text/javascript">#}
     {#    window.jQuery || document.write("<script src='http://static.acubor.com/js/jquery.min.js'>"+"<"+"/script>");#}
     {#  </script>#}
-    <script src="http://static.acubor.com/js/jquery.min.js"></script>
-    <script src="http://static.acubor.com/js/bootstrap.js"></script>
-    <script src="http://static.acubor.com/js/jquery-ui-1.10.3.custom.min.js"></script>
-    <script src="http://static.acubor.com/js/jquery.ui.touch-punch.min.js"></script>
 
-    <script src="http://static.acubor.com/js/jquery.slimscroll.min.js"></script>
-    <script src="http://static.acubor.com/js/jquery.easy-pie-chart.min.js"></script>
-    <script src="http://static.acubor.com/js/jquery.sparkline.min.js"></script>
+    <script src="http://static.acubor.com/js/vendors/jquery.min.js"></script>
+    <script src="http://static.acubor.com/js/vendors/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="http://static.acubor.com/js/vendors/jquery.ui.touch-punch.min.js"></script>
+    <script src="http://static.acubor.com/js/vendors/jquery.slimscroll.min.js"></script>
+    <script src="http://static.acubor.com/js/vendors/jquery.easy-pie-chart.min.js"></script>
+    <script src="http://static.acubor.com/js/vendors/jquery.sparkline.min.js"></script>
+    <script src="http://static.acubor.com/js/vendors/jquery.flot.min.js"></script>
+    <script src="http://static.acubor.com/js/vendors/jquery.flot.pie.min.js"></script>
+    <script src="http://static.acubor.com/js/vendors/jquery.flot.resize.min.js"></script>
+    <script src="http://static.acubor.com/js/vendors/w8-elements.min.js"></script>
+    <script src="http://static.acubor.com/js/vendors/w8.min.js"></script>
+    <script src="http://static.acubor.com/js/vendors/bootstrap.js"></script>
+    <script src="http://static.acubor.com/js/vendors/bootstrap-datepicker.js"></script>
 
-    <script src="http://static.acubor.com/js/jquery.flot.min.js"></script>
-    <script src="http://static.acubor.com/js/jquery.flot.pie.min.js"></script>
-    <script src="http://static.acubor.com/js/jquery.flot.resize.min.js"></script>
 
-<script src="http://static.acubor.com/js/bootstrap-datepicker.js"></script>
-
-    <!--w8 scripts-->
-
-    <script src="http://static.acubor.com/js/w8-elements.min.js"></script>
-    <script src="http://static.acubor.com/js/w8.min.js"></script>
 
     {% block head_end %}{% endblock %}
 
@@ -332,11 +329,11 @@
             </form>
         </div><!--#nav-search-->
     </div>
-    
+
     <div id="page-content" class="clearfix">
 
-    {% block content %}{% endblock %}
-    
+        {% block content %}{% endblock %}
+
     </div>
     <div id="ace-settings-container">
         <div class="btn btn-app btn-mini btn-warning" id="ace-settings-btn">
