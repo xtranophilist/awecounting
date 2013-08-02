@@ -3,10 +3,41 @@
 {% block title %} Create/Update Item {% endblock %}
 
 {% block content %}
-
-    <form method="post">{% csrf_token %}
-        {{ form.as_p }}
-        <input type="submit" value="Submit" />
-    </form>
-
+<div class="page-header position-relative">
+  <h1>
+      Inventory
+  </h1>
+</div>
+<form method="post">
+	<div class="row">
+		<div class="span3">
+			{% csrf_token %}
+			{{ form.code.label_tag }}
+	    {{ form.code }}
+	    {{ form.name.label_tag }}
+	    {{ form.name }}
+	    {{ form.description.label_tag }}
+	    {{ form.description }}
+		</div>
+		<div class="span3">
+			{{ form.sales_price.label_tag }}
+	    {{ form.sales_price }}
+	    {{ form.sales_account.label_tag }}
+	    {{ form.sales_account }}
+	    {{ form.sales_tax_scheme.label_tag }}
+	    {{ form.sales_tax_scheme }}
+		</div>
+		<div class="span3">
+			{{ form.purchase_price.label_tag }}
+	    {{ form.purchase_price }}
+	    {{ form.purchase_tax_scheme.label_tag }}
+	    {{ form.purchase_tax_scheme }}
+		</div>
+	</div>
+	<div class="row">
+		<div class="span12">
+			 <input type="submit" value="Submit" class="btn" />
+		</div>
+	</div>
+</form>
 {% endblock %}
