@@ -1,7 +1,8 @@
 //Custom Bindings
 ko.bindingHandlers.typeahead = {
   init: function (element, valueAccessor) {
-      $(element).attr("autocomplete", "off")
+      var el = $(element);
+      el.attr("autocomplete", "off")
       .typeahead({
           minLength: 0,
           source: function(query, process) {
@@ -14,9 +15,12 @@ ko.bindingHandlers.typeahead = {
             });
             process(objects);
           },
-          updater: function(selection){
-            invoice_view_instance.updateParticular(this.$element[0].getAttribute('data-index'), map[selection]);
-            return selection;
+          updater: function(element){
+            if(map[element]){
+                $(el).attr('data-selected',map[element].id)
+            }else{
+                return "";
+            }
           }
       });
   }
