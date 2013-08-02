@@ -1,25 +1,25 @@
 //Custom Bindings
 ko.bindingHandlers.typeahead = {
-  init: function (element, valueAccessor) {
-      $(element).attr("autocomplete", "off")
-      .typeahead({
-          minLength: 0,
-          source: function(query, process) {
-            objects = [];
-            map = {};
-            var data = ko.utils.unwrapObservable(valueAccessor());
-            $.each(data, function(i, object) {
-                map[object.name] = object;
-                objects.push(object.name);
+    init: function (element, valueAccessor) {
+        $(element).attr("autocomplete", "off")
+            .typeahead({
+                minLength: 0,
+                source: function(query, process) {
+                    objects = [];
+                    map = {};
+                    var data = ko.utils.unwrapObservable(valueAccessor());
+                    $.each(data, function(i, object) {
+                        map[object.name] = object;
+                        objects.push(object.name);
+                    });
+                    process(objects);
+                },
+                updater: function(selection){
+                    invoice_view_instance.updateParticular(this.$element[0].getAttribute('data-index'), map[selection]);
+                    return selection;
+                }
             });
-            process(objects);
-          },
-          updater: function(selection){
-            invoice_view_instance.updateParticular(this.$element[0].getAttribute('data-index'), map[selection]);
-            return selection;
-          }
-      });
-  }
+    }
 };
 
 
@@ -91,6 +91,40 @@ ko.extenders.numeric = function(target, precision) {
 
     //return the new computed observable
     return result;
+};
+
+ko.bindingHandlers.bind = {
+    init: function(element, valueAccessor) {
+        element = $(element);
+        var config = {
+            template: element.html()
+        };
+        element.data('bind.config', config);
+// Why reset data-bind attributes? Because the point of this
+// binding is so that nested bindings apply to the value, not
+// to the current model. This prevents Knockout from continuing
+// to apply the current model to nested elements. Remember, the
+// nested bindings are still captured by `config.template` above.
+        element.find('[data-bind]').attr('data-bind', '');
+    },
+    update: function(element, valueAccessor) {
+        element = $(element);
+        var config = element.data('bind.config');
+        var model = ko.utils.unwrapObservable(valueAccessor());
+        if (model) {
+            element.html(config.template);
+// Save and unset the data-bind attribute so we can apply
+// the new model to the element instead of its children
+// individually.
+            var bindings = element.attr('data-bind');
+            element.attr('data-bind', '');
+            ko.applyBindings(model, element[0]);
+// Reset the element's data-bind attribute.
+            element.attr('data-bind', bindings);
+        }
+        else
+            element.empty();
+    }
 };
 
 //Other useful KO-related functions
