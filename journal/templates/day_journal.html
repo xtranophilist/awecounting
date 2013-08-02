@@ -42,13 +42,11 @@
         <table class="table table-bordered table-striped table-acubor table-sortable" id="voucher_table">
             <thead>
             <tr>
-                <th class="span1">SN</th>
-                <th class="span2">Item</th>
-                <th class="span3">Description</th>
-                <th class="span2">Price</th>
-                <th class="span1">Quantity</th>
-                <th class="span1">Discount %</th>
-                <th class="span1">Amount</th>
+                <th class="span2">SN</th>
+                <th class="span4">Item</th>
+                <th class="span2">Quantity</th>
+                <th class="span1">Rate</th>
+                <th class="span2">Amount</th>
                 <th class="span1"></th>
             </tr>
             </thead>
@@ -65,13 +63,9 @@
                         <i class="icon-chevron-sign-down"></i>
                     </a>
                 </td>
-                <td data-bind="text: description" contenteditable>
-                </td>
                 <td data-bind="editableText: unit_price, numeric: true" contenteditable>
                 </td>
                 <td contenteditable data-bind="editableText: quantity, numeric: true">
-                </td>
-                <td contenteditable data-bind="editableText: discount, numeric: true">
                 </td>
                 <td data-bind="text: amount()">
                 </td>
@@ -84,22 +78,8 @@
 
     </div>
 
-    <br />
-
-    <div class="row-fluid">
 
 
-
-    </div>
-    <br />
-    <div class="row-fluid">
-
-
-
-
-        {#            <input class="btn" type="submit" value="Save" />#}
-    </div>
-    {#    </form>#}
 
     <div id="item_new_form" class="modal hide fade" tabindex="-1" role="dialog">
         <div class="modal-header">
@@ -112,7 +92,7 @@
 
         </div>
         <div class="modal-footer">
-            
+
             <button class="btn btn-primary" data-dismiss="modal" id="InfroTextSubmit">Save changes</button>
         </div>
     </div>
