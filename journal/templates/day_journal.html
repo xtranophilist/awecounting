@@ -16,9 +16,9 @@
         $(document).ready(function () {
 
             {% load filters %}
-            day_cash_sales = {{journal.day_cash_sales|jsonify}}
-            day_cash_sales_model = new DayCashSales(day_cash_sales)
-                    ko.applyBindings(day_cash_sales_model, $('#cash-sales-table')[0]);
+            {#            var day_cash_sales = {{journal.day_cash_sales|jsonify}}#}
+
+            {#            ko.applyBindings(day_cash_sales_model, $('#cash-sales-table')[0]);#}
 
 
         });
@@ -27,13 +27,13 @@
 
 {% block content %}
 
-    {{ data }}
-
     <div class="page-header position-relative">
         <h1>
             Day Journal for {{ journal.date }}
         </h1>
     </div>
+
+    {{ journal_data }}
 
 
     {#    <form method="post" action="#" data-bind='submit: save' >#}
