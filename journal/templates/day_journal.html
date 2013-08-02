@@ -1,16 +1,17 @@
 {%  extends "dashboard.html" %}
 
-{% block title %}Invoice{% endblock %}
+{% block title %}Day Journal for {{ journal.date }}{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li class="active"><a href="{% url "invoice" %}">Invoice</a></li>
+    <li class="active"><a href="{% url "new_day_journal" %}">Invoice</a></li>
 {% endblock %}
 
 {% block head_end %}
     <script src="http://static.acubor.com/js/vendors/knockout.js"></script>
     <script src="http://static.acubor.com/js/ko_lib.js"></script>
     <script src="http://static.acubor.com/js/base.js"></script>
+    <script src="http://static.acubor.com/js/day_journal.js"></script>
     <script>
         $(document).ready(function () {
 
@@ -33,51 +34,85 @@
 
     {{journal.day_cash_sales|jsonify}}
 
-    <form method="post" action="#" data-bind='submit: save' >
-        {% csrf_token %}
+    {#    <form method="post" action="#" data-bind='submit: save' >#}
+    {#        {% csrf_token %}#}
 
-        <div class="row-fluid">
+    <div class="row-fluid">
+
+        <table class="table table-bordered table-striped table-acubor table-sortable" id="voucher_table">
+            <thead>
+            <tr>
+                <th class="span1">SN</th>
+                <th class="span2">Item</th>
+                <th class="span3">Description</th>
+                <th class="span2">Price</th>
+                <th class="span1">Quantity</th>
+                <th class="span1">Discount %</th>
+                <th class="span1">Amount</th>
+                <th class="span1"></th>
+            </tr>
+            </thead>
+
+            <tbody data-bind='foreach: particulars'>
+            <tr>
+                <td>
+                    <div class="drag_handle"><i class="icon-ellipsis-vertical"></i>
+                    </div><span class="wid-pad pull-left" data-bind="text: sn"> </span>
+                </td>
+                <td>
+                    <div contenteditable data-bind="text: item_name, typeahead: $root.items, attr: {'data-index': sn}" class="item-complete-box span10 pull-left" ></div>
+                    <a href="#" data-bind="click: show_items" class="show_all_items pull-right wid-pad">
+                        <i class="icon-chevron-sign-down"></i>
+                    </a>
+                </td>
+                <td data-bind="text: description" contenteditable>
+                </td>
+                <td data-bind="editableText: unit_price, numeric: true" contenteditable>
+                </td>
+                <td contenteditable data-bind="editableText: quantity, numeric: true">
+                </td>
+                <td contenteditable data-bind="editableText: discount, numeric: true">
+                </td>
+                <td data-bind="text: amount()">
+                </td>
+                <td>
+                    <a class="icon-remove-sign" href="#" data-bind="click: $root.removeParticular"></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <br />
+
+    <div class="row-fluid">
 
 
-        </div>
 
-        <br />
-
-        <div class="row-fluid">
-
-
-
-        </div>
-        <br />
-        <div class="row-fluid">        
-            
+    </div>
+    <br />
+    <div class="row-fluid">
 
 
 
-            <input class="btn" type="submit" value="Save" />
-        </div>
-    </form>
 
-    <div id="item_new_form" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        {#            <input class="btn" type="submit" value="Save" />#}
+    </div>
+    {#    </form>#}
+
+    <div id="item_new_form" class="modal hide fade" tabindex="-1" role="dialog">
         <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <button type="button" class="close" data-dismiss="modal">×</button>
             <h3 id="myModalLabel">Edit Introduction</h3>
         </div>
 
         <div class="modal-body">
 
-            <form id="InfroText" method="POST">
 
-                <input type="hidden" name="InfroText" value="1">
-
-                <table>
-                    <tbody><tr><td>Title</td><td><input type="text" name="title" id="title" style="width:300px"><span class="hide help-inline">This is required</span></td></tr>
-                    <tr><td>Introduction</td><td><textarea name="contact" style="width:300px;height:100px"></textarea></td></tr>
-                    </tbody></table>
-            </form>
         </div>
         <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            
             <button class="btn btn-primary" data-dismiss="modal" id="InfroTextSubmit">Save changes</button>
         </div>
     </div>
