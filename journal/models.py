@@ -123,6 +123,23 @@ class DayJournal(models.Model):
     day_summary_inventory = models.ForeignKey(DaySummaryInventory)
     day_payroll = models.ForeignKey(DayPayroll)
 
+    def __init__(self, *args, **kwargs):
+        super(DayJournal, self).__init__(*args, **kwargs)
+        self.day_cash_sales = DayCashSales()
+        self.day_cash_purchase = DayCashPurchase()
+        self.day_cash_receipt = DayCashReceipt()
+        self.day_cash_payment = DayCashPayment()
+        self.day_credit_sales = DayCreditSales()
+        self.day_credit_purchase = DayCreditPurchase()
+        self.day_credit_expense = DayCreditExpense()
+        self.day_credit_income = DayCreditIncome()
+        self.day_summary_cash = DaySummaryCash()
+        self.day_summary_equivalent = DaySummaryEquivalent()
+        self.day_summary_bank = DaySummaryBank()
+        self.day_summary_sales_tax = DaySummarySalesTax()
+        self.day_summary_inventory = DaySummaryInventory()
+        self.day_payroll = DayPayroll()
+
     class Meta:
         db_table = 'journal_day'
 

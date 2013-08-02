@@ -1,0 +1,85 @@
+{%  extends "dashboard.html" %}
+
+{% block title %}Invoice{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "invoice" %}">Invoice</a></li>
+{% endblock %}
+
+{% block head_end %}
+    <script src="http://static.acubor.com/js/knockout.js"></script>
+    <script src="http://static.acubor.com/js/ko_lib.js"></script>
+    <script src="http://static.acubor.com/js/base.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            {% load filters %}
+
+
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    {{ data }}
+
+    <div class="page-header position-relative">
+        <h1>
+            Day Journal
+        </h1>
+    </div>
+
+    {{journal.day_cash_payment|jsonify}}
+
+    <form method="post" action="#" data-bind='submit: save' >
+        {% csrf_token %}
+
+        <div class="row-fluid">
+
+
+        </div>
+
+        <br />
+
+        <div class="row-fluid">
+
+
+
+        </div>
+        <br />
+        <div class="row-fluid">        
+            
+
+
+
+            <input class="btn" type="submit" value="Save" />
+        </div>
+    </form>
+
+    <div id="item_new_form" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+            <h3 id="myModalLabel">Edit Introduction</h3>
+        </div>
+
+        <div class="modal-body">
+
+            <form id="InfroText" method="POST">
+
+                <input type="hidden" name="InfroText" value="1">
+
+                <table>
+                    <tbody><tr><td>Title</td><td><input type="text" name="title" id="title" style="width:300px"><span class="hide help-inline">This is required</span></td></tr>
+                    <tr><td>Introduction</td><td><textarea name="contact" style="width:300px;height:100px"></textarea></td></tr>
+                    </tbody></table>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
+            <button class="btn btn-primary" data-dismiss="modal" id="InfroTextSubmit">Save changes</button>
+        </div>
+    </div>
+
+{% endblock %}
