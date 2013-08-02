@@ -16,6 +16,9 @@
         $(document).ready(function () {
 
             {% load filters %}
+            day_cash_sales = {{journal.day_cash_sales|jsonify}}
+            day_cash_sales_model = new DayCashSales(day_cash_sales)
+                    ko.applyBindings(day_cash_sales_model, $('#cash-sales-table')[0]);
 
 
         });
@@ -32,14 +35,15 @@
         </h1>
     </div>
 
-    {{journal.day_cash_sales|jsonify}}
 
     {#    <form method="post" action="#" data-bind='submit: save' >#}
     {#        {% csrf_token %}#}
 
+
+
     <div class="row-fluid">
 
-        <table class="table table-bordered table-striped table-acubor table-sortable" id="voucher_table">
+        <table class="table table-bordered table-striped table-acubor table-sortable" id="day_cash_sales">
             <thead>
             <tr>
                 <th class="span2">SN</th>
@@ -54,8 +58,7 @@
             <tbody data-bind='foreach: particulars'>
             <tr>
                 <td>
-                    <div class="drag_handle"><i class="icon-ellipsis-vertical"></i>
-                    </div><span class="wid-pad pull-left" data-bind="text: sn"> </span>
+                    <span class="wid-pad pull-left" data-bind="text: sn"> </span>
                 </td>
                 <td>
                     <div contenteditable data-bind="text: item_name, typeahead: $root.items, attr: {'data-index': sn}" class="item-complete-box span10 pull-left" ></div>

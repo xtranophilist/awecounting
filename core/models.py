@@ -10,8 +10,7 @@ class BankAccount(models.Model):
     account = models.ForeignKey(Account)
 
     def save(self, *args, **kwargs):
-        is_new = self.pk is None
-        if is_new:
+        if self.pk is None:
             account = Account(code=self.ac_no, name=self.bank_name)
             account.save()
             self.account = account
