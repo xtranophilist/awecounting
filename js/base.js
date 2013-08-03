@@ -33,7 +33,6 @@ $.ajaxSetup({
 });
 
 function TableViewModel(data, row_model, save_to_url){
-    console.log(data);
     var self = this;
     for (var k in data)
         self[k]=data[k];
