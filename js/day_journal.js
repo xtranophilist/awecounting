@@ -3,18 +3,18 @@ function DayJournal(data){
     for (var k in data)
         self[k]=data[k];
     $.ajax({
-      url: '/inventory/items/json/',
-      dataType: 'json',
-      async: false,
-      success: function(data) {
-        self.items = data;
-      }
+        url: '/inventory/items/json/',
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+            self.items = data;
+        }
     });
-    self.day_cash_sales = new TableViewModel(data.day_cash_sales, DayCashSalesRow);
+    self.day_cash_sales = new TableViewModel(data.day_cash_sales, DayCashSalesRow, '/journal/day_cash_sales/save');
 }
 
 
-function TableViewModel(data, row_model){
+function TableViewModel(data, row_model, save_to_url){
     var self = this;
     for (var k in data)
         self[k]=data[k];
@@ -24,8 +24,8 @@ function TableViewModel(data, row_model){
     }));
 
     self.hasNoRows = ko.computed(function(){
-    return self.rows().length === 0;
-  });
+        return self.rows().length === 0;
+    });
 
     self.addRow = function() {
         var new_item_index = self.rows().length+1;
@@ -39,6 +39,21 @@ function TableViewModel(data, row_model){
     if (self.hasNoRows){
         self.addRow();
     }
+
+    if (typeof(save_to_url) != 'undefined'){
+        self.save = function(e){
+            var el = get_target(e);
+            el.html('Saving');
+            $.post(save_to_url, ko.toJSON(self), function(){  el.html('Save'); });
+        }
+    }
+    else{
+        self.save= function(){
+            throw new Error("'save_to_url' not passed to TableViewModel or save() not implemented!");
+        }
+    }
+
+
 
 }
 
