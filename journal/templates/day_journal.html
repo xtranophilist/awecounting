@@ -16,13 +16,7 @@
         $(document).ready(function () {
 
             {% load filters %}
-
-            var day_journal = {{ journal|jsonify }}
-
-            console.log(day_journal)
-
-
-
+            ko.applyBindings(new DayJournal({{ journal|jsonify }}));
         });
     </script>
 {% endblock %}
@@ -43,7 +37,7 @@
 
 
 
-    <div class="row-fluid" id="day-cash-sales">
+    <div class="row-fluid" data-bind="with: day_cash_sales">
 
         <table class="table table-bordered table-striped table-acubor table-sortable">
             <thead>
@@ -63,16 +57,16 @@
                     <span class="wid-pad pull-left" data-bind="text: sn"> </span>
                 </td>
                 <td>
-                    <div data-bind="editableText: item_name, typeahead: $root.items, attr: {'data-index': sn}, event: {'blur': $root.updateParticular}" class="item-complete-box span10 pull-left" ></div>
+                    <div data-bind="editableText: item, typeahead: $root.items, attr: {'data-index': sn}, event: {'blur': $root.updateParticular}" class="item-complete-box span10 pull-left" ></div>
                     <a href="#" data-bind="click: show_items" class="show_all_items pull-right wid-pad">
                         <i class="icon-chevron-sign-down"></i>
                     </a>
                 </td>
-                <td data-bind="editableText: unit_price, numeric: true">
-                </td>
                 <td data-bind="editableText: quantity, numeric: true">
                 </td>
-                <td data-bind="text: amount()">
+                <td data-bind="text: rate()">
+                </td>
+                <td data-bind="editableText: amount">
                 </td>
                 <td>
                     <a class="icon-remove-sign" href="#" data-bind="click: $root.removeRow"></a>
