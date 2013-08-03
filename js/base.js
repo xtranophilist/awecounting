@@ -32,15 +32,15 @@ $.ajaxSetup({
     }
 });
 
-function TableViewModel(data, row_model, save_to_url){
+function TableViewModel(options, row_model){
 
     var self = this;
-    for (var k in data)
-        self[k]=data[k];
+    for (var k in options.properties)
+        self[k]=options.properties[k];
 
     self.message = ko.observable();
 
-    self.rows = ko.observableArray(ko.utils.arrayMap(data.rows, function(item) {
+    self.rows = ko.observableArray(ko.utils.arrayMap(options.rows, function(item) {
         return new row_model(item);
     }));
 
@@ -63,7 +63,7 @@ function TableViewModel(data, row_model, save_to_url){
 
     self._initial_rows = self.rows().slice(0);
 
-    if (typeof(save_to_url) != 'undefined'){
+    if (typeof(options.save_to_url) != 'undefined'){
         self.save = function(model, e){
             var el = get_target(e);
 //            el.on('mouseover', function() {
@@ -79,12 +79,12 @@ function TableViewModel(data, row_model, save_to_url){
 //            self.rows()[0]['item_id'] = 2
             $.ajax({
                 type: "POST",
-                url: save_to_url,
+                url: options.save_to_url,
                 data: ko.toJSON(self),
                 success: function(msg){
                     self.message('Saved!');
-                    if (typeof(data.onSaveSuccess) != 'undefined'){
-                        data.onSaveSuccess(msg, self.rows());
+                    if (typeof(options.onSaveSuccess) != 'undefined'){
+                        options.onSaveSuccess(msg, self.rows());
                     }
 
                 },
@@ -97,7 +97,7 @@ function TableViewModel(data, row_model, save_to_url){
     }
     else{
         self.save= function(){
-            throw new Error("'save_to_url' not passed to TableViewModel or save() not implemented!");
+            throw new Error("'save_to_url' option not passed to TableViewModel or save() not implemented!");
         }
     }
 

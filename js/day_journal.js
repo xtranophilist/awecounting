@@ -10,18 +10,19 @@ function DayJournal(data){
             self.items = data;
         }
     });
-    data.day_cash_sales.journal_date = self.date;
 
-    data.day_cash_sales.required = ['item', 'amount']
-
-    data.day_cash_sales.onSaveSuccess = function(msg, rows){
-        for (var i in msg){
-            rows[i].id = msg[i];
+    var day_cash_sales_options = {
+        rows: data.day_cash_sales,
+        save_to_url : '/journal/day/save/day_cash_sales/',
+        properties : {journal_date : self.date},
+        onSaveSuccess : function(msg, rows){
+            for (var i in msg){
+                rows[i].id = msg[i];
+            }
         }
+    };
 
-    }
-
-    self.day_cash_sales = new TableViewModel(data.day_cash_sales, DayCashSalesRow, '/journal/day/save/day_cash_sales/');
+    self.day_cash_sales = new TableViewModel(day_cash_sales_options, DayCashSalesRow);
 
     self.recordItem = function(item, event){
         item.item_id = get_target(event).data('selected');
