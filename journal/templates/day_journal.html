@@ -16,17 +16,11 @@
         $(document).ready(function () {
 
             {% load filters %}
-            var day_cash_sales = {{journal.day_cash_sales|jsonify}}
 
-            var day_cash_sales_rows = {
-                rows : day_cash_sales
-            };
+            var day_journal = {{ journal|jsonify }}
 
-            var day_cash_sales_model = new DayCashSales(day_cash_sales_rows);
+            console.log(day_journal)
 
-            console.log(day_cash_sales_model);
-
-            ko.applyBindings(day_cash_sales_model, $('#day-cash-sales')[0]);
 
 
         });
@@ -41,7 +35,7 @@
         </h1>
     </div>
 
-    {{ journal_data.day_cash_sales }}
+    {{ journal|jsonify }}
 
 
     {#    <form method="post" action="#" data-bind='submit: save' >#}
