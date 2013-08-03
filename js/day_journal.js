@@ -1,23 +1,19 @@
 function DayJournal(data){
     var self = this;
     for (var k in data)
+        //noinspection JSUnfilteredForInLoop
         self[k]=data[k];
-    console.log(data);
-    self.day_cash_sales = DayCashSales(data.day_cash_sales);
+    self.day_cash_sales = new DayCashSales(data.day_cash_sales);
 }
 
 
 function DayCashSales(data){
     var self = this;
     for (var k in data)
+        //noinspection JSUnfilteredForInLoop
         self[k]=data[k];
-    self.item = '';
-    self.quantity = ko.observable();
-    self.rate = ko.observable();
-    self.amount = ko.observable(0);
 
-
-    self.rows = ko.observableArray(ko.utils.arrayMap(data.particulars, function(item) {
+    self.rows = ko.observableArray(ko.utils.arrayMap(data.rows, function(item) {
         return new DayCashSalesRow(item);
     }));
 
@@ -29,15 +25,18 @@ function DayCashSales(data){
     self.removeRow = function(row) {
         for (var i = row.sn(); i < self.rows().length; i++) {
             self.rows()[i].sn(self.rows()[i].sn()-1);
-        };
+        }
         self.rows.remove(row);
     };
+
+    console.log(self);
 
 }
 
 function DayCashSalesRow(row){
     var self = this;
     for (var k in row)
+        //noinspection JSUnfilteredForInLoop
         self[k] = row[k];
     self.show_items = function(data, event){
         event.preventDefault();
