@@ -14,6 +14,13 @@ function DayJournal(data){
 
     data.day_cash_sales.required = ['item', 'amount']
 
+    data.day_cash_sales.onSaveSuccess = function(msg, rows){
+        for (var i in msg){
+            rows[i].id = msg[i];
+        }
+
+    }
+
     self.day_cash_sales = new TableViewModel(data.day_cash_sales, DayCashSalesRow, '/journal/day/save/day_cash_sales/');
 
     self.recordItem = function(item, event){
@@ -25,7 +32,7 @@ function DayCashSalesRow(row){
     var self = this;
 
     for (var k in row)
-        self[k] = row[k];
+        self[k] = ko.observable(row[k]);
 
     self.item = ko.observable();
     self.quantity = ko.observable();

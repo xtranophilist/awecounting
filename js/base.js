@@ -69,8 +69,7 @@ function TableViewModel(data, row_model, save_to_url){
 //            el.on('mouseover', function() {
 //                el.html('Save');
 //            });
-             self.message('Saving...');
-            console.log(self);
+            self.message('Saving...');
 //            for (var key in self[]) {
 //                if(ko.isComputed(obj[key]))
 //                {
@@ -78,13 +77,16 @@ function TableViewModel(data, row_model, save_to_url){
 //                }
 //            }
 //            self.rows()[0]['item_id'] = 2
-//            console.log(self.rows())
             $.ajax({
                 type: "POST",
                 url: save_to_url,
                 data: ko.toJSON(self),
                 success: function(msg){
                     self.message('Saved!');
+                    if (typeof(data.onSaveSuccess) != 'undefined'){
+                        data.onSaveSuccess(msg, self.rows());
+                    }
+
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     self.message('Saving Failed!');
