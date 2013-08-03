@@ -12,8 +12,11 @@ function DayJournal(data){
     });
     data.day_cash_sales.journal_date = self.date;
 
+    data.day_cash_sales.required = ['item', 'amount']
+
     self.day_cash_sales = new TableViewModel(data.day_cash_sales, DayCashSalesRow, '/journal/day/save/day_cash_sales/');
 }
+
 function DayCashSalesRow(row){
     var self = this;
 
