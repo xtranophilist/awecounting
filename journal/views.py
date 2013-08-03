@@ -7,7 +7,7 @@ import json
 
 
 def day_journal(request, id=None):
-    day_journal = DayJournal(date=date.today(), company=request.user.company)
+    day_journal, created = DayJournal.objects.get_or_create(date=date.today(), company=request.user.company)
     day_journal_data = DayJournalSerializer(day_journal).data
     base_template = 'dashboard.html'
     return render(request, 'day_journal.html', {
@@ -17,7 +17,7 @@ def day_journal(request, id=None):
 
 
 def get_journal(request):
-    journal, created = DayJournal.objects.get_or_create(date=json.loads(request.body).get('journal_date'), \
+    journal, created = DayJournal.objects.get_or_create(date=json.loads(request.body).get('journal_date'),
                                                         company=request.user.company)
     if created:
         journal.save()
@@ -26,7 +26,7 @@ def get_journal(request):
 
 def save_submodel(request, submodel):
     params = json.loads(request.body)
-    required = params.get('required')
+    required = ['item_id', 'amount']
     day_journal = get_journal(request)
     dct = {}
     for index, row in enumerate(params.get('rows')):
@@ -38,12 +38,12 @@ def save_submodel(request, submodel):
         if not valid:
             continue
         if not 'id' in row:
-            day_cash_sales = DayCashSales(sn=index+1, item_id=row.get('item_id'), amount=row.get('amount'),\
+            day_cash_sales = DayCashSales(sn=index + 1, item_id=row.get('item_id'), amount=row.get('amount'),
                                           quantity=row.get('quantity'), day_journal=day_journal)
 
         else:
             day_cash_sales = DayCashSales.objects.get(id=row['id'])
-        day_cash_sales.sn = index+1
+        day_cash_sales.sn = index + 1
         day_cash_sales.item_id = row.get('item_id')
         day_cash_sales.amount = row.get('amount')
         day_cash_sales.quantity = row.get('quantity')
