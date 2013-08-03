@@ -6,7 +6,7 @@ ko.bindingHandlers.typeahead = {
       .typeahead({
           minLength: 0,
           source: function(query, process) {
-            objects = [];
+            var objects = [];
             map = {};
             var data = ko.utils.unwrapObservable(valueAccessor());
             $.each(data, function(i, object) {
