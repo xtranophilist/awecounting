@@ -3,6 +3,14 @@ function DayJournal(data){
     for (var k in data)
         //noinspection JSUnfilteredForInLoop
         self[k]=data[k];
+    $.ajax({
+      url: '/inventory/items/json/',
+      dataType: 'json',
+      async: false,
+      success: function(data) {
+        self.items = data;
+      }
+    });
     self.day_cash_sales = new TableViewModel(data.day_cash_sales, DayCashSalesRow);
 }
 
@@ -23,9 +31,9 @@ function TableViewModel(data, row_model, sn){
     };
 
     self.removeRow = function(row) {
-        for (var i = row.sn(); i < self.rows().length; i++) {
-            self.rows()[i].sn(self.rows()[i].sn()-1);
-        }
+//        for (var i = row.sn(); i < self.rows().length; i++) {
+//            self.rows()[i].sn(self.rows()[i].sn()-1);
+//        }
         self.rows.remove(row);
     };
 
