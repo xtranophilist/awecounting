@@ -68,6 +68,8 @@ function TableViewModel(data, row_model, save_to_url){
                 el.html('Save');
             });
             el.html('Saving');
+            self.rows()[0]['item'] = 'haha';
+//            console.log(self.rows()[0]);
             $.ajax({
                 type: "POST",
                 url: save_to_url,

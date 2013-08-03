@@ -12,6 +12,7 @@ function DayJournal(data){
     });
     data.day_cash_sales.journal_date = self.date;
 
+
     self.updateItem = function(item, event){
         var key = $(event.currentTarget).data('selected');
         if(key){
@@ -19,8 +20,13 @@ function DayJournal(data){
             item.item = selected_item.name;
         }
     }
+
+    data.day_cash_sales.required = ['item', 'amount']
+
+
     self.day_cash_sales = new TableViewModel(data.day_cash_sales, DayCashSalesRow, '/journal/day/save/day_cash_sales/');
 }
+
 function DayCashSalesRow(row){
     var self = this;
 
