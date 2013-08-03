@@ -9,27 +9,27 @@ $(document).on('mouseup mousedown', '[contenteditable]',function(){
 
 //setup ajax requests to include csrf token
 $.ajaxSetup({
-     beforeSend: function(xhr, settings) {
-         function getCookie(name) {
-             var cookieValue = null;
-             if (document.cookie && document.cookie != '') {
-                 var cookies = document.cookie.split(';');
-                 for (var i = 0; i < cookies.length; i++) {
-                     var cookie = jQuery.trim(cookies[i]);
-                     // Does this cookie string begin with the name we want?
-                 if (cookie.substring(0, name.length + 1) == (name + '=')) {
-                     cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                     break;
-                 }
-             }
-         }
-         return cookieValue;
-         }
-         if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
-             // Only send the token to relative URLs i.e. locally.
-             xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
-         }
-     }
+    beforeSend: function(xhr, settings) {
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        if (!(/^http:.*/.test(settings.url) || /^https:.*/.test(settings.url))) {
+            // Only send the token to relative URLs i.e. locally.
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    }
 });
 
 function TableViewModel(data, row_model, save_to_url){
@@ -37,6 +37,8 @@ function TableViewModel(data, row_model, save_to_url){
     var self = this;
     for (var k in data)
         self[k]=data[k];
+
+    self.message = ko.observable();
 
     self.rows = ko.observableArray(ko.utils.arrayMap(data.rows, function(item) {
         return new row_model(item);
@@ -64,21 +66,28 @@ function TableViewModel(data, row_model, save_to_url){
     if (typeof(save_to_url) != 'undefined'){
         self.save = function(model, e){
             var el = get_target(e);
-            el.on('mouseover', function() {
-                el.html('Save');
-            });
-            el.html('Saving');
-            self.rows()[0]['item'] = 'haha';
-//            console.log(self.rows()[0]);
+//            el.on('mouseover', function() {
+//                el.html('Save');
+//            });
+             self.message('Saving...');
+            console.log(self);
+//            for (var key in self[]) {
+//                if(ko.isComputed(obj[key]))
+//                {
+//                    delete obj[key];
+//                }
+//            }
+//            self.rows()[0]['item_id'] = 2
+//            console.log(self.rows())
             $.ajax({
                 type: "POST",
                 url: save_to_url,
                 data: ko.toJSON(self),
                 success: function(msg){
-                    el.html('Save');
+                    self.message('Saved!');
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    el.html("Saving Failed!");
+                    self.message('Saving Failed!');
                 }
             });
 

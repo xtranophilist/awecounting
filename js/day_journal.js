@@ -17,7 +17,7 @@ function DayJournal(data){
     self.day_cash_sales = new TableViewModel(data.day_cash_sales, DayCashSalesRow, '/journal/day/save/day_cash_sales/');
 
     self.recordItem = function(item, event){
-        item.id = get_target(event).data('selected');
+        item.item_id = get_target(event).data('selected');
     }
 }
 
