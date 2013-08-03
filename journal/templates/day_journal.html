@@ -42,10 +42,10 @@
         <table class="table table-bordered table-striped table-acubor table-sortable">
             <thead>
             <tr>
-                <th class="span2">SN</th>
-                <th class="span4">Item</th>
+                <th class="span1">SN</th>
+                <th class="span2">Item</th>
                 <th class="span2">Quantity</th>
-                <th class="span1">Rate</th>
+                <th class="span2">Rate</th>
                 <th class="span2">Amount</th>
                 <th class="span1"></th>
             </tr>
@@ -58,7 +58,8 @@
                     <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                 </td>
                 <td>
-                    <div data-bind="editableText: item, typeahead: $root.items, event: {'blur': $root.updateParticular}" class="item-complete-box span10 pull-left" ></div>
+                    <div data-bind="editableText: item, typeahead: $root.items, event: {'blur': $root.updateItem}" class="item-complete-box span10 pull-left" ></div>
+
                     <a href="#" data-bind="click: show_items" class="show_all_items pull-right wid-pad">
                         <i class="icon-chevron-sign-down"></i>
                     </a>
