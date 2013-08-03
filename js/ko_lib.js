@@ -17,7 +17,8 @@ ko.bindingHandlers.typeahead = {
           },
           updater: function(element){
             if(map[element]){
-                $(el).attr('data-selected',map[element].id)
+                $(el).attr('data-selected',map[element].id);
+                return element;
             }else{
                 return "";
             }
