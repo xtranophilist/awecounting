@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from journal.models import DayJournal, DayCashPayment
+from journal.models import DayJournal, DayCashPayment, DayCashSales
 from datetime import date
 from journal.serializers import DayJournalSerializer
 from django.http import HttpResponse
@@ -26,17 +26,27 @@ def save_journal_if_not_exist(date, company):
 def save_submodel(request, submodel):
     params = json.loads(request.body)
     required = params.get('required')
-    for row in params.get('rows'):
+    day_journal = save_journal_if_not_exist(params.get('journal_date'), request.user.company)
+    dct = {}
+    for index, row in enumerate(params.get('rows')):
         valid = True
         for attr in required:
-            # if one of the required attributes isn't received
-            if not attr in row:
-                valid = False
-            # if one of the required attributes is an empty string
-            if row.get(attr) == "":
+            # if one of the required attributes isn't received or is an empty string
+            if not attr in row or row.get(attr) == "":
                 valid = False
         if not valid:
             continue
         print row
-    journal = save_journal_if_not_exist(params['journal_date'], request.user.company)
-    return HttpResponse(json.dumps({}), mimetype="application/json")
+        if not 'id' in row:
+            day_cash_sales = DayCashSales(sn=index+1, item_id=row.get('item_id'), amount=row.get('amount'),\
+                                          quantity=row.get('quantity'), day_journal=day_journal)
+
+        else:
+            day_cash_sales = DayCashSales.objects.get(id=row['id'])
+        day_cash_sales.sn = index+1
+        day_cash_sales.item_id = row.get('item_id')
+        day_cash_sales.amount = row.get('amount')
+        day_cash_sales.quantity = row.get('quantity')
+        day_cash_sales.save()
+        dct[index] = day_cash_sales
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
