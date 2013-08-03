@@ -49,7 +49,7 @@ class DayJournal(models.Model):
 class DayCashSales(models.Model):
     sn = models.IntegerField()
     item = models.ForeignKey(Item)
-    quantity = models.FloatField()
+    quantity = models.FloatField(blank=True, null=True)
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='day_cash_sales')
 
