@@ -97,12 +97,15 @@ function InvoiceViewModel(data){
         return sum;
     }
 
-    self.updateParticular = function(index, item){
-      var particular = self.particulars()[index-1];
-      if (particular===undefined)
-        return false;
-      particular.description(item.description);
-      particular.unit_price(item.sales_price);
+    self.updateParticular = function(item, event){
+        var key = $(event.currentTarget).data('selected');
+        if(key){
+            var selected_item = $.grep(self.items, function(e){ return e.id == key; })[0];
+            var model = self.particulars()[item.sn()-1];
+            model.description(selected_item.description);
+            model.unit_price(selected_item.sales_price);
+            model.item_name = selected_item.name;
+        }
     }
 
 }

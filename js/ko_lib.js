@@ -1,25 +1,29 @@
 //Custom Bindings
 ko.bindingHandlers.typeahead = {
-    init: function (element, valueAccessor) {
-        $(element).attr("autocomplete", "off")
-            .typeahead({
-                minLength: 0,
-                source: function(query, process) {
-                    objects = [];
-                    map = {};
-                    var data = ko.utils.unwrapObservable(valueAccessor());
-                    $.each(data, function(i, object) {
-                        map[object.name] = object;
-                        objects.push(object.name);
-                    });
-                    process(objects);
-                },
-                updater: function(selection){
-                    invoice_view_instance.updateParticular(this.$element[0].getAttribute('data-index'), map[selection]);
-                    return selection;
-                }
+  init: function (element, valueAccessor) {
+      var el = $(element);
+      el.attr("autocomplete", "off")
+      .typeahead({
+          minLength: 0,
+          source: function(query, process) {
+            objects = [];
+            map = {};
+            var data = ko.utils.unwrapObservable(valueAccessor());
+            $.each(data, function(i, object) {
+                map[object.name] = object;
+                objects.push(object.name);
             });
-    }
+            process(objects);
+          },
+          updater: function(element){
+            if(map[element]){
+                $(el).attr('data-selected',map[element].id)
+            }else{
+                return "";
+            }
+          }
+      });
+  }
 };
 
 

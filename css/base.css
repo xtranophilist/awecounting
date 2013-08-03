@@ -15,6 +15,9 @@ color: #fff;
 box-shadow: none;
 }
 .navbar-inverse .brand, .navbar-inverse .nav > li > a{ color: rgb(186, 216, 247); }
+.navbar .brand{
+  margin-left: 0;
+}
 .acubor-splash{
 margin-top: 15px;
 }
