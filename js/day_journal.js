@@ -27,13 +27,10 @@ function TableViewModel(data, row_model, sn){
 
     self.addRow = function() {
         var new_item_index = self.rows().length+1;
-        self.rows.push(new DayCashSalesRow({ sn: new_item_index }));
+        self.rows.push(new row_model());
     };
 
     self.removeRow = function(row) {
-//        for (var i = row.sn(); i < self.rows().length; i++) {
-//            self.rows()[i].sn(self.rows()[i].sn()-1);
-//        }
         self.rows.remove(row);
     };
 
