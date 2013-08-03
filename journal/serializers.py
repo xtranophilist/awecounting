@@ -8,7 +8,7 @@ class DayCashSalesSerializer(serializers.ModelSerializer):
 
 
 class DayJournalSerializer(serializers.ModelSerializer):
-    day_cash_sales = DayCashSalesSerializer(source='daycashsales_set')
+    day_cash_sales = DayCashSalesSerializer()
     # daycashpurchase_set
     # day_cash_purchase = models.ManyToManyField(DayCashPurchase)
     # day_cash_receipt = models.ManyToManyField(DayCashReceipt)
