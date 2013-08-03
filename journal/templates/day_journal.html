@@ -51,7 +51,8 @@
             </tr>
             </thead>
 
-            <tbody data-bind='foreach: rows'>
+            <tbody>
+            <!-- ko foreach: rows -->
             <tr>
                 <td>
                     <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
@@ -72,10 +73,19 @@
                     <a class="icon-remove-sign" href="#" data-bind="click: $parent.removeRow"></a>
                 </td>
             </tr>
+            <!-- /ko -->
+            {#            <tr data-bind="if: hasNoRows">#}
+            {#                <td colspan="3">#}
+            {#                    No rows have been added yet.#}
+            {#                </td>#}
+            {#            </tr>#}
             </tbody>
         </table>
         <button class="btn" data-bind="click: addRow">
             <i class="icon-plus-sign hand-on-hover" ></i> Add New Row
+        </button>
+        <button class="btn" data-bind="click: save">
+            Save
         </button>
 
     </div>
