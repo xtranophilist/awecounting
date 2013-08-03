@@ -58,7 +58,7 @@ function TableViewModel(data, row_model, save_to_url){
         self.addRow();
     }
 
-    self._initial_rows = $.extend(true, {}, self.rows());
+    self._initial_rows = self.rows().slice(0);
 
     if (typeof(save_to_url) != 'undefined'){
         self.save = function(model, e){
@@ -88,8 +88,6 @@ function TableViewModel(data, row_model, save_to_url){
     }
 
     self.reset= function(){
-        console.log(self.rows());
-        console.log(self._initial_rows[0]);
         self.rows(self._initial_rows);
     }
 }
