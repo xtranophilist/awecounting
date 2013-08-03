@@ -1,7 +1,6 @@
 function DayJournal(data){
     var self = this;
     for (var k in data)
-        //noinspection JSUnfilteredForInLoop
         self[k]=data[k];
     $.ajax({
       url: '/inventory/items/json/',
@@ -15,15 +14,18 @@ function DayJournal(data){
 }
 
 
-function TableViewModel(data, row_model, sn){
+function TableViewModel(data, row_model){
     var self = this;
     for (var k in data)
-        //noinspection JSUnfilteredForInLoop
         self[k]=data[k];
 
     self.rows = ko.observableArray(ko.utils.arrayMap(data.rows, function(item) {
         return new row_model(item);
     }));
+
+    self.hasNoRows = ko.computed(function(){
+    return self.rows().length === 0;
+  });
 
     self.addRow = function() {
         var new_item_index = self.rows().length+1;
@@ -34,7 +36,9 @@ function TableViewModel(data, row_model, sn){
         self.rows.remove(row);
     };
 
-    console.log(self);
+    if (self.hasNoRows){
+        self.addRow();
+    }
 
 }
 
@@ -42,16 +46,16 @@ function DayCashSalesRow(row){
     var self = this;
 
     for (var k in row)
-        //noinspection JSUnfilteredForInLoop
         self[k] = row[k];
 
     self.item = '';
     self.quantity = ko.observable();
     self.amount = ko.observable(0);
 
-    //noinspection JSUnresolvedFunction
     self.rate = ko.computed(function(){
-        return self.amount/self.quantity;
+        var rate =  self.amount()/self.quantity();
+        return isNaN(rate) ? '' : rate;
+
     });
 
     self.show_items = function(data, event){
