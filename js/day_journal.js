@@ -12,8 +12,15 @@ function DayJournal(data){
     });
     data.day_cash_sales.journal_date = self.date;
     self.day_cash_sales = new TableViewModel(data.day_cash_sales, DayCashSalesRow, '/journal/day_cash_sales/save');
-}
 
+    self.updateItem = function(item, event){
+        var key = $(event.currentTarget).data('selected');
+        if(key){
+            var selected_item = $.grep(self.items, function(e){ return e.id == key; })[0];
+            item.item = selected_item.name;
+        }
+    }
+}
 
 function DayCashSalesRow(row){
     var self = this;
