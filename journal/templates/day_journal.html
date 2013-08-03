@@ -54,10 +54,10 @@
             <tbody data-bind='foreach: rows'>
             <tr>
                 <td>
-                    <span class="wid-pad pull-left" data-bind="text: sn"> </span>
+                    <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                 </td>
                 <td>
-                    <div data-bind="editableText: item, typeahead: $root.items, attr: {'data-index': sn}, event: {'blur': $root.updateParticular}" class="item-complete-box span10 pull-left" ></div>
+                    <div data-bind="editableText: item, typeahead: $root.items, event: {'blur': $root.updateParticular}" class="item-complete-box span10 pull-left" ></div>
                     <a href="#" data-bind="click: show_items" class="show_all_items pull-right wid-pad">
                         <i class="icon-chevron-sign-down"></i>
                     </a>
@@ -69,7 +69,7 @@
                 <td data-bind="editableText: amount">
                 </td>
                 <td>
-                    <a class="icon-remove-sign" href="#" data-bind="click: $root.removeRow"></a>
+                    <a class="icon-remove-sign" href="#" data-bind="click: $parent.removeRow"></a>
                 </td>
             </tr>
             </tbody>
