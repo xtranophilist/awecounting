@@ -41,10 +41,24 @@ function TableViewModel(data, row_model, save_to_url){
     }
 
     if (typeof(save_to_url) != 'undefined'){
-        self.save = function(e){
+        self.save = function(model, e){
             var el = get_target(e);
+            el.on('mouseover', function() {
+                el.html('Save')
+            });
             el.html('Saving');
-            $.post(save_to_url, ko.toJSON(self), function(){  el.html('Save'); });
+            $.ajax({
+                type: "POST",
+                url: save_to_url,
+                data: ko.toJSON(self),
+                success: function(msg){
+                    el.html('Save');
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    el.html("Saving Failed!");
+                }
+            });
+
         }
     }
     else{
@@ -53,6 +67,10 @@ function TableViewModel(data, row_model, save_to_url){
         }
     }
 
+
+    self.reset= function(){
+
+    }
 
 
 }
