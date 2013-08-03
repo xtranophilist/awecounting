@@ -25,6 +25,7 @@ ko.bindingHandlers.typeahead = {
 
 ko.bindingHandlers.editableText = {
     init: function(element, valueAccessor) {
+        $(element).attr('contenteditable', true)
         $(element).on('blur', function() {
             var observable = valueAccessor();
             observable( $(this).text() );
