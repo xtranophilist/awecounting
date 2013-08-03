@@ -23,6 +23,8 @@ function TableViewModel(data, row_model, save_to_url){
         return new row_model(item);
     }));
 
+
+
     self.hasNoRows = ko.computed(function(){
         return self.rows().length === 0;
     });
@@ -39,6 +41,8 @@ function TableViewModel(data, row_model, save_to_url){
     if (self.hasNoRows){
         self.addRow();
     }
+
+    self._initial_rows = $.extend(true, {}, self.rows());
 
     if (typeof(save_to_url) != 'undefined'){
         self.save = function(model, e){
@@ -69,7 +73,9 @@ function TableViewModel(data, row_model, save_to_url){
 
 
     self.reset= function(){
-
+        console.log(self.rows());
+        console.log(self._initial_rows[0]);
+        self.rows(self._initial_rows);
     }
 
 
