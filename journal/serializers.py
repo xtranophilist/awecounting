@@ -3,6 +3,7 @@ from journal.models import DayJournal, DayCashSales
 
 
 class DayCashSalesSerializer(serializers.ModelSerializer):
+    item = serializers.Field(source='item.name')
     class Meta:
         model = DayCashSales
 
