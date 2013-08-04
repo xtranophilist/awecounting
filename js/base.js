@@ -57,7 +57,7 @@ function TableViewModel(options, row_model){
         self.rows.remove(row);
     };
 
-    if (self.hasNoRows){
+    if (self.hasNoRows()){
         self.addRow();
     }
 

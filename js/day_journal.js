@@ -32,12 +32,12 @@ function DayJournal(data){
 function DayCashSalesRow(row){
     var self = this;
 
-    for (var k in row)
-        self[k] = ko.observable(row[k]);
-
     self.item = ko.observable();
     self.quantity = ko.observable();
     self.amount = ko.observable(0);
+
+    for (var k in row)
+        self[k] = ko.observable(row[k]);
 
     self.rate = ko.computed(function(){
         var rate =  self.amount()/self.quantity();
