@@ -45,7 +45,7 @@ function DayCashSalesRow(row){
 
     self.rate = ko.computed(function(){
         var rate =  self.amount()/self.quantity();
-        return isNaN(rate) ? '' : rate;
+        return isNaN(rate) ? '' : Math.round(rate*100)/100;
     });
 
     self.show_items = function(data, event){
