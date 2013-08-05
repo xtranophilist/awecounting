@@ -35,8 +35,8 @@ $.ajaxSetup({
 function TableViewModel(options, row_model){
 
     var self = this;
-    for (var k in options.properties)
-        self[k]=options.properties[k];
+//    for (var k in options.properties)
+//        self[k]=options.properties[k];
 
     self.message = ko.observable();
 
@@ -44,9 +44,21 @@ function TableViewModel(options, row_model){
         return new row_model(item);
     }));
 
+    //if there are any rows
+    if(self.rows().length){
+        //if row has a sn() field, sort it
+        if (self.rows()[0].sn()){
+            self.rows().sort(function (l, r) {
+                return l.sn() > r.sn() ? 1 : -1
+            });
+        }
+    }
+
     self.hasNoRows = ko.computed(function(){
         return self.rows().length === 0;
     });
+
+
 
     self.addRow = function() {
         var new_item_index = self.rows().length+1;
@@ -62,6 +74,8 @@ function TableViewModel(options, row_model){
     }
 
     self._initial_rows = self.rows().slice(0);
+
+//    self.delete_rows = [];
 
     if (typeof(options.save_to_url) != 'undefined'){
         self.save = function(model, e){

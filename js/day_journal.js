@@ -14,7 +14,7 @@ function DayJournal(data){
     var day_cash_sales_options = {
         rows: data.day_cash_sales,
         save_to_url : '/journal/day/save/day_cash_sales/',
-        properties : {journal_date : self.date},
+        journal_date : self.date,
         onSaveSuccess : function(msg, rows){
             for (var i in msg){
                 rows[i].id = msg[i];
