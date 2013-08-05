@@ -27,6 +27,12 @@ ko.bindingHandlers.typeahead = {
   }
 };
 
+ko.bindingHandlers.flash = {
+    init: function(element) {
+        $(element).hide().fadeIn('slow');
+    }
+};
+
 
 ko.bindingHandlers.editableText = {
     init: function(element, valueAccessor) {
