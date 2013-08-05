@@ -26,7 +26,24 @@ function DayJournal(data){
         }
     };
 
+    var day_cash_purchase_options = {
+        rows: data.day_cash_purchase,
+        save_to_url : '/journal/day/save/day_cash_purchase/',
+        properties : {journal_date : self.date},
+        onSaveSuccess : function(msg, rows){
+            $("#day-cash-purchase > tr").each(function (index) {
+                $($("#day-cash-purchase > tr")[index]).addClass('invalid-row');
+            });
+            for (var i in msg){
+                rows[i].id = msg[i];
+                $($("#day-cash-purchase > tr")[i]).removeClass('invalid-row');
+            }
+        }
+    };
+
     self.day_cash_sales = new TableViewModel(day_cash_sales_options, DayCashSalesRow);
+
+    self.day_cash_purchase = new TableViewModel(day_cash_purchase_options, DayCashSalesRow);
 
     self.recordItem = function(item, event){
         item.item_id = get_target(event).data('selected');
