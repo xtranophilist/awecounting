@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from journal.models import DayJournal, DayCashPayment, DayCashSales
+from journal.models import DayJournal, DayCashPayment, DayCashSales, DayCashPurchase
 from datetime import date
 from journal.serializers import DayJournalSerializer
 from django.http import HttpResponse
@@ -13,7 +13,7 @@ def day_journal(request, id=None):
     return render(request, 'day_journal.html', {
         'journal': day_journal_data,
         'base_template': base_template,
-    })
+        })
 
 
 def get_journal(request):
@@ -24,7 +24,7 @@ def get_journal(request):
     return journal
 
 
-def save_submodel(request, submodel):
+def save_day_cash_sales(request, submodel):
     params = json.loads(request.body)
     required = ['item_id', 'amount']
     day_journal = get_journal(request)
@@ -38,9 +38,9 @@ def save_submodel(request, submodel):
                 valid = False
         if not valid:
             continue
-        # if not 'id' in row:
+            # if not 'id' in row:
         day_cash_sales = DayCashSales(sn=index + 1, item_id=row.get('item_id'), amount=row.get('amount'),
-                                          quantity=row.get('quantity'), day_journal=day_journal, id=row.get('id'))
+                                      quantity=row.get('quantity'), day_journal=day_journal, id=row.get('id'))
         # else:
         #     day_cash_sales = DayCashSales.objects.get(id=row['id'])
 
@@ -51,4 +51,34 @@ def save_submodel(request, submodel):
 
         day_cash_sales.save()
         dct[index] = day_cash_sales.id
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+def save_day_cash_purchase(request):
+    params = json.loads(request.body)
+    required = ['item_id', 'amount']
+    day_journal = get_journal(request)
+    dct = {}
+    DayCashPurchase.objects.filter(day_journal=day_journal).delete()
+    for index, row in enumerate(params.get('rows')):
+        valid = True
+        for attr in required:
+            # if one of the required attributes isn't received or is an empty string
+            if not attr in row or row.get(attr) == "":
+                valid = False
+        if not valid:
+            continue
+            # if not 'id' in row:
+        day_cash_purchase = DayCashPurchase(sn=index + 1, item_id=row.get('item_id'), amount=row.get('amount'),
+                                      quantity=row.get('quantity'), day_journal=day_journal, id=row.get('id'))
+        # else:
+        #     day_cash_purchase = DayCashPurchase.objects.get(id=row['id'])
+
+        day_cash_purchase.sn = index + 1
+        day_cash_purchase.item_id = row.get('item_id')
+        day_cash_purchase.amount = row.get('amount')
+        day_cash_purchase.quantity = row.get('quantity')
+
+        day_cash_purchase.save()
+        dct[index] = day_cash_purchase.id
     return HttpResponse(json.dumps(dct), mimetype="application/json")
