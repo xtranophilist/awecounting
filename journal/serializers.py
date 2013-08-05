@@ -12,8 +12,8 @@ class DayCashSalesSerializer(serializers.ModelSerializer):
 
 
 class DayCashPurchaseSerializer(serializers.ModelSerializer):
-    # item = serializers.Field(source='item.name')
-    # item_id = serializers.Field(source='item_id')
+    item = serializers.Field(source='item.name')
+    item_id = serializers.Field(source='item_id')
 
     class Meta:
         model = DayCashPurchase

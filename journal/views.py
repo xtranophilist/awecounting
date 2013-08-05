@@ -24,7 +24,7 @@ def get_journal(request):
     return journal
 
 
-def save_day_cash_sales(request, submodel):
+def save_day_cash_sales(request):
     params = json.loads(request.body)
     required = ['item_id', 'amount']
     day_journal = get_journal(request)
@@ -47,7 +47,11 @@ def save_day_cash_sales(request, submodel):
         day_cash_sales.sn = index + 1
         day_cash_sales.item_id = row.get('item_id')
         day_cash_sales.amount = row.get('amount')
-        day_cash_sales.quantity = row.get('quantity')
+        if row.get('quantity'):
+            print 'aha'
+            day_cash_sales.quantity = row.get('quantity')
+
+        print row
 
         day_cash_sales.save()
         dct[index] = day_cash_sales.id
@@ -70,15 +74,15 @@ def save_day_cash_purchase(request):
             continue
             # if not 'id' in row:
         day_cash_purchase = DayCashPurchase(sn=index + 1, item_id=row.get('item_id'), amount=row.get('amount'),
-                                      quantity=row.get('quantity'), day_journal=day_journal, id=row.get('id'))
+                                            quantity=row.get('quantity'), day_journal=day_journal, id=row.get('id'))
         # else:
         #     day_cash_purchase = DayCashPurchase.objects.get(id=row['id'])
 
         day_cash_purchase.sn = index + 1
         day_cash_purchase.item_id = row.get('item_id')
         day_cash_purchase.amount = row.get('amount')
-        day_cash_purchase.quantity = row.get('quantity')
-
+        if row.get('quantity'):
+            day_cash_purchase.quantity = row.get('quantity')
         day_cash_purchase.save()
         dct[index] = day_cash_purchase.id
     return HttpResponse(json.dumps(dct), mimetype="application/json")
