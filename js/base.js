@@ -35,8 +35,11 @@ $.ajaxSetup({
 function TableViewModel(options, row_model){
 
     var self = this;
-//    for (var k in options.properties)
-//        self[k]=options.properties[k];
+
+    if (typeof(options.properties)!='undefined'){
+        for (var k in options.properties)
+            self[k]=options.properties[k];
+    }
 
     self.message = ko.observable();
 
@@ -57,8 +60,6 @@ function TableViewModel(options, row_model){
     self.hasNoRows = ko.computed(function(){
         return self.rows().length === 0;
     });
-
-
 
     self.addRow = function() {
         var new_item_index = self.rows().length+1;

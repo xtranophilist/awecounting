@@ -95,3 +95,7 @@ tbody > tr > td[contenteditable="true"]:focus {
   width: 46px;
   letter-spacing: 1px;
 }
+
+.invalid-row td{
+    background: #FBE3E4 !important;
+}

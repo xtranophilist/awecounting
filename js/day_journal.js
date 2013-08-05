@@ -14,10 +14,14 @@ function DayJournal(data){
     var day_cash_sales_options = {
         rows: data.day_cash_sales,
         save_to_url : '/journal/day/save/day_cash_sales/',
-        journal_date : self.date,
+        properties : {journal_date : self.date},
         onSaveSuccess : function(msg, rows){
+            $("#day-cash-sales > tr").each(function (index) {
+                $($("#day-cash-sales > tr")[index]).addClass('invalid-row');
+            });
             for (var i in msg){
                 rows[i].id = msg[i];
+                $($("#day-cash-sales > tr")[i]).removeClass('invalid-row');
             }
         }
     };
