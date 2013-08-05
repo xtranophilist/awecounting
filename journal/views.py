@@ -30,6 +30,7 @@ def save_submodel(request, submodel):
     day_journal = get_journal(request)
     dct = {}
     for index, row in enumerate(params.get('rows')):
+        print row
         valid = True
         for attr in required:
             # if one of the required attributes isn't received or is an empty string
@@ -40,9 +41,9 @@ def save_submodel(request, submodel):
         if not 'id' in row:
             day_cash_sales = DayCashSales(sn=index + 1, item_id=row.get('item_id'), amount=row.get('amount'),
                                           quantity=row.get('quantity'), day_journal=day_journal)
-
         else:
             day_cash_sales = DayCashSales.objects.get(id=row['id'])
+        print row
         day_cash_sales.sn = index + 1
         day_cash_sales.item_id = row.get('item_id')
         day_cash_sales.amount = row.get('amount')
