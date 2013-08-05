@@ -98,3 +98,7 @@ tbody > tr > td[contenteditable="true"]:focus {
 .invalid-row td{
     background: #FBE3E4 !important;
 }
+
+.collapsible-head{
+    background: #F0F0F0;
+}
