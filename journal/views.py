@@ -25,7 +25,6 @@ def get_journal(request):
 
 
 def save_submodel(request, submodel):
-    print
     params = json.loads(request.body)
     required = ['item_id', 'amount']
     day_journal = get_journal(request)
