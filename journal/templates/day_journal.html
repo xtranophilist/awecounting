@@ -56,7 +56,7 @@
                     <td>
                         <div data-bind="editableText: item, typeahead: $root.items, event: {blur: $root.recordItem}" class="item-complete-box span10 pull-left" ></div>
 
-                        <a href="#" data-bind="click: show_items" class="show_all_items pull-right wid-pad">
+                        <a href="#" data-bind="click: show_items" class="show_all_items pull-right wid-pad" tabindex="-1">
                             <i class="icon-chevron-sign-down"></i>
                         </a>
                     </td>
@@ -64,7 +64,7 @@
                     <td data-bind="text: rate()"></td>
                     <td data-bind="editableText: amount"></td>
                     <td>
-                        <a class="icon-remove-sign" href="#" data-bind="click: $parent.removeRow"></a>
+                        <a class="icon-remove-sign" href="#" data-bind="click: $parent.removeRow" tabindex="-1"></a>
                     </td>
                 </tr>
                 <!-- /ko -->
@@ -116,7 +116,7 @@
                     <td>
                         <div data-bind="editableText: item, typeahead: $root.items, event: {blur: $root.recordItem}" class="item-complete-box span10 pull-left" ></div>
 
-                        <a href="#" data-bind="click: show_items" class="show_all_items pull-right wid-pad">
+                        <a href="#" data-bind="click: show_items" class="show_all_items pull-right wid-pad" tabindex="-1">
                             <i class="icon-chevron-sign-down"></i>
                         </a>
                     </td>
@@ -124,7 +124,7 @@
                     <td data-bind="text: rate()"></td>
                     <td data-bind="editableText: amount"></td>
                     <td>
-                        <a class="icon-remove-sign" href="#" data-bind="click: $parent.removeRow"></a>
+                        <a class="icon-remove-sign" href="#" data-bind="click: $parent.removeRow" tabindex="-1"></a>
                     </td>
                 </tr>
                 <!-- /ko -->
