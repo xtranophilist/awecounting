@@ -25,13 +25,16 @@ def get_journal(request):
 
 
 def save_submodel(request, submodel):
+    print
     params = json.loads(request.body)
     required = ['item_id', 'amount']
     day_journal = get_journal(request)
     dct = {}
+
     for index, row in enumerate(params.get('rows')):
-        print row
         valid = True
+        print row
+        print
         for attr in required:
             # if one of the required attributes isn't received or is an empty string
             if not attr in row or row.get(attr) == "":
@@ -43,7 +46,7 @@ def save_submodel(request, submodel):
                                           quantity=row.get('quantity'), day_journal=day_journal)
         else:
             day_cash_sales = DayCashSales.objects.get(id=row['id'])
-        print row
+
         day_cash_sales.sn = index + 1
         day_cash_sales.item_id = row.get('item_id')
         day_cash_sales.amount = row.get('amount')
