@@ -102,3 +102,8 @@ tbody > tr > td[contenteditable="true"]:focus {
 .collapsible-head{
     background: #F0F0F0;
 }
+
+.collapse.in {
+    overflow: visible;
+}
+
