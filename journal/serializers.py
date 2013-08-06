@@ -3,12 +3,12 @@ from journal.models import DayJournal, DayCashSales, DayCashPurchase, DayCashRec
 
 
 class DayCashSalesSerializer(serializers.ModelSerializer):
-    item = serializers.Field(source='item.name')
+    # item = serializers.Field(source='item.name')
     item_id = serializers.Field(source='item_id')
 
     class Meta:
         model = DayCashSales
-        exclude = ['day_journal']
+        exclude = ['day_journal', 'item']
 
 
 class DayCashPurchaseSerializer(serializers.ModelSerializer):
