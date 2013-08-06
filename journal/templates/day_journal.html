@@ -71,7 +71,7 @@
 {#                        <a href="#" data-bind="click: show_items" class="show_all_items pull-right wid-pad" tabindex="-1">#}
 {#                            <i class="icon-chevron-sign-down"></i>#}
 {#                        </a>#}
-                        <select data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id"></select>
+                        <select class="span12" data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, select2: {}"></select>
                     </td>
                     <td data-bind="editableText: quantity, numeric: true"></td>
                     <td data-bind="text: rate()"></td>
