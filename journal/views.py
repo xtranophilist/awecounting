@@ -72,12 +72,8 @@ def save_day_cash_purchase(request):
                 valid = False
         if not valid:
             continue
-            # if not 'id' in row:
         day_cash_purchase = DayCashPurchase(sn=index + 1, item_id=row.get('item_id'), amount=row.get('amount'),
                                             quantity=row.get('quantity'), day_journal=day_journal, id=row.get('id'))
-        # else:
-        #     day_cash_purchase = DayCashPurchase.objects.get(id=row['id'])
-
         day_cash_purchase.sn = index + 1
         day_cash_purchase.item_id = row.get('item_id')
         day_cash_purchase.amount = row.get('amount')
@@ -102,12 +98,8 @@ def save_day_cash_receipt(request):
                 valid = False
         if not valid:
             continue
-            # if not 'id' in row:
         day_cash_receipt = DayCashReceipt(sn=index + 1, account_id=row.get('account_id'), amount=row.get('amount'),
                                           day_journal=day_journal, id=row.get('id'))
-        # else:
-        #     day_cash_receipt = DayCashReceipt.objects.get(id=row['id'])
-
         day_cash_receipt.sn = index + 1
         day_cash_receipt.account_id = row.get('account_id')
         day_cash_receipt.amount = row.get('amount')
@@ -130,12 +122,8 @@ def save_day_cash_payment(request):
                 valid = False
         if not valid:
             continue
-            # if not 'id' in row:
         day_cash_payment = DayCashPayment(sn=index + 1, account_id=row.get('account_id'), amount=row.get('amount'),
                                           day_journal=day_journal, id=row.get('id'))
-        # else:
-        #     day_cash_payment = DayCashReceipt.objects.get(id=row['id'])
-
         day_cash_payment.sn = index + 1
         day_cash_payment.account_id = row.get('account_id')
         day_cash_payment.amount = row.get('amount')

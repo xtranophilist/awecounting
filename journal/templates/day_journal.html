@@ -31,6 +31,18 @@
 
     {{ journal|jsonify }}
 
+    <select tabindex="2" class="chosen-select" data-placeholder="Choose a Country...">
+        <option value=""></option>
+        <option value="United States">United States</option>
+        <option value="United Kingdom">United Kingdom</option>
+        <option value="Afghanistan">Afghanistan</option>
+        <option value="Aland Islands">Aland Islands</option>
+        <option value="Albania">Albania</option>
+        <option value="Algeria">Algeria</option>
+        <option value="American Samoa">American Samoa</option>
+        <option value="Zimbabwe">Zimbabwe</option>
+    </select>
+
     <div class="row-fluid collapse-group" data-bind="with: day_cash_sales">
         <h2 class="collapsible-head">Cash Sales<b class="arrow icon-angle-down pull-right"></b></h2>
         <div class="collapse">
