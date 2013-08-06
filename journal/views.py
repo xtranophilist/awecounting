@@ -90,7 +90,7 @@ def save_day_cash_purchase(request):
 
 def save_day_cash_receipt(request):
     params = json.loads(request.body)
-    required = ['item_id', 'amount']
+    required = ['account_id', 'amount']
     day_journal = get_journal(request)
     dct = {}
     DayCashReceipt.objects.filter(day_journal=day_journal).delete()
@@ -103,16 +103,42 @@ def save_day_cash_receipt(request):
         if not valid:
             continue
             # if not 'id' in row:
-        day_cash_receipt = DayCashReceipt(sn=index + 1, item_id=row.get('item_id'), amount=row.get('amount'),
-                                          quantity=row.get('quantity'), day_journal=day_journal, id=row.get('id'))
+        day_cash_receipt = DayCashReceipt(sn=index + 1, account_id=row.get('account_id'), amount=row.get('amount'),
+                                          day_journal=day_journal, id=row.get('id'))
         # else:
         #     day_cash_receipt = DayCashReceipt.objects.get(id=row['id'])
 
         day_cash_receipt.sn = index + 1
-        day_cash_receipt.item_id = row.get('item_id')
+        day_cash_receipt.account_id = row.get('account_id')
         day_cash_receipt.amount = row.get('amount')
-        if row.get('quantity'):
-            day_cash_receipt.quantity = row.get('quantity')
         day_cash_receipt.save()
         dct[index] = day_cash_receipt.id
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+def save_day_cash_payment(request):
+    params = json.loads(request.body)
+    required = ['account_id', 'amount']
+    day_journal = get_journal(request)
+    dct = {}
+    DayCashPayment.objects.filter(day_journal=day_journal).delete()
+    for index, row in enumerate(params.get('rows')):
+        valid = True
+        for attr in required:
+            # if one of the required attributes isn't received or is an empty string
+            if not attr in row or row.get(attr) == "":
+                valid = False
+        if not valid:
+            continue
+            # if not 'id' in row:
+        day_cash_payment = DayCashPayment(sn=index + 1, account_id=row.get('account_id'), amount=row.get('amount'),
+                                          day_journal=day_journal, id=row.get('id'))
+        # else:
+        #     day_cash_payment = DayCashReceipt.objects.get(id=row['id'])
+
+        day_cash_payment.sn = index + 1
+        day_cash_payment.account_id = row.get('account_id')
+        day_cash_payment.amount = row.get('amount')
+        day_cash_payment.save()
+        dct[index] = day_cash_payment.id
     return HttpResponse(json.dumps(dct), mimetype="application/json")
