@@ -30,6 +30,7 @@ urlpatterns = patterns('',
                        (r'^tax/', include('tax.urls')),
                        (r'^inventory/', include('inventory.urls')),
                        (r'^journal/', include('journal.urls')),
+                       (r'^ledger/', include('ledger.urls')),
 
                        url(r'^settings/company/$', core_views.company_settings, name='company_settings'),
                        url(r'^party/create/$', core_views.party_form, name='create_party'),
