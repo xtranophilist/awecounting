@@ -1,11 +1,16 @@
 $(document).ready(function () {
+
     $('.collapsible-head').on('click', function(e) {
         e.preventDefault();
         var $this = $(this);
         var $collapse = $this.closest('.collapse-group').find('.collapse');
         $collapse.collapse('toggle');
     });
+
+    $('.chosen-select').chosen();
+
 });
+
 
 function get_target(e){
     return $((e.currentTarget) ? e.currentTarget : e.srcElement); //for IE <9 compatibility
