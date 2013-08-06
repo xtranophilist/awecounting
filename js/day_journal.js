@@ -2,6 +2,16 @@ function DayJournal(data){
     var self = this;
     for (var k in data)
         self[k]=data[k];
+
+    $.ajax({
+        url: '/ledger/accounts/json/',
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+            self.accounts = data;
+        }
+    });
+
     $.ajax({
         url: '/inventory/items/json/',
         dataType: 'json',

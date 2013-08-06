@@ -7,17 +7,13 @@ $(document).ready(function () {
     });
 });
 
-
 function get_target(e){
     return $((e.currentTarget) ? e.currentTarget : e.srcElement); //for IE <9 compatibility
 }
 
-
-
 $(document).on('mouseup mousedown', '[contenteditable]',function(){
     this.focus();
 });
-
 
 //setup ajax requests to include csrf token
 $.ajaxSetup({
@@ -49,6 +45,7 @@ function TableViewModel(options, row_model){
     var self = this;
 
     if (typeof(options.properties)!='undefined'){
+        /** @namespace options.properties */
         for (var k in options.properties)
             self[k]=options.properties[k];
     }
@@ -88,22 +85,11 @@ function TableViewModel(options, row_model){
 
     self._initial_rows = self.rows().slice(0);
 
-//    self.delete_rows = [];
-
     if (typeof(options.save_to_url) != 'undefined'){
         self.save = function(model, e){
             var el = get_target(e);
-//            el.on('mouseover', function() {
-//                el.html('Save');
-//            });
             self.message('Saving...');
-//            for (var key in self[]) {
-//                if(ko.isComputed(obj[key]))
-//                {
-//                    delete obj[key];
-//                }
-//            }
-//            self.rows()[0]['item_id'] = 2
+            console.log(self.rows());
             $.ajax({
                 type: "POST",
                 url: options.save_to_url,
