@@ -151,5 +151,61 @@
         </div>
     </div>
 
+    <div class="row-fluid collapse-group" data-bind="with: day_cash_receipt">
+        <h2 class="collapsible-head">Cash Receipt<b class="arrow icon-angle-down pull-right"></b></h2>
+        <div class="collapse">
+            <div data-bind="text: message()"></div>
+            <table class="table table-bordered table-striped table-acubor table-sortable">
+                <thead>
+                <tr>
+                    <th class="span1">SN</th>
+                    <th class="span2">Account Type</th>
+                    <th class="span2">Amount</th>
+                    <th class="span1"></th>
+                </tr>
+                </thead>
+
+                <tbody id="day-cash-sales">
+                <!-- ko foreach: rows -->
+                <tr data-bind="flash: true">
+                    <td>
+                        <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
+                    </td>
+                    <td>
+                        <div data-bind="editableText: item, typeahead: $root.items, event: {blur: $root.recordItem}" class="item-complete-box span10 pull-left" ></div>
+
+                        <a href="#" data-bind="click: show_items" class="show_all_items pull-right wid-pad" tabindex="-1">
+                            <i class="icon-chevron-sign-down"></i>
+                        </a>
+                    </td>
+                    <td data-bind="editableText: amount"></td>
+                    <td>
+                        <a class="icon-remove-sign" href="#" data-bind="click: $parent.removeRow" tabindex="-1"></a>
+                    </td>
+                </tr>
+                <!-- /ko -->
+                {#            <tr data-bind="if: hasNoRows">#}
+                {#                <td colspan="3">#}
+                {#                    No rows have been added yet.#}
+                {#                </td>#}
+                {#            </tr>#}
+                </tbody>
+            </table>
+
+            <button class="btn" data-bind="click: addRow">
+                <i class="icon-plus-sign hand-on-hover" ></i> Add New Row
+            </button>
+
+            <button class="btn" data-bind="click: save">
+                Save
+            </button>
+
+            <button class="btn" data-bind="click: reset">
+                Reset
+            </button>
+
+        </div>
+    </div>
+
 
 {% endblock %}
