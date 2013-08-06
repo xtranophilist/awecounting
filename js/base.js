@@ -7,8 +7,6 @@ $(document).ready(function () {
         $collapse.collapse('toggle');
     });
 
-    $('.chosen-select').chosen();
-
 });
 
 
