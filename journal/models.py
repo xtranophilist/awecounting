@@ -66,7 +66,7 @@ class DayCashReceipt(models.Model):
     sn = models.IntegerField()
     account = models.ForeignKey(Account)
     amount = models.FloatField()
-    day_journal = models.ForeignKey(DayJournal)
+    day_journal = models.ForeignKey(DayJournal, related_name='day_cash_receipt')
 
 
 class DayCashPayment(models.Model):
