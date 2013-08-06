@@ -89,6 +89,8 @@ function DayJournal(data){
 
     self.day_cash_receipt = new TableViewModel(day_cash_receipt_options, DayCashReceiptRow);
 
+    self.day_cash_payment = new TableViewModel(day_cash_payment_options, DayCashReceiptRow);
+
     self.recordItem = function(item, event){
         item.item_id = get_target(event).data('selected');
     }
