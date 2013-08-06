@@ -21,6 +21,8 @@ function DayJournal(data){
         }
     });
 
+    console.log(self.items);
+
     var day_cash_sales_options = {
         rows: data.day_cash_sales,
         save_to_url : '/journal/day/save/day_cash_sales/',
@@ -103,7 +105,7 @@ function DayJournal(data){
 function DayCashSalesRow(row){
     var self = this;
 
-    self.item = ko.observable();
+    self.item_id = ko.observable();
     self.quantity = ko.observable();
     self.amount = ko.observable(0);
 
