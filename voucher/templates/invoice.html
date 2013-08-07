@@ -19,12 +19,6 @@
 
             var json_data = {{data|jsonify}};
 
-            {#            json_data.particulars=[#}
-            {#                {sn: 1,'item_name':'a', unit_price:20, description: 'The description', quantity: 2, discount: 10},#}
-            {#                {sn: 2,'item_name':'b', unit_price:20, description: 'The description', quantity: 2, discount: 10},#}
-            {#                {sn: 3,'item_name':'c', unit_price:20, description: 'The description', quantity: 2, discount: 10}#}
-            {#            ];#}
-
             window.invoice_view_instance = new InvoiceViewModel(json_data);
 
             ko.applyBindings(invoice_view_instance);
@@ -97,7 +91,7 @@
 
         </div>
         <br />
-        <div class="row-fluid">
+        <div class="row-fluid" data-bind="with: particulars">
 
             <table class="table table-bordered table-striped table-acubor table-sortable" id="voucher_table">
                 <thead>
@@ -113,18 +107,19 @@
                 </tr>
                 </thead>
 
-                <tbody data-bind='foreach: particulars'>
+                <tbody data-bind='foreach: rows'>
                 <tr>
                     <td>
                         <div class="drag_handle"><i class="icon-ellipsis-vertical"></i>
                         </div><span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                     </td>
                     <td>
-                        <div data-bind="editableText: item_name, typeahead: $root.items,
-                        event: { blur: $root.updateParticular }" class="item-complete-box span10 pull-left" ></div>
-                        <a href="#" data-bind="click: show_items" class="show_all_items pull-right wid-pad">
-                            <i class="icon-chevron-sign-down"></i>
-                        </a>
+{#                        <div data-bind="editableText: item_name, typeahead: $root.items,#}
+{#                        event: { blur: $root.updateParticular }" class="item-complete-box span10 pull-left" ></div>#}
+{#                        <a href="#" data-bind="click: show_items" class="show_all_items pull-right wid-pad">#}
+{#                            <i class="icon-chevron-sign-down"></i>#}
+{#                        </a>#}
+                        <select class="span12" data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, select2: {}"></select>
                     </td>
                     <td data-bind="editableText: description">
                     </td>
@@ -142,8 +137,8 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="pull-right"><b>Grand Total: </b> <span data-bind="text: grand_total()"></span> </div>
-            <button class="btn" data-bind="click: addParticular">
+            <div class="pull-right"><b>Grand Total: </b> <span data-bind="text: $parent.grand_total()"></span> </div>
+            <button class="btn" data-bind="click: addRow">
                 <i class="icon-plus-sign hand-on-hover" ></i> Add New Row
             </button>
             <input class="btn" type="submit" value="Save" />
@@ -156,18 +151,18 @@
             <h3 id="myModalLabel">Edit Introduction</h3>
         </div>
 
-        <div class="modal-body">
-
-            <form id="InfoText" method="POST">
-
-                <input type="hidden" name="InfoText" value="1">
-
-                <table>
-                    <tbody><tr><td>Title</td><td><input type="text" name="title" id="title" style="width:300px"><span class="hide help-inline">This is required</span></td></tr>
-                    <tr><td>Introduction</td><td><textarea name="contact" style="width:300px;height:100px"></textarea></td></tr>
-                    </tbody></table>
-            </form>
-        </div>
+{#        <div class="modal-body">#}
+{##}
+{#            <form id="InfoText" method="POST">#}
+{##}
+{#                <input type="hidden" name="InfoText" value="1">#}
+{##}
+{#                <table>#}
+{#                    <tbody><tr><td>Title</td><td><input type="text" name="title" id="title" style="width:300px"><span class="hide help-inline">This is required</span></td></tr>#}
+{#                    <tr><td>Introduction</td><td><textarea name="contact" style="width:300px;height:100px"></textarea></td></tr>#}
+{#                    </tbody></table>#}
+{#            </form>#}
+{#        </div>#}
         <div class="modal-footer">
             <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
             <button class="btn btn-primary" data-dismiss="modal" id="InfoTextSubmit">Save changes</button>
