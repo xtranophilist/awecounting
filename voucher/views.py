@@ -48,8 +48,10 @@ def save_invoice(request):
     try:
         invoice.save()
     except Exception as e:
-        dct['error_message'] = '; '.join(e.messages)
-
+        if hasattr(e, 'messages'):
+            dct['error_message'] = '; '.join(e.messages)
+        else:
+            dct['error_message'] = 'Error in form data!'
     # form = InvoiceForm(data=params, instance=Invoice())
     # if form.is_valid():
     #     invoice = form.save(commit=False)
