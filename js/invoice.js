@@ -42,7 +42,6 @@ function InvoiceViewModel(data){
 //
     self.save = function(item, event){
 
-//        $.post('/voucher/invoice/save/', ko.toJSON(self), function(){  el.html('Save'); });
         $.ajax({
             type: "POST",
             url: '/voucher/invoice/save/',
@@ -72,16 +71,17 @@ function InvoiceViewModel(data){
         return sum;
     }
 
-//    self.updateParticular = function(item, event){
-//        var key = $(event.currentTarget).data('selected');
-//        if(key){
-//            var selected_item = $.grep(self.items, function(e){ return e.id == key; })[0];
-//            var model = self.particulars()[item.sn()-1];
-//            model.description(selected_item.description);
-//            model.unit_price(selected_item.sales_price);
-//            model.item_name = selected_item.name;
-//        }
-//    }
+    self.itemChanged = function(row, event){
+        var selected_item = $.grep(self.items, function(i){
+            return i.id == row.item_id();
+        });
+        row.description('tat');
+        console.log(row);
+        console.log('hi');
+        row.description(selected_item.description);
+        row.unit_price(selected_item.sales_price);
+//        row.tax_scheme(selected_item.tax_scheme);
+    }
 
 }
 
@@ -94,6 +94,7 @@ function ParticularViewModel(particular){
     self.unit_price= ko.observable(0);
     self.quantity = ko.observable(1).extend({ numeric: 2 });
     self.discount = ko.observable(0).extend({ numeric: 2 });
+    self.tax_scheme = ko.observable();
     for(var k in particular)
         self[k] = ko.observable(particular[k]);
 
