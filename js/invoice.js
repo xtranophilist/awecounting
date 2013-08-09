@@ -3,12 +3,12 @@ function InvoiceViewModel(data){
     var self = this;
 
     $.ajax({
-      url: '/inventory/items/json/',
-      dataType: 'json',
-      async: false,
-      success: function(data) {
-        self.items = data;
-      }
+        url: '/inventory/items/json/',
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+            self.items = data;
+        }
     });
 
     for (var k in data)
@@ -18,8 +18,10 @@ function InvoiceViewModel(data){
 //        return new ParticularViewModel(item);
 //    }));
 
-    invoice_options = {
-      rows: data.particulars
+    self.message = ko.observable('Hiya');
+
+    var invoice_options = {
+        rows: data.particulars
     };
 
     self.particulars = new TableViewModel(invoice_options, ParticularViewModel);
@@ -36,11 +38,31 @@ function InvoiceViewModel(data){
 //        };
 //        self.particulars.remove(particular);
 //    };
+
 //
     self.save = function(item, event){
 
-        $.post('/voucher/invoice/save/', ko.toJSON(self), function(){  el.html('Save'); });
+//        $.post('/voucher/invoice/save/', ko.toJSON(self), function(){  el.html('Save'); });
+        $.ajax({
+            type: "POST",
+            url: '/voucher/invoice/save/',
+            data: ko.toJSON(self),
+            success: function(msg){
+                if (typeof (msg.error_message) != 'undefined'){
+                    $('#message').html(msg.error_message);
+                }
+                else{
+                    $('#message').html('Saved!');
+                }
+            }
+//            error: function(XMLHttpRequest, textStatus, errorThrown) {
+//                console.log(XMLHttpRequest);
+//                $('#message').html(XMLHttpRequest.responseText.message);
+
+//            }
+        });
     }
+
 
     self.grand_total = function(){
         var sum = 0;
