@@ -6,8 +6,8 @@ from voucher.models import Invoice, PurchaseVoucher
 
 class InvoiceForm(KOModelForm):
     party = forms.ModelChoiceField(Party.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'select2'}))
-    # party = forms.CharField(widget=forms.TextInput(), label='To')
-    currency = forms.ModelChoiceField(Currency.objects.all(), empty_label=None)
+    currency = forms.ModelChoiceField(Currency.objects.all(), empty_label=None,
+                                      widget=forms.Select(attrs={'class': 'select2'}))
     date = forms.DateField(widget=KOModelForm.DateTypeInput(attrs={'class': 'date-picker'}))
 
     class Meta:
@@ -24,7 +24,7 @@ class PurchaseVoucherForm(KOModelForm):
         label='Add an attachment',
         help_text='',
         required=False,
-    )
+        )
 
     class Meta:
         model = PurchaseVoucher
