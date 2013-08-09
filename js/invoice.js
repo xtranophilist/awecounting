@@ -38,8 +38,7 @@ function InvoiceViewModel(data){
 //    };
 //
     self.save = function(item, event){
-        var el = get_target(event);
-        el.html('Saving');
+
         $.post('/voucher/invoice/save/', ko.toJSON(self), function(){  el.html('Save'); });
     }
 
