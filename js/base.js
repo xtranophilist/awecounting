@@ -93,8 +93,6 @@ function TableViewModel(options, row_model){
     if (typeof(options.save_to_url) != 'undefined'){
         self.save = function(model, e){
             var el = get_target(e);
-            self.message('Saving...');
-            console.log(self.rows());
             $.ajax({
                 type: "POST",
                 url: options.save_to_url,
