@@ -877,7 +877,7 @@
 					part, dir;
 				if (relative_to && $(relative_to).val() != ""){
                     date = new Date($(relative_to).val());
-                    date.setUTCDate(date.getUTCDate() + 1)
+//                    date.setUTCDate(date.getUTCDate() + 1)
                 }
                 else{
                     date = new Date();

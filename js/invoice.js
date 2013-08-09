@@ -1,5 +1,10 @@
-function InvoiceViewModel(data){
+$(document).ready(function () {
+    $('#inv-date').datepicker().data('datepicker');
+    $('#due-date').datepicker({relative_to: '#inv-date'});
+});
 
+
+function InvoiceViewModel(data){
     var self = this;
 
     $.ajax({
@@ -14,18 +19,13 @@ function InvoiceViewModel(data){
     for (var k in data)
         self[k]=data[k];
 
-//    self.rows = ko.observableArray(ko.utils.arrayMap(data.particulars, function(item) {
-//        return new ParticularViewModel(item);
-//    }));
-
-    self.message = ko.observable('Hiya');
+    self.message = ko.observable('');
 
     var invoice_options = {
         rows: data.particulars
     };
 
     self.particulars = new TableViewModel(invoice_options, ParticularViewModel);
-
 
 //    self.addParticular = function() {
 //        var new_item_index = self.particulars().length+1;
@@ -39,9 +39,7 @@ function InvoiceViewModel(data){
 //        self.particulars.remove(particular);
 //    };
 
-//
     self.save = function(item, event){
-
         $.ajax({
             type: "POST",
             url: '/voucher/invoice/save/',
@@ -55,13 +53,10 @@ function InvoiceViewModel(data){
                 }
             }
 //            error: function(XMLHttpRequest, textStatus, errorThrown) {
-//                console.log(XMLHttpRequest);
 //                $('#message').html(XMLHttpRequest.responseText.message);
-
 //            }
         });
     }
-
 
     self.grand_total = function(){
         var sum = 0;
@@ -75,19 +70,9 @@ function InvoiceViewModel(data){
         var selected_item = $.grep(self.items, function(i){
             return i.id == row.item_id();
         })[0];
-
         row.description(selected_item.description);
         row.unit_price(selected_item.sales_price);
         row.tax_scheme(selected_item.tax_scheme);
-
-//        var key = $(event.currentTarget).data('selected');
-//        if(key){
-//            var selected_item = $.grep(self.items, function(e){ return e.id == key; })[0];
-//            var model = self.particulars()[item.sn()-1];
-//            model.description(selected_item.description);
-//            model.unit_price(selected_item.sales_price);
-//            model.item_name = selected_item.name;
-//        }
     }
 
 }
@@ -102,6 +87,7 @@ function ParticularViewModel(particular){
     self.quantity = ko.observable(1).extend({ numeric: 2 });
     self.discount = ko.observable(0).extend({ numeric: 2 });
     self.tax_scheme = ko.observable();
+
     for(var k in particular)
         self[k] = ko.observable(particular[k]);
 
@@ -111,9 +97,5 @@ function ParticularViewModel(particular){
         return amt;
     });
 
-    self.show_items = function(data, event){
-        event.preventDefault();
-        get_target(event).parent().find('.item-complete-box').trigger('focus').trigger('keyup');
-    }
 }
 
