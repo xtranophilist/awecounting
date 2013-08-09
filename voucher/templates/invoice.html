@@ -19,12 +19,7 @@
 
             var json_data = {{data|jsonify}};
 
-            window.invoice_view_instance = new InvoiceViewModel(json_data);
-
-            ko.applyBindings(invoice_view_instance);
-
-            var nowTemp = new Date();
-            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+            ko.applyBindings(new InvoiceViewModel(json_data));
 
             var checkin = $('#id_date').datepicker().data('datepicker');
 
@@ -92,7 +87,7 @@
         </div>
         <br />
 
-        <div data-bind="text: message()" id="message">Hi</div>
+        <div data-bind="text: message()" id="message"></div>
 
         <div class="row-fluid" data-bind="with: particulars">
 
@@ -122,7 +117,7 @@
 {#                        <a href="#" data-bind="click: show_items" class="show_all_items pull-right wid-pad">#}
 {#                            <i class="icon-chevron-sign-down"></i>#}
 {#                        </a>#}
-                        <select class="span12 item-selector" data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, select2: {}"></select>
+                        <select class="span12 item-selector" data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, select2: {},  event: {change: $root.itemChanged}"></select>
                     </td>
                     <td data-bind="editableText: description">
                     </td>
