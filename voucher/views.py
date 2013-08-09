@@ -5,6 +5,8 @@ from django.shortcuts import render, redirect
 from forms import InvoiceForm, PurchaseVoucherForm
 from voucher.models import Invoice, PurchaseVoucher
 from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer
+from django.http import HttpResponse
+import json
 
 
 def invoice(request, id=None):
@@ -34,14 +36,29 @@ def invoice(request, id=None):
 
 def save_invoice(request):
     params = json.loads(request.body)
-    form = InvoiceForm(data=params, instance=Invoice())
-    if form.is_valid():
-        invoice = form.save(commit=False)
-        # invoice.party_id = 1
-        invoice.company = request.user.company
+    del params['read_only']
+    del params['items']
+    del params['particulars']
+    print params
+    invoice = Invoice(party_id=params.get('party'), invoice_no=params.get('invoice_no'),
+                      reference=params.get('reference'), date=params.get('date'),
+                      due_date=params.get('due_date'), tax=params.get('tax'),
+                      currency_id=params.get('currency'), company=request.user.company)
+    try:
         invoice.save()
-    else:
-        print form.errors
+    except Exception as e:
+        # message = e.message
+        return HttpResponse(json.dumps({'message': '; '.join(e.messages)}), mimetype="application/json")
+
+
+    # form = InvoiceForm(data=params, instance=Invoice())
+    # if form.is_valid():
+    #     invoice = form.save(commit=False)
+    #     # invoice.party_id = 1
+    #     invoice.company = request.user.company
+    #     invoice.save()
+    # else:
+    #     print form.errors
 
 
 def purchase_voucher(request, id=None):
