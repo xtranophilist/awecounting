@@ -78,7 +78,7 @@
             </div>
             <div class="span3">
                 {{ form.due_date.label_tag }}
-                <input class="due-date"  date-format="mm/dd/yy" data-bind="value: due_date" id="id_due_date" name="due_date" required="required" type="text">
+                <input class="due-date"  date-format="mm/dd/yy" data-bind="value: due_date" id="id_due_date" name="due_date" type="text">
             </div>
             <div class="span3">
                 {{ form.tax.label_tag }}
@@ -119,7 +119,7 @@
 {#                        <a href="#" data-bind="click: show_items" class="show_all_items pull-right wid-pad">#}
 {#                            <i class="icon-chevron-sign-down"></i>#}
 {#                        </a>#}
-                        <select class="span12" data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, select2: {}"></select>
+                        <select class="span12 item-selector" data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, select2: {}"></select>
                     </td>
                     <td data-bind="editableText: description">
                     </td>

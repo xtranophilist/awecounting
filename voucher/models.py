@@ -10,9 +10,9 @@ class Invoice(models.Model):
     tax_choices = [('inclusive', 'Tax Inclusive'), ('exclusive', 'Tax Exclusive'), ('no', 'No Tax')]
     party = models.ForeignKey(Party, verbose_name=u'To')
     date = models.DateField()
-    due_date = models.DateField(null=True)
+    due_date = models.DateField(null=True, blank=True)
     invoice_no = models.CharField(max_length=20)
-    reference = models.CharField(max_length=100, null=True)
+    reference = models.CharField(max_length=100, null=True, blank=True)
     currency = models.ForeignKey(Currency)
     tax = models.CharField(max_length=10, choices=tax_choices, default='inclusive')
     company = models.ForeignKey(Company)
