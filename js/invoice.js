@@ -77,6 +77,8 @@ function InvoiceViewModel(data){
         })[0];
 
         row.description(selected_item.description);
+        row.unit_price(selected_item.sales_price);
+        row.tax_scheme(selected_item.tax_scheme);
 
 //        var key = $(event.currentTarget).data('selected');
 //        if(key){
@@ -99,6 +101,7 @@ function ParticularViewModel(particular){
     self.unit_price= ko.observable(0);
     self.quantity = ko.observable(1).extend({ numeric: 2 });
     self.discount = ko.observable(0).extend({ numeric: 2 });
+    self.tax_scheme = ko.observable();
     for(var k in particular)
         self[k] = ko.observable(particular[k]);
 
