@@ -24,37 +24,28 @@ def get_journal(request):
     return journal
 
 
+def invalid(row, required_fields):
+    for attr in required_fields:
+        # if one of the required attributes isn't received or is an empty string
+        if not attr in row or row.get(attr) == "":
+            return True
+        return False
+
+
 def save_day_cash_sales(request):
-    params = json.loads(request.body)
-    required = ['item_id', 'amount']
-    day_journal = get_journal(request)
     dct = {}
-    DayCashSales.objects.filter(day_journal=day_journal).delete()
-    for index, row in enumerate(params.get('rows')):
-        valid = True
-        for attr in required:
-            # if one of the required attributes isn't received or is an empty string
-            if not attr in row or row.get(attr) == "":
-                valid = False
-        if not valid:
+    print json.loads(request.body)
+    for index, row in enumerate(json.loads(request.body).get('rows')):
+        if invalid(row, ['item_id', 'amount', 'quantity']):
             continue
-            # if not 'id' in row:
-        day_cash_sales = DayCashSales(sn=index + 1, item_id=row.get('item_id'), amount=row.get('amount'),
-                                      quantity=row.get('quantity'), day_journal=day_journal, id=row.get('id'))
-        # else:
-        #     day_cash_sales = DayCashSales.objects.get(id=row['id'])
-
-        day_cash_sales.sn = index + 1
-        day_cash_sales.item_id = row.get('item_id')
-        day_cash_sales.amount = row.get('amount')
-        if row.get('quantity'):
-            print 'aha'
-            day_cash_sales.quantity = row.get('quantity')
-
-        print row
-
-        day_cash_sales.save()
-        dct[index] = day_cash_sales.id
+        values = {'sn': index+1, 'item_id': row.get('item_id'), 'amount': row.get('amount'),
+                  'quantity': row.get('quantity'), 'day_journal': get_journal(request)}
+        submodel, created = DayCashSales.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            for key, value in values.items():
+                setattr(submodel, key, value)
+        submodel.save()
+        dct[index] = submodel.id
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 

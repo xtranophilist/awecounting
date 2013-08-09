@@ -3,7 +3,7 @@ import json
 from django.shortcuts import render, redirect
 
 from forms import InvoiceForm, PurchaseVoucherForm
-from voucher.models import Invoice, PurchaseVoucher
+from voucher.models import Invoice, PurchaseVoucher, Particular
 from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer
 from django.http import HttpResponse
 import json
@@ -36,11 +36,25 @@ def invoice(request, id=None):
 
 def save_invoice(request):
     params = json.loads(request.body)
+    required = ['item_id', 'unit_price', 'quantity']
     del params['read_only']
     del params['items']
-    del params['particulars']
     dct = {}
     print params
+    for index, row in enumerate(params.get('particulars').get('rows')):
+        valid = True
+        for attr in required:
+            # if one of the required attributes isn't received or is an empty string
+            if not attr in row or row.get(attr) == "":
+                valid = False
+        if not valid:
+            continue
+        particular = Particular(sn=index+1, item_id=row.get('item_id'), description=row.get('description'),
+                                unit_price=row.get('unit_price'), quantity=row.get('quantity'))
+        particular.save()
+        import pdb
+        pdb.set_trace()
+
     invoice = Invoice(party_id=params.get('party'), invoice_no=params.get('invoice_no'),
                       reference=params.get('reference'), date=params.get('date'),
                       due_date=params.get('due_date'), tax=params.get('tax'),
@@ -52,14 +66,6 @@ def save_invoice(request):
             dct['error_message'] = '; '.join(e.messages)
         else:
             dct['error_message'] = 'Error in form data!'
-    # form = InvoiceForm(data=params, instance=Invoice())
-    # if form.is_valid():
-    #     invoice = form.save(commit=False)
-    #     # invoice.party_id = 1
-    #     invoice.company = request.user.company
-    #     invoice.save()
-    # else:
-    #     print form.errors
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
@@ -70,7 +76,7 @@ def purchase_voucher(request, id=None):
     except CompanySetting.DoesNotExist:
         #TODO Add a flash message
         return redirect('/settings/company')
-    # return HttpResponseRedirect(reverse('myapp.views.list'))
+        # return HttpResponseRedirect(reverse('myapp.views.list'))
     if request.POST:
         form = PurchaseVoucherForm(request.POST, request.FILES)
         import pdb
