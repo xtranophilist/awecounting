@@ -74,11 +74,11 @@
 
             <div class="span3">
                 {{ form.date.label_tag }}
-                <input class="date-picker" date-format="mm/dd/yy" data-bind="value: date" id="id_date" name="date" required="required" type="text">
+                <input class="date-picker" data-date-format="yyyy-mm-dd" data-bind="value: date" id="id_date" name="date" required="required" type="text">
             </div>
             <div class="span3">
                 {{ form.due_date.label_tag }}
-                <input class="due-date"  date-format="mm/dd/yy" data-bind="value: due_date" id="id_due_date" name="due_date" type="text">
+                <input class="due-date" data-date-format="yyyy-mm-dd" data-bind="value: due_date" id="id_due_date" name="due_date" type="text">
             </div>
             <div class="span3">
                 {{ form.tax.label_tag }}
