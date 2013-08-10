@@ -18,11 +18,19 @@ class ExtFileField(forms.FileField):
 
     def clean(self, *args, **kwargs):
         data = super(ExtFileField, self).clean(*args, **kwargs)
-        filename = data.name
-        ext = os.path.splitext(filename)[1]
-        ext = ext.lower()
-        if ext not in self.ext_whitelist:
-            raise forms.ValidationError("File type not allowed!")
+        if data is None:
+            if self.required:
+                raise forms.ValidationError("This file is required")
+            else:
+                return
+        else:
+            filename = data.name
+            ext = os.path.splitext(filename)[1]
+            ext = ext.lower()
+            if ext not in self.ext_whitelist:
+                file_types = ", ".join([i for i in self.ext_whitelist])
+                error = "Only allowed file types are: %s" % file_types
+                raise forms.ValidationError(error)
 
 
 class KOModelForm(forms.ModelForm):

@@ -91,7 +91,8 @@ def purchase_voucher(request, id=None):
         form = PurchaseVoucherForm(request.POST, request.FILES)
         if form.is_valid():
             voucher = form.save(commit=False)
-            voucher.attachment = request.FILES['attachment']
+            if 'attachment' in request.FILES:
+                voucher.attachment = request.FILES['attachment']
             voucher.company = request.user.company
             voucher.save()
     else:
