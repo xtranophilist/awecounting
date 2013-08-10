@@ -102,13 +102,13 @@
                     <td>
                         <select class="span12 item-selector" data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, optionsCaption: 'Choose an item...', select2: {},  event: {change: $root.itemChanged}"></select>
                     </td>
-                    <td data-bind="text: description" contenteditable>
+                    <td data-bind="editableText: description">
                     </td>
-                    <td data-bind="editableText: unit_price, numeric: true" contenteditable>
+                    <td data-bind="editableText: unit_price, numeric: true">
                     </td>
-                    <td contenteditable data-bind="editableText: quantity, numeric: true">
+                    <td data-bind="editableText: quantity, numeric: true">
                     </td>
-                    <td contenteditable data-bind="editableText: discount, numeric: true">
+                    <td data-bind="editableText: discount, numeric: true">
                     </td>
                     <td data-bind="text: amount()">
                     </td>

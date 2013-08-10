@@ -85,12 +85,26 @@ def purchase_voucher(request, id=None):
         company_setting = CompanySetting.objects.get(company=request.user.company)
     except CompanySetting.DoesNotExist:
         return redirect('/settings/company')
-    voucher = PurchaseVoucher(date=date.today(), currency=company_setting.default_currency)
+    if id:
+        voucher = get_object_or_404(PurchaseVoucher, id=id)
+    else:
+        voucher = PurchaseVoucher(date=date.today(), currency=company_setting.default_currency)
+
     if request.POST:
         particulars = json.loads(request.POST['particulars'])
-        import pdb
-        pdb.set_trace()
-        form = PurchaseVoucherForm(request.POST, request.FILES)
+        model = PurchaseParticular
+        for index, row in enumerate(particulars.get('rows')):
+            print row
+            if invalid(row, ['item_id', 'unit_price', 'quantity']):
+                continue
+            values = {'sn': index+1, 'item_id': row.get('item_id'), 'description': row.get('description'),
+                      'unit_price': row.get('unit_price'), 'quantity': row.get('quantity'),
+                      'discount': row.get('discount'), 'purchase_voucher': voucher}
+            submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+            if not created:
+                submodel = save_model(submodel, values)
+        delete_rows(particulars.get('deleted_rows'), model)
+        form = PurchaseVoucherForm(request.POST, request.FILES, instance=voucher)
         if form.is_valid():
             voucher = form.save(commit=False)
             if 'attachment' in request.FILES:
