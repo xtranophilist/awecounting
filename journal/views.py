@@ -29,12 +29,18 @@ def invalid(row, required_fields):
         # if one of the required attributes isn't received or is an empty string
         if not attr in row or row.get(attr) == "":
             return True
-        return False
+    return False
+
+
+def save_submodel(submodel, values):
+    for key, value in values.items():
+                setattr(submodel, key, value)
+    submodel.save()
+    return submodel.id
 
 
 def save_day_cash_sales(request):
     dct = {}
-    print json.loads(request.body)
     for index, row in enumerate(json.loads(request.body).get('rows')):
         if invalid(row, ['item_id', 'amount', 'quantity']):
             continue
@@ -42,10 +48,7 @@ def save_day_cash_sales(request):
                   'quantity': row.get('quantity'), 'day_journal': get_journal(request)}
         submodel, created = DayCashSales.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
-            for key, value in values.items():
-                setattr(submodel, key, value)
-        submodel.save()
-        dct[index] = submodel.id
+                dct[index] = save_submodel(submodel, values)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
