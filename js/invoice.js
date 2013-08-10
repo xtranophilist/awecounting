@@ -71,11 +71,11 @@ function InvoiceViewModel(data){
             return i.id == row.item_id();
         })[0];
         if (!selected_item) return;
-        if (!row.description)
+        if (!row.description())
             row.description(selected_item.description);
-        if (!row.unit_price)
+        if (!row.unit_price())
             row.unit_price(selected_item.sales_price);
-        if (!row.tax_scheme)
+        if (!row.tax_scheme())
             row.tax_scheme(selected_item.tax_scheme);
     }
 
