@@ -21,8 +21,6 @@ function DayJournal(data){
         }
     });
 
-    console.log(self.items);
-
     var day_cash_sales_options = {
         rows: data.day_cash_sales,
         save_to_url : '/journal/day/save/day_cash_sales/',
@@ -82,8 +80,6 @@ function DayJournal(data){
             }
         }
     };
-
-
 
     self.day_cash_sales = new TableViewModel(day_cash_sales_options, DayCashSalesRow);
 

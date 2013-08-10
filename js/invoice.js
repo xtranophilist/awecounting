@@ -70,9 +70,13 @@ function InvoiceViewModel(data){
         var selected_item = $.grep(self.items, function(i){
             return i.id == row.item_id();
         })[0];
-        row.description(selected_item.description);
-        row.unit_price(selected_item.sales_price);
-        row.tax_scheme(selected_item.tax_scheme);
+        if (!selected_item) return;
+        if (!row.description)
+            row.description(selected_item.description);
+        if (!row.unit_price)
+            row.unit_price(selected_item.sales_price);
+        if (!row.tax_scheme)
+            row.tax_scheme(selected_item.tax_scheme);
     }
 
 }
@@ -81,7 +85,7 @@ function ParticularViewModel(particular){
 
     var self = this;
     //default values
-    self.item_id = ko.observable('');
+    self.item_id = ko.observable();
     self.description = ko.observable('');
     self.unit_price= ko.observable(0);
     self.quantity = ko.observable(1).extend({ numeric: 2 });
