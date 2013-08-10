@@ -42,6 +42,6 @@ class DayJournalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DayJournal
-        # depth = 1
+        exclude = ['company']
 
 

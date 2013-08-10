@@ -14,6 +14,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Invoice
+        exclude = ['company']
 
 
 class PurchaseVoucherSerializer(serializers.ModelSerializer):

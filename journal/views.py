@@ -32,11 +32,11 @@ def invalid(row, required_fields):
     return False
 
 
-def save_submodel(submodel, values):
+def save_model(model, values):
     for key, value in values.items():
-        setattr(submodel, key, value)
-    submodel.save()
-    return submodel
+        setattr(model, key, value)
+    model.save()
+    return model
 
 
 def delete_rows(rows, model):
@@ -56,7 +56,7 @@ def save_day_cash_sales(request):
                   'quantity': row.get('quantity'), 'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
-            submodel = save_submodel(submodel, values)
+            submodel = save_model(submodel, values)
         dct[index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")

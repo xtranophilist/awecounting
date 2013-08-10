@@ -1,12 +1,14 @@
 import json
 
 from django.shortcuts import render, redirect
+from datetime import date
 
 from forms import InvoiceForm, PurchaseVoucherForm
 from voucher.models import Invoice, PurchaseVoucher, Particular
 from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer
 from django.http import HttpResponse
 import json
+from journal.views import invalid, get_journal, save_model, delete_rows
 
 
 def invoice(request, id=None):
@@ -25,6 +27,7 @@ def invoice(request, id=None):
     except:
         invoice.invoice_no = ''
     invoice.currency = company_setting.default_currency
+    invoice.date = date.today()
     form = InvoiceForm(data=request.POST, instance=invoice)
     invoice_data = InvoiceSerializer(invoice).data
     invoice_data['read_only'] = {
@@ -36,24 +39,10 @@ def invoice(request, id=None):
 
 def save_invoice(request):
     params = json.loads(request.body)
-    required = ['item_id', 'unit_price', 'quantity']
     del params['read_only']
     del params['items']
     dct = {}
     print params
-    for index, row in enumerate(params.get('particulars').get('rows')):
-        valid = True
-        for attr in required:
-            # if one of the required attributes isn't received or is an empty string
-            if not attr in row or row.get(attr) == "":
-                valid = False
-        if not valid:
-            continue
-        particular = Particular(sn=index+1, item_id=row.get('item_id'), description=row.get('description'),
-                                unit_price=row.get('unit_price'), quantity=row.get('quantity'))
-        particular.save()
-        import pdb
-        pdb.set_trace()
 
     invoice = Invoice(party_id=params.get('party'), invoice_no=params.get('invoice_no'),
                       reference=params.get('reference'), date=params.get('date'),
@@ -61,11 +50,36 @@ def save_invoice(request):
                       currency_id=params.get('currency'), company=request.user.company)
     try:
         invoice.save()
+        # for index, row in enumerate(params.get('particulars').get('rows')):
+        #     if invalid(row, ['item_id', 'unit_price', 'quantity']):
+        #         continue
+        #     model = Particular
+        #     values = {'sn': index+1, 'item_id': row.get('item_id'), 'description': row.get('description'),
+        #               'unit_price': row.get('unit_price'), 'quantity': row.get('quantity'), 'invoice': invoice}
+        #     submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        #     if not created:
+        #         submodel = save_model(submodel, values)
+        #     dct[index] = submodel.id
+        # delete_rows(params.get('deleted_rows'), model)
+
     except Exception as e:
         if hasattr(e, 'messages'):
             dct['error_message'] = '; '.join(e.messages)
         else:
             dct['error_message'] = 'Error in form data!'
+        for index, row in enumerate(params.get('particulars').get('rows')):
+            if invalid(row, ['item_id', 'unit_price', 'quantity']):
+                continue
+            import pdb
+            pdb.set_trace()
+            model = Particular
+            values = {'sn': index+1, 'item_id': row.get('item_id'), 'description': row.get('description'),
+                      'unit_price': row.get('unit_price'), 'quantity': row.get('quantity'), 'invoice': invoice}
+            submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+            if not created:
+                submodel = save_model(submodel, values)
+            dct[index] = submodel.id
+        delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
