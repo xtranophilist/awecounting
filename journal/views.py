@@ -61,25 +61,18 @@ def save_day_cash_purchase(request):
 
 def save_day_cash_receipt(request):
     params = json.loads(request.body)
-    required = ['account_id', 'amount']
-    day_journal = get_journal(request)
     dct = {}
-    DayCashReceipt.objects.filter(day_journal=day_journal).delete()
+    model = DayCashReceipt
     for index, row in enumerate(params.get('rows')):
-        valid = True
-        for attr in required:
-            # if one of the required attributes isn't received or is an empty string
-            if not attr in row or row.get(attr) == "":
-                valid = False
-        if not valid:
+        if invalid(row, ['account_id', 'amount']):
             continue
-        day_cash_receipt = DayCashReceipt(sn=index + 1, account_id=row.get('account_id'), amount=row.get('amount'),
-                                          day_journal=day_journal, id=row.get('id'))
-        day_cash_receipt.sn = index + 1
-        day_cash_receipt.account_id = row.get('account_id')
-        day_cash_receipt.amount = row.get('amount')
-        day_cash_receipt.save()
-        dct[index] = day_cash_receipt.id
+        values = {'sn': index+1, 'account_id': row.get('account_id'), 'amount': row.get('amount'),
+                  'day_journal': get_journal(request)}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct[index] = submodel.id
+    delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
