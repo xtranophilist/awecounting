@@ -21,9 +21,8 @@ def invoice(request, id=None):
     if id:
         invoice = Invoice.objects.get(id=id)
     else:
-        invoice = Invoice()
+        invoice = Invoice(date=date.today(), currency=company_setting.default_currency)
     try:
-        print 'hi'
         try:
             last_invoice = Invoice.objects.latest('id')
             last_invoice_no = last_invoice.invoice_no
@@ -35,8 +34,7 @@ def invoice(request, id=None):
                              + str(new_invoice_no)
     except:
         invoice.invoice_no = ''
-    invoice.currency = company_setting.default_currency
-    invoice.date = date.today()
+
     form = InvoiceForm(data=request.POST, instance=invoice)
     invoice_data = InvoiceSerializer(invoice).data
     invoice_data['read_only'] = {
