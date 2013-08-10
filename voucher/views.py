@@ -53,18 +53,6 @@ def save_invoice(request):
                       currency_id=params.get('currency'), company=request.user.company)
     try:
         invoice.save()
-        # for index, row in enumerate(params.get('particulars').get('rows')):
-        #     if invalid(row, ['item_id', 'unit_price', 'quantity']):
-        #         continue
-        #     model = Particular
-        #     values = {'sn': index+1, 'item_id': row.get('item_id'), 'description': row.get('description'),
-        #               'unit_price': row.get('unit_price'), 'quantity': row.get('quantity'), 'invoice': invoice}
-        #     submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-        #     if not created:
-        #         submodel = save_model(submodel, values)
-        #     dct[index] = submodel.id
-        # delete_rows(params.get('deleted_rows'), model)
-
     except Exception as e:
         if hasattr(e, 'messages'):
             dct['error_message'] = '; '.join(e.messages)

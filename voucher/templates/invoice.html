@@ -110,7 +110,7 @@
                         </div><span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                     </td>
                     <td>
-                        <select class="span12 item-selector" data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, select2: {},  event: {change: $root.itemChanged}"></select>
+                        <select class="span12 item-selector" data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, optionsCaption: 'Choose an item...', select2: {},  event: {change: $root.itemChanged}"></select>
                     </td>
                     <td data-bind="editableText: description">
                     </td>

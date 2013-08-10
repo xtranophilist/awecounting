@@ -4,8 +4,11 @@ from voucher.models import Particular
 
 
 class ParticularSerializer(serializers.ModelSerializer):
+    item_id = serializers.Field(source='item_id')
+
     class Meta:
         model = Particular
+        exclude = ['item']
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
