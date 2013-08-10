@@ -23,8 +23,13 @@ def invoice(request, id=None):
     else:
         invoice = Invoice()
     try:
-        last_invoice = Invoice.objects.latest('id')
-        new_invoice_no = int(last_invoice.invoice_no)+1
+        print 'hi'
+        try:
+            last_invoice = Invoice.objects.latest('id')
+            last_invoice_no = last_invoice.invoice_no
+        except Invoice.DoesNotExist:
+            last_invoice_no = 0
+        new_invoice_no = int(last_invoice_no)+1
         invoice.invoice_no = "0" * (int(company_setting.invoice_digit_count) - str(new_invoice_no).__len__()) \
                              + str(new_invoice_no)
     except:
