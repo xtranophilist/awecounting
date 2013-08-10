@@ -71,6 +71,8 @@ function TableViewModel(options, row_model){
         }
     }
 
+    self.deleted_rows  = [];
+
     self.hasNoRows = ko.computed(function(){
         return self.rows().length === 0;
     });
@@ -82,6 +84,7 @@ function TableViewModel(options, row_model){
 
     self.removeRow = function(row) {
         self.rows.remove(row);
+        self.deleted_rows.push(row);
     };
 
     if (self.hasNoRows()){
