@@ -8,7 +8,7 @@ from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, Purchase
 from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer
 from django.http import HttpResponse
 import json
-from journal.views import invalid, get_journal, save_model, delete_rows
+from acubor.lib import delete_rows, invalid, save_model
 
 
 def invoice(request, id=None):
@@ -94,7 +94,6 @@ def purchase_voucher(request, id=None):
         particulars = json.loads(request.POST['particulars'])
         model = PurchaseParticular
         for index, row in enumerate(particulars.get('rows')):
-            print row
             if invalid(row, ['item_id', 'unit_price', 'quantity']):
                 continue
             values = {'sn': index+1, 'item_id': row.get('item_id'), 'description': row.get('description'),
@@ -103,6 +102,8 @@ def purchase_voucher(request, id=None):
             submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
             if not created:
                 submodel = save_model(submodel, values)
+        import pdb
+        pdb.set_trace()
         delete_rows(particulars.get('deleted_rows'), model)
         form = PurchaseVoucherForm(request.POST, request.FILES, instance=voucher)
         if form.is_valid():

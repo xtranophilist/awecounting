@@ -4,6 +4,7 @@ from datetime import date
 from journal.serializers import DayJournalSerializer
 from django.http import HttpResponse
 import json
+from acubor.lib import delete_rows, invalid, save_model
 
 
 def day_journal(request, id=None):
@@ -22,27 +23,6 @@ def get_journal(request):
     if created:
         journal.save()
     return journal
-
-
-def invalid(row, required_fields):
-    for attr in required_fields:
-        # if one of the required attributes isn't received or is an empty string
-        if not attr in row or row.get(attr) == "":
-            return True
-    return False
-
-
-def save_model(model, values):
-    for key, value in values.items():
-        setattr(model, key, value)
-    model.save()
-    return model
-
-
-def delete_rows(rows, model):
-    for row in rows:
-        if row.get('id'):
-            model.objects.get(id=row.get('id')).delete()
 
 
 def save_day_cash_sales(request):

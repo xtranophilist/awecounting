@@ -65,4 +65,22 @@ class KOModelForm(forms.ModelForm):
             field.widget.attrs['data-bind'] = 'value: '+name
 
 
+def invalid(row, required_fields):
+    for attr in required_fields:
+        # if one of the required attributes isn't received or is an empty string
+        if not attr in row or row.get(attr) == "":
+            return True
+    return False
 
+
+def save_model(model, values):
+    for key, value in values.items():
+        setattr(model, key, value)
+    model.save()
+    return model
+
+
+def delete_rows(rows, model):
+    for row in rows:
+        if row.get('id'):
+            model.objects.get(id=row.get('id')).delete()
