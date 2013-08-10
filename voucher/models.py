@@ -27,9 +27,9 @@ class Particular(models.Model):
     description = models.TextField()
     quantity = models.FloatField(default=1)
     unit_price = models.FloatField()
-    discount = models.FloatField()
-    account = models.ForeignKey(Account)
-    tax_scheme = models.ForeignKey(TaxScheme, verbose_name=u'Tax Rate')
+    discount = models.FloatField(blank=True, null=True)
+    account = models.ForeignKey(Account, blank=True, null=True)
+    tax_scheme = models.ForeignKey(TaxScheme, verbose_name=u'Tax Rate', blank=True, null=True)
     invoice = models.ForeignKey(Invoice, related_name='particulars')
 
 
