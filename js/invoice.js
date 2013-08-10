@@ -95,6 +95,9 @@ function ParticularViewModel(particular){
     for(var k in particular)
         self[k] = ko.observable(particular[k]);
 
+    if (self.discount()==null)
+        self.discount(0);
+
     self.amount = ko.computed(function(){
         var wo_discount = self.quantity() * self.unit_price();
         var amt = wo_discount - ((self.discount() * wo_discount)/100);
