@@ -1,5 +1,7 @@
 from rest_framework import serializers
-from journal.models import DayJournal, DayCashSales, DayCashPurchase, DayCashReceipt, DayCashPayment
+from journal.models import DayJournal, DayCashSales, DayCashPurchase, DayCashReceipt, DayCashPayment, DaySummaryCash, \
+    DaySummaryBank, DaySummaryEquivalent, DaySummarySalesTax, DaySummaryInventory, DayCreditExpense, DayCreditIncome, \
+    DayCreditPurchase, DayCreditSales, DayPayroll
 
 
 class DayCashSalesSerializer(serializers.ModelSerializer):
@@ -34,11 +36,19 @@ class DayCashPaymentSerializer(serializers.ModelSerializer):
         exclude = ['day_journal']
 
 
+class DaySummaryCashSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = DaySummaryCash
+        exclude = ['day_journal']
+
+
 class DayJournalSerializer(serializers.ModelSerializer):
     day_cash_sales = DayCashSalesSerializer()
     day_cash_purchase = DayCashPurchaseSerializer()
     day_cash_receipt = DayCashReceiptSerializer()
     day_cash_payment = DayCashPaymentSerializer()
+    day_summary_cash = DaySummaryCashSerializer()
 
     class Meta:
         model = DayJournal
