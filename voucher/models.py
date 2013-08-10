@@ -36,9 +36,8 @@ class Particular(models.Model):
 class PurchaseVoucher(models.Model):
     party = models.ForeignKey(Party, verbose_name=u'From')
     date = models.DateField()
-    due_date = models.DateField(null=True)
-    # invoice_no = models.CharField(max_length=20)
-    reference = models.CharField(max_length=100, null=True)
+    due_date = models.DateField(null=True, blank=True)
+    reference = models.CharField(max_length=100, null=True, blank=True)
     currency = models.ForeignKey(Currency)
     tax_choices = [('inclusive', 'Tax Inclusive'), ('exclusive', 'Tax Exclusive'), ('no', 'No Tax')]
     tax = models.CharField(max_length=10, choices=tax_choices, default='inclusive')
