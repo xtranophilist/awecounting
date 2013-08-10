@@ -22,7 +22,7 @@ class PurchaseVoucherForm(KOModelForm):
         label='Add an attachment',
         help_text='',
         required=False,
-        ext_whitelist=(".jpg", ".txt")
+        ext_whitelist=('.jpg', '.png', '.gif', '.tif', '.pdf')
     )
 
     class Meta:
