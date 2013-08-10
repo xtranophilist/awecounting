@@ -14,7 +14,6 @@
     <script src="http://static.acubor.com/js/day_journal.js"></script>
     <script>
         $(document).ready(function () {
-
             {% load filters %}
             ko.applyBindings(new DayJournal({{ journal|jsonify }}));
         });
