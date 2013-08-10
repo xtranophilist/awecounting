@@ -85,20 +85,17 @@ def purchase_voucher(request, id=None):
     try:
         company_setting = CompanySetting.objects.get(company=request.user.company)
     except CompanySetting.DoesNotExist:
-        #TODO Add a flash message
         return redirect('/settings/company')
-        # return HttpResponseRedirect(reverse('myapp.views.list'))
+    voucher = PurchaseVoucher(date=date.today(), currency=company_setting.default_currency)
     if request.POST:
         form = PurchaseVoucherForm(request.POST, request.FILES)
-        import pdb
-        pdb.set_trace()
         if form.is_valid():
             voucher = form.save(commit=False)
             voucher.attachment = request.FILES['attachment']
             voucher.company = request.user.company
             voucher.save()
-    purchase_voucher = PurchaseVoucher()
-    form = PurchaseVoucherForm(data=request.POST, instance=purchase_voucher)
-    purchase_voucher_data = PurchaseVoucherSerializer(purchase_voucher).data
+    else:
+        form = PurchaseVoucherForm(instance=voucher)
+    purchase_voucher_data = PurchaseVoucherSerializer(voucher).data
     return render(request, 'purchase_voucher.html', {'form': form, 'data': purchase_voucher_data})
 
