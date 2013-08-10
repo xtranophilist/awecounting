@@ -34,21 +34,28 @@ def invalid(row, required_fields):
 
 def save_submodel(submodel, values):
     for key, value in values.items():
-                setattr(submodel, key, value)
+        setattr(submodel, key, value)
     submodel.save()
     return submodel.id
 
 
+def delete_rows(rows, model):
+    for row in rows:
+        model.objects.get(id=row.get('id')).delete()
+
+
 def save_day_cash_sales(request):
+    model = DayCashSales
     dct = {}
     for index, row in enumerate(json.loads(request.body).get('rows')):
         if invalid(row, ['item_id', 'amount', 'quantity']):
             continue
         values = {'sn': index+1, 'item_id': row.get('item_id'), 'amount': row.get('amount'),
                   'quantity': row.get('quantity'), 'day_journal': get_journal(request)}
-        submodel, created = DayCashSales.objects.get_or_create(id=row.get('id'), defaults=values)
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
-                dct[index] = save_submodel(submodel, values)
+            dct[index] = save_submodel(submodel, values)
+    delete_rows(json.loads(request.body).get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
