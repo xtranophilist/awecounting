@@ -73,7 +73,7 @@
 
         </div>
         <br />
-        <div class="row-fluid">        
+        <div class="row-fluid" data-bind="with: particulars">
             
             <table class="table table-bordered table-striped table-acubor table-sortable" id="voucher_table">
                 <thead>
@@ -89,11 +89,11 @@
                 </tr>
                 </thead>
 
-                <tbody data-bind='foreach: particulars'>
+                <tbody data-bind='foreach: rows'>
                 <tr>
                     <td>
                         <div class="drag_handle"><i class="icon-ellipsis-vertical"></i>
-                        </div><span class="wid-pad pull-left" data-bind="text: sn"> </span>
+                        </div><span class="wid-pad pull-left" data-bind="text:  $index()+1"> </span>
                     </td>
                     <td>
                         <select class="span12 item-selector" data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, optionsCaption: 'Choose an item...', select2: {},  event: {change: $root.itemChanged}"></select>
@@ -114,7 +114,7 @@
                 </tr>
                 </tbody>
             </table>
-            <div class="pull-right"><b>Grand Total: </b> <span data-bind="text: grand_total()"></span> </div>
+            <div class="pull-right"><b>Grand Total: </b> <span data-bind="text: $parent.grand_total()"></span> </div>
             <button class="btn" data-bind="click: addRow">
                 <i class="icon-plus-sign hand-on-hover" ></i> Add New Row
             </button>
