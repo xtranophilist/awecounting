@@ -28,6 +28,7 @@ def invoice(request, id=None):
             last_invoice = Invoice.objects.latest('id')
             last_invoice_no = last_invoice.invoice_no
         except Invoice.DoesNotExist:
+            # for first invoice
             last_invoice_no = 0
         new_invoice_no = int(last_invoice_no)+1
         invoice.invoice_no = "0" * (int(company_setting.invoice_digit_count) - str(new_invoice_no).__len__()) \
@@ -47,17 +48,20 @@ def invoice(request, id=None):
 
 def save_invoice(request):
     params = json.loads(request.body)
-    del params['read_only']
-    del params['items']
     dct = {}
-    print params
-    print
-    invoice = Invoice(party_id=params.get('party'), invoice_no=params.get('invoice_no'),
-                      reference=params.get('reference'), date=params.get('date'),
-                      due_date=params.get('due_date'), tax=params.get('tax'),
-                      currency_id=params.get('currency'), company=request.user.company)
+    invoice_values = {'party_id': params.get('party'), 'invoice_no': params.get('invoice_no'),
+                      'reference': params.get('reference'), 'date': params.get('date'),
+                      'due_date': params.get('due_date'), 'tax': params.get('tax'),
+                      'currency_id': params.get('currency'), 'company': request.user.company}
+
     try:
-        invoice.save()
+        if params.get('id'):
+            # invoice, created = Invoice.objects.get_or_create(id=params.get('id'), defaults=invoice_values)
+            invoice = Invoice.objects.get(id=params.get('id'))
+        else:
+            invoice = Invoice()
+            # if not created:
+        invoice = save_model(invoice, invoice_values)
     except Exception as e:
         if hasattr(e, 'messages'):
             dct['error_message'] = '; '.join(e.messages)
@@ -65,10 +69,9 @@ def save_invoice(request):
             dct['error_message'] = 'Error in form data!'
     model = Particular
     for index, row in enumerate(params.get('particulars').get('rows')):
-
+        print row
         if invalid(row, ['item_id', 'unit_price', 'quantity']):
             continue
-
         values = {'sn': index+1, 'item_id': row.get('item_id'), 'description': row.get('description'),
                   'unit_price': row.get('unit_price'), 'quantity': row.get('quantity'), 'invoice': invoice}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
