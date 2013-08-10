@@ -21,7 +21,7 @@ class Invoice(models.Model):
         db_table = 'invoice'
 
 
-class Particular(models.Model):
+class InvoiceParticular(models.Model):
     sn = models.IntegerField()
     item = models.ForeignKey(Item)
     description = models.TextField()
@@ -31,6 +31,9 @@ class Particular(models.Model):
     account = models.ForeignKey(Account, blank=True, null=True)
     tax_scheme = models.ForeignKey(TaxScheme, verbose_name=u'Tax Rate', blank=True, null=True)
     invoice = models.ForeignKey(Invoice, related_name='particulars')
+
+    class Meta:
+        db_table = 'invoice_particular'
 
 
 class PurchaseVoucher(models.Model):
@@ -43,3 +46,18 @@ class PurchaseVoucher(models.Model):
     tax = models.CharField(max_length=10, choices=tax_choices, default='inclusive')
     attachment = models.FileField(upload_to='pv/%Y/%m/%d', blank=True, null=True)
     company = models.ForeignKey(Company)
+
+
+class PurchaseParticular(models.Model):
+    sn = models.IntegerField()
+    item = models.ForeignKey(Item)
+    description = models.TextField()
+    quantity = models.FloatField(default=1)
+    unit_price = models.FloatField()
+    discount = models.FloatField(blank=True, null=True)
+    account = models.ForeignKey(Account, blank=True, null=True)
+    tax_scheme = models.ForeignKey(TaxScheme, verbose_name=u'Tax Rate', blank=True, null=True)
+    purchase_voucher = models.ForeignKey(PurchaseVoucher, related_name='particulars')
+
+    class Meta:
+        db_table = 'purchase_particular'
