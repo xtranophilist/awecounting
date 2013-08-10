@@ -14,14 +14,8 @@
     <script src="http://static.acubor.com/js/invoice.js"></script>
     <script>
         $(document).ready(function () {
-
             {% load filters %}
-
-            var json_data = {{data|jsonify}};
-
-            ko.applyBindings(new InvoiceViewModel(json_data));
-
-
+            ko.applyBindings(new InvoiceViewModel({{data|jsonify}}));
         });
     </script>
 {% endblock %}

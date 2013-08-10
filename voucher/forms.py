@@ -1,4 +1,4 @@
-from acubor.lib import KOModelForm
+from acubor.lib import KOModelForm, ExtFileField
 from django import forms
 from core.models import Currency, Party
 from voucher.models import Invoice, PurchaseVoucher
@@ -15,13 +15,15 @@ class InvoiceForm(KOModelForm):
 
 
 class PurchaseVoucherForm(KOModelForm):
-    # party = forms.CharField(widget=forms.TextInput())
-    currency = forms.ModelChoiceField(Currency.objects.all(), empty_label=None)
-    attachment = forms.FileField(
+    party = forms.ModelChoiceField(Party.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'select2'}))
+    currency = forms.ModelChoiceField(Currency.objects.all(), empty_label=None,
+                                      widget=forms.Select(attrs={'class': 'select2'}))
+    attachment = ExtFileField(
         label='Add an attachment',
         help_text='',
         required=False,
-        )
+        ext_whitelist=(".jpg", ".txt")
+    )
 
     class Meta:
         model = PurchaseVoucher
