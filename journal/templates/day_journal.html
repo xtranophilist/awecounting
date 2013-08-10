@@ -63,11 +63,6 @@
                     </td>
                 </tr>
                 <!-- /ko -->
-                {#            <tr data-bind="if: hasNoRows">#}
-                {#                <td colspan="3">#}
-                {#                    No rows have been added yet.#}
-                {#                </td>#}
-                {#            </tr>#}
                 </tbody>
             </table>
 
@@ -257,29 +252,24 @@
                     <th class="span2">Inward</th>
                     <th class="span2">Outward</th>
                     <th class="span2">Closing</th>
+                    <th class="span2">Actual</th>
+                    <th class="span2">Difference</th>
                 </tr>
                 </thead>
 
-                <tbody id="day-cash-sales">
+                <tbody id="day-summary-cash">
                 <!-- ko foreach: rows -->
                 <tr data-bind="flash: true">
                     <td data-bind="text: opening()"></td>
                     <td data-bind="text: inward()"></td>
                     <td data-bind="text: outward()"></td>
-                    <td data-bind="editableText: closing"></td>
+                    <td data-bind="text: closing()"></td>
+                    <td data-bind="editableText: actual"></td>
+                    <td data-bind="text: difference()"></td>
                 </tr>
                 <!-- /ko -->
-                {#            <tr data-bind="if: hasNoRows">#}
-                {#                <td colspan="3">#}
-                {#                    No rows have been added yet.#}
-                {#                </td>#}
-                {#            </tr>#}
                 </tbody>
             </table>
-
-            <button class="btn" data-bind="click: addRow">
-                <i class="icon-plus-sign hand-on-hover" ></i> Add New Row
-            </button>
 
             <button class="btn" data-bind="click: save">
                 Save

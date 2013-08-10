@@ -91,3 +91,7 @@ def save_day_cash_payment(request):
         dct[index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+def save_day_summary_cash(request):
+    pass
