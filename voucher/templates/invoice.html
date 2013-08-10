@@ -62,10 +62,12 @@
             <div class="span3">
                 {{ form.date.label_tag }}
                 <input data-date-format="yyyy-mm-dd" data-bind="value: date" id="inv-date" name="date" required="required" type="text">
+                {{ form.date.errors}}
             </div>
             <div class="span3">
                 {{ form.due_date.label_tag }}
                 <input data-date-format="yyyy-mm-dd" data-bind="value: due_date" id="due-date" name="due_date" type="text">
+                {{ form.due_date.errors}}
             </div>
             <div class="span3">
                 {{ form.tax.label_tag }}
