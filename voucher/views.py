@@ -18,7 +18,10 @@ def invoice(request, id=None):
     except CompanySetting.DoesNotExist:
         #TODO Add a flash message
         return redirect('/settings/company')
-    invoice = Invoice()
+    if id:
+        invoice = Invoice.objects.get(id=id)
+    else:
+        invoice = Invoice()
     try:
         last_invoice = Invoice.objects.latest('id')
         new_invoice_no = int(last_invoice.invoice_no)+1
@@ -43,7 +46,7 @@ def save_invoice(request):
     del params['items']
     dct = {}
     print params
-
+    print
     invoice = Invoice(party_id=params.get('party'), invoice_no=params.get('invoice_no'),
                       reference=params.get('reference'), date=params.get('date'),
                       due_date=params.get('due_date'), tax=params.get('tax'),
@@ -67,19 +70,19 @@ def save_invoice(request):
             dct['error_message'] = '; '.join(e.messages)
         else:
             dct['error_message'] = 'Error in form data!'
-        for index, row in enumerate(params.get('particulars').get('rows')):
-            if invalid(row, ['item_id', 'unit_price', 'quantity']):
-                continue
-            import pdb
-            pdb.set_trace()
-            model = Particular
-            values = {'sn': index+1, 'item_id': row.get('item_id'), 'description': row.get('description'),
-                      'unit_price': row.get('unit_price'), 'quantity': row.get('quantity'), 'invoice': invoice}
-            submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-            if not created:
-                submodel = save_model(submodel, values)
-            dct[index] = submodel.id
-        delete_rows(params.get('deleted_rows'), model)
+    model = Particular
+    for index, row in enumerate(params.get('particulars').get('rows')):
+
+        if invalid(row, ['item_id', 'unit_price', 'quantity']):
+            continue
+
+        values = {'sn': index+1, 'item_id': row.get('item_id'), 'description': row.get('description'),
+                  'unit_price': row.get('unit_price'), 'quantity': row.get('quantity'), 'invoice': invoice}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct[index] = submodel.id
+    delete_rows(params.get('particulars').get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
