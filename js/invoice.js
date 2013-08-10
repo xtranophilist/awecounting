@@ -50,6 +50,16 @@ function InvoiceViewModel(data){
                 }
                 else{
                     $('#message').html('Saved!');
+                    console.log(msg);
+                    if (msg.id)
+                        self.id = msg.id;
+                    $("#particulars-body > tr").each(function (i) {
+                        $($("#particulars-body > tr")[i]).addClass('invalid-row');
+                    });
+                    for (var i in msg.rows){
+                        self.particulars.rows()[i].id = msg.rows[i];
+                        $($("#particulars-body > tr")[i]).removeClass('invalid-row');
+                    }
                 }
             }
 //            error: function(XMLHttpRequest, textStatus, errorThrown) {

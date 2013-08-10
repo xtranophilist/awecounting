@@ -107,3 +107,7 @@ tbody > tr > td[contenteditable="true"]:focus {
     overflow: visible;
 }
 
+.errorlist{
+    color: red;
+}
+
