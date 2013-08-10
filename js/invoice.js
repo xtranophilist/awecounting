@@ -96,7 +96,7 @@ function ParticularViewModel(particular){
     var self = this;
     //default values
     self.item_id = ko.observable();
-    self.description = ko.observable('');
+    self.description = ko.observable();
     self.unit_price= ko.observable(0);
     self.quantity = ko.observable(1).extend({ numeric: 2 });
     self.discount = ko.observable(0).extend({ numeric: 2 });
