@@ -1,19 +1,27 @@
 from rest_framework import serializers
 from voucher.models import Invoice, PurchaseVoucher
-from voucher.models import Particular
+from voucher.models import InvoiceParticular, PurchaseParticular
 
 
-class ParticularSerializer(serializers.ModelSerializer):
+class InvoiceParticularSerializer(serializers.ModelSerializer):
     item_id = serializers.Field(source='item_id')
 
     class Meta:
-        model = Particular
+        model = InvoiceParticular
+        exclude = ['item']
+
+
+class PurchaseParticularSerializer(serializers.ModelSerializer):
+    item_id = serializers.Field(source='item_id')
+
+    class Meta:
+        model = PurchaseParticular
         exclude = ['item']
 
 
 class InvoiceSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
-    particulars = ParticularSerializer()
+    particulars = InvoiceParticularSerializer()
     
     class Meta:
         model = Invoice
@@ -22,6 +30,7 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
 class PurchaseVoucherSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
+    particulars = PurchaseParticularSerializer()
 
     class Meta:
         model = PurchaseVoucher
