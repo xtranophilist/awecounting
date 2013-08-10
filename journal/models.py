@@ -51,7 +51,7 @@ class DayCreditSales(models.Model):
     account = models.ForeignKey(Account)
     quantity = models.FloatField()
     amount = models.FloatField()
-    day_journal = models.ForeignKey(DayJournal)
+    day_journal = models.ForeignKey(DayJournal, related_name='day_credit_sales')
 
 
 class DayCreditPurchase(models.Model):
@@ -60,7 +60,7 @@ class DayCreditPurchase(models.Model):
     account = models.ForeignKey(Account)
     quantity = models.FloatField()
     amount = models.FloatField()
-    day_journal = models.ForeignKey(DayJournal)
+    day_journal = models.ForeignKey(DayJournal, related_name='day_credit_purchase')
 
 
 class DayCreditExpense(models.Model):
@@ -68,7 +68,7 @@ class DayCreditExpense(models.Model):
     item = models.ForeignKey(Item)
     account = models.ForeignKey(Account)
     amount = models.FloatField()
-    day_journal = models.ForeignKey(DayJournal)
+    day_journal = models.ForeignKey(DayJournal, related_name='day_credit_expense')
 
 
 class DayCreditIncome(models.Model):
@@ -76,12 +76,12 @@ class DayCreditIncome(models.Model):
     item = models.ForeignKey(Item)
     account = models.ForeignKey(Account)
     amount = models.FloatField()
-    day_journal = models.ForeignKey(DayJournal)
+    day_journal = models.ForeignKey(DayJournal, related_name='day_credit_income')
 
 
 class DaySummaryCash(models.Model):
     actual = models.FloatField()
-    day_journal = models.ForeignKey(DayJournal)
+    day_journal = models.ForeignKey(DayJournal, related_name='day_summary_cash')
 
 
 class DaySummaryEquivalent(models.Model):
@@ -89,7 +89,7 @@ class DaySummaryEquivalent(models.Model):
     item = models.ForeignKey(Item)
     inward = models.FloatField()
     outward = models.FloatField()
-    day_journal = models.ForeignKey(DayJournal)
+    day_journal = models.ForeignKey(DayJournal, related_name='day_summary_equivalent')
 
 
 class DaySummaryBank(models.Model):
@@ -100,14 +100,14 @@ class DaySummaryBank(models.Model):
     interest_receipt = models.FloatField()
     interest_and_commission = models.FloatField()
     actual = models.FloatField()
-    day_journal = models.ForeignKey(DayJournal)
+    day_journal = models.ForeignKey(DayJournal, related_name='day_summary_bank')
 
 
 class DaySummarySalesTax(models.Model):
     sn = models.IntegerField()
     tax_scheme = models.ForeignKey(TaxScheme)
     amount = models.FloatField()
-    day_journal = models.ForeignKey(DayJournal)
+    day_journal = models.ForeignKey(DayJournal, related_name='day_summary_sales_tax')
 
 
 class DaySummaryInventory(models.Model):
@@ -117,6 +117,7 @@ class DaySummaryInventory(models.Model):
     sales = models.FloatField()
     actual = models.FloatField()
     day_journal = models.ForeignKey(DayJournal)
+    day_journal = models.ForeignKey(DayJournal, related_name='day_summary_inventory')
 
 
 class DayPayroll(models.Model):
@@ -124,4 +125,4 @@ class DayPayroll(models.Model):
     head = models.CharField(max_length=254)
     total_taxable = models.FloatField()
     tax = models.FloatField()
-    day_journal = models.ForeignKey(DayJournal)
+    day_journal = models.ForeignKey(DayJournal, related_name='day_payroll')
