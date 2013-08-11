@@ -50,7 +50,7 @@
                 </tr>
                 </thead>
 
-                <tbody id="day-cash-sales">
+                <tbody id="cash-sales">
                 <!-- ko foreach: rows -->
                 <tr data-bind="flash: true">
                     <td>
@@ -90,7 +90,7 @@
                 </tr>
                 </thead>
 
-                <tbody id="day-cash-purchase">
+                <tbody id="cash-purchase">
                 <!-- ko foreach: rows -->
                 <tr data-bind="flash: true">
                     <td>
@@ -130,7 +130,7 @@
                 </tr>
                 </thead>
 
-                <tbody id="day-cash-receipt">
+                <tbody id="cash-receipt">
                 <!-- ko foreach: rows -->
                 <tr data-bind="flash: true">
                     <td>
@@ -192,8 +192,8 @@
 
     <br/>
 
-    <div class="row-fluid collapse-group" data-bind="with: day_summary_cash">
-        <h2 class="collapsible-head">Summary Cash
+    <div class="row-fluid collapse-group" data-bind="with: summary_cash">
+        <h2 class="collapsible-head">Summary: Cash & Cash Equivalent
         <span class="collapse-show-on-expand pull-right">
                 <button class="button" data-bind="click: addRow">
                     <i class="icon-plus-sign" ></i> Add New Row
@@ -207,19 +207,23 @@
             <table class="table table-bordered table-striped table-acubor table-sortable">
                 <thead>
                 <tr>
-                    <th class="span2">Opening</th>
-                    <th class="span2">Inward</th>
-                    <th class="span2">Outward</th>
-                    <th class="span2">Closing</th>
-                    <th class="span2">Actual</th>
-                    <th class="span2">Difference</th>
+                    <th class="span1">SN</th>
+                    <th class="span2">Particulars</th>
+                    <th class="span1">Opening</th>
+                    <th class="span1">Inward</th>
+                    <th class="span1">Outward</th>
+                    <th class="span1">Closing</th>
+                    <th class="span1">Actual</th>
+                    <th class="span1">Difference</th>
                 </tr>
                 </thead>
 
-                <tbody id="day-summary-cash">
+                <tbody id="summary-cash">
                 <!-- ko foreach: rows -->
                 <tr data-bind="flash: true">
-                    <td data-bind="text: opening()"></td>
+                    <td data-bind="text: $index+1"></td>
+                    <td data-bind="text: particular()"></td>
+                    <td data-bind="text: opening()">1000</td>
                     <td data-bind="text: inward()"></td>
                     <td data-bind="text: outward()"></td>
                     <td data-bind="text: closing()"></td>
@@ -231,5 +235,7 @@
             </table>
         </div>
     </div>
+
+
 
 {% endblock %}
