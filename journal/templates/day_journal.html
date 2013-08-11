@@ -11,11 +11,11 @@
     <script src="http://static.acubor.com/js/vendors/knockout.js"></script>
     <script src="http://static.acubor.com/js/ko_lib.js"></script>
     <script src="http://static.acubor.com/js/base.js"></script>
-    <script src="http://static.acubor.com/js/day_journal.js"></script>
+    {#    <script src="http://static.acubor.com/js/day_journal.js"></script>#}
     <script>
         $(document).ready(function () {
             {% load filters %}
-            ko.applyBindings(new DayJournal({{ journal|jsonify }}));
+            {#            ko.applyBindings(new DayJournal({{ journal|jsonify }}));#}
         });
     </script>
 {% endblock %}
@@ -30,7 +30,7 @@
 
     {{ journal|jsonify }}
 
-    <div class="row-fluid collapse-group" data-bind="with: day_cash_sales">
+    <div class="row-fluid collapse-group" data-bind="with: cash_sales">
         <h2 class="collapsible-head">Cash Sales<b class="arrow icon-angle-down pull-right"></b></h2>
         <div class="collapse">
             <div data-bind="text: message()"></div>
@@ -38,9 +38,7 @@
                 <thead>
                 <tr>
                     <th class="span1">SN</th>
-                    <th class="span2">Item</th>
-                    <th class="span2">Quantity</th>
-                    <th class="span2">Rate</th>
+                    <th class="span2">Sales Ledger</th>
                     <th class="span2">Amount</th>
                     <th class="span1"></th>
                 </tr>
@@ -55,11 +53,9 @@
                     <td>
                         <select class="span12" data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, select2: {}"></select>
                     </td>
-                    <td data-bind="editableText: quantity, numeric: true"></td>
-                    <td data-bind="text: rate()"></td>
                     <td data-bind="editableText: amount"></td>
                     <td>
-                        <a class="icon-remove-sign" href="#" data-bind="click: $parent.removeRow" tabindex="-1"></a>
+                        <button class="close" data-bind="click: $parent.removeRow">&times;</button>
                     </td>
                 </tr>
                 <!-- /ko -->
@@ -89,9 +85,7 @@
                 <thead>
                 <tr>
                     <th class="span1">SN</th>
-                    <th class="span2">Item</th>
-                    <th class="span2">Quantity</th>
-                    <th class="span2">Rate</th>
+                    <th class="span2">Purchase Ledger</th>
                     <th class="span2">Amount</th>
                     <th class="span1"></th>
                 </tr>
@@ -106,19 +100,12 @@
                     <td>
                         <select class="span12" data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, select2: {}"></select>
                     </td>
-                    <td data-bind="editableText: quantity, numeric: true"></td>
-                    <td data-bind="text: rate()"></td>
                     <td data-bind="editableText: amount"></td>
                     <td>
-                        <a class="icon-remove-sign" href="#" data-bind="click: $parent.removeRow" tabindex="-1"></a>
+                        <button class="close" data-bind="click: $parent.removeRow">&times;</button>
                     </td>
                 </tr>
                 <!-- /ko -->
-                {#                <tr data-bind="if: hasNoRows">#}
-                {#                    <td colspan="3">#}
-                {#                        No rows have been added yet.#}
-                {#                    </td>#}
-                {#                </tr>#}
                 </tbody>
             </table>
 
@@ -145,7 +132,7 @@
                 <thead>
                 <tr>
                     <th class="span1">SN</th>
-                    <th class="span2">Account Type</th>
+                    <th class="span2">Receipt From</th>
                     <th class="span2">Amount</th>
                     <th class="span1"></th>
                 </tr>
@@ -158,19 +145,14 @@
                         <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                     </td>
                     <td>
-                        <select class="span12" data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: account_id, select2: {}"></select>
+                        <select class="span12" data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, select2: {}"></select>
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td>
-                        <a class="icon-remove-sign" href="#" data-bind="click: $parent.removeRow" tabindex="-1"></a>
+                        <button class="close" data-bind="click: $parent.removeRow">&times;</button>
                     </td>
                 </tr>
                 <!-- /ko -->
-                {#                <tr data-bind="if: hasNoRows">#}
-                {#                    <td colspan="3">#}
-                {#                        No rows have been added yet.#}
-                {#                    </td>#}
-                {#                </tr>#}
                 </tbody>
             </table>
 
@@ -197,7 +179,7 @@
                 <thead>
                 <tr>
                     <th class="span1">SN</th>
-                    <th class="span2">Account Type</th>
+                    <th class="span2">Payment To</th>
                     <th class="span2">Amount</th>
                     <th class="span1"></th>
                 </tr>
@@ -210,19 +192,14 @@
                         <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                     </td>
                     <td>
-                        <select class="span12" data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: account_id, select2: {}"></select>
+                        <select class="span12" data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, select2: {}"></select>
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td>
-                        <a class="icon-remove-sign" href="#" data-bind="click: $parent.removeRow" tabindex="-1"></a>
+                        <button class="close" data-bind="click: $parent.removeRow">&times;</button>
                     </td>
                 </tr>
                 <!-- /ko -->
-                {#                <tr data-bind="if: hasNoRows">#}
-                {#                    <td colspan="3">#}
-                {#                        No rows have been added yet.#}
-                {#                    </td>#}
-                {#                </tr>#}
                 </tbody>
             </table>
 
@@ -240,6 +217,8 @@
 
         </div>
     </div>
+
+    <br/>
 
     <div class="row-fluid collapse-group" data-bind="with: day_summary_cash">
         <h2 class="collapsible-head">Summary Cash<b class="arrow icon-angle-down pull-right"></b></h2>
