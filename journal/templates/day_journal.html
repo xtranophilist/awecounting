@@ -1,10 +1,10 @@
 {%  extends "dashboard.html" %}
 
-{% block title %}Day Journal for {{ journal.date }}{% endblock %}
+{% block title %}Day Book for {{ journal.date }}{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li class="active"><a href="{% url "new_day_journal" %}">Invoice</a></li>
+    <li class="active"><a href="{% url "new_day_journal" %}">Day Book</a></li>
 {% endblock %}
 
 {% block head_end %}
@@ -24,7 +24,7 @@
 
     <div class="page-header position-relative">
         <h1>
-            Day Journal for {{ journal.date }}
+            Day Book for {{ journal.date }}
         </h1>
     </div>
 
