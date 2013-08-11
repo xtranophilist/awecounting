@@ -91,20 +91,6 @@ def purchase_voucher(request, id=None):
         voucher = PurchaseVoucher(date=date.today(), currency=company_setting.default_currency)
 
     if request.POST:
-        particulars = json.loads(request.POST['particulars'])
-        model = PurchaseParticular
-        for index, row in enumerate(particulars.get('rows')):
-            if invalid(row, ['item_id', 'unit_price', 'quantity']):
-                continue
-            values = {'sn': index+1, 'item_id': row.get('item_id'), 'description': row.get('description'),
-                      'unit_price': row.get('unit_price'), 'quantity': row.get('quantity'),
-                      'discount': row.get('discount'), 'purchase_voucher': voucher}
-            submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-            if not created:
-                submodel = save_model(submodel, values)
-        import pdb
-        pdb.set_trace()
-        delete_rows(particulars.get('deleted_rows'), model)
         form = PurchaseVoucherForm(request.POST, request.FILES, instance=voucher)
         if form.is_valid():
             voucher = form.save(commit=False)
@@ -112,6 +98,20 @@ def purchase_voucher(request, id=None):
                 voucher.attachment = request.FILES['attachment']
             voucher.company = request.user.company
             voucher.save()
+        if id or form.is_valid():
+            particulars = json.loads(request.POST['particulars'])
+            model = PurchaseParticular
+            for index, row in enumerate(particulars.get('rows')):
+                if invalid(row, ['item_id', 'unit_price', 'quantity']):
+                    continue
+                values = {'sn': index+1, 'item_id': row.get('item_id'), 'description': row.get('description'),
+                          'unit_price': row.get('unit_price'), 'quantity': row.get('quantity'),
+                          'discount': row.get('discount'), 'purchase_voucher': voucher}
+                submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+                if not created:
+                    submodel = save_model(submodel, values)
+            delete_rows(particulars.get('deleted_rows'), model)
+
     else:
         form = PurchaseVoucherForm(instance=voucher)
     purchase_voucher_data = PurchaseVoucherSerializer(voucher).data
