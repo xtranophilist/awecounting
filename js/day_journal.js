@@ -148,8 +148,11 @@ function DayCashReceiptRow(row){
 function DaySummaryCashRow(row){
     var self = this;
 
-    self.opening = ko.observable(0);
-    self.inward = ko.observable(0);
+    self.opening = ko.observable(1000);
+    self.inward = ko.computed(function(){
+            return 2000;
+        }
+    );
     self.outward = ko.observable(0);
     self.closing = ko.observable();
     self.actual = ko.observable();

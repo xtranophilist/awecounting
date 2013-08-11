@@ -111,3 +111,10 @@ tbody > tr > td[contenteditable="true"]:focus {
     color: red;
 }
 
+.collapse-group h2{
+    margin: 0;
+}
+
+.collapse-group .collapse .btn{
+    margin-bottom: 1em;
+}
