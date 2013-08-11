@@ -101,6 +101,8 @@ tbody > tr > td[contenteditable="true"]:focus {
 
 .collapsible-head{
     background: #F0F0F0;
+    border-radius: 0.3em 0.3em 0 0;
+    padding-left: 1em;
 }
 
 .collapse.in {
@@ -121,6 +123,10 @@ tbody > tr > td[contenteditable="true"]:focus {
 
 .collapse-show-on-expand{
     display: none;
+}
+
+.collapse-group{
+    border-bottom: 1px dotted #FFFFFF;
 }
 
 .close:only-child{
