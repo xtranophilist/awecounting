@@ -123,6 +123,7 @@ tbody > tr > td[contenteditable="true"]:focus {
 
 .collapse-show-on-expand{
     display: none;
+    padding-right: 0.2em;
 }
 
 .collapse-group{
