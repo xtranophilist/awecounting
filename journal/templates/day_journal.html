@@ -296,7 +296,7 @@
                 </tr>
                 </thead>
 
-                <tbody id="summary-transfers">
+                <tbody id="summary-bank">
                 <!-- ko foreach: rows -->
                 <tr data-bind="flash: true">
                     <td data-bind="text: $index+1">1</td>
@@ -311,5 +311,48 @@
             </table>
         </div>
     </div>
+
+    <div class="row-fluid collapse-group" data-bind="with: summary_sales_tax">
+        <h2 class="collapsible-head">Summary: Sales Tax
+            <span class="collapse-show-on-expand pull-right">
+                <button class="button" data-bind="click: addRow"><i class="icon-plus-sign" ></i> Add New Row</button>
+            <button class="button" data-bind="click: save"><i class="icon-save"></i> Save</button>
+            <button class="button" data-bind="click: reset">Reset</button>
+            </span>
+        </h2>
+
+        <div class="collapse">
+            <div data-bind="text: message()"></div>
+            <table class="table table-bordered table-striped table-acubor table-sortable">
+                <thead>
+                <tr>
+                    <th class="span1">SN</th>
+                    <th class="span2">Type of Tax</th>
+                    <th class="span2">Amount</th>
+                    <th class="span1"></th>
+                </tr>
+                </thead>
+
+                <tbody id="summary-sales-tax">
+                <!-- ko foreach: rows -->
+                <tr data-bind="flash: true">
+                    <td>
+                        <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
+                    </td>
+                    <td>
+
+                    </td>
+                    <td data-bind="editableText: amount"></td>
+                    <td align="center">
+                        <button class="close" data-bind="click: $parent.removeRow">&times;</button>
+                    </td>
+                </tr>
+                <!-- /ko -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
 
 {% endblock %}
