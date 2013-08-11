@@ -9,7 +9,7 @@
         </h1>
     </div>
     <ul>
-        {% for scheme in tax_schemes %}
+        {% for object in tax_schemes %}
             <li>
             <a href="{{ object.get_absolute_url }}">
                 {{ object.name }} - {{ object.percent }}
