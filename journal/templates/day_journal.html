@@ -288,9 +288,11 @@
                 <thead>
                 <tr>
                     <th class="span1">SN</th>
-                    <th class="span2">Transfer Type</th>
-                    <th class="span1">Inward</th>
-                    <th class="span1">Outward</th>
+                    <th class="span2">Bank Account</th>
+                    <th class="span1">Card Deposit</th>
+                    <th class="span1">Cash Deposit</th>
+                    <th class="span1">Account Transfer+</th>
+                    <th class="span1">Account Transfer-</th>
                 </tr>
                 </thead>
 
@@ -298,9 +300,11 @@
                 <!-- ko foreach: rows -->
                 <tr data-bind="flash: true">
                     <td data-bind="text: $index+1">1</td>
-                    <td data-bind="text: transfer_type()"></td>
-                    <td data-bind="text: inward()"></td>
-                    <td data-bind="text: outward()"></td>
+                    <td data-bind="text: bank_account_id"></td>
+                    <td data-bind="text: card_deposit()"></td>
+                    <td data-bind="text: cash_deposit()"></td>
+                    <td data-bind="text: account_transfer_plus()"></td>
+                    <td data-bind="text: account_transfer_minus()"></td>
                 </tr>
                 <!-- /ko -->
                 </tbody>
