@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from dayjournal.models import DayBook, CashSales, CashPurchase, CashReceipt, CashPayment, SummaryCash, \
+from dayjournal.models import DayJournal, CashSales, CashPurchase, CashReceipt, CashPayment, SummaryCash, \
     SummaryBank, SummaryEquivalent, SummarySalesTax, SummaryInventory, CreditExpense, CreditIncome, \
     CreditPurchase, CreditSales
 
@@ -7,37 +7,37 @@ from dayjournal.models import DayBook, CashSales, CashPurchase, CashReceipt, Cas
 class CashSalesSerializer(serializers.ModelSerializer):
     class Meta:
         model = CashSales
-        exclude = ['day_book']
+        exclude = ['day_journal']
 
 
 class CashPurchaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = CashPurchase
-        exclude = ['day_book']
+        exclude = ['day_journal']
 
 
 class CashReceiptSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CashReceipt
-        exclude = ['day_book']
+        exclude = ['day_journal']
 
 
 class CashPaymentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CashPayment
-        exclude = ['day_book']
+        exclude = ['day_journal']
 
 
 class SummaryCashSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SummaryCash
-        exclude = ['day_book']
+        exclude = ['day_journal']
 
 
-class DayBookSerializer(serializers.ModelSerializer):
+class DayJournalSerializer(serializers.ModelSerializer):
     cash_sales = CashSalesSerializer()
     cash_purchase = CashPurchaseSerializer()
     cash_receipt = CashReceiptSerializer()
@@ -45,7 +45,7 @@ class DayBookSerializer(serializers.ModelSerializer):
     summary_cash = SummaryCashSerializer()
 
     class Meta:
-        model = DayBook
+        model = DayJournal
         exclude = ['company']
 
 
