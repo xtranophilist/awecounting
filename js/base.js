@@ -2,6 +2,9 @@ $(document).ready(function () {
 
     $('.collapsible-head').on('click', function(e) {
         e.preventDefault();
+        if (e.target.tagName=='BUTTON'){
+            return false;
+        }
         var $this = $(this);
         var $collapse = $this.closest('.collapse-group').find('.collapse');
         ($this.closest('.collapse-group').find('.collapsible-head').find('.collapse-show-on-expand').toggle());
