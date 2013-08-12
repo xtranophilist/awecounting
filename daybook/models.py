@@ -1,8 +1,6 @@
 from django.db import models
-from inventory.models import Item
 from users.models import Company
 from ledger.models import Account
-from tax.models import TaxScheme
 
 
 class DayBook(models.Model):

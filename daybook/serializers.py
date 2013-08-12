@@ -1,57 +1,57 @@
 from rest_framework import serializers
-from daybook.models import DayJournal, DayCashSales, DayCashPurchase, DayCashReceipt, DayCashPayment, DaySummaryCash, \
-    DaySummaryBank, DaySummaryEquivalent, DaySummarySalesTax, DaySummaryInventory, DayCreditExpense, DayCreditIncome, \
-    DayCreditPurchase, DayCreditSales, DayPayroll
+from daybook.models import DayBook, CashSales, CashPurchase, CashReceipt, CashPayment, SummaryCash, \
+    SummaryBank, SummaryEquivalent, SummarySalesTax, SummaryInventory, CreditExpense, CreditIncome, \
+    CreditPurchase, CreditSales
 
 
-class DayCashSalesSerializer(serializers.ModelSerializer):
+class CashSalesSerializer(serializers.ModelSerializer):
     # item = serializers.Field(source='item.name')
     item_id = serializers.Field(source='item_id')
 
     class Meta:
-        model = DayCashSales
-        exclude = ['day_journal', 'item']
+        model = CashSales
+        exclude = ['day_book', 'item']
 
 
-class DayCashPurchaseSerializer(serializers.ModelSerializer):
+class CashPurchaseSerializer(serializers.ModelSerializer):
     item = serializers.Field(source='item.name')
     item_id = serializers.Field(source='item_id')
 
     class Meta:
-        model = DayCashPurchase
-        exclude = ['day_journal']
+        model = CashPurchase
+        exclude = ['day_book']
 
 
-class DayCashReceiptSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = DayCashReceipt
-        exclude = ['day_journal']
-
-
-class DayCashPaymentSerializer(serializers.ModelSerializer):
+class CashReceiptSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = DayCashPayment
-        exclude = ['day_journal']
+        model = CashReceipt
+        exclude = ['day_book']
 
 
-class DaySummaryCashSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = DaySummaryCash
-        exclude = ['day_journal']
-
-
-class DayJournalSerializer(serializers.ModelSerializer):
-    day_cash_sales = DayCashSalesSerializer()
-    day_cash_purchase = DayCashPurchaseSerializer()
-    day_cash_receipt = DayCashReceiptSerializer()
-    day_cash_payment = DayCashPaymentSerializer()
-    day_summary_cash = DaySummaryCashSerializer()
+class CashPaymentSerializer(serializers.ModelSerializer):
 
     class Meta:
-        model = DayJournal
+        model = CashPayment
+        exclude = ['day_book']
+
+
+class SummaryCashSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SummaryCash
+        exclude = ['day_book']
+
+
+class DayBookSerializer(serializers.ModelSerializer):
+    cash_sales = CashSalesSerializer()
+    cash_purchase = CashPurchaseSerializer()
+    cash_receipt = CashReceiptSerializer()
+    cash_payment = CashPaymentSerializer()
+    summary_cash = SummaryCashSerializer()
+
+    class Meta:
+        model = DayBook
         exclude = ['company']
 
 
