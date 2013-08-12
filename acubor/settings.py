@@ -127,7 +127,7 @@ INSTALLED_APPS = (
     'tax',
     'voucher',
     'ledger',
-    'daybook',
+    'dayjournal',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.admindocs',

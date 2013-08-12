@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
-from daybook.models import DayBook, CashPayment, CashSales, CashPurchase, CashReceipt
+from dayjournal.models import DayBook, CashPayment, CashSales, CashPurchase, CashReceipt
 from datetime import date
-from daybook.serializers import DayBookSerializer
+from dayjournal.serializers import DayBookSerializer
 from django.http import HttpResponse
 import json
 from acubor.lib import delete_rows, invalid, save_model
