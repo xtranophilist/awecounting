@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from journal.models import DayJournal, DayCashSales, DayCashPurchase, DayCashReceipt, DayCashPayment, DaySummaryCash, \
+from daybook.models import DayJournal, DayCashSales, DayCashPurchase, DayCashReceipt, DayCashPayment, DaySummaryCash, \
     DaySummaryBank, DaySummaryEquivalent, DaySummarySalesTax, DaySummaryInventory, DayCreditExpense, DayCreditIncome, \
     DayCreditPurchase, DayCreditSales, DayPayroll
 
