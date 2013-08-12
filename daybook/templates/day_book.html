@@ -1,21 +1,21 @@
 {%  extends "dashboard.html" %}
 
-{% block title %}Day Book for {{ journal.date }}{% endblock %}
+{% block title %}Day Book for {{ day_book.date }}{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li class="active"><a href="{% url "new_day_journal" %}">Day Book</a></li>
+    <li class="active"><a href="{% url "new_day_book" %}">Day Book</a></li>
 {% endblock %}
 
 {% block head_end %}
     <script src="http://static.acubor.com/js/vendors/knockout.js"></script>
     <script src="http://static.acubor.com/js/ko_lib.js"></script>
     <script src="http://static.acubor.com/js/base.js"></script>
-    {#    <script src="http://static.acubor.com/js/day_journal.js"></script>#}
+    {#    <script src="http://static.acubor.com/js/day_book.js"></script>#}
     <script>
         $(document).ready(function () {
             {% load filters %}
-            {#            ko.applyBindings(new DayJournal({{ journal|jsonify }}));#}
+            {#            ko.applyBindings(new DayBook({{ day_book|jsonify }}));#}
         });
     </script>
 {% endblock %}
@@ -24,7 +24,7 @@
 
     <div class="page-header position-relative">
         <h1>
-            Day Book for {{ journal.date }}
+            Day Book for {{ day_book.date }}
         </h1>
     </div>
 
