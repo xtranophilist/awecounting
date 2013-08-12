@@ -23,7 +23,7 @@ function DayJournal(data){
 
     var cash_sales_options = {
         rows: data.cash_sales,
-        save_to_url : '/day_journal/save/cash_sales/',
+        save_to_url : '/day/save/cash_sales/',
         properties : {day_journal_date : self.date},
         onSaveSuccess : function(msg, rows){
             $("#cash-sales > tr").each(function (index) {
@@ -38,7 +38,7 @@ function DayJournal(data){
 
     var cash_purchase_options = {
         rows: data.cash_purchase,
-        save_to_url : '/day_journal/save/cash_purchase/',
+        save_to_url : '/day/save/cash_purchase/',
         properties : {day_journal_date : self.date},
         onSaveSuccess : function(msg, rows){
             $("#cash-purchase > tr").each(function (index) {
@@ -53,7 +53,7 @@ function DayJournal(data){
 
     var cash_receipt_options = {
         rows: data.cash_receipt,
-        save_to_url : '/day_journal/save/cash_receipt/',
+        save_to_url : '/day/save/cash_receipt/',
         properties : {day_journal_date : self.date},
         onSaveSuccess : function(msg, rows){
             $("#cash-receipt > tr").each(function (index) {
@@ -68,7 +68,7 @@ function DayJournal(data){
 
     var cash_payment_options = {
         rows: data.cash_payment,
-        save_to_url : '/day_journal/save/cash_payment/',
+        save_to_url : '/day/save/cash_payment/',
         properties : {day_journal_date : self.date},
         onSaveSuccess : function(msg, rows){
             $("#cash-payment > tr").each(function (index) {
@@ -83,7 +83,7 @@ function DayJournal(data){
 
     var summary_cash_options = {
         rows: data.cash_payment,
-        save_to_url : '/day_journal/save/cash_payment/',
+        save_to_url : '/day/save/cash_payment/',
         properties : {day_journal_date : self.date},
         onSaveSuccess : function(msg, rows){
             $("#summary-cash > tr").each(function (index) {
