@@ -8,7 +8,7 @@ class DayBook(models.Model):
     company = models.ForeignKey(Company)
 
     class Meta:
-        db_table = 'daybook'
+        db_table = 'day_journal'
 
 
 class CashSales(models.Model):
