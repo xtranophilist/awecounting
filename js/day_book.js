@@ -96,9 +96,9 @@ function DayBook(data){
         }
     };
 
-    self.cash_sales = new TableViewModel(cash_sales_options, DayCashSalesRow);
+    self.cash_sales = new TableViewModel(cash_sales_options, CashSalesRow);
 
-    self.cash_purchase = new TableViewModel(cash_purchase_options, DayCashSalesRow);
+    self.cash_purchase = new TableViewModel(cash_purchase_options, CashSalesRow);
 
     self.cash_receipt = new TableViewModel(cash_receipt_options, DayCashReceiptRow);
 
@@ -115,21 +115,14 @@ function DayBook(data){
     }
 }
 
-function DayCashSalesRow(row){
+function CashSalesRow(row){
     var self = this;
 
-    self.item_id = ko.observable();
-    self.quantity = ko.observable();
+    self.account_id = ko.observable();
     self.amount = ko.observable(0);
 
     for (var k in row)
         self[k] = ko.observable(row[k]);
-
-    self.rate = ko.computed(function(){
-        var rate =  self.amount()/self.quantity();
-        return isNaN(rate) ? '' : Math.round(rate*100)/100;
-    });
-
 }
 
 function DayCashReceiptRow(row){
