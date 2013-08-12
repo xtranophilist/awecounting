@@ -29,7 +29,7 @@ urlpatterns = patterns('',
                        (r'^account/', include('ledger.urls')),
                        (r'^tax/', include('tax.urls')),
                        (r'^inventory/', include('inventory.urls')),
-                       (r'^daybook/', include('daybook.urls')),
+                       (r'^day_book/', include('daybook.urls')),
                        (r'^ledger/', include('ledger.urls')),
 
                        url(r'^settings/company/$', core_views.company_settings, name='company_settings'),

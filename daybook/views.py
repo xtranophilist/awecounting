@@ -42,7 +42,7 @@ def save_cash_sales(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
-def save_day_cash_purchase(request):
+def save_cash_purchase(request):
     params = json.loads(request.body)
     dct = {}
     model = CashPurchase
@@ -59,7 +59,7 @@ def save_day_cash_purchase(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
-def save_day_cash_receipt(request):
+def save_cash_receipt(request):
     params = json.loads(request.body)
     dct = {}
     model = CashReceipt
@@ -76,7 +76,7 @@ def save_day_cash_receipt(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
-def save_day_cash_payment(request):
+def save_cash_payment(request):
     params = json.loads(request.body)
     dct = {}
     model = CashPayment
@@ -93,5 +93,5 @@ def save_day_cash_payment(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
-def save_day_summary_cash(request):
+def save_summary_cash(request):
     pass
