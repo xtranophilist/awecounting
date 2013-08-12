@@ -118,11 +118,12 @@ function DayBook(data){
 function CashSalesRow(row){
     var self = this;
 
-    self.account_id = ko.observable();
+    self.sales_ledger = ko.observable();
     self.amount = ko.observable(0);
 
     for (var k in row)
         self[k] = ko.observable(row[k]);
+
 }
 
 function DayCashReceiptRow(row){
