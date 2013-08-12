@@ -30,10 +30,10 @@ def save_cash_sales(request):
     dct = {}
     model = CashSales
     for index, row in enumerate(params.get('rows')):
-        if invalid(row, ['item_id', 'amount', 'quantity']):
+        if invalid(row, ['sales_ledger', 'amount']):
             continue
-        values = {'sn': index+1, 'item_id': row.get('item_id'), 'amount': row.get('amount'),
-                  'quantity': row.get('quantity'), 'day_book': get_book(request)}
+        values = {'sn': index+1, 'sales_ledger_id': row.get('sales_ledger'), 'amount': row.get('amount'),
+                  'day_book': get_book(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)

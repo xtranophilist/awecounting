@@ -59,9 +59,9 @@
                         <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                     </td>
                     <td>
-                        <select class="span12" data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: account_id, select2: {}"></select>
+                        <select class="span12" data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: sales_ledger, select2: {}"></select>
                     </td>
-                    <td data-bind="editableText: amount"></td>
+                    <td data-bind="editableText: amount, numeric: true"></td>
                     <td align="center">
                         <button class="close" data-bind="click: $parent.removeRow">&times;</button>
                     </td>

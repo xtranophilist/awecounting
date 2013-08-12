@@ -5,18 +5,12 @@ from daybook.models import DayBook, CashSales, CashPurchase, CashReceipt, CashPa
 
 
 class CashSalesSerializer(serializers.ModelSerializer):
-    # item = serializers.Field(source='item.name')
-    item_id = serializers.Field(source='item_id')
-
     class Meta:
         model = CashSales
-        exclude = ['day_book', 'item']
+        exclude = ['day_book']
 
 
 class CashPurchaseSerializer(serializers.ModelSerializer):
-    item = serializers.Field(source='item.name')
-    item_id = serializers.Field(source='item_id')
-
     class Meta:
         model = CashPurchase
         exclude = ['day_book']
