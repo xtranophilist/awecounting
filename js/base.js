@@ -41,9 +41,25 @@ function intersect_safe(a, b){
     return result;
 }
 
-
 function get_target(e){
     return $((e.currentTarget) ? e.currentTarget : e.srcElement); //for IE <9 compatibility
+}
+
+//String
+
+//Converts underscored or dashed string to camelCase
+String.prototype.toCamelCase = function(){
+    return this.replace(/[-_\s]+(.)?/g, function(match, c){ return c ? c.toUpperCase() : ""; });
+}
+
+//Converts camelCased or dashed string into an underscored_one
+String.prototype.toUnderscore = function(){
+    return this.replace(/([a-z\d])([A-Z]+)/g, '$1_$2').replace(/[-\s]+/g, '_').toLowerCase();
+}
+
+//Converts underscored or camelCased string into an dashed-one
+String.prototype.toDash  = function(){
+    return this.replace(/([A-Z])/g, '-$1').replace(/[-_\s]+/g, '-').toLowerCase();
 }
 
 //Fixes
