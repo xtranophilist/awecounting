@@ -19,7 +19,7 @@
         </h1>
     </div>
 
-    <table class="table table-bordered table-striped table-acubor table-sortable">
+    <table class="table table-bordered table-striped table-sortable">
         <thead>
         <th>Inv. No.</th>
         <th>To</th>
@@ -29,7 +29,11 @@
         <tbody>
         {% for invoice in invoices %}
             <tr>
-            <td>{{ invoice.invoice_no }}</td>
+            <td>
+                <a href="{% url "view_invoice" invoice.invoice_no %}">
+                {{ invoice.invoice_no }}
+                </a>
+            </td>
             <td>{{ invoice.party }}</td>
             <td>{{ invoice.date }}</td>
             <td>{{ invoice.due_date }}</td>
