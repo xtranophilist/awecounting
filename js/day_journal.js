@@ -31,6 +31,17 @@ function DayJournal(data){
         return filtered_accounts;
     };
 
+    var invalidate = function(msg, rows,tr_wrapper){
+        var selection = $("#" + tr_wrapper + " > tr");
+        selection.each(function (index) {
+                $(selection[index]).addClass('invalid-row');
+            });
+            for (var i in msg){
+                rows[i].id = msg[i];
+                $(selection[i]).removeClass('invalid-row');
+            }
+    }
+
     var cash_sales_options = {
         rows: data.cash_sales,
         save_to_url : '/day/save/cash_sales/',
@@ -88,6 +99,15 @@ function DayJournal(data){
                 rows[i].id = msg[i];
                 $($("#cash-payment > tr")[i]).removeClass('invalid-row');
             }
+        }
+    };
+
+    var credit_sales_options = {
+        rows: data.credit_sales,
+        save_to_url : '/day/save/credit_sales/',
+        properties : {day_journal_date : self.date},
+        onSaveSuccess : function(msg, rows){
+            invalidate(msg, rows, 'credit-sales');
         }
     };
 
