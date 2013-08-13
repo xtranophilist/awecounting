@@ -176,3 +176,8 @@ tbody > tr > td[contenteditable="true"]:focus {
 .select2-container .select2-choice .select2-arrow, .select2-container .select2-choice, .select2-drop{
     border-radius: 0 !important;
 }
+
+/*flatten w8*/
+#nav-search-input{
+    border-radius: 0 !important;
+}
