@@ -16,29 +16,29 @@ def list_invoice(request):
     return render(request, 'list_invoice.html', {'invoices': all_invoices})
 
 
-def invoice(request, id=None):
+def invoice(request, invoice_no=None):
     from core.models import CompanySetting
     try:
         company_setting = CompanySetting.objects.get(company=request.user.company)
     except CompanySetting.DoesNotExist:
         #TODO Add a flash message
         return redirect('/settings/company')
-    if id:
-        invoice = get_object_or_404(Invoice, id=id)
+    if invoice_no:
+        invoice = get_object_or_404(Invoice, invoice_no=invoice_no)
     else:
         invoice = Invoice(date=date.today(), currency=company_setting.default_currency)
-    try:
         try:
-            last_invoice = Invoice.objects.latest('id')
-            last_invoice_no = last_invoice.invoice_no
-        except Invoice.DoesNotExist:
-            # for first invoice
-            last_invoice_no = 0
-        new_invoice_no = int(last_invoice_no)+1
-        invoice.invoice_no = "0" * (int(company_setting.invoice_digit_count) - str(new_invoice_no).__len__()) \
-                             + str(new_invoice_no)
-    except:
-        invoice.invoice_no = ''
+            try:
+                last_invoice = Invoice.objects.latest('id')
+                last_invoice_no = last_invoice.invoice_no
+            except Invoice.DoesNotExist:
+                # for first invoice
+                last_invoice_no = 0
+            new_invoice_no = int(last_invoice_no)+1
+            invoice.invoice_no = "0" * (int(company_setting.invoice_digit_count) - str(new_invoice_no).__len__()) \
+                                 + str(new_invoice_no)
+        except:
+            invoice.invoice_no = ''
 
     form = InvoiceForm(data=request.POST, instance=invoice)
     invoice_data = InvoiceSerializer(invoice).data
