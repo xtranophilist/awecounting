@@ -11,6 +11,11 @@ import json
 from acubor.lib import delete_rows, invalid, save_model
 
 
+def list_invoice(request):
+    all_invoices = Invoice.objects.all()
+    return render(request, 'list_invoice.html', {'invoices': all_invoices})
+
+
 def invoice(request, id=None):
     from core.models import CompanySetting
     try:

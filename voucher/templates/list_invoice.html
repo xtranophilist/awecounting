@@ -1,0 +1,42 @@
+{%  extends "dashboard.html" %}
+
+{% block title %}Invoices{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "list_invoice" %}">Invoices</a></li>
+{% endblock %}
+
+{% block head_end %}
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header position-relative">
+        <h1>
+            Invoices
+        </h1>
+    </div>
+
+    <table class="table table-bordered table-striped table-acubor table-sortable">
+        <thead>
+        <th>Inv. No.</th>
+        <th>To</th>
+        <th>Date</th>
+        <th>Due Date</th>
+        </thead>
+        <tbody>
+        {% for invoice in invoices %}
+            <tr>
+            <td>{{ invoice.invoice_no }}</td>
+            <td>{{ invoice.party }}</td>
+            <td>{{ invoice.date }}</td>
+            <td>{{ invoice.due_date }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}
