@@ -32,7 +32,8 @@
 
 
     <div class="row-fluid collapse-group" data-bind="with: cash_sales">
-        <div class="collapsible-head"><h2>Cash Sales</h2>
+        <div class="collapsible-head"><h2 data-bind="css: status">Cash Sales</h2>
+            <span data-bind="text: message()"></span>
             <span class="collapse-show-on-expand pull-right">
                 <button class="button" data-bind="click: addRow"><i class="icon-plus-sign" ></i> Add New Row</button>
             <button class="button" data-bind="click: save"><i class="icon-save"></i> Save</button>
@@ -41,7 +42,6 @@
         </div>
 
         <div class="collapse">
-            <div data-bind="text: message()"></div>
             <table class="table table-bordered table-striped table-acubor table-sortable">
                 <thead>
                 <tr>
@@ -59,7 +59,7 @@
                         <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                     </td>
                     <td>
-                        <select class="span12" data-bind="options: $root.accounts_by_tag('Sales'), optionsText: 'name', optionsValue: 'id', value: account_id, select2: {}"></select>
+                        <select class="span12" data-bind="options: $root.accounts_by_tag('Sales'), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {}"></select>
                     </td>
                     <td data-bind="editableText: amount, numeric: true"></td>
                     <td align="center">
