@@ -21,11 +21,22 @@ function DayJournal(data){
         }
     });
 
-    self.accounts_by_tag = function(tag){
+    self.accounts_by_tag = function(tags, is_or){
         var filtered_accounts = [];
         for (var i in self.accounts){
-            if ($.inArray(tag, self.accounts[i].tags) !== -1){
-                filtered_accounts.push(self.accounts[i]);
+            var account_tags = self.accounts[i].tags
+            if( typeof tags === 'string' ) {
+                if ($.inArray(tags, account_tags) !== -1){
+                    filtered_accounts.push(self.accounts[i]);
+                }
+            }else if(typeof is_or != 'undefined'){
+                if (intersect_safe(tags, account_tags).length){
+                    filtered_accounts.push(self.accounts[i]);
+                }
+            }else{
+                if (compare_arrays(tags, account_tags)){
+                    filtered_accounts.push(self.accounts[i]);
+                }
             }
         }
         return filtered_accounts;
@@ -34,12 +45,12 @@ function DayJournal(data){
     var invalidate = function(msg, rows,tr_wrapper){
         var selection = $("#" + tr_wrapper + " > tr");
         selection.each(function (index) {
-                $(selection[index]).addClass('invalid-row');
-            });
-            for (var i in msg){
-                rows[i].id = msg[i];
-                $(selection[i]).removeClass('invalid-row');
-            }
+            $(selection[index]).addClass('invalid-row');
+        });
+        for (var i in msg){
+            rows[i].id = msg[i];
+            $(selection[i]).removeClass('invalid-row');
+        }
     }
 
     var cash_sales_options = {
