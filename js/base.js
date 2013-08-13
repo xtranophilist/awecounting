@@ -1,3 +1,4 @@
+//Triggers on document-ready
 $(document).ready(function () {
 
     $('.collapsible-head').on('click', function(e) {
@@ -15,10 +16,37 @@ $(document).ready(function () {
 
 });
 
+//Useful Functions
+
+function compare_arrays(arr1, arr2){
+    return $(arr1).not(arr2).length == 0 && $(arr2).not(arr1).length == 0;
+}
+
+function intersect_safe(a, b){
+    var ai=0, bi=0;
+    var result = new Array();
+
+    while( ai < a.length && bi < b.length )
+    {
+        if      (a[ai] < b[bi] ){ ai++; }
+        else if (a[ai] > b[bi] ){ bi++; }
+        else /* they're equal */
+        {
+            result.push(a[ai]);
+            ai++;
+            bi++;
+        }
+    }
+
+    return result;
+}
+
 
 function get_target(e){
     return $((e.currentTarget) ? e.currentTarget : e.srcElement); //for IE <9 compatibility
 }
+
+//Fixes
 
 $(document).on('mouseup mousedown', '[contenteditable]',function(){
     this.focus();
@@ -48,6 +76,8 @@ $.ajaxSetup({
         }
     }
 });
+
+//Reusable KO Models
 
 function TableViewModel(options, row_model){
 
