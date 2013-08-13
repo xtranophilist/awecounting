@@ -21,6 +21,16 @@ function DayJournal(data){
         }
     });
 
+    self.accounts_by_tag = function(tag){
+        var filtered_accounts = [];
+        for (var i in self.accounts){
+            if ($.inArray(tag, self.accounts[i].tags) !== -1){
+                filtered_accounts.push(self.accounts[i]);
+            }
+        }
+        return filtered_accounts;
+    };
+
     var cash_sales_options = {
         rows: data.cash_sales,
         save_to_url : '/day/save/cash_sales/',
