@@ -171,3 +171,8 @@ tbody > tr > td[contenteditable="true"]:focus {
     border-collapse: collapse !important;
     background-image: none !important;
 }
+
+/*Flatten select2*/
+.select2-container .select2-choice .select2-arrow, .select2-container .select2-choice, .select2-drop{
+    border-radius: 0 !important;
+}
