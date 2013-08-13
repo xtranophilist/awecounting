@@ -109,6 +109,7 @@ function TableViewModel(options, row_model){
         console.log(self.root.day_cash_sales.rows());
 
     self.message = ko.observable();
+    self.status = ko.observable('standby')
 
     self.rows = ko.observableArray(ko.utils.arrayMap(options.rows, function(item) {
         return new row_model(item);
@@ -148,6 +149,7 @@ function TableViewModel(options, row_model){
 
     if (typeof(options.save_to_url) != 'undefined'){
         self.save = function(model, e){
+            self.status('waiting');
             var el = get_target(e);
             $.ajax({
                 type: "POST",
@@ -158,10 +160,12 @@ function TableViewModel(options, row_model){
                     if (typeof(options.onSaveSuccess) != 'undefined'){
                         options.onSaveSuccess(msg, self.rows());
                     }
+                    self.status('success');
 
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     self.message('Saving Failed!');
+                    self.status('error');
                 }
             });
 
