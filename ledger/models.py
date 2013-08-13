@@ -6,6 +6,7 @@ class Account(models.Model):
     code = models.CharField(max_length=10)
     name = models.CharField(max_length=100)
     company = models.ForeignKey(Company)
+    current_balance = models.FloatField()
 
     def get_absolute_url(self):
         return '/account/' + str(self.id)
@@ -24,3 +25,11 @@ class InventoryAccount(models.Model):
 
     def __unicode__(self):
         return self.name
+
+
+class Transaction(models.Model):
+    account = models.ForeignKey(Account)
+    date = models.DateField()
+    amount = models.FloatField()
+    current_balance = models.FloatField()
+    type = models.CharField(max_length=2)  # Dr. or Cr.
