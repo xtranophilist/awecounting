@@ -106,9 +106,9 @@ function DayJournal(data){
         }
     };
 
-    self.cash_sales = new TableViewModel(cash_sales_options, CashSalesRow);
+    self.cash_sales = new TableViewModel(cash_sales_options, CashRow);
 
-    self.cash_purchase = new TableViewModel(cash_purchase_options, CashSalesRow);
+    self.cash_purchase = new TableViewModel(cash_purchase_options, CashRow);
 
     self.cash_receipt = new TableViewModel(cash_receipt_options, DayCashReceiptRow);
 
@@ -125,10 +125,10 @@ function DayJournal(data){
     }
 }
 
-function CashSalesRow(row){
+function CashRow(row){
     var self = this;
 
-    self.sales_ledger = ko.observable();
+    self.account_id = ko.observable();
     self.amount = ko.observable(0);
 
     for (var k in row)
