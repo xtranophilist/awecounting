@@ -40,3 +40,6 @@ class Tag(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=254, null=True, blank=True)
     accounts = models.ManyToManyField(Account, related_name='tags', blank=True)
+
+    def __unicode__(self):
+        return self.name
