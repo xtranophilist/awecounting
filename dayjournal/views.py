@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt
+from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt,\
+    CreditExpense, CreditIncome, CreditPurchase, CreditSales
 from datetime import date
 from dayjournal.serializers import DayJournalSerializer
 from django.http import HttpResponse
@@ -61,31 +62,15 @@ def save_cash_purchase(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
-def save_cash_receipt(request):
-    params = json.loads(request.body)
-    dct = {}
-    model = CashReceipt
-    for index, row in enumerate(params.get('rows')):
-        if invalid(row, ['account_id', 'amount']):
-            continue
-        values = {'sn': index+1, 'account_id': row.get('account_id'), 'amount': row.get('amount'),
-                  'day_journal': get_journal(request)}
-        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-        if not created:
-            submodel = save_model(submodel, values)
-        dct[index] = submodel.id
-    delete_rows(params.get('deleted_rows'), model)
-    return HttpResponse(json.dumps(dct), mimetype="application/json")
-
-
 def save_cash_payment(request):
     params = json.loads(request.body)
     dct = {}
     model = CashPayment
     for index, row in enumerate(params.get('rows')):
+        print row
         if invalid(row, ['account_id', 'amount']):
             continue
-        values = {'sn': index+1, 'account_id': row.get('account_id'), 'amount': row.get('amount'),
+        values = {'sn': index+1, 'payment_to_id': row.get('account_id'), 'amount': row.get('amount'),
                   'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
@@ -93,6 +78,54 @@ def save_cash_payment(request):
         dct[index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+def save_cash_receipt(request):
+    params = json.loads(request.body)
+    dct = {}
+    model = CashReceipt
+    for index, row in enumerate(params.get('rows')):
+        print row
+        if invalid(row, ['account_id', 'amount']):
+            continue
+        values = {'sn': index+1, 'received_from_id': row.get('account_id'), 'amount': row.get('amount'),
+                  'day_journal': get_journal(request)}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct[index] = submodel.id
+    delete_rows(params.get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+def save_credit_sales(request):
+    params = json.loads(request.body)
+    dct = {}
+    model = CreditSales
+    for index, row in enumerate(params.get('rows')):
+        print row
+        if invalid(row, ['account_cr_id', 'account_dr_id', 'amount']):
+            continue
+        values = {'sn': index+1, 'sales_ledger_id': row.get('account_cr_id'), 'customer_id': row.get('account_dr_id'),
+                  'amount': row.get('amount'), 'day_journal': get_journal(request)}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct[index] = submodel.id
+    delete_rows(params.get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+def save_credit_purchase(request):
+    pass
+
+
+def save_credit_income(request):
+    pass
+
+
+def save_credit_expense(request):
+    pass
 
 
 def save_summary_cash(request):
