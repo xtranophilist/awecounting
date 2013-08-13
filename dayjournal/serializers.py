@@ -13,9 +13,10 @@ class CashSalesSerializer(serializers.ModelSerializer):
 
 
 class CashPurchaseSerializer(serializers.ModelSerializer):
+    account_id = serializers.Field(source='purchase_ledger_id')
     class Meta:
         model = CashPurchase
-        exclude = ['day_journal']
+        exclude = ['day_journal', 'purchase_ledger']
 
 
 class CashReceiptSerializer(serializers.ModelSerializer):

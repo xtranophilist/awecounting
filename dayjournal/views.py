@@ -48,10 +48,11 @@ def save_cash_purchase(request):
     dct = {}
     model = CashPurchase
     for index, row in enumerate(params.get('rows')):
-        if invalid(row, ['item_id', 'amount', 'quantity']):
+        print row
+        if invalid(row, ['account_id', 'amount']):
             continue
-        values = {'sn': index+1, 'item_id': row.get('item_id'), 'amount': row.get('amount'),
-                  'quantity': row.get('quantity'), 'day_journal': get_journal(request)}
+        values = {'sn': index+1, 'purchase_ledger_id': row.get('account_id'), 'amount': row.get('amount'),
+                  'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
