@@ -6,6 +6,7 @@ ko.bindingHandlers.select2 = {
         var obj = valueAccessor(),
             allBindings = allBindingsAccessor(),
             lookupKey = allBindings.lookupKey;
+        obj['placeholderOption'] = 'first';
         $(element).select2(obj);
         if (lookupKey) {
             var value = ko.utils.unwrapObservable(allBindings.value);
