@@ -130,9 +130,11 @@ function DayJournal(data){
 
     self.cash_purchase = new TableViewModel(cash_purchase_options, CashRow);
 
-    self.cash_receipt = new TableViewModel(cash_receipt_options, DayCashReceiptRow);
+    self.cash_receipt = new TableViewModel(cash_receipt_options, CashRow);
 
-    self.cash_payment = new TableViewModel(cash_payment_options, DayCashReceiptRow);
+    self.cash_payment = new TableViewModel(cash_payment_options, CashRow);
+
+    self.credit_sales = new TableViewModel(credit_sales_options, CreditRow);
 
     self.summary_cash = new TableViewModel(summary_cash_options, DaySummaryCashRow);
 
@@ -149,7 +151,19 @@ function CashRow(row){
     var self = this;
 
     self.account_id = ko.observable();
-    self.amount = ko.observable(0);
+    self.amount = ko.observable();
+
+    for (var k in row)
+        self[k] = ko.observable(row[k]);
+
+}
+
+function CreditRow(row){
+    var self = this;
+
+    self.account_cr_id = ko.observable();
+    self.account_dr_id = ko.observable();
+    self.amount = ko.observable();
 
     for (var k in row)
         self[k] = ko.observable(row[k]);
