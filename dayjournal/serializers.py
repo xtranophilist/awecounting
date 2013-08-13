@@ -5,9 +5,11 @@ from dayjournal.models import DayJournal, CashSales, CashPurchase, CashReceipt, 
 
 
 class CashSalesSerializer(serializers.ModelSerializer):
+    account_id = serializers.Field(source='sales_ledger_id')
+
     class Meta:
         model = CashSales
-        exclude = ['day_journal']
+        exclude = ['day_journal', 'sales_ledger']
 
 
 class CashPurchaseSerializer(serializers.ModelSerializer):
