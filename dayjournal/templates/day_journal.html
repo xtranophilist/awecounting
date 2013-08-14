@@ -417,11 +417,11 @@
                 <tr data-bind="flash: true">
                     <td data-bind="text: $index()+2"></td>
                     <td>
-                        <select class="span12" data-bind="options: $root.accounts_by_tag('Payment'), optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: particular, select2: {placeholderOption: 'first', allowClear: true}, event: {change: $root.accountsChanged}"></select>
+                        <select class="span12" data-bind="options: $root.accounts_by_tag('Payment'), optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: account_id, select2: {placeholderOption: 'first'}, event: {change: $root.accountChanged}"></select>
                     </td>
                     <td data-bind="text: opening()"></td>
-                    <td data-bind="text: inward()"></td>
-                    <td data-bind="text: outward()"></td>
+                    <td data-bind="editableText: inward"></td>
+                    <td data-bind="editableText: outward"></td>
                     <td data-bind="text: closing()"></td>
                     <td data-bind="editableText: actual"></td>
                     <td data-bind="text: difference()"></td>
