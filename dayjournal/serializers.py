@@ -54,6 +54,24 @@ class CreditPurchaseSerializer(serializers.ModelSerializer):
         exclude = ['day_journal', 'purchase_ledger', 'supplier']
 
 
+class CreditExpenseSerializer(serializers.ModelSerializer):
+    account_cr_id = serializers.Field(source='expense_head')
+    account_dr_id = serializers.Field(source='expense_claimed_by_id')
+
+    class Meta:
+        model = CreditExpense
+        exclude = ['day_journal', 'expense_head', 'expense_claimed_by']
+
+
+class CreditIncomeSerializer(serializers.ModelSerializer):
+    account_dr_id = serializers.Field(source='income_head_id')
+    account_cr_id = serializers.Field(source='income_from_id')
+
+    class Meta:
+        model = CreditIncome
+        exclude = ['day_journal', 'income_head', 'income_from']
+
+
 class SummaryCashSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -69,6 +87,8 @@ class DayJournalSerializer(serializers.ModelSerializer):
     cash_payment = CashPaymentSerializer()
     credit_sales = CreditSalesSerializer()
     credit_purchase = CreditPurchaseSerializer()
+    credit_expense = CreditExpenseSerializer()
+    credit_income = CreditIncomeSerializer()
 
     class Meta:
         model = DayJournal

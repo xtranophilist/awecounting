@@ -50,7 +50,6 @@ def save_cash_purchase(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashPurchase
     for index, row in enumerate(params.get('rows')):
-        print row
         invalid_attrs = invalid(row, ['account_id', 'amount'])
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
@@ -70,7 +69,6 @@ def save_cash_payment(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashPayment
     for index, row in enumerate(params.get('rows')):
-        print row
         invalid_attrs = invalid(row, ['account_id', 'amount'])
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
@@ -90,7 +88,6 @@ def save_cash_receipt(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashReceipt
     for index, row in enumerate(params.get('rows')):
-        print row
         invalid_attrs = invalid(row, ['account_id', 'amount'])
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
@@ -110,7 +107,6 @@ def save_credit_sales(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CreditSales
     for index, row in enumerate(params.get('rows')):
-        print row
         invalid_attrs = invalid(row, ['account_cr_id', 'account_dr_id', 'amount'])
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
@@ -130,7 +126,6 @@ def save_credit_purchase(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CreditPurchase
     for index, row in enumerate(params.get('rows')):
-        print row
         invalid_attrs = invalid(row, ['account_cr_id', 'account_dr_id', 'amount'])
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
@@ -146,11 +141,42 @@ def save_credit_purchase(request):
 
 
 def save_credit_income(request):
-    pass
+    params = json.loads(request.body)
+    dct = {'invalid_attributes': {}, 'saved': {}}
+    model = CreditIncome
+    for index, row in enumerate(params.get('rows')):
+        invalid_attrs = invalid(row, ['account_cr_id', 'account_dr_id', 'amount'])
+        if invalid_attrs:
+            dct['invalid_attributes'][index] = invalid_attrs
+            continue
+        values = {'sn': index+1, 'income_head_id': row.get('account_dr_id'), 'income_from_id': row.get('account_cr_id'),
+                  'amount': row.get('amount'), 'day_journal': get_journal(request)}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct['saved'][index] = submodel.id
+    delete_rows(params.get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
 def save_credit_expense(request):
-    pass
+    params = json.loads(request.body)
+    dct = {'invalid_attributes': {}, 'saved': {}}
+    model = CreditExpense
+    for index, row in enumerate(params.get('rows')):
+        invalid_attrs = invalid(row, ['account_cr_id', 'account_dr_id', 'amount'])
+        if invalid_attrs:
+            dct['invalid_attributes'][index] = invalid_attrs
+            continue
+        values = {'sn': index+1, 'expense_head_id': row.get('account_cr_id'),
+                  'expense_claimed_by_id': row.get('account_dr_id'),
+                  'amount': row.get('amount'), 'day_journal': get_journal(request)}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct['saved'][index] = submodel.id
+    delete_rows(params.get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
 def save_summary_cash(request):
