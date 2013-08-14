@@ -94,7 +94,32 @@ function DayJournal(data){
 
     self.credit_expense = new TableViewModel(key_to_options('credit_expense'), CreditRow);
 
-//    self.summary_cash = new TableViewModel(summary_cash_options, DaySummaryCashRow);
+    var summary_cash_and_equivalent_options = {
+        rows: data['summary_equivalent'],
+        save_to_url : '/day/save/' + 'summary_equivalent' + '/',
+        properties : {day_journal_date : self.date, summary_cash: new SummaryCashModel(self.summary_cash)},
+        onSaveSuccess : function(msg, rows){
+            validate(msg, rows, 'summary-equivalent');
+
+        }
+    };
+
+        self.summary_cash_and_equivalent = new TableViewModel(summary_cash_and_equivalent_options, DaySummaryCashRow);
+}
+
+function SummaryCashModel(data){
+    var self = this;
+
+    self.opening = ko.observable(1000);
+    self.inward = ko.observable(100);
+    self.outward = ko.observable(10);
+    self.closing = ko.observable(50);
+    self.actual = ko.observable(5);
+    self.difference = ko.observable(45);
+
+
+    for (var k in data)
+        self[k] = ko.observable(data[k]);
 }
 
 function CashRow(row){
@@ -123,7 +148,9 @@ function CreditRow(row){
 function DaySummaryCashRow(row){
     var self = this;
 
+    self.particular = ko.observable()
     self.opening = ko.observable(1000);
+
     self.inward = ko.computed(function(){
             return 2000;
         }
