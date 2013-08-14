@@ -81,7 +81,7 @@ class SummaryEquivalent(models.Model):
     particular = models.ForeignKey(Account)
     inward = models.FloatField()
     outward = models.FloatField()
-    closing = models.FloatField()
+    actual = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='summary_equivalent')
 
 
