@@ -60,7 +60,8 @@ function DayJournal(data){
             model.status('error');
         }
         else if(saved_size<rows.length){
-            var message = saved_size + ' row(s) saved! ' + (rows.length - saved_size) + ' row(s) are incomplete!';
+            var message = saved_size.toString() +' row' + ((saved_size==1)?'':'s') + ' saved! ';
+            message += (rows.length-saved_size).toString() +' row' + ((rows.length-saved_size==1)?' is':'s are') + ' incomplete!';
             model.message(message);
             model.status('error');
         }
