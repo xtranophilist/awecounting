@@ -13,7 +13,7 @@ class Migration(SchemaMigration):
 
         # Adding field 'SummaryEquivalent.actual'
         db.add_column(u'dayjournal_summaryequivalent', 'actual',
-                      self.gf('django.db.models.fields.FloatField')(default=None),
+                      self.gf('django.db.models.fields.FloatField')(default=0),
                       keep_default=False)
 
 
