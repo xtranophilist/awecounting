@@ -121,10 +121,10 @@ function SummaryCashModel(data){
     self.inward = function(root){
         var total = 0;
         $.each(root.cash_sales.rows(), function(){
-            total += this.amount();
+            total += parseInt(this.amount());
         });
         $.each(root.cash_receipt.rows(), function(){
-            total += this.amount();
+            total += parseInt(this.amount());
         });
         return total;
     };
@@ -132,10 +132,10 @@ function SummaryCashModel(data){
     self.outward = function(root){
         var total = 0;
         $.each(root.cash_purchase.rows(), function(){
-            total += this.amount();
+            total += parseInt(this.amount());
         });
         $.each(root.cash_payment.rows(), function(){
-            total += this.amount();
+            total += parseInt(this.amount());
         });
         return total;
     };
@@ -148,9 +148,7 @@ function SummaryCashModel(data){
         return self.actual() - self.closing(root);
     };
 
-
     self.actual = ko.observable(0);
-
 
     for (var k in data)
         self[k] = ko.observable(data[k]);

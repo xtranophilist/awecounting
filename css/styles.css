@@ -203,3 +203,8 @@ tbody > tr > td[contenteditable="true"]:focus {
 .collapse{
     height: auto;
 }
+
+tbody > tr > td[contenteditable="true"] {
+    outline: 1px solid #FFFFAA;
+    resize: none;
+}
