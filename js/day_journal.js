@@ -88,6 +88,12 @@ function DayJournal(data){
 
     self.credit_sales = new TableViewModel(key_to_options('credit_sales'), CreditRow);
 
+    self.credit_purchase = new TableViewModel(key_to_options('credit_purchase'), CreditRow);
+
+    self.credit_income = new TableViewModel(key_to_options('credit_income'), CreditRow);
+
+    self.credit_expense = new TableViewModel(key_to_options('credit_expense'), CreditRow);
+
 //    self.summary_cash = new TableViewModel(summary_cash_options, DaySummaryCashRow);
 }
 
