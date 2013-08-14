@@ -104,7 +104,7 @@ function DayJournal(data){
         }
     };
 
-        self.summary_cash_and_equivalent = new TableViewModel(summary_cash_and_equivalent_options, SummaryEquivalentRow);
+    self.summary_cash_and_equivalent = new TableViewModel(summary_cash_and_equivalent_options, SummaryEquivalentRow);
 }
 
 function SummaryCashModel(data){
@@ -112,16 +112,44 @@ function SummaryCashModel(data){
 
     self.opening = function(all_accounts){
         var cash_account = all_accounts.filter(function(element, index, array){
-                if (element.name == 'Cash Account')
-                    return element;
+            if (element.name == 'Cash Account')
+                return element;
         })[0];
         return cash_account.current_balance;
     };
-    self.inward = ko.observable(100);
-    self.outward = ko.observable(10);
-    self.closing = ko.observable(50);
-    self.actual = ko.observable(5);
-    self.difference = ko.observable(45);
+
+    self.inward = function(root){
+        var total = 0;
+        $.each(root.cash_sales.rows(), function(){
+            total += this.amount();
+        });
+        $.each(root.cash_receipt.rows(), function(){
+            total += this.amount();
+        });
+        return total;
+    };
+
+    self.outward = function(root){
+        var total = 0;
+        $.each(root.cash_purchase.rows(), function(){
+            total += this.amount();
+        });
+        $.each(root.cash_payment.rows(), function(){
+            total += this.amount();
+        });
+        return total;
+    };
+
+    self.closing = function(root){
+        return self.opening(root.accounts) + self.inward(root) - self.outward(root);
+    };
+
+    self.difference = function(root){
+        return self.actual() - self.closing(root);
+    };
+
+
+    self.actual = ko.observable(0);
 
 
     for (var k in data)
