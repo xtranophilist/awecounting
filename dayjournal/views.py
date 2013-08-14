@@ -126,7 +126,23 @@ def save_credit_sales(request):
 
 
 def save_credit_purchase(request):
-    pass
+    params = json.loads(request.body)
+    dct = {'invalid_attributes': {}, 'saved': {}}
+    model = CreditPurchase
+    for index, row in enumerate(params.get('rows')):
+        print row
+        invalid_attrs = invalid(row, ['account_cr_id', 'account_dr_id', 'amount'])
+        if invalid_attrs:
+            dct['invalid_attributes'][index] = invalid_attrs
+            continue
+        values = {'sn': index+1, 'purchase_ledger_id': row.get('account_dr_id'), 'supplier_id': row.get('account_cr_id'),
+                  'amount': row.get('amount'), 'day_journal': get_journal(request)}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct['saved'][index] = submodel.id
+    delete_rows(params.get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
 def save_credit_income(request):

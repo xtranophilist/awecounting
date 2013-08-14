@@ -226,7 +226,7 @@
                         <select class="span12" data-bind="options: $root.accounts_by_tag('Sales'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}"></select>
                     </td>
                     <td>
-                        <select class="span12" data-bind="options: $root.accounts_by_tag(['Customer','Party'], true), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
+                        <select class="span12" data-bind="options: $root.accounts_by_tag(['Customer','Party']), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td align="center">
@@ -267,10 +267,10 @@
                         <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                     </td>
                     <td>
-                        <select class="span12" data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, select2: {}"></select>
+                        <select class="span12" data-bind="options: $root.accounts_by_tag('Purchase'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
                     </td>
                     <td>
-                        <select class="span12" data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, select2: {}"></select>
+                        <select class="span12" data-bind="options: $root.accounts_by_tag('Sales'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}"></select>
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td>
