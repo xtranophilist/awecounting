@@ -104,13 +104,19 @@ function DayJournal(data){
         }
     };
 
-        self.summary_cash_and_equivalent = new TableViewModel(summary_cash_and_equivalent_options, DaySummaryCashRow);
+        self.summary_cash_and_equivalent = new TableViewModel(summary_cash_and_equivalent_options, SummaryEquivalentRow);
 }
 
 function SummaryCashModel(data){
     var self = this;
 
-    self.opening = ko.observable(1000);
+    self.opening = function(all_accounts){
+        var cash_account = all_accounts.filter(function(element, index, array){
+                if (element.name == 'Cash Account')
+                    return element;
+        })[0];
+        return cash_account.current_balance;
+    };
     self.inward = ko.observable(100);
     self.outward = ko.observable(10);
     self.closing = ko.observable(50);
@@ -145,11 +151,12 @@ function CreditRow(row){
 
 }
 
-function DaySummaryCashRow(row){
+function SummaryEquivalentRow(row){
     var self = this;
 
     self.particular = ko.observable()
-    self.opening = ko.observable(1000);
+
+    self.opening = ko.observable();
 
     self.inward = ko.computed(function(){
             return 2000;
