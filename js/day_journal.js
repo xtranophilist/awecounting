@@ -193,14 +193,20 @@ function SummaryEquivalentRow(row){
 
     self.opening = ko.observable();
 
-    self.inward = ko.computed(function(){
-            return 2000;
-        }
-    );
+    self.inward = ko.observable();
     self.outward = ko.observable();
-    self.closing = ko.observable();
+
+    self.closing = function(){
+        var closing = parseInt(self.opening()) + parseInt(self.inward()) - parseInt(self.outward());
+        return isNaN(closing)?'':closing;
+    };
+
     self.actual = ko.observable();
-    self.difference = ko.observable();
+
+    self.difference = function(){
+        var diff =  self.actual() - self.closing();
+        return isNaN(diff)?'':diff;
+    };
 
     for (var k in row)
         self[k] = ko.observable(row[k]);
