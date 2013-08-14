@@ -42,14 +42,27 @@ function DayJournal(data){
         return filtered_accounts;
     };
 
-    var invalidate = function(msg, rows, tr_wrapper_id){
+    var validate = function(msg, rows, tr_wrapper_id){
         var selection = $("#" + tr_wrapper_id + " > tr");
         selection.each(function (index) {
             $(selection[index]).addClass('invalid-row');
         });
-        for (var i in msg){
+        for (var i in msg['saved']){
             rows[i].id = msg[i];
             $(selection[i]).removeClass('invalid-row');
+        }
+        var model = self[tr_wrapper_id.toUnderscore()];
+        var saved_size = Object.size(msg['saved']) ;
+        if(saved_size==rows.length)
+            model.message('Saved!');
+        else if(saved_size==0){
+            model.message('No rows saved!');
+            model.status('error');
+        }
+        else if(saved_size<rows.length){
+            var message = saved_size + ' row(s) saved! ' + (rows.length - saved_size) + ' row(s) are incomplete!';
+            model.message(message);
+            model.status('error');
         }
     }
 
@@ -59,7 +72,7 @@ function DayJournal(data){
             save_to_url : '/day/save/' + key + '/',
             properties : {day_journal_date : self.date},
             onSaveSuccess : function(msg, rows){
-                invalidate(msg, rows, key.toDash());
+                validate(msg, rows, key.toDash());
             }
         };
     }
