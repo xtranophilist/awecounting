@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, \
-    CreditExpense, CreditIncome, CreditPurchase, CreditSales
+    CreditExpense, CreditIncome, CreditPurchase, CreditSales, \
+    SummaryEquivalent, SummaryBank, SummaryCash, SummaryInventory, SummarySalesTax, SummaryTransfer
+
 from datetime import date
 from dayjournal.serializers import DayJournalSerializer
 from django.http import HttpResponse
@@ -179,5 +181,23 @@ def save_credit_expense(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
-def save_summary_cash(request):
-    pass
+def save_summary_cash_and_equivalent(request):
+    params = json.loads(request.body)
+    dct = {'invalid_attributes': {}, 'saved': {}}
+    model = SummaryEquivalent
+    for index, row in enumerate(params.get('rows')):
+        invalid_attrs = invalid(row, ['account_id'])
+        if invalid_attrs:
+            dct['invalid_attributes'][index] = invalid_attrs
+            continue
+        for attr in ['inward', 'outward', 'actual']:
+            if row.get(attr) == '':
+                row[attr] = 0
+        values = {'sn': index+2, 'particular_id': row.get('account_id'), 'inward': row.get('inward'),
+                  'outward': row.get('outward'), 'actual': row.get('actual'), 'day_journal': get_journal(request)}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct['saved'][index] = submodel.id
+    delete_rows(params.get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
