@@ -28,18 +28,20 @@ def get_journal(request):
 
 def save_cash_sales(request):
     params = json.loads(request.body)
-    dct = {}
+    dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashSales
     for index, row in enumerate(params.get('rows')):
         print row
-        if invalid(row, ['account_id', 'amount']):
+        invalid_attrs = invalid(row, ['account_id', 'amount'])
+        if invalid_attrs:
+            dct['invalid_attributes'][index] = invalid_attrs
             continue
         values = {'sn': index+1, 'sales_ledger_id': row.get('account_id'), 'amount': row.get('amount'),
                   'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
-        dct[index] = submodel.id
+        dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
