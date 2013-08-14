@@ -13,4 +13,4 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         # exclude = ['code', 'company', 'parent', 'current_balance']
-        fields = ['id', 'name', 'tags']
+        fields = ['id', 'name', 'tags', 'current_balance']
