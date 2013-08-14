@@ -21,6 +21,15 @@ function DayJournal(data){
         }
     });
 
+    self.accountChanged = function(row){
+        var selected_account = $.grep(self.accounts, function(i){
+            return i.id == row.account_id();
+        })[0];
+        if (typeof selected_account == 'undefined')
+            return;
+        row.opening(selected_account.current_balance);
+    }
+
     self.accounts_by_tag = function(tags, is_or){
         var filtered_accounts = [];
         for (var i in self.accounts){
@@ -180,7 +189,7 @@ function CreditRow(row){
 function SummaryEquivalentRow(row){
     var self = this;
 
-    self.particular = ko.observable()
+    self.account_id = ko.observable()
 
     self.opening = ko.observable();
 
@@ -188,7 +197,7 @@ function SummaryEquivalentRow(row){
             return 2000;
         }
     );
-    self.outward = ko.observable(0);
+    self.outward = ko.observable();
     self.closing = ko.observable();
     self.actual = ko.observable();
     self.difference = ko.observable();
