@@ -122,6 +122,13 @@ class SummaryInventory(models.Model):
     day_journal = models.ForeignKey(DayJournal, related_name='summary_inventory')
 
 
+class SummaryLotto(models.Model):
+    sn = models.IntegerField()
+    particular = models.ForeignKey(Account)
+    disp = models.FloatField()
+    reg = models.FloatField()
+
+
 # class Payroll(models.Model):
 #     sn = models.IntegerField()
 #     head = models.CharField(max_length=254)
