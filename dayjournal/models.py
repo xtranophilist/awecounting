@@ -77,7 +77,7 @@ class CreditIncome(models.Model):
 
 
 class SummaryCash(models.Model):
-    closing = models.FloatField()
+    actual = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='summary_cash')
 
 
