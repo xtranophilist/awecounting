@@ -87,10 +87,17 @@ class SummaryEquivalentSerializer(serializers.ModelSerializer):
 
 
 class SummaryBankSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = SummaryBank
         exclude = ['day_journal']
+
+
+class SummarySalesTax(serializers.ModelSerializer):
+    account_id = serializers.Field(source='tax_scheme_id')
+
+    class Meta:
+        model = SummarySalesTax
+        exclude = ['day_journal', 'tax_scheme']
 
 
 class DayJournalSerializer(serializers.ModelSerializer):
@@ -105,6 +112,7 @@ class DayJournalSerializer(serializers.ModelSerializer):
     summary_cash = SummaryCashSerializer()
     # summary_equivalent = SummaryEquivalentSerializer()
     summary_bank = SummaryBankSerializer()
+    summary_sales_tax = SummarySalesTax()
 
     class Meta:
         model = DayJournal

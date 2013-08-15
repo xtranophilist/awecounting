@@ -234,3 +234,22 @@ def save_summary_bank(request):
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+def save_summary_sales_tax(request):
+    params = json.loads(request.body)
+    dct = {'invalid_attributes': {}, 'saved': {}}
+    model = SummarySalesTax
+    for index, row in enumerate(params.get('rows')):
+        invalid_attrs = invalid(row, ['account_id', 'amount'])
+        if invalid_attrs:
+            dct['invalid_attributes'][index] = invalid_attrs
+            continue
+        values = {'sn': index+1, 'tax_scheme_id': row.get('account_id'), 'amount': row.get('amount'),
+                  'day_journal': get_journal(request)}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct['saved'][index] = submodel.id
+    delete_rows(params.get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
