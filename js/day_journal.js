@@ -105,10 +105,10 @@ function DayJournal(data){
 
     var summary_cash_and_equivalent_options = {
         rows: data['summary_equivalent'],
-        save_to_url : '/day/save/' + 'summary_equivalent' + '/',
+        save_to_url : '/day/save/' + 'summary_cash_and_equivalent' + '/',
         properties : {day_journal_date : self.date, summary_cash: new SummaryCashModel(self.summary_cash)},
         onSaveSuccess : function(msg, rows){
-            validate(msg, rows, 'summary-equivalent');
+            validate(msg, rows, 'summary-cash-and-equivalent');
 
         }
     };
@@ -193,13 +193,13 @@ function SummaryEquivalentRow(row){
 
     self.opening = ko.observable();
 
-    self.inward = ko.observable();
-    self.outward = ko.observable();
+    self.inward = ko.observable(0).extend({ numeric: 2 });
+    self.outward = ko.observable(0).extend({ numeric: 2 });
 
-    self.closing = function(){
+    self.closing = ko.computed(function(){
         var closing = parseInt(self.opening()) + parseInt(self.inward()) - parseInt(self.outward());
         return isNaN(closing)?'':closing;
-    };
+    });
 
     self.actual = ko.observable();
 
