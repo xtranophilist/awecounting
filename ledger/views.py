@@ -33,3 +33,8 @@ def account_form(request, id=None):
         'form': form,
         'base_template': base_template,
     })
+
+
+def list_accounts(request):
+    all_accounts = Account.objects.all()
+    return render(request, 'list_accounts.html', {'accounts': all_accounts})
