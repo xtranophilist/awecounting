@@ -188,10 +188,14 @@ def save_credit_expense(request):
 
 def save_summary_cash_and_equivalent(request):
     params = json.loads(request.body)
-    # print params
+    print params
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = SummaryEquivalent
-    # print params.get('summary_cash')
+    print params.get('summary_cash')
+    summary_cash, created = SummaryCash.objects.get_or_create(id=params.get('summary_cash').get('id'), defaults={
+        'actual': params.get('summary_cash').get('actual'), 'day_journal': get_journal(request)
+    })
+    dct['saved'][0] = summary_cash.id
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_id'])
         if invalid_attrs:
