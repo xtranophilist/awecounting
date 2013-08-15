@@ -82,8 +82,13 @@ function DayJournal(data){
             $(selection[index]).addClass('invalid-row');
         });
         for (var i in msg['saved']){
+            if (i=='0'){
+
+                $('#summary-cash-row').removeClass('invalid-row');
+            }else{
             rows[i-1].id = msg['saved'][i];
             $(selection[i]).removeClass('invalid-row');
+            }
         }
         var model = self['summary_cash_and_equivalent'];
         var saved_size = Object.size(msg['saved']) ;
@@ -131,7 +136,7 @@ function DayJournal(data){
     var summary_cash_and_equivalent_options = {
         rows: data['summary_equivalent'],
         save_to_url : '/day/save/' + 'summary_cash_and_equivalent' + '/',
-        properties : {day_journal_date : self.date, summary_cash: new SummaryCashModel(self.summary_cash)},
+        properties : {day_journal_date : self.date, summary_cash: new SummaryCashModel(self.summary_cash[0])},
         onSaveSuccess : function(msg, rows){
             validate_summary_cash_and_equivalent(msg, rows);
 
@@ -155,10 +160,12 @@ function SummaryCashModel(data){
     self.inward = function(root){
         var total = 0;
         $.each(root.cash_sales.rows(), function(){
-            total += parseInt(this.amount());
+            if (!isNaN(this.amount()))
+                total += parseInt(this.amount());
         });
         $.each(root.cash_receipt.rows(), function(){
-            total += parseInt(this.amount());
+            if (!isNaN(this.amount()))
+                total += parseInt(this.amount());
         });
         return total;
     };
@@ -166,10 +173,12 @@ function SummaryCashModel(data){
     self.outward = function(root){
         var total = 0;
         $.each(root.cash_purchase.rows(), function(){
-            total += parseInt(this.amount());
+            if (!isNaN(this.amount()))
+                total += parseInt(this.amount());
         });
         $.each(root.cash_payment.rows(), function(){
-            total += parseInt(this.amount());
+            if (!isNaN(this.amount()))
+                total += parseInt(this.amount());
         });
         return total;
     };
@@ -182,10 +191,11 @@ function SummaryCashModel(data){
         return self.actual() - self.closing(root);
     };
 
-    self.actual = ko.observable(0);
+    self.actual = ko.observable();
 
-    for (var k in data)
+    for (var k in data){
         self[k] = ko.observable(data[k]);
+    }
 }
 
 function CashRow(row){
