@@ -135,6 +135,8 @@ function DayJournal(data){
 
     self.summary_bank = new TableViewModel(key_to_options('summary_bank'), BankRow);
 
+    self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), CashRow);
+
     var summary_cash_and_equivalent_options = {
         rows: data['summary_equivalent'],
         save_to_url : '/day/save/' + 'summary_cash_and_equivalent' + '/',
@@ -203,7 +205,7 @@ function SummaryCashModel(data){
 function BankRow(row){
     var self = this;
 
-    self.bank_account_id = ko.observable();
+    self.bank_account = ko.observable();
     self.cheque_deposit = ko.observable();
     self.cash_deposit = ko.observable();
 
