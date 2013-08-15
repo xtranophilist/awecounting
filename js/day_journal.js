@@ -133,6 +133,8 @@ function DayJournal(data){
 
     self.credit_expense = new TableViewModel(key_to_options('credit_expense'), CreditRow);
 
+    self.summary_bank = new TableViewModel(key_to_options('summary_bank'), BankRow);
+
     var summary_cash_and_equivalent_options = {
         rows: data['summary_equivalent'],
         save_to_url : '/day/save/' + 'summary_cash_and_equivalent' + '/',
@@ -196,6 +198,18 @@ function SummaryCashModel(data){
     for (var k in data){
         self[k] = ko.observable(data[k]);
     }
+}
+
+function BankRow(row){
+    var self = this;
+
+    self.bank_account_id = ko.observable();
+    self.cheque_deposit = ko.observable();
+    self.cash_deposit = ko.observable();
+
+    for (var k in row)
+        self[k] = ko.observable(row[k]);
+
 }
 
 function CashRow(row){
