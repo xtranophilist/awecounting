@@ -33,6 +33,8 @@ def get_journal(request):
 
 def save_cash_sales(request):
     params = json.loads(request.body)
+    print params.get('rows')
+    print params.get('deleted_rows')
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashSales
     for index, row in enumerate(params.get('rows')):
@@ -186,16 +188,18 @@ def save_credit_expense(request):
 
 def save_summary_cash_and_equivalent(request):
     params = json.loads(request.body)
+    # print params
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = SummaryEquivalent
-    print params.get('summary_cash')
+    # print params.get('summary_cash')
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_id'])
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
         for attr in ['inward', 'outward', 'actual']:
-            if row.get(attr) == '':
+            if row.get(attr) is None or row.get(attr) == '':
+                print attr
                 row[attr] = 0
         values = {'sn': index+2, 'particular_id': row.get('account_id'), 'inward': row.get('inward'),
                   'outward': row.get('outward'), 'actual': row.get('actual'), 'day_journal': get_journal(request)}

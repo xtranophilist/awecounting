@@ -7,8 +7,13 @@ class DayJournal(models.Model):
     date = models.DateField()
     company = models.ForeignKey(Company)
 
+    def get_absolute_url(self):
+        return '/day/' + str(self.date)
+
     class Meta:
         db_table = 'day_journal'
+
+
 
 
 class CashSales(models.Model):
