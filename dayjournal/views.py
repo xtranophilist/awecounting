@@ -10,8 +10,11 @@ import json
 from acubor.lib import delete_rows, invalid, save_model
 
 
-def day_journal(request, id=None):
-    day_journal, created = DayJournal.objects.get_or_create(date=date.today(), company=request.user.company)
+def day_journal(request, journal_date=None):
+    if date:
+        day_journal = get_object_or_404(DayJournal, date=journal_date)
+    else:
+        day_journal, created = DayJournal.objects.get_or_create(date=date.today(), company=request.user.company)
     day_journal_data = DayJournalSerializer(day_journal).data
     base_template = 'dashboard.html'
     return render(request, 'day_journal.html', {
@@ -185,6 +188,7 @@ def save_summary_cash_and_equivalent(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = SummaryEquivalent
+    print params.get('summary_cash')
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_id'])
         if invalid_attrs:
@@ -198,6 +202,6 @@ def save_summary_cash_and_equivalent(request):
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
-        dct['saved'][index] = submodel.id
+        dct['saved'][index+1] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
