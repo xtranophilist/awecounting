@@ -500,10 +500,10 @@
                 <tr data-bind="flash: true">
                     <td data-bind="text: $index()+1">1</td>
                     <td>
-                        <select class="span12" data-bind="options: $root.accounts_by_tag('Payment'), optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: bank_account_id, select2: {placeholderOption: 'first'}"></select>
+                        <select class="span12" data-bind="options: $root.accounts_by_tag('Payment'), optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: bank_account, select2: {placeholderOption: 'first'}"></select>
                     </td>
-                    <td data-bind="editableText: cheque_deposit()"></td>
-                    <td data-bind="editableText: cash_deposit()"></td>
+                    <td data-bind="editableText: cheque_deposit"></td>
+                    <td data-bind="editableText: cash_deposit"></td>
                     <td>
                         <button class="close" data-bind="click: $parent.removeRow">&times;</button>
                     </td>
