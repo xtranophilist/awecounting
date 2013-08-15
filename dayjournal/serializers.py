@@ -86,17 +86,25 @@ class SummaryEquivalentSerializer(serializers.ModelSerializer):
         exclude = ['day_journal', 'particular']
 
 
+class SummaryBankSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = SummaryBank
+        exclude = ['day_journal']
+
+
 class DayJournalSerializer(serializers.ModelSerializer):
-    cash_sales = CashSalesSerializer()
-    cash_purchase = CashPurchaseSerializer()
-    cash_receipt = CashReceiptSerializer()
-    cash_payment = CashPaymentSerializer()
+    # cash_sales = CashSalesSerializer()
+    # cash_purchase = CashPurchaseSerializer()
+    # cash_receipt = CashReceiptSerializer()
+    # cash_payment = CashPaymentSerializer()
     # credit_sales = CreditSalesSerializer()
     # credit_purchase = CreditPurchaseSerializer()
     # credit_expense = CreditExpenseSerializer()
     # credit_income = CreditIncomeSerializer()
     summary_cash = SummaryCashSerializer()
-    summary_equivalent = SummaryEquivalentSerializer()
+    # summary_equivalent = SummaryEquivalentSerializer()
+    summary_bank = SummaryBankSerializer()
 
     class Meta:
         model = DayJournal
