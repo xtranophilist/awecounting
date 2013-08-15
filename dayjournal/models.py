@@ -127,6 +127,7 @@ class SummaryLotto(models.Model):
     particular = models.ForeignKey(Account)
     disp = models.FloatField()
     reg = models.FloatField()
+    day_journal = models.ForeignKey(DayJournal, related_name='summary_lotto')
 
 
 # class Payroll(models.Model):
