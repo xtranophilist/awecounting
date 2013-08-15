@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, \
     CreditExpense, CreditIncome, CreditPurchase, CreditSales, \
-    SummaryEquivalent, SummaryBank, SummaryCash, SummaryInventory, SummarySalesTax, SummaryTransfer
+    SummaryEquivalent, SummaryBank, SummaryCash, SummaryInventory, SummarySalesTax, SummaryTransfer, SummaryLotto
 
 from datetime import date
 from dayjournal.serializers import DayJournalSerializer
@@ -247,6 +247,27 @@ def save_summary_sales_tax(request):
             continue
         values = {'sn': index+1, 'tax_scheme_id': row.get('account_id'), 'amount': row.get('amount'),
                   'day_journal': get_journal(request)}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct['saved'][index] = submodel.id
+    delete_rows(params.get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+def save_summary_lotto(request):
+    params = json.loads(request.body)
+    dct = {'invalid_attributes': {}, 'saved': {}}
+    model = SummaryLotto
+    for index, row in enumerate(params.get('rows')):
+        print row
+        invalid_attrs = invalid(row, ['particular', 'disp', 'reg'])
+        if invalid_attrs:
+            dct['invalid_attributes'][index] = invalid_attrs
+            continue
+        values = {'sn': index+1, 'particular_id': row.get('particular'),
+                  'disp': row.get('disp'),
+                  'reg': row.get('reg'), 'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
