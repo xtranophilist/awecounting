@@ -135,6 +135,8 @@ function DayJournal(data){
 
     self.summary_bank = new TableViewModel(key_to_options('summary_bank'), BankRow);
 
+    self.summary_lotto = new TableViewModel(key_to_options('summary_lotto'), LottoRow);
+
     self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), CashRow);
 
     var summary_cash_and_equivalent_options = {
@@ -202,6 +204,8 @@ function SummaryCashModel(data){
     }
 }
 
+
+
 function BankRow(row){
     var self = this;
 
@@ -211,7 +215,22 @@ function BankRow(row){
 
     for (var k in row)
         self[k] = ko.observable(row[k]);
+}
 
+function LottoRow(row){
+    var self = this;
+
+    self.particular = ko.observable();
+    self.disp = ko.observable();
+    self.reg = ko.observable();
+
+    self.diff = function(){
+        var diff =  parseInt(self.disp()) - parseInt(self.reg());
+        return isNaN(diff)?'':diff;
+    };
+
+    for (var k in row)
+        self[k] = ko.observable(row[k]);
 }
 
 function CashRow(row){
