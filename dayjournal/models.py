@@ -101,10 +101,8 @@ class SummaryTransfer(models.Model):
 class SummaryBank(models.Model):
     sn = models.IntegerField()
     bank_account = models.ForeignKey(Account)
-    card_deposit = models.FloatField()
+    cheque_deposit = models.FloatField()
     cash_deposit = models.FloatField()
-    account_transfer_plus = models.FloatField()
-    account_transfer_minus = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='summary_bank')
 
 
