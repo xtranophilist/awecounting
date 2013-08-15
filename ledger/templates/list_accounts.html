@@ -41,15 +41,4 @@
         </tbody>
     </table>
 
-
-    <ul>
-        {% for object in accounts %}
-            <li>
-                <a href="{{ object.get_absolute_url }}">
-                    {{ object.name }}
-                </a>
-            </li>
-
-        {% endfor %}
-    </ul>
 {% endblock %}

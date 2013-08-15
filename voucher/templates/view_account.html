@@ -1,0 +1,74 @@
+{% extends "dashboard.html" %}
+
+{% block title %}All Accounts{% endblock %}
+
+{% block content %}
+
+    <div class="page-header position-relative">
+        <h1>
+            {{ account.name }}
+        </h1>
+    </div>
+
+    Code: {{ account.code }} <br/>
+    Current Balance: {{ account.current_balance }} <br/>
+    <a href="{% url "update_account" account.id %}">
+        Edit Account Details
+    </a>
+
+{#    <table class="table table-bordered table-striped table-sortable">#}
+{#        <thead>#}
+{#        <th>Code</th>#}
+{#        <th>Name</th>#}
+{#        <th>Current Balance</th>#}
+{#        <th>Actions</th>#}
+{#        </thead>#}
+{#        <tbody>#}
+{#        <tr>#}
+{#            <td>#}
+{#                <a href="{% url "view_account" account.id %}">#}
+{#                    {{ account.code }}#}
+{#                </a>#}
+{#            </td>#}
+{#            <td>#}
+{#                <a href="{% url "view_account" account.id %}">#}
+{#                    {{ account.name }}#}
+{#                </a>#}
+{#            </td>#}
+{#            <td>{{ account.current_balance }}</td>#}
+{#            <td>#}
+{##}
+{#            </td>#}
+{#        </tr>#}
+{#        </tbody>#}
+{#    </table>#}
+
+    <h2>Transactions:</h2>
+
+    {% load filters %}
+
+    <table class="table table-bordered table-striped table-sortable">
+        <thead>
+        <th>Date</th>
+        <th>Amount</th>
+        <th>Type</th>
+        <th>Balance</th>
+        </thead>
+        <tbody>
+        {% for transaction in transactions %}
+            <tr>
+                <td>
+                    {{ transaction.date }}
+                </td>
+                <td>
+                    {{ transaction.amount }}
+                </td>
+                <td>{{ transaction.type }}</td>
+                <td>
+                    {{ transaction.balance }}
+                </td>
+            </tr>
+
+        {% endfor %}
+
+{% endblock %}

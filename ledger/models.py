@@ -29,7 +29,7 @@ class InventoryAccount(models.Model):
 
 
 class Transaction(models.Model):
-    account = models.ForeignKey(Account)
+    account = models.ForeignKey(Account, related_name='transactions')
     date = models.DateField()
     amount = models.FloatField()
     current_balance = models.FloatField()
