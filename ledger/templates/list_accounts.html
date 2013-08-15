@@ -3,13 +3,51 @@
 {% block title %}All Accounts{% endblock %}
 
 {% block content %}
-    <h2>All Accounts</h2>
+
+    <div class="page-header position-relative">
+        <h1>
+            All Accounts
+        </h1>
+    </div>
+
+    <table class="table table-bordered table-striped table-sortable">
+        <thead>
+        <th>Code</th>
+        <th>Name</th>
+        <th>Current Balance</th>
+        <th>Actions</th>
+        </thead>
+        <tbody>
+        {% for account in accounts %}
+            <tr>
+                <td>
+                    <a href="{% url "view_account" account.id %}">
+                        {{ account.code }}
+                    </a>
+                </td>
+                <td>
+                    <a href="{% url "view_account" account.id %}">
+                        {{ account.name }}
+                    </a>
+                </td>
+                <td>{{ account.current_balance }}</td>
+                <td>
+                    <a href="{% url "update_account" account.id %}">
+                        Edit
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
     <ul>
         {% for object in accounts %}
             <li>
-            <a href="{{ object.get_absolute_url }}">
-                {{ object.name }}
-            </a>
+                <a href="{{ object.get_absolute_url }}">
+                    {{ object.name }}
+                </a>
             </li>
 
         {% endfor %}

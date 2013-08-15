@@ -38,3 +38,7 @@ def account_form(request, id=None):
 def list_accounts(request):
     all_accounts = Account.objects.all()
     return render(request, 'list_accounts.html', {'accounts': all_accounts})
+
+
+def view_account(request):
+    pass
