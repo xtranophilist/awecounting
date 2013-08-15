@@ -169,6 +169,7 @@ function TableViewModel(options, row_model){
                         options.onSaveSuccess(msg, self.rows());
                     }
                     self.status('success');
+                    self.deleted_rows  = [];
 
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
