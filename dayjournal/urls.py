@@ -17,6 +17,7 @@ urlpatterns = patterns('',
                        url(r'^save/summary_bank/$', views.save_summary_bank, name='save_summary_bank'),
                        url(r'^save/summary_sales_tax/$', views.save_summary_sales_tax, name='save_summary_sales_tax'),
                        url(r'^save/summary_lotto/$', views.save_summary_lotto, name='save_summary_lotto'),
+                       url(r'^save/summary_transfer/$', views.save_summary_transfer, name='save_summary_transfer'),
                        # url(r'^day/save/(?P<submodel>[a-zA-Z0-9_.-]+)/$', views.save_submodel, name='save_submodel'),
 )
 

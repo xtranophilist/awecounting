@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, \
-    CreditExpense, CreditIncome, CreditPurchase, CreditSales, \
+    CreditExpense, CreditIncome, CreditPurchase, CreditSales, SummaryUtility, \
     SummaryEquivalent, SummaryBank, SummaryCash, SummaryInventory, SummarySalesTax, SummaryTransfer, SummaryLotto
 
 from datetime import date
@@ -272,5 +272,40 @@ def save_summary_lotto(request):
         if not created:
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
+    delete_rows(params.get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+def save_summary_transfer(request):
+    params = json.loads(request.body)
+    dct = {'invalid_attributes': {}, 'saved': {}}
+    model = SummaryTransfer
+    invalid_attrs = invalid(params.get('summary_utility'), ['amount'])
+    if not invalid_attrs:
+        summary_utility, created = SummaryUtility.objects.get_or_create(
+            id=params.get('summary_utility').get('id'),
+            defaults={'amount': params.get('summary_utility').get('amount'), 'day_journal': get_journal(request)}
+        )
+        dct['saved'][0] = summary_utility.id
+    for index, row in enumerate(params.get('rows')):
+        invalid_attrs = invalid(row, ['transfer_type'])
+
+        print row
+
+        if invalid_attrs:
+            dct['invalid_attributes'][index] = invalid_attrs
+            continue
+
+        for attr in ['inward', 'outward']:
+            if row.get(attr) is None or row.get(attr) == '':
+                print attr
+                row[attr] = 0
+
+        values = {'sn': index+2, 'transfer_type_id': row.get('transfer_type'), 'inward': row.get('inward'),
+                  'outward': row.get('outward'), 'day_journal': get_journal(request)}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct['saved'][index+1] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")

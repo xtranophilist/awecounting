@@ -451,10 +451,11 @@
             <table class="table table-bordered table-striped table-acubor table-sortable">
                 <thead>
                 <tr>
-                    <th class="span1">SN</th>
-                    <th class="span2">Transfer Type</th>
-                    <th class="span1">Inward</th>
-                    <th class="span1">Outward</th>
+                    <th>SN</th>
+                    <th>Transfer Type</th>
+                    <th>Inward</th>
+                    <th>Outward</th>
+                    <th></th>
                 </tr>
                 </thead>
 
@@ -471,8 +472,11 @@
                     <td>
                         <select class="span12" data-bind="options: $root.accounts_by_tag('Payment'), optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: transfer_type, select2: {placeholderOption: 'first'}"></select>
                     </td>
-                    <td data-bind="editableText: inward()"></td>
-                    <td data-bind="editableText: outward()"></td>
+                    <td data-bind="editableText: inward"></td>
+                    <td data-bind="editableText: outward"></td>
+                    <td>
+                        <button class="close" data-bind="click: $parent.removeRow">&times;</button>
+                    </td>
                 </tr>
                 <!-- /ko -->
                 </tbody>
