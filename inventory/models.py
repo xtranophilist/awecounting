@@ -33,10 +33,19 @@ class Item(models.Model):
 class InventoryAccount(models.Model):
     code = models.CharField(max_length=10)
     name = models.CharField(max_length=100)
-    company = models.ForeignKey(Company)
+    item = models.ForeignKey(Item)
 
     def get_absolute_url(self):
         return '/inventory_account/' + str(self.id)
 
     def __unicode__(self):
         return self.name
+
+
+class InventoryTransaction(models.Model):
+    account = models.ForeignKey(InventoryAccount)
+    date = models.DateField()
+    quantity = models.FloatField()
+    type = models.CharField(max_length=3) # in or out
+    current_quantity = models.FloatField()
+
