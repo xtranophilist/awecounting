@@ -12,14 +12,14 @@ function DayJournal(data){
         }
     });
 
-    $.ajax({
-        url: '/inventory/accounts/json/',
-        dataType: 'json',
-        async: false,
-        success: function(data) {
-            self.inventory_accounts = data;
-        }
-    });
+//    $.ajax({
+//        url: '/inventory/accounts/'+self.date+'.json',
+//        dataType: 'json',
+//        async: false,
+//        success: function(data) {
+//            self.inventory_accounts = data;
+//        }
+//    });
 
     $.ajax({
         url: '/inventory/items/json/',
@@ -30,13 +30,22 @@ function DayJournal(data){
         }
     });
 
-    self.accountChanged = function(row){
+    self.account_changed = function(row){
         var selected_account = $.grep(self.accounts, function(i){
             return i.id == row.account_id();
         })[0];
         if (typeof selected_account == 'undefined')
             return;
         row.opening(selected_account.current_balance);
+    }
+
+    self.inventory_account_changed = function(row){
+        var selected_account = $.grep(self.inventory_accounts, function(i){
+            return i.id == row.account_id();
+        })[0];
+        if (typeof selected_account == 'undefined')
+            return;
+        row.opening(selected_account.current_amount);
     }
 
     self.accounts_by_tag = function(tags, is_or){
@@ -129,7 +138,8 @@ function DayJournal(data){
     var key_to_options_with_extra_row = function(key, extra_row, extra_row_model){
         var properties = {}
         properties['day_journal_date'] = self.date;
-        properties[extra_row] = new extra_row_model(self[extra_row][0]);
+        if (self[extra_row])
+            properties[extra_row] = new extra_row_model(self[extra_row][0]);
         return {
             rows: data[key],
             save_to_url : '/day/save/' + key + '/',
