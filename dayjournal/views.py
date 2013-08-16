@@ -186,16 +186,22 @@ def save_credit_expense(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
-def save_summary_cash_and_equivalent(request):
+def save_summary_equivalent(request):
     params = json.loads(request.body)
-    print params
+    # print params
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = SummaryEquivalent
-    print params.get('summary_cash')
-    summary_cash, created = SummaryCash.objects.get_or_create(id=params.get('summary_cash').get('id'), defaults={
-        'actual': params.get('summary_cash').get('actual'), 'day_journal': get_journal(request)
-    })
-    dct['saved'][0] = summary_cash.id
+
+    #saving summary_cash
+    invalid_attrs = invalid(params.get('summary_cash'), ['actual'])
+    if not invalid_attrs:
+        values = {'actual': params.get('summary_cash').get('actual'), 'day_journal': get_journal(request)}
+        summary_cash, created = SummaryCash.objects.get_or_create(id=params.get('summary_cash').get('id'), defaults=values)
+        if not created:
+            summary_cash = save_model(summary_cash, values)
+        dct['saved'][0] = summary_cash.id
+
+    #saving cash equivalent rows
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_id'])
         if invalid_attrs:
@@ -279,18 +285,23 @@ def save_summary_lotto(request):
 def save_summary_transfer(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
-    model = SummaryTransfer
+
+    #saving summary_utility
     invalid_attrs = invalid(params.get('summary_utility'), ['amount'])
     if not invalid_attrs:
+        values = {'amount': params.get('summary_utility').get('amount'), 'day_journal': get_journal(request)}
         summary_utility, created = SummaryUtility.objects.get_or_create(
             id=params.get('summary_utility').get('id'),
-            defaults={'amount': params.get('summary_utility').get('amount'), 'day_journal': get_journal(request)}
+            defaults=values
         )
+        if not created:
+            summary_utility = save_model(summary_utility, values)
         dct['saved'][0] = summary_utility.id
-    for index, row in enumerate(params.get('rows')):
-        invalid_attrs = invalid(row, ['transfer_type'])
 
-        print row
+    #saving summary transfer rows
+    model = SummaryTransfer
+    for index, row in enumerate(params.get('rows')):
+        invalid_attrs = invalid(row, ['transfer_type', 'inward', 'outward'])
 
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
