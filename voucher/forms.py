@@ -1,6 +1,7 @@
 from acubor.lib import KOModelForm, ExtFileField
 from django import forms
-from core.models import Currency, Party
+from core.models import Currency
+from ledger.models import Party
 from voucher.models import Invoice, PurchaseVoucher
 
 

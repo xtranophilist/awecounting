@@ -1,10 +1,15 @@
 import json
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-from models import Item
+from models import Item, InventoryAccount
 from serializers import ItemSerializer
 from forms import ItemForm
 
+
+def accounts_as_json(request):
+    accounts = InventoryAccount.objects.all()
+    items_data = InventoryAccountSerializer(accounts).data
+    return HttpResponse(json.dumps(items_data), mimetype="application/json")
 
 def item_form(request, id=None):
     if id:

@@ -2,7 +2,8 @@ from django.db import models
 from inventory.models import Item
 from ledger.models import Account
 from tax.models import TaxScheme
-from core.models import Party, Currency
+from ledger.models import Party
+from core.models import Currency
 from users.models import Company
 
 

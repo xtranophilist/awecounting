@@ -1,6 +1,7 @@
 from django.db import models
 from users.models import Company
 from ledger.models import Account
+from inventory.models import InventoryAccount
 
 
 class DayJournal(models.Model):
@@ -113,13 +114,13 @@ class SummarySalesTax(models.Model):
     day_journal = models.ForeignKey(DayJournal, related_name='summary_sales_tax')
 
 
-class SummaryInventory(models.Model):
-    sn = models.IntegerField()
-    particular = models.ForeignKey(Account)
-    purchase = models.FloatField()
-    sales = models.FloatField()
-    actual = models.FloatField()
-    day_journal = models.ForeignKey(DayJournal, related_name='summary_inventory')
+# class SummaryInventory(models.Model):
+#     sn = models.IntegerField()
+#     particular = models.ForeignKey(Account)
+#     purchase = models.FloatField()
+#     sales = models.FloatField()
+#     actual = models.FloatField()
+#     day_journal = models.ForeignKey(DayJournal, related_name='summary_inventory')
 
 
 class SummaryLotto(models.Model):
@@ -133,6 +134,17 @@ class SummaryLotto(models.Model):
 class SummaryUtility(models.Model):
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='summary_utility')
+
+
+class SummaryInventory(models.Model):
+    sn = models.IntegerField()
+    particular = models.ForeignKey(InventoryAccount)
+    opening = models.IntegerField()
+    purchase = models.IntegerField()
+    sales = models.IntegerField()
+    actual = models.IntegerField()
+    day_journal = models.ForeignKey(DayJournal, related_name='summary_inventory')
+
 
 
 # class Payroll(models.Model):

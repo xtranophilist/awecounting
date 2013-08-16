@@ -1,14 +1,10 @@
 from rest_framework import serializers
-from models import Account, Tag
-
-
-class TagSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Tag
+from models import Account
+from core.serializers import TagSerializer
 
 
 class AccountSerializer(serializers.ModelSerializer):
-    tags = serializers.RelatedField(many=True)
+    tags = TagSerializer(many=True)
 
     class Meta:
         model = Account

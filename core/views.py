@@ -1,5 +1,6 @@
 from django.shortcuts import render
-from core.models import CompanySetting, Party
+from core.models import CompanySetting
+from ledger.models import Party
 from core.forms import CompanySettingsForm, PartyForm
 from django.shortcuts import render, get_object_or_404
 

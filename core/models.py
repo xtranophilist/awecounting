@@ -1,45 +1,5 @@
 from django.db import models
 from users.models import Company
-from ledger.models import Account
-
-
-class BankAccount(models.Model):
-    bank_name = models.CharField(max_length=254)
-    ac_no = models.IntegerField()
-    branch_name = models.CharField(max_length=254, blank=True, null=True)
-    account = models.ForeignKey(Account)
-
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            account = Account(code=self.ac_no, name=self.bank_name)
-            account.save()
-            self.account = account
-        super(BankAccount, self).save(*args, **kwargs)
-
-
-class Party(models.Model):
-    name = models.CharField(max_length=254)
-    address = models.TextField(null=True, blank=True)
-    phone_no = models.CharField(max_length=20, null=True, blank=True)
-    email = models.EmailField(max_length=254, null=True, blank=True)
-    fax = models.CharField(max_length=20, null=True, blank=True)
-    debtor_choices = [(1, 'Good'), (2, 'Bad'), (3, 'Ugly')]
-    debtor_level = models.IntegerField(choices=debtor_choices, default=1, null=True, blank=True)
-    company = models.ForeignKey(Company)
-
-    def __unicode__(self):
-        return self.name
-
-    def save(self, *args, **kwargs):
-        is_new = self.pk is None
-        if is_new:
-            account = Account(code=self.ac_no, name=self.bank_name)
-            account.save()
-            self.account = account
-        super(Party, self).save(*args, **kwargs)
-
-    class Meta:
-        db_table = 'party'
 
 
 class Currency(models.Model):
@@ -66,4 +26,12 @@ class CompanySetting(models.Model):
         return self.company.name
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=254, null=True, blank=True)
 
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        db_table = 'tag'
