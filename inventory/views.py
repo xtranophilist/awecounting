@@ -12,6 +12,12 @@ def accounts_as_json(request):
     return HttpResponse(json.dumps(items_data), mimetype="application/json")
 
 
+def accounts_by_day_as_json(request, day):
+    accounts = InventoryAccount.objects.all()
+    items_data = InventoryAccountSerializer(accounts).data
+    return HttpResponse(json.dumps(items_data), mimetype="application/json")
+
+
 def item_form(request, id=None):
     if id:
         item = get_object_or_404(Item, id=id)

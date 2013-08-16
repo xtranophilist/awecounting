@@ -43,9 +43,9 @@ class InventoryAccount(models.Model):
 
 
 class InventoryTransaction(models.Model):
-    account = models.ForeignKey(InventoryAccount)
+    account = models.ForeignKey(InventoryAccount, related_name='transactions')
     date = models.DateField()
     quantity = models.FloatField()
-    type = models.CharField(max_length=3) # in or out
+    type = models.CharField(max_length=3)  # in or out
     current_quantity = models.FloatField()
 
