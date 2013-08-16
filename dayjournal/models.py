@@ -130,6 +130,12 @@ class SummaryLotto(models.Model):
     day_journal = models.ForeignKey(DayJournal, related_name='summary_lotto')
 
 
+class SummaryUtility(models.Model):
+    sn = models.IntegerField()
+    amount = models.FloatField()
+    day_journal = models.ForeignKey(DayJournal, related_name='summary_utility')
+
+
 # class Payroll(models.Model):
 #     sn = models.IntegerField()
 #     head = models.CharField(max_length=254)
