@@ -131,7 +131,6 @@ class SummaryLotto(models.Model):
 
 
 class SummaryUtility(models.Model):
-    sn = models.IntegerField()
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='summary_utility')
 
