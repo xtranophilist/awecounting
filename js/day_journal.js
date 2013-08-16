@@ -86,8 +86,8 @@ function DayJournal(data){
 
                 $('#summary-cash-row').removeClass('invalid-row');
             }else{
-            rows[i-1].id = msg['saved'][i];
-            $(selection[i]).removeClass('invalid-row');
+                rows[i-1].id = msg['saved'][i];
+                $(selection[i]).removeClass('invalid-row');
             }
         }
         var model = self['summary_cash_and_equivalent'];
@@ -139,6 +139,8 @@ function DayJournal(data){
 
     self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), CashRow);
 
+
+
     var summary_cash_and_equivalent_options = {
         rows: data['summary_equivalent'],
         save_to_url : '/day/save/' + 'summary_cash_and_equivalent' + '/',
@@ -150,6 +152,18 @@ function DayJournal(data){
     };
 
     self.summary_cash_and_equivalent = new TableViewModel(summary_cash_and_equivalent_options, SummaryEquivalentRow);
+
+    var summary_transfer_options = {
+        rows: data['summary_transfers'],
+        save_to_url : '/day/save/' + 'summary_transfers' + '/',
+        properties : {day_journal_date : self.date, summary_utility: new SummaryUtilityModel(self.summary_utility[0])},
+        onSaveSuccess : function(msg, rows){
+//            validate_summary_transfers(msg, rows);
+
+        }
+    };
+
+    self.summary_transfer = new TableViewModel(summary_transfer_options, SummaryTransferRow);
 }
 
 function SummaryCashModel(data){
@@ -203,8 +217,6 @@ function SummaryCashModel(data){
         self[k] = ko.observable(data[k]);
     }
 }
-
-
 
 function BankRow(row){
     var self = this;
@@ -280,5 +292,29 @@ function SummaryEquivalentRow(row){
 
     for (var k in row)
         self[k] = ko.observable(row[k]);
+
+}
+
+function SummaryUtilityModel(data){
+    var self = this;
+
+    self.amount = ko.observable();
+
+    for (var k in data){
+        self[k] = ko.observable(data[k]);
+    }
+
+}
+
+function SummaryTransferRow(row){
+    var self = this;
+
+    self.transfer_type = ko.observable();
+    self.inward = ko.observable();
+    self.outward = ko.observable();
+
+    for (var k in row){
+        self[k] = ko.observable(row[k]);
+    }
 
 }
