@@ -76,31 +76,31 @@ function DayJournal(data){
         }
     }
 
-    var validate_summary_cash_and_equivalent = function(msg, rows){
-        var selection = $("#" + 'summary-cash-and-equivalent' + " > tr");
+    var validate_with_extra_row = function(msg, rows, tr_wrapper_id, extra_row_id){
+        var selection = $("#" + tr_wrapper_id + " > tr");
         selection.each(function (index) {
             $(selection[index]).addClass('invalid-row');
         });
         for (var i in msg['saved']){
             if (i=='0'){
-
-                $('#summary-cash-row').removeClass('invalid-row');
+                $('#'+extra_row_id).removeClass('invalid-row');
             }else{
                 rows[i-1].id = msg['saved'][i];
                 $(selection[i]).removeClass('invalid-row');
             }
         }
-        var model = self['summary_cash_and_equivalent'];
+        var model = self[tr_wrapper_id.toUnderscore()];
         var saved_size = Object.size(msg['saved']) ;
-        if(saved_size==rows.length)
+        var rows_size = rows.length + 1
+        if(saved_size==rows_size)
             model.message('Saved!');
         else if(saved_size==0){
             model.message('No rows saved!');
             model.status('error');
         }
-        else if(saved_size<rows.length){
+        else if(saved_size<rows_size){
             var message = saved_size.toString() +' row' + ((saved_size==1)?'':'s') + ' saved! ';
-            message += (rows.length-saved_size).toString() +' row' + ((rows.length-saved_size==1)?' is':'s are') + ' incomplete!';
+            message += (rows_size-saved_size).toString() +' row' + ((rows_size-saved_size==1)?' is':'s are') + ' incomplete!';
             model.message(message);
             model.status('error');
         }
@@ -113,6 +113,21 @@ function DayJournal(data){
             properties : {day_journal_date : self.date},
             onSaveSuccess : function(msg, rows){
                 validate(msg, rows, key.toDash());
+            }
+        };
+    }
+
+    var key_to_options_with_extra_row = function(key, extra_row, extra_row_model){
+        var properties = {}
+        properties['day_journal_date'] = self.date;
+        properties[extra_row] = new extra_row_model(self[extra_row][0]);
+        return {
+            rows: data[key],
+            save_to_url : '/day/save/' + key + '/',
+            properties: properties,
+            onSaveSuccess : function(msg, rows){
+                validate_with_extra_row(msg, rows, key.toDash(), extra_row.toDash());
+
             }
         };
     }
@@ -139,31 +154,9 @@ function DayJournal(data){
 
     self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), CashRow);
 
+    self.summary_equivalent = new TableViewModel(key_to_options_with_extra_row('summary_equivalent', 'summary_cash', SummaryCashModel), SummaryEquivalentRow);
 
-
-    var summary_cash_and_equivalent_options = {
-        rows: data['summary_equivalent'],
-        save_to_url : '/day/save/' + 'summary_cash_and_equivalent' + '/',
-        properties : {day_journal_date : self.date, summary_cash: new SummaryCashModel(self.summary_cash[0])},
-        onSaveSuccess : function(msg, rows){
-            validate_summary_cash_and_equivalent(msg, rows);
-
-        }
-    };
-
-    self.summary_cash_and_equivalent = new TableViewModel(summary_cash_and_equivalent_options, SummaryEquivalentRow);
-
-    var summary_transfer_options = {
-        rows: data['summary_transfers'],
-        save_to_url : '/day/save/' + 'summary_transfers' + '/',
-        properties : {day_journal_date : self.date, summary_utility: new SummaryUtilityModel(self.summary_utility[0])},
-        onSaveSuccess : function(msg, rows){
-//            validate_summary_transfers(msg, rows);
-
-        }
-    };
-
-    self.summary_transfer = new TableViewModel(summary_transfer_options, SummaryTransferRow);
+    self.summary_transfer = new TableViewModel(key_to_options_with_extra_row('summary_transfer', 'summary_utility', SummaryUtilityModel), SummaryTransferRow);
 }
 
 function SummaryCashModel(data){
