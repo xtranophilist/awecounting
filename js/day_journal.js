@@ -13,6 +13,15 @@ function DayJournal(data){
     });
 
     $.ajax({
+        url: '/inventory/accounts/json/',
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+            self.inventory_accounts = data;
+        }
+    });
+
+    $.ajax({
         url: '/inventory/items/json/',
         dataType: 'json',
         async: false,
