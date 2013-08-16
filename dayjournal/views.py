@@ -11,7 +11,7 @@ from acubor.lib import delete_rows, invalid, save_model
 
 
 def day_journal(request, journal_date=None):
-    if date:
+    if journal_date:
         day_journal = get_object_or_404(DayJournal, date=journal_date)
     else:
         day_journal, created = DayJournal.objects.get_or_create(date=date.today(), company=request.user.company)
