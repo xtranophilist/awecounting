@@ -24,7 +24,7 @@ class InventoryAccountSerializer(serializers.ModelSerializer):
 
     def __init__(self, *args, **kwargs):
         day = kwargs.pop('day', None)
-        super(AccountSerializer, self).__init__(*args, **kwargs)
+        super(InventoryAccountSerializer, self).__init__(*args, **kwargs)
         if day is not None:
             self.day = day
         else:
@@ -33,5 +33,5 @@ class InventoryAccountSerializer(serializers.ModelSerializer):
     def get_last_day_closing(self, obj):
         transaction = obj.get_last_transaction_before(self.day)
         if transaction:
-            return transaction.current_balance
+            return transaction.current_quantity
 
