@@ -4,6 +4,12 @@ from users.models import Company
 
 
 class Entry(models.Model):
+    company = models.ForeignKey(Company)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
+
+
+class EntryRow(models.Model):
     sn = models.IntegerField()
     employee = models.ForeignKey(Account)
     pay_heading = models.CharField(max_length=254)
@@ -11,8 +17,6 @@ class Entry(models.Model):
     hours = models.FloatField()
     tax = models.FloatField()
     remarks = models.TextField(blank=True, null=True)
-    company = models.ForeignKey(Company)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-
-
+    entry = models.ForeignKey(Entry)
