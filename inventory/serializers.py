@@ -15,7 +15,7 @@ class ItemSerializer(serializers.ModelSerializer):
 
 
 class InventoryAccountSerializer(serializers.ModelSerializer):
-    current_amount = serializers.Field('transactions.0')
+    # current_amount = serializers.Field('transactions.0')
 
     class Meta:
         model = InventoryAccount

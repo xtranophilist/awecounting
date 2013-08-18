@@ -6,6 +6,7 @@ from core.serializers import TagSerializer
 class AccountSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True)
 
+
     class Meta:
         model = Account
         # exclude = ['code', 'company', 'parent', 'current_balance']
