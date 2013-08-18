@@ -36,7 +36,7 @@ function DayJournal(data){
         })[0];
         if (typeof selected_account == 'undefined')
             return;
-        row.opening(selected_account.current_balance);
+        row.opening(selected_account.opening);
     }
 
     self.inventory_account_changed = function(row){
@@ -45,7 +45,7 @@ function DayJournal(data){
         })[0];
         if (typeof selected_account == 'undefined')
             return;
-        row.opening(selected_account.current_amount);
+        row.opening(selected_account.opening);
     }
 
     self.accounts_by_tag = function(tags, is_or){
