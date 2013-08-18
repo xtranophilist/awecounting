@@ -3,6 +3,8 @@ from payroll.models import Entry, EntryRow
 
 
 class EntryRowSerializer(serializers.ModelSerializer):
+    account_id = serializers.Field(source='employee_id')
+
     class Meta:
         model = EntryRow
 
