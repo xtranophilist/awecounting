@@ -5,7 +5,7 @@ from datetime import date
 
 
 class AccountSerializer(serializers.ModelSerializer):
-    tags = TagSerializer(many=True)
+    tags = serializers.Field(source='all_tags')
     opening = serializers.SerializerMethodField('get_last_day_closing')
 
     class Meta:

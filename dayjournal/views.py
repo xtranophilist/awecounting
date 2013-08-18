@@ -332,8 +332,7 @@ def save_summary_inventory(request):
             dct['invalid_attributes'][index] = invalid_attrs
             continue
         values = {'sn': index+1, 'purchase': row.get('inward'), 'particular_id': row.get('account_id'),
-                  'sales': row.get('outward'),
-                  'actual': row.get('actual'), 'day_journal': get_journal(request)}
+                  'sales': row.get('outward'), 'actual': row.get('actual'), 'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)

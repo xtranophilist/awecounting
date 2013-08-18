@@ -3,5 +3,4 @@ from models import Account, Transaction
 
 admin.site.register(Account)
 # admin.site.register(InventoryAccount)
-# admin.site.register(Tag)
 admin.site.register(Transaction)

@@ -138,7 +138,7 @@ class DayJournalSerializer(serializers.ModelSerializer):
     # summary_equivalent = SummaryEquivalentSerializer()
     # summary_bank = SummaryBankSerializer()
     # summary_sales_tax = SummarySalesTax()
-    # summary_lotto = SummaryLottoSerializer()
+    summary_lotto = SummaryLottoSerializer()
     # summary_transfer = SummaryTransferSerializer()
     # summary_utility = SummaryUtilitySerializer()
     summary_inventory = SummaryInventorySerializer()
