@@ -644,7 +644,7 @@
                 <tr data-bind="flash: true">
                     <td data-bind="text: $index()+1"></td>
                     <td>
-                        <select class="span12" data-bind="options: $root.inventory_accounts, optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: account_id, select2: {placeholderOption: 'first'}, event: {change: $root.account_changed}"></select>
+                        <select class="span12" data-bind="options: $root.inventory_accounts, optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: account_id, select2: {placeholderOption: 'first'}, event: {change: $root.inventory_account_changed}"></select>
                     </td>
                     <td data-bind="text: opening()"></td>
                     <td data-bind="editableText: inward, numeric: true"></td>
