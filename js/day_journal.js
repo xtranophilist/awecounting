@@ -57,7 +57,9 @@ function DayJournal(data){
                     filtered_accounts.push(self.accounts[i]);
                 }
             }else if(typeof is_or != 'undefined'){
-                if (intersect_safe(tags, account_tags).length){
+                console.log(tags);
+                console.log(account_tags);
+                if (intersection(tags, account_tags).length){
                     filtered_accounts.push(self.accounts[i]);
                 }
             }else{
