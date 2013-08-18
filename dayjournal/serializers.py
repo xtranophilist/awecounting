@@ -118,9 +118,11 @@ class SummaryUtilitySerializer(serializers.ModelSerializer):
 
 
 class SummaryInventorySerializer(serializers.ModelSerializer):
+    account_id = serializers.Field(source='particular_id')
+
     class Meta:
         model = SummaryInventory
-        exclude = ['day_journal']
+        exclude = ['day_journal', 'particular']
 
 
 class DayJournalSerializer(serializers.ModelSerializer):
