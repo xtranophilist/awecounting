@@ -16,12 +16,12 @@ class Account(models.Model):
         return '/account/' + str(self.id)
 
     def get_last_day_last_transaction(self):
-        transactions = Transaction.objects.filter(account=self, date__lt=date.today()).order_by('-id').order_by('-date')[:1]
+        transactions = Transaction.objects.filter(account=self, date__lt=date.today()).order_by('-id', '-date')[:1]
         if len(transactions) > 0:
             return transactions[0]
 
     def get_last_transaction_before(self, before_date):
-        transactions = Transaction.objects.filter(account=self, date__lt=before_date).order_by('-id').order_by('-date')[:1]
+        transactions = Transaction.objects.filter(account=self, date__lt=before_date).order_by('-id', '-date')[:1]
         if len(transactions) > 0:
             return transactions[0]
 
