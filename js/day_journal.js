@@ -30,6 +30,20 @@ function DayJournal(data){
         }
     });
 
+    self.lotto_changed = function(row){
+        var selected_account = $.grep(self.accounts, function(i){
+            return i.id == row.particular();
+        })[0];
+        if (typeof selected_account == 'undefined')
+            return;
+        $.each(self.cash_sales.rows(), function(key, value){
+            if (value.account_id() == selected_account.id){
+                row.disp(value.amount());
+                return false;
+            }
+        });
+    }
+
     self.account_changed = function(row){
         var selected_account = $.grep(self.accounts, function(i){
             return i.id == row.account_id();
@@ -57,8 +71,6 @@ function DayJournal(data){
                     filtered_accounts.push(self.accounts[i]);
                 }
             }else if(typeof is_or != 'undefined'){
-                console.log(tags);
-                console.log(account_tags);
                 if (intersection(tags, account_tags).length){
                     filtered_accounts.push(self.accounts[i]);
                 }
