@@ -14,3 +14,5 @@ class Entry(models.Model):
     company = models.ForeignKey(Company)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
+
+

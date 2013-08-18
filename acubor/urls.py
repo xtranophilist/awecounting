@@ -31,6 +31,7 @@ urlpatterns = patterns('',
                        (r'^inventory/', include('inventory.urls')),
                        (r'^day/', include('dayjournal.urls')),
                        (r'^ledger/', include('ledger.urls')),
+                       (r'^payroll/', include('payroll.urls')),
 
                        url(r'^settings/company/$', core_views.company_settings, name='company_settings'),
                        url(r'^party/create/$', core_views.party_form, name='create_party'),
