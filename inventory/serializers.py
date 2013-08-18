@@ -2,6 +2,7 @@ from rest_framework import serializers
 from models import Item, InventoryAccount
 from tax.serializers import TaxSchemeSerializer
 from ledger.serializers import AccountSerializer
+from datetime import date
 
 
 class ItemSerializer(serializers.ModelSerializer):
@@ -15,8 +16,22 @@ class ItemSerializer(serializers.ModelSerializer):
 
 
 class InventoryAccountSerializer(serializers.ModelSerializer):
-    # current_amount = serializers.Field('transactions.0')
+    opening = serializers.SerializerMethodField('get_last_day_closing')
 
     class Meta:
         model = InventoryAccount
-        exclude = ['company', 'code']
+        fields = ['id', 'name', 'opening']
+
+    def __init__(self, *args, **kwargs):
+        day = kwargs.pop('day', None)
+        super(AccountSerializer, self).__init__(*args, **kwargs)
+        if day is not None:
+            self.day = day
+        else:
+            self.day = date.today()
+
+    def get_last_day_closing(self, obj):
+        transaction = obj.get_last_transaction_before(self.day)
+        if transaction:
+            return transaction.current_balance
+

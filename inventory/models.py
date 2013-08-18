@@ -2,6 +2,7 @@ from django.db import models
 from tax.models import TaxScheme
 from ledger.models import Account
 from users.models import Company
+from datetime import date
 
 
 class Category(models.Model):
@@ -37,6 +38,16 @@ class InventoryAccount(models.Model):
 
     def get_absolute_url(self):
         return '/inventory_account/' + str(self.id)
+
+    def get_last_day_last_transaction(self):
+        transactions = InventoryTransaction.objects.filter(account=self, date__lt=date.today()).order_by('-id', '-date')[:1]
+        if len(transactions) > 0:
+            return transactions[0]
+
+    def get_last_transaction_before(self, before_date):
+        transactions = InventoryTransaction.objects.filter(account=self, date__lt=before_date).order_by('-id', '-date')[:1]
+        if len(transactions) > 0:
+            return transactions[0]
 
     def __unicode__(self):
         return self.name

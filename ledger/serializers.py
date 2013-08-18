@@ -22,7 +22,6 @@ class AccountSerializer(serializers.ModelSerializer):
             self.day = date.today()
 
     def get_last_day_closing(self, obj):
-        # if hasattr(self, 'day'):
         transaction = obj.get_last_transaction_before(self.day)
         if transaction:
             return transaction.current_balance
