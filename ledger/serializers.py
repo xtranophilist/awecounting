@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from models import Account
 from core.serializers import TagSerializer
+from datetime import date
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -17,8 +18,11 @@ class AccountSerializer(serializers.ModelSerializer):
         super(AccountSerializer, self).__init__(*args, **kwargs)
         if day is not None:
             self.day = day
+        else:
+            self.day = date.today()
 
     def get_last_day_closing(self, obj):
+        # if hasattr(self, 'day'):
         transaction = obj.get_last_transaction_before(self.day)
         if transaction:
             return transaction.current_balance
