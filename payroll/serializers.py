@@ -9,6 +9,6 @@ class EntryRowSerializer(serializers.ModelSerializer):
 
 class EntrySerializer(serializers.ModelSerializer):
     rows = EntryRowSerializer()
-    
+
     class Meta:
         model = Entry

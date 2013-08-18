@@ -19,4 +19,4 @@ class EntryRow(models.Model):
     remarks = models.TextField(blank=True, null=True)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
-    entry = models.ForeignKey(Entry)
+    entry = models.ForeignKey(Entry, related_name='rows')
