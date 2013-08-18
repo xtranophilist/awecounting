@@ -139,7 +139,7 @@ class SummaryUtility(models.Model):
 class SummaryInventory(models.Model):
     sn = models.IntegerField()
     particular = models.ForeignKey(InventoryAccount)
-    opening = models.IntegerField()
+    # opening = models.IntegerField()
     purchase = models.IntegerField()
     sales = models.IntegerField()
     actual = models.IntegerField()
