@@ -128,6 +128,7 @@ INSTALLED_APPS = (
     'voucher',
     'ledger',
     'dayjournal',
+    'payroll',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.admindocs',

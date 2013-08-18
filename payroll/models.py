@@ -1,3 +1,16 @@
 from django.db import models
+from ledger.models import Account
+from users.models import Company
 
-# Create your models here.
+
+class Entry(models.Model):
+    sn = models.IntegerField()
+    employee = models.ForeignKey(Account)
+    pay_heading = models.CharField(max_length=254)
+    amount = models.FloatField()
+    hours = models.FloatField()
+    tax = models.FloatField()
+    remarks = models.TextField(blank=True, null=True)
+    company = models.ForeignKey(Company)
+    created = models.DateTimeField(auto_now_add=True)
+    modified = models.DateTimeField(auto_now=True)
