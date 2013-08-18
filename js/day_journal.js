@@ -4,7 +4,7 @@ function DayJournal(data){
         self[k]=data[k];
 
     $.ajax({
-        url: '/ledger/accounts/json/',
+        url: '/ledger/accounts/'+self.date+'.json',
         dataType: 'json',
         async: false,
         success: function(data) {
@@ -12,14 +12,14 @@ function DayJournal(data){
         }
     });
 
-//    $.ajax({
-//        url: '/inventory/accounts/'+self.date+'.json',
-//        dataType: 'json',
-//        async: false,
-//        success: function(data) {
-//            self.inventory_accounts = data;
-//        }
-//    });
+    $.ajax({
+        url: '/inventory/accounts/'+self.date+'.json',
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+            self.inventory_accounts = data;
+        }
+    });
 
     $.ajax({
         url: '/inventory/items/json/',
