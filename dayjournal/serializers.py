@@ -126,7 +126,7 @@ class SummaryInventorySerializer(serializers.ModelSerializer):
 
 
 class DayJournalSerializer(serializers.ModelSerializer):
-    # cash_sales = CashSalesSerializer()
+    cash_sales = CashSalesSerializer()
     # cash_purchase = CashPurchaseSerializer()
     # cash_receipt = CashReceiptSerializer()
     # cash_payment = CashPaymentSerializer()
