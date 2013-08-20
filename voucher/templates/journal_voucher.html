@@ -1,0 +1,77 @@
+{%  extends "dashboard.html" %}
+
+{% block title %}Payroll{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "new_payroll" %}">Payroll</a></li>
+{% endblock %}
+
+{% block head_end %}
+    <script src="http://localhost/acubor_static/js/vendors/knockout.js"></script>
+    <script src="http://localhost/acubor_static/js/ko_lib.js"></script>
+    <script src="http://localhost/acubor_static/js/base.js"></script>
+    <script src="http://localhost/acubor_static/js/payroll.js"></script>
+    <script>
+        $(document).ready(function () {
+            {% load filters %}
+            ko.applyBindings(new PayrollEntryModel({{data|jsonify}}));
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    {{ data }}
+
+    <div data-bind="with: payroll_entry">
+        <div><h2 data-bind="css: status()">Payroll Entry</h2>
+            <span data-bind="text: message()"></span>
+
+        </div>
+
+
+        <table class="table table-bordered table-striped table-acubor table-sortable">
+            <thead>
+            <tr>
+                <th>SN</th>
+                <th>Employee</th>
+                <th>Pay Heading</th>
+                <th>Amount</th>
+                <th>Hours</th>
+                <th>Tax</th>
+                <th>Remarks</th>
+                <th class="span1"></th>
+            </tr>
+            </thead>
+
+            <tbody id="payroll-entry">
+            <!-- ko foreach: rows -->
+            <tr data-bind="flash: true">
+                <td>
+                    <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
+                </td>
+                <td>
+                    <select data-bind="options: $root.accounts_by_tag(['Staff'], true), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
+                </td>
+                <td data-bind="editableText: pay_heading"></td>
+                <td data-bind="editableText: amount, numeric: true"></td>
+                <td data-bind="editableText: hours, numeric: true"></td>
+                <td data-bind="editableText: tax, numeric: true"></td>
+                <td data-bind="editableText: remarks"></td>
+                <td align="center">
+                    <button class="close" data-bind="click: $parent.removeRow">&times;</button>
+                </td>
+            </tr>
+            <!-- /ko -->
+            </tbody>
+        </table>
+        <span>
+            <button class="button" data-bind="click: addRow"><i class="icon-plus-sign" ></i> Add New Row</button>
+            <button class="button" data-bind="click: save"><i class="icon-save"></i> Save</button>
+            <button class="button" data-bind="click: reset">Reset</button>
+        </span>
+
+    </div>
+
+{% endblock %}

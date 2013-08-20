@@ -4,8 +4,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from datetime import date
 
 from forms import InvoiceForm, PurchaseVoucherForm
-from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, PurchaseParticular
-from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer
+from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, PurchaseParticular, JournalVoucher, \
+    JournalVoucherRow
+from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, JournalVoucherRowSerializer, \
+    JournalVoucherSerializer
 from django.http import HttpResponse
 import json
 from acubor.lib import delete_rows, invalid, save_model
@@ -121,4 +123,14 @@ def purchase_voucher(request, id=None):
         form = PurchaseVoucherForm(instance=voucher)
     purchase_voucher_data = PurchaseVoucherSerializer(voucher).data
     return render(request, 'purchase_voucher.html', {'form': form, 'data': purchase_voucher_data})
+
+
+def journal_voucher(request, id=None):
+    if id:
+        voucher = get_object_or_404(JournalVoucher, id=id)
+    else:
+        voucher = JournalVoucher()
+    data = JournalVoucherSerializer(voucher).data
+    return render(request, 'journal_voucher.html', {'data': data})
+
 
