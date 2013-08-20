@@ -62,3 +62,17 @@ class PurchaseParticular(models.Model):
 
     class Meta:
         db_table = 'purchase_particular'
+
+
+class JournalVoucher(models.Model):
+    date = models.DateField()
+    company = models.ForeignKey(Company)
+
+
+class JournalVoucherRow(models.Model):
+    sn = models.IntegerField()
+    dr_account = models.ForeignKey(Account, null=True, blank=True, related_name='dr_rows')
+    cr_account = models.ForeignKey(Account, null=True, blank=True, related_name='cr_rows')
+    dr_amount = models.FloatField(null=True, blank=True)
+    cr_amount = models.FloatField(null=True, blank=True)
+
