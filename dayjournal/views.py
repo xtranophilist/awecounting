@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, \
-    CreditExpense, CreditIncome, CreditPurchase, CreditSales, SummaryUtility, \
+    CreditExpense, CreditIncome, CreditPurchase, CreditSales, SummaryUtility, LottoDetailRow, \
     SummaryEquivalent, SummaryBank, SummaryCash, SummaryInventory, SummarySalesTax, SummaryTransfer, SummaryLotto
 
 from datetime import date
@@ -351,3 +351,24 @@ def lotto_detail(request, journal_date=None):
         'day_journal': day_journal_data,
         'base_template': base_template,
         })
+
+
+def save_lotto_detail(request):
+    params = json.loads(request.body)
+    dct = {'invalid_attributes': {}, 'saved': {}}
+    model = LottoDetailRow
+    for index, row in enumerate(params.get('rows')):
+        invalid_attrs = invalid(row, ['type', 'purchase_pack', 'purchase_quantity', 'sold_quantity', 'actual_quantity'])
+        if invalid_attrs:
+            dct['invalid_attributes'][index] = invalid_attrs
+            continue
+        values = {'sn': index+1, 'type_id': row.get('type'), 'purchase_pack': row.get('purchase_pack'),
+                  'purchase_quantity': row.get('purchase_quantity'), 'sold_quantity': row.get('sold_quantity'),
+                  'rate': row.get('rate'),
+                  'actual_quantity': row.get('actual_quantity'), 'day_journal': get_journal(request)}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct['saved'][index] = submodel.id
+    delete_rows(params.get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
