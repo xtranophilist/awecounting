@@ -159,5 +159,5 @@ class LottoDetailRow(models.Model):
     purchase_quantity = models.IntegerField()
     sold_quantity = models.IntegerField()
     actual_quantity = models.IntegerField()
-    day_journal = models.ForeignKey(DayJournal)
+    day_journal = models.ForeignKey(DayJournal, related_name='lotto_details')
 

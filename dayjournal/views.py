@@ -4,7 +4,7 @@ from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, 
     SummaryEquivalent, SummaryBank, SummaryCash, SummaryInventory, SummarySalesTax, SummaryTransfer, SummaryLotto
 
 from datetime import date
-from dayjournal.serializers import DayJournalSerializer
+from dayjournal.serializers import DayJournalSerializer, DayJournalLottoSerializer
 from django.http import HttpResponse
 import json
 from acubor.lib import delete_rows, invalid, save_model
@@ -326,7 +326,6 @@ def save_summary_inventory(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = SummaryInventory
     for index, row in enumerate(params.get('rows')):
-        print row
         invalid_attrs = invalid(row, ['account_id', 'inward', 'outward', 'actual'])
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
@@ -339,3 +338,16 @@ def save_summary_inventory(request):
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+def lotto_detail(request, journal_date=None):
+    if journal_date:
+        day_journal = get_object_or_404(DayJournal, date=journal_date)
+    else:
+        day_journal, created = DayJournal.objects.get_or_create(date=date.today(), company=request.user.company)
+    day_journal_data = DayJournalLottoSerializer(day_journal).data
+    base_template = 'dashboard.html'
+    return render(request, 'day_lotto.html', {
+        'day_journal': day_journal_data,
+        'base_template': base_template,
+        })

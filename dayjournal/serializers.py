@@ -1,7 +1,8 @@
 from rest_framework import serializers
 from dayjournal.models import DayJournal, CashSales, CashPurchase, CashReceipt, CashPayment, SummaryCash, \
     SummaryBank, SummaryEquivalent, SummarySalesTax, SummaryInventory, CreditExpense, CreditIncome, \
-    CreditPurchase, CreditSales, SummaryLotto, SummaryUtility, SummaryTransfer
+    CreditPurchase, CreditSales, SummaryLotto, SummaryUtility, SummaryTransfer, LottoDetailRow
+
 
 class CashSalesSerializer(serializers.ModelSerializer):
     account_id = serializers.Field(source='sales_ledger_id')
@@ -127,21 +128,34 @@ class SummaryInventorySerializer(serializers.ModelSerializer):
 
 class DayJournalSerializer(serializers.ModelSerializer):
     cash_sales = CashSalesSerializer()
-    # cash_purchase = CashPurchaseSerializer()
-    # cash_receipt = CashReceiptSerializer()
-    # cash_payment = CashPaymentSerializer()
-    # credit_sales = CreditSalesSerializer()
-    # credit_purchase = CreditPurchaseSerializer()
-    # credit_expense = CreditExpenseSerializer()
-    # credit_income = CreditIncomeSerializer()
-    # summary_cash = SummaryCashSerializer()
-    # summary_equivalent = SummaryEquivalentSerializer()
-    # summary_bank = SummaryBankSerializer()
-    # summary_sales_tax = SummarySalesTax()
+    cash_purchase = CashPurchaseSerializer()
+    cash_receipt = CashReceiptSerializer()
+    cash_payment = CashPaymentSerializer()
+    credit_sales = CreditSalesSerializer()
+    credit_purchase = CreditPurchaseSerializer()
+    credit_expense = CreditExpenseSerializer()
+    credit_income = CreditIncomeSerializer()
+    summary_cash = SummaryCashSerializer()
+    summary_equivalent = SummaryEquivalentSerializer()
+    summary_bank = SummaryBankSerializer()
+    summary_sales_tax = SummarySalesTax()
     summary_lotto = SummaryLottoSerializer()
-    # summary_transfer = SummaryTransferSerializer()
-    # summary_utility = SummaryUtilitySerializer()
+    summary_transfer = SummaryTransferSerializer()
+    summary_utility = SummaryUtilitySerializer()
     summary_inventory = SummaryInventorySerializer()
+
+    class Meta:
+        model = DayJournal
+        exclude = ['company']
+
+
+class LottoDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LottoDetailRow
+
+
+class DayJournalLottoSerializer(serializers.ModelSerializer):
+    lotto_details = LottoDetailSerializer()
 
     class Meta:
         model = DayJournal
