@@ -42,6 +42,7 @@ class JournalVoucherRowSerializer(serializers.ModelSerializer):
 
 
 class JournalVoucherSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField()
     rows = JournalVoucherRowSerializer()
 
     class Meta:
