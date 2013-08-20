@@ -147,6 +147,11 @@ class SummaryInventory(models.Model):
 
 
 class LottoDetail(models.Model):
+    company = models.ForeignKey(Company)
+    date = models.DateField()
+
+
+class LottoDetailRow(models.Model):
     sn = models.IntegerField()
     type = models.ForeignKey(Account, null=True, blank=True)
     rate = models.FloatField()
@@ -154,5 +159,5 @@ class LottoDetail(models.Model):
     purchase_quantity = models.IntegerField()
     sold_quantity = models.IntegerField()
     actual_quantity = models.IntegerField()
-    company = models.ForeignKey(Company)
-    date = models.DateField()
+    lotto_detail = models.ForeignKey(LottoDetail)
+
