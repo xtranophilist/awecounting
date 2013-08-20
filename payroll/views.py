@@ -27,7 +27,6 @@ def save_entry(request):
         # 'currency_id': params.get('currency'),
         'company': request.user.company
     }
-    print params
     if params.get('id'):
         entry = Entry.objects.get(id=params.get('id'))
     else:

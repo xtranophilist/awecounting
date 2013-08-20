@@ -146,10 +146,13 @@ class SummaryInventory(models.Model):
     day_journal = models.ForeignKey(DayJournal, related_name='summary_inventory')
 
 
-
-# class Payroll(models.Model):
-#     sn = models.IntegerField()
-#     head = models.CharField(max_length=254)
-#     total_taxable = models.FloatField()
-#     tax = models.FloatField()
-#     day_journal = models.ForeignKey(DayJournal, related_name='payroll')
+class LottoDetail(models.Model):
+    sn = models.IntegerField()
+    type = models.ForeignKey(Account, null=True, blank=True)
+    rate = models.FloatField()
+    purchase_pack = models.IntegerField(default=1)
+    purchase_quantity = models.IntegerField()
+    sold_quantity = models.IntegerField()
+    actual_quantity = models.IntegerField()
+    company = models.ForeignKey(Company)
+    date = models.DateField()
