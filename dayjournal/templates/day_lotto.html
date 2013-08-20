@@ -81,17 +81,17 @@
                     <td data-bind="text: opening, numeric: true"></td>
                     <td data-bind="editableText: purchase_pack, numeric: true"></td>
                     <td data-bind="editableText: purchase_quantity, numeric: true"></td>
-                    <td data-bind="text: purchase_total, numeric: true"></td>
-                    <td data-bind="text: purchase_amount, numeric: true"></td>
-                    <td data-bind="text: total, numeric: true"></td>
+                    <td data-bind="text: purchase_total()"></td>
+                    <td data-bind="text: purchase_amount()"></td>
+                    <td data-bind="text: total()"></td>
                     <td data-bind="editableText: sold_quantity, numeric: true"></td>
-                    <td data-bind="text: sold_amount, numeric: true"></td>
-                    <td data-bind="text: closing_quantity, numeric: true"></td>
-                    <td data-bind="text: closing_amount, numeric: true"></td>
+                    <td data-bind="text: sold_amount()"></td>
+                    <td data-bind="text: closing_quantity()"></td>
+                    <td data-bind="text: closing_amount()"></td>
                     <td data-bind="editableText: actual_quantity, numeric: true"></td>
-                    <td data-bind="text: actual_amount, numeric: true"></td>
-                    <td data-bind="text: difference_quantity, numeric: true"></td>
-                    <td data-bind="text: difference_amount, numeric: true"></td>
+                    <td data-bind="text: actual_amount()"></td>
+                    <td data-bind="text: difference_quantity()"></td>
+                    <td data-bind="text: difference_amount()"></td>
                     <td align="center">
                         <button class="close" data-bind="click: $parent.removeRow">&times;</button>
                     </td>
