@@ -5,7 +5,7 @@ function LottoDetailModel(data){
         self[k]=data[k];
 
     $.ajax({
-        url: '/ledger/accounts/json',
+        url: '/ledger/accounts/json/',
         dataType: 'json',
         async: false,
         success: function(data) {
@@ -61,9 +61,9 @@ function LottoDetailModel(data){
 
     var key_to_options = function(key){
         return {
-            rows: data['rows'],
-            save_to_url : '/payroll/save/',
-            properties : {id : self.id},
+            rows: data['lotto_details'],
+            save_to_url : '/day/save/lotto_detail/',
+            properties : {day_journal_date : self.date},
             onSaveSuccess : function(msg, rows){
                 validate(msg, rows, key.toDash());
             }
@@ -80,25 +80,42 @@ function LottoDetailRow(row){
     var self = this;
 
     self.type = ko.observable();
-    self.rate = ko.observable()
-    self.opening = ko.observable();
+    self.rate = ko.observable();
+    self.opening = ko.observable(10);
     self.purchase_pack = ko.observable();
     self.purchase_quantity = ko.observable();
-    self.purchase_total = ko.observable();
-    self.purchase_amount = ko.observable();
-    self.total = ko.observable();
-    self.sold_quantity = ko.observable();
-    self.sold_amount = ko.observable();
-    self.closing_quantity = ko.observable();
-    self.closing_amount = ko.observable();
     self.actual_quantity = ko.observable();
-    self.actual_amount = ko.observable();
-    self.difference_quantity = ko.observable();
-    self.difference_amount = ko.observable();
+    self.sold_quantity = ko.observable();
+
+    self.purchase_total = function(){
+        return rnum(self.purchase_pack() * self.purchase_quantity());
+    }
+    self.purchase_amount = function(){
+        return rnum(self.purchase_total() * self.rate());
+    }
+    self.total = function(){
+        return rnum(self.purchase_total() + self.opening());
+    }
+    self.sold_amount = function(){
+        return rnum(self.sold_quantity() * self.rate());
+    }
+    self.closing_quantity = function(){
+        return rnum(self.total() - self.sold_quantity());
+    }
+    self.closing_amount = function(){
+        return rnum(self.closing_quantity() * self.rate());
+    }
+    self.actual_amount = function(){
+        return rnum(self.actual_quantity() * self.rate());
+    }
+    self.difference_quantity = function(){
+        return rnum(self.closing_quantity() * self.actual_quantity());
+    }
+    self.difference_amount = function(){
+        return rnum(self.difference_quantity() * self.rate());
+    }
 
     for (var k in row){
         self[k] = ko.observable(row[k]);
     }
-
 }
-
