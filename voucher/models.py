@@ -75,4 +75,5 @@ class JournalVoucherRow(models.Model):
     cr_account = models.ForeignKey(Account, null=True, blank=True, related_name='cr_rows')
     dr_amount = models.FloatField(null=True, blank=True)
     cr_amount = models.FloatField(null=True, blank=True)
+    journal_voucher = models.ForeignKey(JournalVoucher, related_name='rows')
 
