@@ -146,9 +146,9 @@ class SummaryInventory(models.Model):
     day_journal = models.ForeignKey(DayJournal, related_name='summary_inventory')
 
 
-class LottoDetail(models.Model):
-    company = models.ForeignKey(Company)
-    date = models.DateField()
+# class LottoDetail(models.Model):
+#     company = models.ForeignKey(Company)
+#     date = models.DateField()
 
 
 class LottoDetailRow(models.Model):
@@ -159,5 +159,5 @@ class LottoDetailRow(models.Model):
     purchase_quantity = models.IntegerField()
     sold_quantity = models.IntegerField()
     actual_quantity = models.IntegerField()
-    lotto_detail = models.ForeignKey(LottoDetail)
+    day_journal = models.ForeignKey(DayJournal)
 
