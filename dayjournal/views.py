@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, \
     CreditExpense, CreditIncome, CreditPurchase, CreditSales, SummaryUtility, LottoDetailRow, \
     SummaryEquivalent, SummaryBank, SummaryCash, SummaryInventory, SummarySalesTax, SummaryTransfer, SummaryLotto
+from ledger.models import Account
 
 from datetime import date
 from dayjournal.serializers import DayJournalSerializer, DayJournalLottoSerializer
@@ -16,6 +17,7 @@ def day_journal(request, journal_date=None):
     else:
         day_journal, created = DayJournal.objects.get_or_create(date=date.today(), company=request.user.company)
     day_journal_data = DayJournalSerializer(day_journal).data
+    # bank_accounts =
     base_template = 'dashboard.html'
     return render(request, 'day_journal.html', {
         'day_journal': day_journal_data,

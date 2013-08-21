@@ -161,3 +161,15 @@ class LottoDetailRow(models.Model):
     actual_quantity = models.IntegerField()
     day_journal = models.ForeignKey(DayJournal, related_name='lotto_details')
 
+
+class BankDetail(models.Model):
+    bank_account = models.ForeignKey(Account)
+    day_journal = models.ForeignKey(DayJournal, related_name='bank_detail')
+
+
+class BankDetailRow(models.Model):
+    sn = models.IntegerField()
+    account = models.ForeignKey(Account)
+    type = models.CharField(max_length=3)
+    amount = models.FloatField()
+    bank_detail = models.ForeignKey(BankDetail)
