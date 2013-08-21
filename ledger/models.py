@@ -2,6 +2,7 @@ from django.db import models
 from users.models import Company
 from core.models import Tag
 from datetime import date
+from core.models import Tag
 
 
 class Account(models.Model):
@@ -24,6 +25,11 @@ class Account(models.Model):
         transactions = Transaction.objects.filter(account=self, date__lt=before_date).order_by('-id', '-date')[:1]
         if len(transactions) > 0:
             return transactions[0]
+
+    def add_tag(self, tag):
+        # all_tags = self.get_all_tags()
+        tag_instance, created = Tag.objects.get_or_create(name=tag)
+        self.tags.add(tag_instance)
 
     def get_all_tags(self):
         return [tag.name for tag in self.tags.all()]
@@ -54,6 +60,7 @@ class BankAccount(models.Model):
             account = Account(code=self.ac_no, name=self.bank_name)
             account.company = self.company
             account.save()
+            account.add_tag('Bank')
             self.account = account
         super(BankAccount, self).save(*args, **kwargs)
 
@@ -75,8 +82,9 @@ class Party(models.Model):
         is_new = self.pk is None
         if is_new:
             account = Account(name=self.name)
-
+            account.company = self.company
             account.save()
+            account.add_tag('Party')
             self.account = account
         super(Party, self).save(*args, **kwargs)
 
