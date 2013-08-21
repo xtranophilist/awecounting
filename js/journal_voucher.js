@@ -54,8 +54,9 @@ function JournalVoucher(data){
     self.journal_voucher.cr_total = function(){
         var total = 0;
         $.each(self.journal_voucher.rows(), function(){
-            if (!isNaN(this.cr_amount()))
+            if (isAN(this.cr_amount())){
                 total += parseInt(this.cr_amount());
+            }
         });
         return total;
     }
@@ -63,7 +64,7 @@ function JournalVoucher(data){
     self.journal_voucher.dr_total = function(){
         var total = 0;
         $.each(self.journal_voucher.rows(), function(){
-            if (!isNaN(this.dr_amount()))
+            if (isAN(this.dr_amount()))
                 total += parseInt(this.dr_amount());
         });
         return total;
@@ -76,6 +77,7 @@ function JournalVoucher(data){
         var selection = $("#journal-voucher > tr");
         for (var i=0; i<rows.length; i++){
             var row_valid = true;
+            $(selection[i]).removeClass('invalid-row');
             var row = rows[i];
             if (row.dr_account_id() && row.cr_account_id()){
                 message += 'Row ' + (i+1) + ': You can\'t enter both Dr and Cr Accounts in same row! ';

@@ -59,6 +59,12 @@ function rnum(o){
     return isNaN(o)?'':o;
 }
 
+function isAN(n){
+    if (n=='')
+        return false;
+    return !isNaN(n);
+}
+
 function empty_or_undefined(o){
     if (o=='' || typeof o =='undefined')
         return true;
