@@ -70,29 +70,67 @@ function JournalVoucher(data){
         return total;
     }
 
+    self.journal_voucher.cr_equals_dr = function(){
+        return self.journal_voucher.dr_total() === self.journal_voucher.cr_total();
+    }
+
+    self.journal_voucher.total_row_class = function(){
+        if (self.journal_voucher.dr_total() === self.journal_voucher.cr_total())
+            return 'valid-row';
+        return 'invalid-row';
+    }
+
     self.journal_voucher.save = function(){
         var valid = true;
         var message = '';
         var rows = self.journal_voucher.rows();
         var selection = $("#journal-voucher > tr");
+
+        var error_messages = {
+            1 : 'You can\'t enter both Dr and Cr Accounts in same row!',
+            2 : 'You can\'t enter Cr amount while selecting Dr account!',
+            3 : 'You can\'t enter Dr amount while selecting Cr account!',
+            4 : 'Either Dr or Cr account is required in a row!',
+            5 : 'You can\'t enter both Dr and Cr amounts in same row!',
+            6 : 'Either Dr or Cr amount is required in a row!'
+        };
+
+        var errors = {}; //row: [errors]
+
         for (var i=0; i<rows.length; i++){
+
             var row_valid = true;
             $(selection[i]).removeClass('invalid-row');
             var row = rows[i];
+            errors[i] = [];
             if (row.dr_account_id() && row.cr_account_id()){
-                message += 'Row ' + (i+1) + ': You can\'t enter both Dr and Cr Accounts in same row! ';
+//                message += 'Row ' + (i+1) + ':  ';
+                errors[i].push(1);
+                row_valid = false;
+            }
+            if (row.dr_account_id() && row.cr_amount()){
+//                message += 'Row ' + (i+1) + ':  ';
+                errors[i].push(2);
+                row_valid = false;
+            }
+            if (row.cr_account_id() && row.dr_amount()){
+//                message += 'Row ' + (i+1) + ':  ';
+                errors[i].push(3);
                 row_valid = false;
             }
             if (!row.dr_account_id() && !row.cr_account_id()){
-                message += 'Row ' + (i+1) + ': Either Dr or Cr account is required in a row! ';
+//                message += 'Row ' + (i+1) + ':  ';
+                errors[i].push(4);
                 row_valid = false;
             }
             if (row.dr_amount() && row.cr_amount()){
-                message += 'Row ' + (i+1) + ': You can\'t enter both Dr and Cr amounts in same row! ';
+//                message += 'Row ' + (i+1) + ':  ';
+                errors[i].push(5);
                 row_valid = false;
             }
             if (empty_or_undefined(row.dr_amount()) && empty_or_undefined(row.cr_amount())){
-                message += 'Row ' + (i+1) + ': Either Dr or Cr amount is required in a row! ';
+//                message += 'Row ' + (i+1) + ':  ';
+                errors[i].push(6);
                 row_valid = false;
             }
             if (!row_valid){
@@ -100,6 +138,22 @@ function JournalVoucher(data){
                 $(selection[i]).addClass('invalid-row');
             }
         }
+
+        for ( var r in errors){
+            var row_errors = errors[r];
+            message += 'Row ' + (parseInt(r)+1) + ': ';
+            for (var i in row_errors){
+                message += error_messages[row_errors[i]] + ' ';
+            }
+            // TODO
+//            message += '<br>';
+        }
+
+        if (!self.journal_voucher.cr_equals_dr()){
+            message += 'Total Dr and Cr amounts don\'t tally!';
+            valid = false;
+        }
+
         self.journal_voucher.message(message);
         if (!valid){
             self.journal_voucher.status('error');
