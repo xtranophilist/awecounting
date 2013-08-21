@@ -6,6 +6,8 @@ $(document).ready(function () {
 function JournalVoucher(data){
     var self = this;
 
+    self.date = '';
+
     for (var k in data)
         self[k]=data[k];
 
@@ -55,8 +57,6 @@ function JournalVoucher(data){
     }
 
     self.journal_voucher = new TableViewModel(key_to_options('journal_voucher'), JournalVoucherRow);
-
-    self.journal_voucher.date = '';
 
     self.journal_voucher.cr_total = function(){
         var total = 0;
@@ -163,6 +163,11 @@ function JournalVoucher(data){
 
         if (!self.journal_voucher.cr_equals_dr()){
             message += 'Total Dr and Cr amounts don\'t tally!';
+            valid = false;
+        }
+
+        if (!self.date){
+            message += 'Date field is required!';
             valid = false;
         }
 
