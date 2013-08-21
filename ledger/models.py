@@ -45,10 +45,12 @@ class BankAccount(models.Model):
     ac_no = models.IntegerField()
     branch_name = models.CharField(max_length=254, blank=True, null=True)
     account = models.ForeignKey(Account)
+    company = models.ForeignKey(Company)
 
     def save(self, *args, **kwargs):
         if self.pk is None:
             account = Account(code=self.ac_no, name=self.bank_name)
+            account.company = self.company
             account.save()
             self.account = account
         super(BankAccount, self).save(*args, **kwargs)
@@ -71,6 +73,7 @@ class Party(models.Model):
         is_new = self.pk is None
         if is_new:
             account = Account(name=self.name)
+
             account.save()
             self.account = account
         super(Party, self).save(*args, **kwargs)
