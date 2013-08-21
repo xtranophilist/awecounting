@@ -177,20 +177,20 @@ function JournalVoucher(data){
             return false;
         }
         $.ajax({
-                type: "POST",
-                url: '/voucher/journal/save',
-                data: ko.toJSON(self),
-                success: function(msg){
-                    self.journal_voucher.message('Saved!');
-                    self.deleted_rows  = [];
-                    self.journal_voucher.status('success');
+            type: "POST",
+            url: '/voucher/journal/save',
+            data: ko.toJSON(self),
+            success: function(msg){
+                self.journal_voucher.message('Saved!');
+                self.deleted_rows  = [];
+                self.journal_voucher.status('success');
 
-                },
-                error: function(XMLHttpRequest, textStatus, errorThrown) {
-                    self.journal_voucher.message('Saving Failed!');
-                    self.journal_voucher.status('error');
-                }
-            });
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) {
+                self.journal_voucher.message('Saving Failed!');
+                self.journal_voucher.status('error');
+            }
+        });
 
 
     }

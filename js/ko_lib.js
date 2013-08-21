@@ -25,31 +25,31 @@ ko.bindingHandlers.select2 = {
 };
 
 ko.bindingHandlers.typeahead = {
-  init: function (element, valueAccessor) {
-      var el = $(element);
-      el.attr("autocomplete", "off")
-      .typeahead({
-          minLength: 0,
-          source: function(query, process) {
-            var objects = [];
-            map = {};
-            var data = ko.utils.unwrapObservable(valueAccessor());
-            $.each(data, function(i, object) {
-                map[object.name] = object;
-                objects.push(object.name);
+    init: function (element, valueAccessor) {
+        var el = $(element);
+        el.attr("autocomplete", "off")
+            .typeahead({
+                minLength: 0,
+                source: function(query, process) {
+                    var objects = [];
+                    map = {};
+                    var data = ko.utils.unwrapObservable(valueAccessor());
+                    $.each(data, function(i, object) {
+                        map[object.name] = object;
+                        objects.push(object.name);
+                    });
+                    process(objects);
+                },
+                updater: function(element){
+                    if(map[element]){
+                        $(el).attr('data-selected',map[element].id);
+                        return element;
+                    }else{
+                        return "";
+                    }
+                }
             });
-            process(objects);
-          },
-          updater: function(element){
-            if(map[element]){
-                $(el).attr('data-selected',map[element].id);
-                return element;
-            }else{
-                return "";
-            }
-          }
-      });
-  }
+    }
 };
 
 ko.bindingHandlers.flash = {
