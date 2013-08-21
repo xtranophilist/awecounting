@@ -81,6 +81,9 @@ function JournalVoucher(data){
     }
 
     self.journal_voucher.save = function(){
+
+        self.journal_voucher.status('waiting');
+
         var valid = true;
         var message = '';
         var rows = self.journal_voucher.rows();
@@ -98,6 +101,8 @@ function JournalVoucher(data){
         var errors = {}; //row: [errors]
 
         for (var i=0; i<rows.length; i++){
+
+
 
             var row_valid = true;
             $(selection[i]).removeClass('invalid-row');
@@ -159,8 +164,22 @@ function JournalVoucher(data){
             self.journal_voucher.status('error');
             return false;
         }
-        console.log('Saving');
-        self.journal_voucher.status('success');
+        $.ajax({
+                type: "POST",
+                url: '/voucher/journal/save',
+                data: ko.toJSON(self),
+                success: function(msg){
+                    self.journal_voucher.message('Saved!');
+                    self.deleted_rows  = [];
+                    self.journal_voucher.status('success');
+
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown) {
+                    self.journal_voucher.message('Saving Failed!');
+                    self.journal_voucher.status('error');
+                }
+            });
+
 
     }
 }
