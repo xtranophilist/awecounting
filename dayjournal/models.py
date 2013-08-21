@@ -172,4 +172,4 @@ class BankDetailRow(models.Model):
     account = models.ForeignKey(Account)
     type = models.CharField(max_length=3)
     amount = models.FloatField()
-    bank_detail = models.ForeignKey(BankDetail)
+    bank_detail = models.ForeignKey(BankDetail, related_name='rows')
