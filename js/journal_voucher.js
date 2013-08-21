@@ -48,7 +48,7 @@ function JournalVoucher(data){
     var key_to_options = function(key){
         return {
             rows: data['rows'],
-            save_to_url : '/voucher/journal/save',
+            save_to_url : '/voucher/journal/save/',
             properties : {id : self.id},
             onSaveSuccess : function(msg, rows){
                 validate(msg, rows, key.toDash());
@@ -205,7 +205,8 @@ function JournalVoucherRow(row){
     self.cr_amount = ko.observable();
 
     for (var k in row){
-        self[k] = ko.observable(row[k]);
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
     }
 
 }
