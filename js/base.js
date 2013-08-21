@@ -59,6 +59,12 @@ function rnum(o){
     return isNaN(o)?'':o;
 }
 
+function empty_or_undefined(o){
+    if (o=='' || typeof o =='undefined')
+        return true;
+    return false;
+}
+
 function get_target(e){
     return $((e.currentTarget) ? e.currentTarget : e.srcElement); //for IE <9 compatibility
 }
