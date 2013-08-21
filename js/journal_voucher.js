@@ -50,6 +50,63 @@ function JournalVoucher(data){
     }
 
     self.journal_voucher = new TableViewModel(key_to_options('journal_voucher'), JournalVoucherRow);
+
+    self.journal_voucher.cr_total = function(){
+        var total = 0;
+        $.each(self.journal_voucher.rows(), function(){
+            if (!isNaN(this.cr_amount()))
+                total += parseInt(this.cr_amount());
+        });
+        return total;
+    }
+
+    self.journal_voucher.dr_total = function(){
+        var total = 0;
+        $.each(self.journal_voucher.rows(), function(){
+            if (!isNaN(this.dr_amount()))
+                total += parseInt(this.dr_amount());
+        });
+        return total;
+    }
+
+    self.journal_voucher.save = function(){
+        var valid = true;
+        var message = '';
+        var rows = self.journal_voucher.rows();
+        var selection = $("#journal-voucher > tr");
+        for (var i=0; i<rows.length; i++){
+            var row_valid = true;
+            var row = rows[i];
+            if (row.dr_account_id() && row.cr_account_id()){
+                message += 'Row ' + (i+1) + ': You can\'t enter both Dr and Cr Accounts in same row! ';
+                row_valid = false;
+            }
+            if (!row.dr_account_id() && !row.cr_account_id()){
+                message += 'Row ' + (i+1) + ': Either Dr or Cr account is required in a row! ';
+                row_valid = false;
+            }
+            if (row.dr_amount() && row.cr_amount()){
+                message += 'Row ' + (i+1) + ': You can\'t enter both Dr and Cr amounts in same row! ';
+                row_valid = false;
+            }
+            if (empty_or_undefined(row.dr_amount()) && empty_or_undefined(row.cr_amount())){
+                message += 'Row ' + (i+1) + ': Either Dr or Cr amount is required in a row! ';
+                row_valid = false;
+            }
+            if (!row_valid){
+                valid = false;
+                $(selection[i]).addClass('invalid-row');
+            }
+        }
+        self.journal_voucher.message(message);
+        if (!valid){
+            self.journal_voucher.status('error');
+            return false;
+        }
+        console.log('Saving');
+        self.journal_voucher.status('success');
+
+    }
 }
 
 function JournalVoucherRow(row){
