@@ -9,4 +9,5 @@ urlpatterns = patterns('',
                        url(r'^purchase/$', views.purchase_voucher, name='purchase_voucher'),
                        url(r'^journal/$', views.journal_voucher, name='journal_voucher'),
                        url(r'^journal/(?P<id>[0-9]+)/$', views.journal_voucher, name='journal_voucher_view'),
+                       url(r'^journal/save$', views.save_journal_voucher, name='save_journal_voucher'),
                        )
