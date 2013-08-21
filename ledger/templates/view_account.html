@@ -1,6 +1,6 @@
 {% extends "dashboard.html" %}
 
-{% block title %}All Accounts{% endblock %}
+{% block title %}{{ account.name }}{% endblock %}
 
 {% block content %}
 
@@ -12,6 +12,7 @@
 
     Code: {{ account.code }} <br/>
     Current Balance: {{ account.current_balance }} <br/>
+    Tags: {{ account.tags.all|join:', ' }}<br/>
     <a href="{% url "update_account" account.id %}">
         Edit Account Details
     </a>

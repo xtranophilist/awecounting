@@ -25,8 +25,10 @@ class Account(models.Model):
         if len(transactions) > 0:
             return transactions[0]
 
-    def all_tags(self):
+    def get_all_tags(self):
         return [tag.name for tag in self.tags.all()]
+
+    all_tags = property(get_all_tags)
 
     def __unicode__(self):
         return self.name
