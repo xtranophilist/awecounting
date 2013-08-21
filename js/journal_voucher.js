@@ -1,3 +1,8 @@
+$(document).ready(function () {
+    $('.date-picker').datepicker().data('datepicker');
+});
+
+
 function JournalVoucher(data){
     var self = this;
 
@@ -50,6 +55,8 @@ function JournalVoucher(data){
     }
 
     self.journal_voucher = new TableViewModel(key_to_options('journal_voucher'), JournalVoucherRow);
+
+    self.journal_voucher.date = '';
 
     self.journal_voucher.cr_total = function(){
         var total = 0;
