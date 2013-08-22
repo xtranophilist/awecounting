@@ -23,5 +23,6 @@ urlpatterns = patterns('',
                        url(r'^lotto$', views.lotto_detail, name='new_lotto_detail'),
                        url(r'^(?P<journal_date>\d{4}-\d{2}-\d{2})/$', views.lotto_detail, name='view_lotto_journal'),
                        url(r'^save/lotto_detail/$', views.save_lotto_detail, name='save_lotto_detail'),
+                       url(r'^save/bank_detail/(?P<account_id>[0-9]+)/$', views.save_bank_detail, name='save_bank_detail'),
 )
 

@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, \
-    CreditExpense, CreditIncome, CreditPurchase, CreditSales, SummaryUtility, LottoDetailRow, \
+from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, BankDetail, \
+    CreditExpense, CreditIncome, CreditPurchase, CreditSales, SummaryUtility, LottoDetailRow, BankDetailRow, \
     SummaryEquivalent, SummaryBank, SummaryCash, SummaryInventory, SummarySalesTax, SummaryTransfer, SummaryLotto
 from ledger.models import Account
 
@@ -374,3 +374,29 @@ def save_lotto_detail(request):
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+def save_bank_detail(request, account_id):
+    bank_account = Account.objects.get(id=account_id)
+    params = json.loads(request.body)
+    day_journal = get_journal(request)
+    bank_detail, created = BankDetail.objects.get_or_create(day_journal=day_journal, bank_account=bank_account)
+    dct = {'invalid_attributes': {}, 'saved': {}}
+    model = BankDetailRow
+    print params
+    for index, row in enumerate(params.get('rows')):
+        invalid_attrs = invalid(row, ['type', 'account_id', 'amount'])
+        if invalid_attrs:
+            dct['invalid_attributes'][index] = invalid_attrs
+            continue
+        values = {'sn': index+1, 'type': row.get('type'), 'amount': row.get('amount'),
+                  'account_id': row.get('account_id'), 'bank_detail': bank_detail}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct['saved'][index] = submodel.id
+    delete_rows(params.get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+
