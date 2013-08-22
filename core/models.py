@@ -30,6 +30,7 @@ class Tag(models.Model):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=254, null=True, blank=True)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='children')
+    company = models.ForeignKey(Company)
 
     def __unicode__(self):
         return self.name
