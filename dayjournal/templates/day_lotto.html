@@ -75,7 +75,7 @@
                         <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                     </td>
                     <td>
-                        <select class="span12" data-bind="options: $root.accounts_by_tag(['Sales', 'Lotto', 'Lottery'], true), optionsText: 'name', optionsValue: 'id', value: type, optionsCaption: 'Choose an account..', select2: {}"></select>
+                        <select class="span12" data-bind="options: $root.inventory_accounts, optionsText: 'name', optionsValue: 'id', value: type, optionsCaption: 'Choose an account..', select2: {}, event: {change: $root.inventory_account_changed}"></select>
                     </td>
                     <td data-bind="editableText: rate, numeric: true"></td>
                     <td data-bind="text: opening, numeric: true"></td>

@@ -52,7 +52,7 @@ class BankAccount(models.Model):
     bank_name = models.CharField(max_length=254)
     ac_no = models.IntegerField()
     branch_name = models.CharField(max_length=254, blank=True, null=True)
-    account = models.ForeignKey(Account)
+    account = models.OneToOneField(Account)
     company = models.ForeignKey(Company)
 
     def save(self, *args, **kwargs):
