@@ -143,9 +143,6 @@ function TableViewModel(options, row_model){
             self[k]=options.properties[k];
     }
 
-    if (self.root)
-        console.log(self.root.day_cash_sales.rows());
-
     self.message = ko.observable();
     self.status = ko.observable('standby')
 
