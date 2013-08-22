@@ -12,7 +12,7 @@ class Entry(models.Model):
 class EntryRow(models.Model):
     sn = models.IntegerField()
     employee = models.ForeignKey(Account)
-    pay_heading = models.CharField(max_length=254)
+    pay_heading = models.ForeignKey(Account, related_name='row')
     amount = models.FloatField()
     hours = models.FloatField()
     tax = models.FloatField()
