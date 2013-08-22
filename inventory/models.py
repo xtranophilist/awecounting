@@ -48,7 +48,7 @@ class Item(models.Model):
     sales_tax_scheme = models.ForeignKey(TaxScheme, verbose_name=u'Tax Rate', related_name='sales_items')
     company = models.ForeignKey(Company)
     category = models.ForeignKey(Category)
-    account = models.ForeignKey(InventoryAccount)
+    account = models.ForeignKey(InventoryAccount, blank=True)
 
     def save(self, *args, **kwargs):
         if self.pk is None:

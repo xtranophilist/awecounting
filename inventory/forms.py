@@ -7,4 +7,4 @@ class ItemForm(KOModelForm):
 
     class Meta:
         model = Item
-        exclude = ['company']
+        exclude = ['company', 'account']
