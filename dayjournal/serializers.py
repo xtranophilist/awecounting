@@ -127,6 +127,8 @@ class SummaryInventorySerializer(serializers.ModelSerializer):
 
 
 class BankDetailRowSerializer(serializers.ModelSerializer):
+    account_id = serializers.Field('account_id')
+
     class Meta:
         model = BankDetailRow
         exclude = ['bank_detail']
@@ -141,7 +143,7 @@ class BankDetailSerializer(serializers.ModelSerializer):
 
 
 class DayJournalSerializer(serializers.ModelSerializer):
-    # cash_sales = CashSalesSerializer()
+    cash_sales = CashSalesSerializer()
     # cash_purchase = CashPurchaseSerializer()
     # cash_receipt = CashReceiptSerializer()
     # cash_payment = CashPaymentSerializer()
