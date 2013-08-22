@@ -54,7 +54,9 @@
                 <td>
                     <select data-bind="options: $root.accounts_by_tag(['Staff'], true), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
                 </td>
-                <td data-bind="editableText: pay_heading"></td>
+                <td>
+                    <select data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: pay_heading, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
+                </td>
                 <td data-bind="editableText: amount, numeric: true"></td>
                 <td data-bind="editableText: hours, numeric: true"></td>
                 <td data-bind="editableText: tax, numeric: true"></td>
