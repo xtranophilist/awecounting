@@ -5,11 +5,11 @@ function LottoDetailModel(data){
         self[k]=data[k];
 
     $.ajax({
-        url: '/ledger/accounts/json/',
+        url: '/inventory/accounts/'+self.date+'.json',
         dataType: 'json',
         async: false,
         success: function(data) {
-            self.accounts = data;
+            self.inventory_accounts = data;
         }
     });
 
@@ -33,6 +33,18 @@ function LottoDetailModel(data){
         }
         return filtered_accounts;
     };
+
+    self.inventory_account_changed = function(row){
+        var selected_account = $.grep(self.inventory_accounts, function(i){
+            return i.id == row.type();
+        })[0];
+        if (typeof selected_account == 'undefined')
+            return;
+        if (!row.opening())
+            row.opening(selected_account.opening);
+        if (!row.rate())
+            row.rate(selected_account.rate);
+    }
 
     var validate = function(msg, rows, tr_wrapper_id){
         var selection = $("#" + tr_wrapper_id + " > tr");
@@ -81,7 +93,7 @@ function LottoDetailRow(row){
 
     self.type = ko.observable();
     self.rate = ko.observable();
-    self.opening = ko.observable(10);
+    self.opening = ko.observable();
     self.purchase_pack = ko.observable();
     self.purchase_quantity = ko.observable();
     self.actual_quantity = ko.observable();
