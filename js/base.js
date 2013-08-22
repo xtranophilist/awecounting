@@ -200,7 +200,6 @@ function TableViewModel(options, row_model){
                     }
                     self.status('success');
                     self.deleted_rows  = [];
-
                 },
                 error: function(XMLHttpRequest, textStatus, errorThrown) {
                     self.message('Saving Failed!');

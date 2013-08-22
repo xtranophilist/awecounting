@@ -192,6 +192,43 @@ function DayJournal(data){
     self.summary_transfer = new TableViewModel(key_to_options_with_extra_row('summary_transfer', 'summary_utility', SummaryUtilityModel), SummaryTransferRow);
 
     self.summary_inventory = new TableViewModel(key_to_options('summary_inventory'), SummaryEquivalentRow);
+
+    //adding new bank accounts if they don't already exist for the current day journal
+    for (var i in self.accounts_by_tag('Bank')){
+        var account = self.accounts_by_tag('Bank')[i];
+
+        var exists = false;
+        for (var j in self.bank_detail){
+            var detail = self.bank_detail[j];
+            if (detail.bank_account == account.id){
+                exists = true;
+            }
+        }
+        if (!exists){
+            self.bank_detail.push({bank_account: account.id, rows: []});
+        }
+    }
+
+    console.log(self.bank_detail);
+
+    for (var i in self.bank_detail){
+        self.bank_detail[i] = new TableViewModel(key_to_options('bank_detail'), BankDetailRow);
+    }
+
+
+}
+
+function BankDetailRow(row){
+
+    self.account_id = ko.observable();
+    self.type = ko.observable();
+    self.amount = ko.observable();
+
+    for (var k in row){
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
+    }
+
 }
 
 function SummaryCashModel(data){
