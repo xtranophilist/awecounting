@@ -1,0 +1,27 @@
+{% extends base_template %}
+
+{% block title %} Update Tag {% endblock %}
+
+{% block content %}
+    <div class="page-header position-relative">
+        <h1>
+            Update Tag
+        </h1>
+    </div>
+    <form method="post">
+
+        {{ form.as_p }}
+
+        <div class="row">
+
+            <input type="submit" value="Submit" class="btn" />
+            <a class="btn" href="{% url 'delete_tag' form.instance.id %}">Delete this tag!</a>
+
+        </div>
+
+
+
+
+    </form>
+
+{% endblock %}

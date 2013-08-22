@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from core.models import CompanySetting, Tag
 from ledger.models import Party
 from core.forms import CompanySettingsForm, PartyForm, TagForm
@@ -59,6 +59,7 @@ def create_tag(request):
             tag = form.save(commit=False)
             tag.company = request.user.company
             tag.save()
+            return redirect('/tags/')
     else:
         form = TagForm(instance=tag)
     if request.is_ajax():
@@ -69,3 +70,30 @@ def create_tag(request):
         'form': form,
         'base_template': base_template,
     })
+
+
+def update_tag(request, id):
+    tag = get_object_or_404(Tag, id=id)
+    if request.POST:
+        form = TagForm(data=request.POST, instance=tag)
+        if form.is_valid():
+            tag = form.save(commit=False)
+            tag.company = request.user.company
+            tag.save()
+            return redirect('/tags/')
+    else:
+        form = TagForm(instance=tag)
+    if request.is_ajax():
+        base_template = 'modal.html'
+    else:
+        base_template = 'dashboard.html'
+    return render(request, 'tag_update_form.html', {
+        'form': form,
+        'base_template': base_template
+    })
+
+
+def delete_tag(request, id):
+    tag = get_object_or_404(Tag, id=id)
+    tag.delete()
+    return redirect('/tags/')

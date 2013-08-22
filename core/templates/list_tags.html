@@ -4,18 +4,26 @@
 
 {% block content %}
 
+    <div class="page-header position-relative">
+        <h1>
+            All Tags
+        </h1>
+    </div>
+
     {% load mptt_tags %}
-<ul>
-    {% recursetree tags %}
-        <li>
-            {{ node.name }}
-            {% if not node.is_leaf_node %}
-                <ul class="children">
-                    {{ children }}
-                </ul>
-            {% endif %}
-        </li>
-    {% endrecursetree %}
-</ul>
+    <ul>
+        {% recursetree tags %}
+            <li>
+                <a href="{% url 'update_tag' node.id %}">{{ node.name }}</a>
+                {% if not node.is_leaf_node %}
+                    <ul class="children">
+                        {{ children }}
+                    </ul>
+                {% endif %}
+            </li>
+        {% endrecursetree %}
+    </ul>
+
+    <a class="btn" href="{% url 'create_tag' %}">Create New Tag</a>
 
 {% endblock %}

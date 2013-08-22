@@ -39,6 +39,8 @@ urlpatterns = patterns('',
 
                        url(r'^tags/$', core_views.list_tags, name='list_tags'),
                        url(r'^tag/create$', core_views.create_tag, name='create_tag'),
+                       url(r'^tag/(?P<id>[0-9]+)/$', core_views.update_tag, name='update_tag'),
+                       url(r'^tag/(?P<id>[0-9]+)/delete$', core_views.delete_tag, name='delete_tag'),
 
                        url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
                        url(r'^', include(router.urls)),
