@@ -3,7 +3,7 @@ from tax.models import TaxScheme
 from ledger.models import Account
 from users.models import Company
 from datetime import date
-
+from core.models import Tag
 
 class Category(models.Model):
     code = models.CharField(max_length=10, blank=True, null=True)
@@ -26,6 +26,20 @@ class Item(models.Model):
     sales_tax_scheme = models.ForeignKey(TaxScheme, verbose_name=u'Tax Rate', related_name='sales_items')
     company = models.ForeignKey(Company)
     category = models.ForeignKey(Category)
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            account = InventoryAccount(code=self.ac_no, name=self.name)
+            account.company = self.company
+            account.save()
+            # account.add_tag('Bank')
+            self.account = account
+        super(Item, self).save(*args, **kwargs)
+
+    def add_tag(self, tag):
+        # all_tags = self.get_all_tags()
+        tag_instance, created = Tag.objects.get_or_create(name=tag)
+        self.tags.add(tag_instance)
 
     def __unicode__(self):
         return '[' + self.code + '] ' + self.name
