@@ -139,6 +139,7 @@ class BankDetailSerializer(serializers.ModelSerializer):
         model = BankDetail
         exclude = ['day_journal']
 
+
 class DayJournalSerializer(serializers.ModelSerializer):
     # cash_sales = CashSalesSerializer()
     # cash_purchase = CashPurchaseSerializer()
