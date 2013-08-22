@@ -129,6 +129,7 @@ INSTALLED_APPS = (
     'ledger',
     'dayjournal',
     'payroll',
+    'mptt',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.admindocs',

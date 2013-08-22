@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import Company
+from mptt.models import MPTTModel, TreeForeignKey
 
 
 class Currency(models.Model):
@@ -26,10 +27,10 @@ class CompanySetting(models.Model):
         return self.company.name
 
 
-class Tag(models.Model):
+class Tag(MPTTModel):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=254, null=True, blank=True)
-    parent = models.ForeignKey('self', blank=True, null=True, related_name='children')
+    parent = TreeForeignKey('self', blank=True, null=True, related_name='children')
     company = models.ForeignKey(Company)
 
     def __unicode__(self):
