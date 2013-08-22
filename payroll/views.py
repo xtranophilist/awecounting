@@ -21,10 +21,6 @@ def save_entry(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
     values = {
-        # 'party_id': params.get('party'), 'invoice_no': params.get('invoice_no'),
-        # 'reference': params.get('reference'), 'date': params.get('date'),
-        # 'due_date': params.get('due_date'), 'tax': params.get('tax'),
-        # 'currency_id': params.get('currency'),
         'company': request.user.company
     }
     if params.get('id'):
