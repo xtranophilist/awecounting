@@ -1,5 +1,5 @@
 from django import forms
-from core.models import CompanySetting, Currency
+from core.models import CompanySetting, Currency, Tag
 from ledger.models import Party
 from acubor.lib import KOModelForm
 
@@ -16,4 +16,10 @@ class PartyForm(KOModelForm):
 
     class Meta:
         model = Party
+        exclude = ['company']
+
+
+class TagForm(KOModelForm):
+    class Meta:
+        model = Tag
         exclude = ['company']

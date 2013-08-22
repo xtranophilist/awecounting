@@ -1,9 +1,21 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title></title>
-</head>
-<body>
+{% extends "dashboard.html" %}
 
-</body>
-</html>
+{% block title %}All Tags{% endblock %}
+
+{% block content %}
+
+    {% load mptt_tags %}
+<ul>
+    {% recursetree tags %}
+        <li>
+            {{ node.name }}
+            {% if not node.is_leaf_node %}
+                <ul class="children">
+                    {{ children }}
+                </ul>
+            {% endif %}
+        </li>
+    {% endrecursetree %}
+</ul>
+
+{% endblock %}

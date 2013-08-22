@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from core.models import CompanySetting
+from core.models import CompanySetting, Tag
 from ledger.models import Party
-from core.forms import CompanySettingsForm, PartyForm
+from core.forms import CompanySettingsForm, PartyForm, TagForm
 from django.shortcuts import render, get_object_or_404
 
 
@@ -44,3 +44,28 @@ def party_form(request, id=None):
         'base_template': base_template,
     })
 
+
+def list_tags(request):
+    tags = Tag.objects.filter(company=request.user.company)
+    print tags
+    return render(request, 'list_tags.html', {'tags': tags})
+
+
+def create_tag(request):
+    tag = Tag()
+    if request.POST:
+        form = TagForm(data=request.POST)
+        if form.is_valid():
+            tag = form.save(commit=False)
+            tag.company = request.user.company
+            tag.save()
+    else:
+        form = TagForm(instance=tag)
+    if request.is_ajax():
+        base_template = 'modal.html'
+    else:
+        base_template = 'dashboard.html'
+    return render(request, 'tag_create_form.html', {
+        'form': form,
+        'base_template': base_template,
+    })
