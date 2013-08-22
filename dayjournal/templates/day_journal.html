@@ -694,7 +694,9 @@
                     <td>
                         <select data-bind="options: $root.accounts, optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: account_id, select2: {placeholderOption: 'first'}"></select>
                     </td>
-                    <td data-bind="editableText: type"></td>
+                    <td>
+                        <select data-bind="options: ['In', 'Out'], value: type, select2: {}"></select>
+                    </td>
                     <td data-bind="editableText: amount, numeric: true"></td>
                     <td>
                         <button class="close" data-bind="click: $parent.removeRow">&times;</button>
