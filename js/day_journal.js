@@ -83,6 +83,13 @@ function DayJournal(data){
         return filtered_accounts;
     };
 
+    self.account_by_id = function(id){
+        var account = $.grep(self.accounts, function(i){
+            return i.id == id;
+        });
+        return account[0];
+    }
+
     var validate = function(msg, rows, tr_wrapper_id){
         var selection = $("#" + tr_wrapper_id + " > tr");
         selection.each(function (index) {
@@ -209,12 +216,28 @@ function DayJournal(data){
         }
     }
 
-    console.log(self.bank_detail);
-
     for (var i in self.bank_detail){
-        self.bank_detail[i] = new TableViewModel(key_to_options('bank_detail'), BankDetailRow);
+        var title  = self.account_by_id(self.bank_detail[i].bank_account).name;
+        self.bank_detail[i] = new TableViewModel(bank_key_to_option('bank_detail', i), BankDetailRow);
+        self.bank_detail[i].title = title;
     }
 
+    function bank_key_to_option(key, i){
+        return {
+            rows: data[key][i].rows,
+            save_to_url : '/day/save/bank_detail/' + self.bank_detail[i].bank_account + '/',
+            properties : {
+                day_journal_date : self.date,
+                bank_account_id : self.bank_detail[i].bank_account,
+                id : self.bank_detail[i].id
+            },
+            onSaveSuccess : function(msg, rows){
+                validate(msg, rows, key.toDash());
+            }
+        };
+    }
+
+//    console.log(self.bank_detail);
 
 }
 
