@@ -7,7 +7,7 @@ class AccountForm(KOModelForm):
 
     class Meta:
         model = Account
-        exclude = ['company']
+        exclude = ['company', 'parent']
 
 
 class BankAccountForm(KOModelForm):

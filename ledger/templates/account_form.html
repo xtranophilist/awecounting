@@ -8,9 +8,15 @@
             Create/Update Account
         </h1>
     </div>
+
+
     <form method="post">
         {% csrf_token %}
+
+        {{ form.errors }}
+
         {{ form.as_p }}
+
         <div class="row">
             <div class="span12">
                 <input type="submit" value="Submit" class="btn" />

@@ -31,6 +31,7 @@ def account_form(request, id=None):
             item = form.save(commit=False)
             item.company = request.user.company
             item.save()
+            form.save_m2m()
     else:
         form = AccountForm(instance=account)
     if request.is_ajax():
