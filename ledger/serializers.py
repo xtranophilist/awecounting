@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from models import Account
-from core.serializers import TagSerializer
+from core.serializers import CategorySerializer
 from datetime import date
 
 
