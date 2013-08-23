@@ -1,6 +1,6 @@
 from django import forms
-from core.models import CompanySetting, Currency, Category
-from ledger.models import Party
+from core.models import CompanySetting, Currency
+from ledger.models import Party, Category
 from acubor.lib import KOModelForm
 
 

@@ -3,7 +3,6 @@ from tax.models import TaxScheme
 from ledger.models import Account
 from users.models import Company
 from datetime import date
-from core.models import Category
 
 
 class Category(models.Model):

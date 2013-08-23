@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from core.models import Category
+from ledger.models import Category
 
 
 class CategorySerializer(serializers.ModelSerializer):

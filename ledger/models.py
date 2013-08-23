@@ -1,8 +1,21 @@
 from django.db import models
 from users.models import Company
-from core.models import Category
 from datetime import date
-from core.models import Category
+from mptt.models import MPTTModel, TreeForeignKey
+
+
+class Category(MPTTModel):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=254, null=True, blank=True)
+    parent = TreeForeignKey('self', blank=True, null=True, related_name='children')
+    company = models.ForeignKey(Company)
+
+    def __unicode__(self):
+        return self.name
+
+    class Meta:
+        db_table = 'ledger_category'
+        verbose_name_plural = u'Categories'
 
 
 class Account(models.Model):
@@ -11,7 +24,7 @@ class Account(models.Model):
     company = models.ForeignKey(Company)
     current_balance = models.FloatField(default=0)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='children')
-    categories = models.ManyToManyField(Category, related_name='accounts', blank=True)
+    # category = models.ForeignKey(Category, related_name='accounts', blank=True)
 
     def get_absolute_url(self):
         return '/account/' + str(self.id)

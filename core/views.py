@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect
-from core.models import CompanySetting, Category
-from ledger.models import Party
+from core.models import CompanySetting
+from ledger.models import Party, Category
 from core.forms import CompanySettingsForm, PartyForm, CategoryForm
 from django.shortcuts import render, get_object_or_404
+
 
 
 def company_settings(request):
