@@ -25,6 +25,7 @@ class Account(models.Model):
     current_balance = models.FloatField(default=0)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='children')
     category = models.ForeignKey(Category, related_name='accounts', blank=True)
+    tax_rate = models.FloatField(blank=True, null=True)
 
     def get_absolute_url(self):
         return '/account/' + str(self.id)
