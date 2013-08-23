@@ -9,4 +9,24 @@
         </h1>
     </div>
 
+
+    {% load mptt_tags %}
+    <table class="table table-bordered table-striped table-sortable">
+        {% recursetree tags %}
+                <tr>
+                    <td>{{ node.name }}</td>
+                    <td></td>
+                </tr>
+            {% for account in node.accounts.all %}
+                <tr>
+                    <td>{{ account.name }}</td>
+                    <td>{{ account.current_balance }}</td>
+                </tr>
+            {% endfor %}
+                {% if not node.is_leaf_node %}
+                        {{ children }}
+                {% endif %}
+        {% endrecursetree %}
+    </table>
+
 {% endblock %}
