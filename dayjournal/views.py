@@ -47,6 +47,7 @@ def save_cash_sales(request):
         values = {'sn': index+1, 'sales_ledger_id': row.get('account_id'), 'amount': row.get('amount'),
                   'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        #sales-cr;cash-dr
         if not created:
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
@@ -66,6 +67,7 @@ def save_cash_purchase(request):
         values = {'sn': index+1, 'purchase_ledger_id': row.get('account_id'), 'amount': row.get('amount'),
                   'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        #cash-cr;purchase-dr
         if not created:
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
@@ -88,6 +90,7 @@ def save_cash_payment(request):
         if not created:
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
+        #cash-cr;payment-dr
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
@@ -107,6 +110,7 @@ def save_cash_receipt(request):
         if not created:
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
+        #cash-dr;r_from-cr
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
@@ -126,6 +130,7 @@ def save_credit_sales(request):
         if not created:
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
+        #sales-cr;customer-dr
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
