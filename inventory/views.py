@@ -21,8 +21,10 @@ def accounts_by_day_as_json(request, day):
 def item_form(request, id=None):
     if id:
         item = get_object_or_404(Item, id=id)
+        scenario = 'Update'
     else:
         item = Item()
+        scenario = 'Create'
     if request.POST:
         form = ItemForm(data=request.POST, instance=item)
         if form.is_valid():
@@ -36,6 +38,7 @@ def item_form(request, id=None):
     else:
         base_template = 'dashboard.html'
     return render(request, 'item_form.html', {
+        'scenario': scenario,
         'form': form,
         'base_template': base_template,
     })
