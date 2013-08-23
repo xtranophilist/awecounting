@@ -13,7 +13,7 @@ function LottoDetailModel(data){
         }
     });
 
-    self.accounts_by_tag = function(categories, is_or){
+    self.accounts_by_category = function(categories, is_or){
         var filtered_accounts = [];
         for (var i in self.accounts){
             var account_categories = self.accounts[i].categories

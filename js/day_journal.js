@@ -62,7 +62,7 @@ function DayJournal(data){
         row.opening(selected_account.opening);
     }
 
-    self.accounts_by_tag = function(categories, is_or){
+    self.accounts_by_category = function(categories, is_or){
         var filtered_accounts = [];
         for (var i in self.accounts){
             var account_categories = self.accounts[i].categories
@@ -227,8 +227,8 @@ function DayJournal(data){
     self.summary_inventory = new TableViewModel(key_to_options('summary_inventory'), SummaryEquivalentRow);
 
     //adding new bank accounts if they don't already exist for the current day journal
-    for (var i in self.accounts_by_tag('Bank')){
-        var account = self.accounts_by_tag('Bank')[i];
+    for (var i in self.accounts_by_category('Bank')){
+        var account = self.accounts_by_category('Bank')[i];
         var exists = false;
         for (var j in self.bank_detail){
             var detail = self.bank_detail[j];
