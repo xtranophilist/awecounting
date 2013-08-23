@@ -17,12 +17,11 @@ class ItemSerializer(serializers.ModelSerializer):
 
 class InventoryAccountSerializer(serializers.ModelSerializer):
     opening = serializers.SerializerMethodField('get_last_day_closing')
-    # rate = serializers.SerializerMethodField('get_rate')
-    rate = serializers.Field(source='item.sales_price')
+    rate = serializers.SerializerMethodField('get_rate')
 
     class Meta:
         model = InventoryAccount
-        fields = ['id', 'name', 'opening', 'rate']
+        fields = ['id', 'name', 'rate']
 
     def __init__(self, *args, **kwargs):
         day = kwargs.pop('day', None)
@@ -37,9 +36,8 @@ class InventoryAccountSerializer(serializers.ModelSerializer):
         if transaction:
             return transaction.current_quantity
 
-    # def get_rate(self, obj):
-    #     item = obj.item
-    #
-    #     if transaction:
-    #         return transaction.current_quantity
-
+    def get_rate(self, obj):
+        try:
+            return obj.item.sales_price
+        except:
+            return None
