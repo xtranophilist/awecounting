@@ -11,7 +11,7 @@ class Account(models.Model):
     company = models.ForeignKey(Company)
     current_balance = models.FloatField(default=0)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='children')
-    tags = models.ManyToManyField(Category, related_name='accounts', blank=True)
+    categories = models.ManyToManyField(Category, related_name='accounts', blank=True)
 
     def get_absolute_url(self):
         return '/account/' + str(self.id)
@@ -27,14 +27,14 @@ class Account(models.Model):
             return transactions[0]
 
     def add_tag(self, tag):
-        # all_tags = self.get_all_tags()
+        # all_categories = self.get_all_categories()
         tag_instance, created = Category.objects.get_or_create(name=tag, company_id=5)
-        self.tags.add(tag_instance)
+        self.categories.add(tag_instance)
 
-    def get_all_tags(self):
-        return [tag.name for tag in self.tags.all()]
+    def get_all_categories(self):
+        return [tag.name for tag in self.categories.all()]
 
-    all_tags = property(get_all_tags)
+    all_categories = property(get_all_categories)
 
     def __unicode__(self):
         return self.name

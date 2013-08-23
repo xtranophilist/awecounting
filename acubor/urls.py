@@ -38,7 +38,7 @@ urlpatterns = patterns('',
                        url(r'^party/create/$', core_views.party_form, name='create_party'),
                        url(r'^party/(?P<id>[0-9]+)/$', core_views.party_form, name='update_party'),
 
-                       url(r'^tags/$', core_views.list_tags, name='list_tags'),
+                       url(r'^categories/$', core_views.list_categories, name='list_categories'),
                        url(r'^tag/create$', core_views.create_tag, name='create_tag'),
                        url(r'^tag/(?P<id>[0-9]+)/$', core_views.update_tag, name='update_tag'),
                        url(r'^tag/(?P<id>[0-9]+)/delete$', core_views.delete_tag, name='delete_tag'),

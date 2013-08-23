@@ -45,10 +45,9 @@ def party_form(request, id=None):
     })
 
 
-def list_tags(request):
-    tags = Category.objects.filter(company=request.user.company)
-    print tags
-    return render(request, 'list_tags.html', {'tags': tags})
+def list_categories(request):
+    categories = Category.objects.filter(company=request.user.company)
+    return render(request, 'list_categories.html', {'categories': categories})
 
 
 def create_tag(request):
@@ -59,7 +58,7 @@ def create_tag(request):
             tag = form.save(commit=False)
             tag.company = request.user.company
             tag.save()
-            return redirect('/tags/')
+            return redirect('/categories/')
     else:
         form = TagForm(instance=tag)
     if request.is_ajax():
@@ -80,7 +79,7 @@ def update_tag(request, id):
             tag = form.save(commit=False)
             tag.company = request.user.company
             tag.save()
-            return redirect('/tags/')
+            return redirect('/categories/')
     else:
         form = TagForm(instance=tag)
     if request.is_ajax():
@@ -96,4 +95,4 @@ def update_tag(request, id):
 def delete_tag(request, id):
     tag = get_object_or_404(Category, id=id)
     tag.delete()
-    return redirect('/tags/')
+    return redirect('/categories/')

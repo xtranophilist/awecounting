@@ -8,8 +8,8 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding M2M table for field tags on 'Account'
-        m2m_table_name = db.shorten_name(u'ledger_account_tags')
+        # Adding M2M table for field categories on 'Account'
+        m2m_table_name = db.shorten_name(u'ledger_account_categories')
         db.create_table(m2m_table_name, (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('account', models.ForeignKey(orm[u'ledger.account'], null=False)),
@@ -22,8 +22,8 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        # Removing M2M table for field tags on 'Account'
-        db.delete_table(db.shorten_name(u'ledger_account_tags'))
+        # Removing M2M table for field categories on 'Account'
+        db.delete_table(db.shorten_name(u'ledger_account_categories'))
 
         # Adding M2M table for field accounts on 'Tag'
         m2m_table_name = db.shorten_name(u'ledger_tag_accounts')
@@ -44,7 +44,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': u"orm['ledger.Account']"}),
-            'tags': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'accounts'", 'blank': 'True', 'to': u"orm['ledger.Tag']"})
+            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'accounts'", 'blank': 'True', 'to': u"orm['ledger.Tag']"})
         },
         u'ledger.tag': {
             'Meta': {'object_name': 'Tag'},

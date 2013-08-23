@@ -60,9 +60,9 @@ class Item(models.Model):
         super(Item, self).save(*args, **kwargs)
 
     def add_tag(self, tag):
-        # all_tags = self.get_all_tags()
+        # all_categories = self.get_all_categories()
         tag_instance, created = Category.objects.get_or_create(name=tag)
-        self.tags.add(tag_instance)
+        self.categories.add(tag_instance)
 
     def __unicode__(self):
         return '[' + self.code + '] ' + self.name

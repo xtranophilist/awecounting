@@ -5,13 +5,13 @@ from datetime import date
 
 
 class AccountSerializer(serializers.ModelSerializer):
-    tags = serializers.Field(source='all_tags')
+    categories = serializers.Field(source='all_categories')
     opening = serializers.SerializerMethodField('get_last_day_closing')
 
     class Meta:
         model = Account
         # exclude = ['code', 'company', 'parent', 'current_balance']
-        fields = ['id', 'name', 'tags', 'opening']
+        fields = ['id', 'name', 'categories', 'opening']
 
     def __init__(self, *args, **kwargs):
         day = kwargs.pop('day', None)

@@ -12,7 +12,7 @@
 
     Code: {{ account.code }} <br/>
     Current Balance: {{ account.current_balance }} <br/>
-    Tags: {{ account.tags.all|join:', ' }}<br/>
+    Tags: {{ account.categories.all|join:', ' }}<br/>
     <a href="{% url "update_account" account.id %}">
         Edit Account Details
     </a>

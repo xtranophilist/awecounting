@@ -25,9 +25,9 @@ def to_dict(model):
 
 
 def trial_balance(request):
-    tags = Category.objects.filter(company=request.user.company)
+    categories = Category.objects.filter(company=request.user.company)
     dicts = to_dict(Category)
     print json.dumps(dicts, indent=4)
     return render(request, 'trial_balance.html', {
-        'tags': tags
+        'categories': categories
     })
