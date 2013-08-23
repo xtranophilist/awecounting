@@ -1,8 +1,8 @@
 from django.db import models
 from users.models import Company
-from core.models import Tag
+from core.models import Category
 from datetime import date
-from core.models import Tag
+from core.models import Category
 
 
 class Account(models.Model):
@@ -11,7 +11,7 @@ class Account(models.Model):
     company = models.ForeignKey(Company)
     current_balance = models.FloatField(default=0)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='children')
-    tags = models.ManyToManyField(Tag, related_name='accounts', blank=True)
+    tags = models.ManyToManyField(Category, related_name='accounts', blank=True)
 
     def get_absolute_url(self):
         return '/account/' + str(self.id)
@@ -28,7 +28,7 @@ class Account(models.Model):
 
     def add_tag(self, tag):
         # all_tags = self.get_all_tags()
-        tag_instance, created = Tag.objects.get_or_create(name=tag)
+        tag_instance, created = Category.objects.get_or_create(name=tag, company_id=5)
         self.tags.add(tag_instance)
 
     def get_all_tags(self):

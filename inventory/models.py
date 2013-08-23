@@ -3,7 +3,7 @@ from tax.models import TaxScheme
 from ledger.models import Account
 from users.models import Company
 from datetime import date
-from core.models import Tag
+from core.models import Category
 
 
 class Category(models.Model):
@@ -61,7 +61,7 @@ class Item(models.Model):
 
     def add_tag(self, tag):
         # all_tags = self.get_all_tags()
-        tag_instance, created = Tag.objects.get_or_create(name=tag)
+        tag_instance, created = Category.objects.get_or_create(name=tag)
         self.tags.add(tag_instance)
 
     def __unicode__(self):

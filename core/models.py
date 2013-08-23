@@ -27,7 +27,7 @@ class CompanySetting(models.Model):
         return self.company.name
 
 
-class Tag(MPTTModel):
+class Category(MPTTModel):
     name = models.CharField(max_length=50)
     description = models.CharField(max_length=254, null=True, blank=True)
     parent = TreeForeignKey('self', blank=True, null=True, related_name='children')
@@ -37,4 +37,4 @@ class Tag(MPTTModel):
         return self.name
 
     class Meta:
-        db_table = 'tag'
+        db_table = 'category'

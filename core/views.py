@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from core.models import CompanySetting, Tag
+from core.models import CompanySetting, Category
 from ledger.models import Party
 from core.forms import CompanySettingsForm, PartyForm, TagForm
 from django.shortcuts import render, get_object_or_404
@@ -46,13 +46,13 @@ def party_form(request, id=None):
 
 
 def list_tags(request):
-    tags = Tag.objects.filter(company=request.user.company)
+    tags = Category.objects.filter(company=request.user.company)
     print tags
     return render(request, 'list_tags.html', {'tags': tags})
 
 
 def create_tag(request):
-    tag = Tag()
+    tag = Category()
     if request.POST:
         form = TagForm(data=request.POST)
         if form.is_valid():
@@ -73,7 +73,7 @@ def create_tag(request):
 
 
 def update_tag(request, id):
-    tag = get_object_or_404(Tag, id=id)
+    tag = get_object_or_404(Category, id=id)
     if request.POST:
         form = TagForm(data=request.POST, instance=tag)
         if form.is_valid():
@@ -94,6 +94,6 @@ def update_tag(request, id):
 
 
 def delete_tag(request, id):
-    tag = get_object_or_404(Tag, id=id)
+    tag = get_object_or_404(Category, id=id)
     tag.delete()
     return redirect('/tags/')
