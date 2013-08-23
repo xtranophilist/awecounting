@@ -134,6 +134,10 @@ def journal_voucher(request, id=None):
     return render(request, 'journal_voucher.html', {'data': data})
 
 
+def empty_to_None(dict, list_of_attr):
+    return dict
+
+
 def save_journal_voucher(request):
     params = json.loads(request.body)
     dct = {'rows': {}}
@@ -141,25 +145,17 @@ def save_journal_voucher(request):
     del [params['accounts']]
     del [params['journal_voucher']['_initial_rows']]
 
-    print params
     voucher_values = {'date': params.get('date'), 'company': request.user.company}
-    # try:
     if params.get('id'):
         voucher = JournalVoucher.objects.get(id=params.get('id'))
     else:
         voucher = JournalVoucher()
-        # if not created:
     voucher = save_model(voucher, voucher_values)
     dct['id'] = voucher.id
-    # except Exception as e:
-        # if hasattr(e, 'messages'):
-        #     dct['error_message'] = '; '.join(e.messages)
-        # else:
-        #     dct['error_message'] = 'Error in form data!'
-        #     print 'error'
-    print voucher.id
     model = JournalVoucherRow
     for index, row in enumerate(params.get('journal_voucher').get('rows')):
+        # print row.get('dr_account_id')
+        empty_to_None(row, ['dr_amount'], 'cr_amount')
         values = {'sn': index+1, 'dr_account_id': row.get('dr_account_id'), 'dr_amount': row.get('dr_amount'),
                   'cr_account_id': row.get('cr_account_id'), 'cr_amount': row.get('cr_amount'),
                   'journal_voucher': voucher}
