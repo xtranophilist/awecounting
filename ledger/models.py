@@ -40,9 +40,9 @@ class Account(models.Model):
         if len(transactions) > 0:
             return transactions[0]
 
-    def add_category(self, category):
+    def add_category(self, category, company):
         # all_categories = self.get_all_categories()
-        category_instance, created = Category.objects.get_or_create(name=category, company_id=5)
+        category_instance, created = Category.objects.get_or_create(name=category, company=company)
         self.categories.add(category_instance)
 
     def get_all_categories(self):
@@ -74,7 +74,7 @@ class BankAccount(models.Model):
             account = Account(code=self.ac_no, name=self.bank_name)
             account.company = self.company
             account.save()
-            account.add_category('Bank')
+            account.add_category('Bank', self.company)
             self.account = account
         super(BankAccount, self).save(*args, **kwargs)
 
@@ -98,7 +98,7 @@ class Party(models.Model):
             account = Account(name=self.name)
             account.company = self.company
             account.save()
-            account.add_category('Party')
+            account.add_category('Party', self.company)
             self.account = account
         super(Party, self).save(*args, **kwargs)
 
