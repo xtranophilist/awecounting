@@ -52,7 +52,7 @@
                     <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                 </td>
                 <td>
-                    <select data-bind="options: $root.account_by_category(['Staff'], true), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
+                    <select data-bind="options: $root.accounts_by_category(['Staff'], true), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
                 </td>
                 <td>
                     <select data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: pay_heading, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
