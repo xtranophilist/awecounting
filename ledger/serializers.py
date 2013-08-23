@@ -5,8 +5,8 @@ from datetime import date
 
 
 class AccountSerializer(serializers.ModelSerializer):
-    categories = serializers.Field(source='all_categories')
     opening = serializers.SerializerMethodField('get_last_day_closing')
+    categories = serializers.Field()
 
     class Meta:
         model = Account

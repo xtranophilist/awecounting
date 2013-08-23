@@ -46,9 +46,9 @@ class Account(models.Model):
         self.categories.add(category_instance)
 
     def get_all_categories(self):
-        return [category.name for category in self.categories.all()]
+        return self.category.get_ancestors(include_self=True)
 
-    all_categories = property(get_all_categories)
+    categories = property(get_all_categories)
 
     def __unicode__(self):
         return self.name
