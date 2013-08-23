@@ -67,8 +67,10 @@ def view_account(request, id):
 def bank_account_form(request, id=None):
     if id:
         bank_account = get_object_or_404(BankAccount, id=id)
+        scenario = 'Update'
     else:
         bank_account = BankAccount()
+        scenario = 'Create'
     if request.POST:
         form = BankAccountForm(data=request.POST, instance=bank_account)
         if form.is_valid():
@@ -82,6 +84,7 @@ def bank_account_form(request, id=None):
     else:
         base_template = 'dashboard.html'
     return render(request, 'bank_account_form.html', {
+        'scenario': scenario,
         'form': form,
         'base_template': base_template,
     })
