@@ -14,7 +14,7 @@
         <thead>
         <th>Code</th>
         <th>Name</th>
-        <th>Tags</th>
+        <th>Category</th>
         <th>Current Balance</th>
         <th>Actions</th>
         </thead>
@@ -32,7 +32,7 @@
                     </a>
                 </td>
                 <td>
-                        {{ account.categories.all|join:', ' }}
+                        {{ account.category }}
                 </td>
                 <td>{{ account.current_balance }}</td>
                 <td>
