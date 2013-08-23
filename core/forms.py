@@ -19,7 +19,7 @@ class PartyForm(KOModelForm):
         exclude = ['company']
 
 
-class TagForm(KOModelForm):
+class CategoryForm(KOModelForm):
     class Meta:
         model = Category
         exclude = ['company']

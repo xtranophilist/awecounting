@@ -1,12 +1,12 @@
 {% extends "dashboard.html" %}
 
-{% block title %}All Tags{% endblock %}
+{% block title %}All Categories{% endblock %}
 
 {% block content %}
 
     <div class="page-header position-relative">
         <h1>
-            All Tags
+            All Categories
         </h1>
     </div>
 
@@ -14,7 +14,7 @@
     <ul>
         {% recursetree categories %}
             <li>
-                <a href="{% url 'update_tag' node.id %}">{{ node.name }}</a>
+                <a href="{% url 'update_category' node.id %}">{{ node.name }}</a>
                 {% if not node.is_leaf_node %}
                     <ul class="children">
                         {{ children }}
@@ -24,6 +24,6 @@
         {% endrecursetree %}
     </ul>
 
-    <a class="btn" href="{% url 'create_tag' %}">Create New Tag</a>
+    <a class="btn" href="{% url 'create_category' %}">Create New Category</a>
 
 {% endblock %}

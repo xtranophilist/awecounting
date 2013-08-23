@@ -55,14 +55,14 @@ class Item(models.Model):
             account = InventoryAccount(code=self.code, name=self.name)
             account.company = self.company
             account.save()
-            # account.add_tag('Bank')
+            # account.add_category('Bank')
             self.account = account
         super(Item, self).save(*args, **kwargs)
 
-    def add_tag(self, tag):
+    def add_category(self, category):
         # all_categories = self.get_all_categories()
-        tag_instance, created = Category.objects.get_or_create(name=tag)
-        self.categories.add(tag_instance)
+        category_instance, created = Category.objects.get_or_create(name=category)
+        self.categories.add(category_instance)
 
     def __unicode__(self):
         return '[' + self.code + '] ' + self.name

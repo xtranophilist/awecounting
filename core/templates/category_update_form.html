@@ -1,11 +1,11 @@
 {% extends base_template %}
 
-{% block title %} Update Tag {% endblock %}
+{% block title %} Update Category {% endblock %}
 
 {% block content %}
     <div class="page-header position-relative">
         <h1>
-            Update Tag
+            Update Category
         </h1>
     </div>
     <form method="post">
@@ -15,7 +15,7 @@
         <div class="row">
 
             <input type="submit" value="Submit" class="btn" />
-            <a class="btn" href="{% url 'delete_tag' form.instance.id %}">Delete this tag!</a>
+            <a class="btn" href="{% url 'delete_category' form.instance.id %}">Delete this category!</a>
 
         </div>
 

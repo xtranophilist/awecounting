@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from core.models import CompanySetting, Category
 from ledger.models import Party
-from core.forms import CompanySettingsForm, PartyForm, TagForm
+from core.forms import CompanySettingsForm, PartyForm, CategoryForm
 from django.shortcuts import render, get_object_or_404
 
 
@@ -50,49 +50,49 @@ def list_categories(request):
     return render(request, 'list_categories.html', {'categories': categories})
 
 
-def create_tag(request):
-    tag = Category()
+def create_category(request):
+    category = Category()
     if request.POST:
-        form = TagForm(data=request.POST)
+        form = CategoryForm(data=request.POST)
         if form.is_valid():
-            tag = form.save(commit=False)
-            tag.company = request.user.company
-            tag.save()
+            category = form.save(commit=False)
+            category.company = request.user.company
+            category.save()
             return redirect('/categories/')
     else:
-        form = TagForm(instance=tag)
+        form = CategoryForm(instance=category)
     if request.is_ajax():
         base_template = 'modal.html'
     else:
         base_template = 'dashboard.html'
-    return render(request, 'tag_create_form.html', {
+    return render(request, 'category_create_form.html', {
         'form': form,
         'base_template': base_template,
     })
 
 
-def update_tag(request, id):
-    tag = get_object_or_404(Category, id=id)
+def update_category(request, id):
+    category = get_object_or_404(Category, id=id)
     if request.POST:
-        form = TagForm(data=request.POST, instance=tag)
+        form = CategoryForm(data=request.POST, instance=category)
         if form.is_valid():
-            tag = form.save(commit=False)
-            tag.company = request.user.company
-            tag.save()
+            category = form.save(commit=False)
+            category.company = request.user.company
+            category.save()
             return redirect('/categories/')
     else:
-        form = TagForm(instance=tag)
+        form = CategoryForm(instance=category)
     if request.is_ajax():
         base_template = 'modal.html'
     else:
         base_template = 'dashboard.html'
-    return render(request, 'tag_update_form.html', {
+    return render(request, 'category_update_form.html', {
         'form': form,
         'base_template': base_template
     })
 
 
-def delete_tag(request, id):
-    tag = get_object_or_404(Category, id=id)
-    tag.delete()
+def delete_category(request, id):
+    category = get_object_or_404(Category, id=id)
+    category.delete()
     return redirect('/categories/')
