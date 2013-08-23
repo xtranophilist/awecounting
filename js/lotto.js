@@ -13,20 +13,20 @@ function LottoDetailModel(data){
         }
     });
 
-    self.accounts_by_tag = function(tags, is_or){
+    self.accounts_by_tag = function(categories, is_or){
         var filtered_accounts = [];
         for (var i in self.accounts){
-            var account_tags = self.accounts[i].tags
-            if( typeof tags === 'string' ) {
-                if ($.inArray(tags, account_tags) !== -1){
+            var account_categories = self.accounts[i].categories
+            if( typeof categories === 'string' ) {
+                if ($.inArray(categories, account_categories) !== -1){
                     filtered_accounts.push(self.accounts[i]);
                 }
             }else if(typeof is_or != 'undefined'){
-                if (intersection(tags, account_tags).length){
+                if (intersection(categories, account_categories).length){
                     filtered_accounts.push(self.accounts[i]);
                 }
             }else{
-                if (compare_arrays(tags, account_tags)){
+                if (compare_arrays(categories, account_categories)){
                     filtered_accounts.push(self.accounts[i]);
                 }
             }
