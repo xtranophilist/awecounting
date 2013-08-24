@@ -44,9 +44,21 @@ function DayJournal(data) {
         });
     }
 
-    self.account_changed = function (row) {
+    self.account_changed = function (row, event) {
         var selected_account = $.grep(self.accounts, function (i) {
             return i.id == row.account_id();
+        })[0];
+        if (typeof selected_account == 'undefined')
+            return;
+        if (typeof row.tax_rate == 'function')
+            row.tax_rate(selected_account.tax_rate);
+        if (typeof row.opening == 'function')
+            row.opening(selected_account.opening);
+    }
+
+    self.account_cr_changed = function (row, event) {
+        var selected_account = $.grep(self.accounts, function (i) {
+            return i.id == row.account_cr_id();
         })[0];
         if (typeof selected_account == 'undefined')
             return;
@@ -209,7 +221,7 @@ function DayJournal(data) {
 
     self.cash_payment = new TableViewModel(key_to_options('cash_payment'), CashRow);
 
-    self.credit_sales = new TableViewModel(key_to_options('credit_sales'), CreditRow);
+    self.credit_sales = new TableViewModel(key_to_options('credit_sales'), CreditSalesRow);
 
     self.credit_purchase = new TableViewModel(key_to_options('credit_purchase'), CreditRow);
 
@@ -395,6 +407,22 @@ function CreditRow(row) {
     self.account_cr_id = ko.observable();
     self.account_dr_id = ko.observable();
     self.amount = ko.observable();
+
+    for (var k in row)
+        self[k] = ko.observable(row[k]);
+
+}
+
+function CreditSalesRow(row) {
+    var self = this;
+
+    self.account_cr_id = ko.observable();
+    self.account_dr_id = ko.observable();
+    self.tax_rate = ko.observable();
+    self.amount = ko.observable();
+    self.tax = function(){
+        return rnum( parseFloat(self.amount()) * parseFloat(self.tax_rate()) / 100);
+    }
 
     for (var k in row)
         self[k] = ko.observable(row[k]);
