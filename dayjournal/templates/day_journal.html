@@ -215,6 +215,7 @@
                     <th class="span2">Sales Ledger</th>
                     <th class="span2">Customer</th>
                     <th class="span2">Amount</th>
+                    <th class="span2">Tax</th>
                     <th class="span1"></th>
                 </tr>
                 </thead>
@@ -226,12 +227,13 @@
                         <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                     </td>
                     <td>
-                        <select class="span12" data-bind="options: $root.accounts_by_category('Sales'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}"></select>
+                        <select class="span12" data-bind="options: $root.accounts_by_category('Sales'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}, event: {change: $root.account_cr_changed}"></select>
                     </td>
                     <td>
                         <select class="span12" data-bind="options: $root.accounts_by_category('Debtors'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
                     </td>
                     <td data-bind="editableText: amount"></td>
+                    <td data-bind="text: tax()"></td>
                     <td align="center">
                         <button class="close" data-bind="click: $parent.removeRow">&times;</button>
                     </td>
