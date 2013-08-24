@@ -12,7 +12,7 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         # exclude = ['code', 'company', 'parent', 'current_balance']
-        fields = ['id', 'name', 'categories', 'opening']
+        fields = ['id', 'name', 'categories', 'opening', 'tax_rate']
 
     def __init__(self, *args, **kwargs):
         day = kwargs.pop('day', None)
