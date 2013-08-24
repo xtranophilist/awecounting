@@ -50,7 +50,10 @@ function DayJournal(data) {
         })[0];
         if (typeof selected_account == 'undefined')
             return;
-        row.opening(selected_account.opening);
+        if (typeof row.tax_rate == 'function')
+            row.tax_rate(selected_account.tax_rate);
+        if (typeof row.opening == 'function')
+            row.opening(selected_account.opening);
     }
 
     self.inventory_account_changed = function (row) {
@@ -198,7 +201,7 @@ function DayJournal(data) {
         };
     }
 
-    self.cash_sales = new TableViewModel(key_to_options('cash_sales'), CashRow);
+    self.cash_sales = new TableViewModel(key_to_options('cash_sales'), CashSalesRow);
 
     self.cash_purchase = new TableViewModel(key_to_options('cash_purchase'), CashRow);
 
@@ -364,6 +367,19 @@ function CashRow(row) {
     var self = this;
 
     self.account_id = ko.observable();
+    self.amount = ko.observable();
+
+    for (var k in row)
+        self[k] = ko.observable(row[k]);
+
+}
+
+function CashSalesRow(row) {
+    var self = this;
+
+    self.account_id = ko.observable();
+    self.tax_rate = ko.observable();
+    self.tax = ko.observable();
     self.amount = ko.observable();
 
     for (var k in row)
