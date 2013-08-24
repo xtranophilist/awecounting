@@ -40,6 +40,17 @@ class Account(models.Model):
         if len(transactions) > 0:
             return transactions[0]
 
+    def get_day_opening(self, before_date=None):
+        if not before_date:
+            day = date.today()
+        transactions = Transaction.objects.filter(account=self, date__lt=day).order_by('-id', '-date')[:1]
+        if len(transactions) > 0:
+            return transactions[0].current_balance
+        return self.current_balance
+
+    day_opening = property(get_day_opening)
+
+
     def add_category(self, category, company):
         # all_categories = self.get_all_categories()
         category_instance, created = Category.objects.get_or_create(name=category, company=company)
