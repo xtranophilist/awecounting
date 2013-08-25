@@ -21,6 +21,8 @@ function DayJournal(data) {
         }
     });
 
+    console.log(self);
+
 //    $.ajax({
 //        url: '/inventory/items/json/',
 //        dataType: 'json',
@@ -206,7 +208,8 @@ function DayJournal(data) {
 
     self.summary_lotto = new TableViewModel(key_to_options('summary_lotto'), LottoRow);
 
-    self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), CashRow);
+
+    self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), SummaryTaxRow);
 
     self.summary_equivalent = new TableViewModel(key_to_options_with_extra_row('summary_equivalent', 'summary_cash', SummaryCashModel), SummaryEquivalentRow);
 
@@ -232,11 +235,11 @@ function SummaryCashModel(data) {
         var total = 0;
         $.each(root.cash_sales.rows(), function () {
             if (!isNaN(this.amount()))
-                total += parseInt(this.amount());
+                total += parseFloat(this.amount());
         });
         $.each(root.cash_receipt.rows(), function () {
             if (!isNaN(this.amount()))
-                total += parseInt(this.amount());
+                total += parseFloat(this.amount());
         });
         return total;
     };
@@ -245,11 +248,11 @@ function SummaryCashModel(data) {
         var total = 0;
         $.each(root.cash_purchase.rows(), function () {
             if (!isNaN(this.amount()))
-                total += parseInt(this.amount());
+                total += parseFloat(this.amount());
         });
         $.each(root.cash_payment.rows(), function () {
             if (!isNaN(this.amount()))
-                total += parseInt(this.amount());
+                total += parseFloat(this.amount());
         });
         return total;
     };
@@ -259,7 +262,7 @@ function SummaryCashModel(data) {
     };
 
     self.difference = function (root) {
-        return self.actual() - self.closing(root);
+        return rnum(self.actual() - self.closing(root));
     };
 
     self.actual = ko.observable();
@@ -277,7 +280,7 @@ function LottoRow(row) {
     self.reg = ko.observable();
 
     self.diff = function () {
-        var diff = parseInt(self.disp()) - parseInt(self.reg());
+        var diff = parseFloat(self.disp()) - parseFloat(self.reg());
         return isNaN(diff) ? '' : diff;
     };
 
@@ -339,6 +342,32 @@ function CreditSalesRow(row) {
 
 }
 
+function SummaryTaxRow(row) {
+    var self = this;
+
+    self.register = ko.observable();
+    self.accounts = function(root){
+        var total = 0;
+        $.each(root.cash_sales.rows(), function () {
+            if (!isNaN(this.tax()))
+                total += parseFloat(this.tax());
+        });
+        $.each(root.credit_sales.rows(), function () {
+            if (!isNaN(this.tax()))
+                total += parseFloat(this.tax());
+        });
+        return total;
+    }
+
+    self.difference = function(root){
+        return rnum(self.register() - self.accounts(root));
+    }
+
+    for (var k in row)
+        self[k] = ko.observable(row[k]);
+
+}
+
 function SummaryEquivalentRow(row) {
     var self = this;
 
@@ -350,15 +379,14 @@ function SummaryEquivalentRow(row) {
     self.outward = ko.observable(0).extend({ numeric: 2 });
 
     self.closing = ko.computed(function () {
-        var closing = parseInt(self.opening()) + parseInt(self.inward()) - parseInt(self.outward());
+        var closing = parseFloat(self.opening()) + parseFloat(self.inward()) - parseFloat(self.outward());
         return isNaN(closing) ? '' : closing;
     });
 
     self.actual = ko.observable();
 
     self.difference = function () {
-        var diff = self.actual() - self.closing();
-        return isNaN(diff) ? '' : diff;
+        return rnum(self.actual() - self.closing());
     };
 
     for (var k in row)
