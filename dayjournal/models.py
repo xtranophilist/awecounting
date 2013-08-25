@@ -1,6 +1,6 @@
 from django.db import models
 from users.models import Company
-from ledger.models import Account
+from ledger.models import Account, Transaction
 from inventory.models import InventoryAccount
 
 
@@ -21,6 +21,7 @@ class CashSales(models.Model):
     sales_ledger = models.ForeignKey(Account)
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_sales')
+    transaction = models.ForeignKey(Transaction)
 
 
 class CashPurchase(models.Model):
@@ -28,6 +29,7 @@ class CashPurchase(models.Model):
     purchase_ledger = models.ForeignKey(Account)
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_purchase')
+    transaction = models.ForeignKey(Transaction)
 
 
 class CashReceipt(models.Model):
@@ -35,6 +37,7 @@ class CashReceipt(models.Model):
     received_from = models.ForeignKey(Account)
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_receipt')
+    transaction = models.ForeignKey(Transaction)
 
 
 class CashPayment(models.Model):
@@ -42,6 +45,7 @@ class CashPayment(models.Model):
     payment_to = models.ForeignKey(Account)
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_payment')
+    transaction = models.ForeignKey(Transaction)
 
 
 class CreditSales(models.Model):
@@ -50,6 +54,7 @@ class CreditSales(models.Model):
     customer = models.ForeignKey(Account, related_name='customer')
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='credit_sales')
+    transaction = models.ForeignKey(Transaction)
 
 
 class CreditPurchase(models.Model):
@@ -58,6 +63,7 @@ class CreditPurchase(models.Model):
     supplier = models.ForeignKey(Account, related_name='supplier')
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='credit_purchase')
+    transaction = models.ForeignKey(Transaction)
 
 
 class CreditExpense(models.Model):
@@ -66,6 +72,7 @@ class CreditExpense(models.Model):
     expense_claimed_by = models.ForeignKey(Account, related_name='expense_claimed_by')
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='credit_expense')
+    transaction = models.ForeignKey(Transaction)
 
 
 class CreditIncome(models.Model):
@@ -74,6 +81,7 @@ class CreditIncome(models.Model):
     income_from = models.ForeignKey(Account, related_name='income_from')
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='credit_income')
+    transaction = models.ForeignKey(Transaction)
 
 
 class SummaryCash(models.Model):
