@@ -1,5 +1,6 @@
 function DayJournal(data) {
     var self = this;
+    self.sales_tax = ko.observable();
     for (var k in data)
         self[k] = data[k];
 
@@ -210,6 +211,8 @@ function DayJournal(data) {
 
 
     self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), SummaryTaxRow);
+    self.summary_sales_tax.rows()[0].register(self.sales_tax);
+
 
     self.summary_equivalent = new TableViewModel(key_to_options_with_extra_row('summary_equivalent', 'summary_cash', SummaryCashModel), SummaryEquivalentRow);
 
