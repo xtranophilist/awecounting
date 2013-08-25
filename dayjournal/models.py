@@ -7,6 +7,7 @@ from inventory.models import InventoryAccount
 class DayJournal(models.Model):
     date = models.DateField()
     company = models.ForeignKey(Company)
+    sales_tax = models.FloatField()
 
     def get_absolute_url(self):
         return '/day/' + str(self.date)
@@ -105,11 +106,11 @@ class SummaryBank(models.Model):
     day_journal = models.ForeignKey(DayJournal, related_name='summary_bank')
 
 
-class SummarySalesTax(models.Model):
-    sn = models.IntegerField()
-    tax_scheme = models.ForeignKey(Account)
-    amount = models.FloatField()
-    day_journal = models.ForeignKey(DayJournal, related_name='summary_sales_tax')
+# class SummarySalesTax(models.Model):
+#     sn = models.IntegerField()
+#     tax_scheme = models.ForeignKey(Account)
+#     amount = models.FloatField()
+#     day_journal = models.ForeignKey(DayJournal, related_name='summary_sales_tax')
 
 
 # class SummaryInventory(models.Model):

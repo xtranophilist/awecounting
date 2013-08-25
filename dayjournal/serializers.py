@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from dayjournal.models import DayJournal, CashSales, CashPurchase, CashReceipt, CashPayment, SummaryCash, \
-    SummaryBank, SummaryEquivalent, SummarySalesTax, SummaryInventory, CreditExpense, CreditIncome, CreditPurchase, \
+    SummaryBank, SummaryEquivalent, SummaryInventory, CreditExpense, CreditIncome, CreditPurchase, \
     CreditSales, SummaryLotto, SummaryUtility, SummaryTransfer, LottoDetailRow
 
 
@@ -92,12 +92,12 @@ class SummaryBankSerializer(serializers.ModelSerializer):
         exclude = ['day_journal']
 
 
-class SummarySalesTax(serializers.ModelSerializer):
-    account_id = serializers.Field(source='tax_scheme_id')
-
-    class Meta:
-        model = SummarySalesTax
-        exclude = ['day_journal', 'tax_scheme']
+# class SummarySalesTax(serializers.ModelSerializer):
+#     account_id = serializers.Field(source='tax_scheme_id')
+#
+#     class Meta:
+#         model = SummarySalesTax
+#         exclude = ['day_journal', 'tax_scheme']
 
 
 class SummaryLottoSerializer(serializers.ModelSerializer):
@@ -128,21 +128,20 @@ class SummaryInventorySerializer(serializers.ModelSerializer):
 
 class DayJournalSerializer(serializers.ModelSerializer):
     cash_sales = CashSalesSerializer()
-    cash_purchase = CashPurchaseSerializer()
-    cash_receipt = CashReceiptSerializer()
-    cash_payment = CashPaymentSerializer()
+    # cash_purchase = CashPurchaseSerializer()
+    # cash_receipt = CashReceiptSerializer()
+    # cash_payment = CashPaymentSerializer()
     credit_sales = CreditSalesSerializer()
-    credit_purchase = CreditPurchaseSerializer()
-    credit_expense = CreditExpenseSerializer()
-    credit_income = CreditIncomeSerializer()
-    summary_cash = SummaryCashSerializer()
-    summary_equivalent = SummaryEquivalentSerializer()
-    summary_bank = SummaryBankSerializer()
-    summary_sales_tax = SummarySalesTax()
-    summary_lotto = SummaryLottoSerializer()
-    summary_transfer = SummaryTransferSerializer()
-    summary_utility = SummaryUtilitySerializer()
-    summary_inventory = SummaryInventorySerializer()
+    # credit_purchase = CreditPurchaseSerializer()
+    # credit_expense = CreditExpenseSerializer()
+    # credit_income = CreditIncomeSerializer()
+    # summary_cash = SummaryCashSerializer()
+    # summary_equivalent = SummaryEquivalentSerializer()
+    # summary_bank = SummaryBankSerializer()
+    # summary_lotto = SummaryLottoSerializer()
+    # summary_transfer = SummaryTransferSerializer()
+    # summary_utility = SummaryUtilitySerializer()
+    # summary_inventory = SummaryInventorySerializer()
 
     class Meta:
         model = DayJournal
