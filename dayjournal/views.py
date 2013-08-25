@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, \
-    CreditExpense, CreditIncome, CreditPurchase, CreditSales, SummaryUtility, LottoDetailRow, \
+    CreditExpense, CreditIncome, CreditPurchase, CreditSales, LottoDetailRow, \
     SummaryEquivalent, SummaryBank, SummaryCash, SummaryInventory, SummaryTransfer, SummaryLotto
 from ledger.models import Account
 
@@ -8,7 +8,7 @@ from datetime import date
 from dayjournal.serializers import DayJournalSerializer, DayJournalLottoSerializer
 from django.http import HttpResponse
 import json
-from acubor.lib import delete_rows, invalid, save_model
+from acubor.lib import delete_rows, invalid, save_model, all_empty
 
 
 def day_journal(request, journal_date=None):
@@ -293,37 +293,34 @@ def save_summary_transfer(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
 
     #saving summary_utility
-    invalid_attrs = invalid(params.get('summary_utility'), ['amount'])
-    if not invalid_attrs:
-        values = {'amount': params.get('summary_utility').get('amount'), 'day_journal': get_journal(request)}
-        summary_utility, created = SummaryUtility.objects.get_or_create(
-            id=params.get('summary_utility').get('id'),
-            defaults=values
-        )
-        if not created:
-            summary_utility = save_model(summary_utility, values)
-        dct['saved'][0] = summary_utility.id
+    # invalid_attrs = invalid(params.get('summary_utility'), ['amount'])
+    # if not invalid_attrs:
+    #     values = {'amount': params.get('summary_utility').get('amount'), 'day_journal': get_journal(request)}
+        # summary_utility, created = SummaryUtility.objects.get_or_create(
+        #     id=params.get('summary_utility').get('id'),
+        #     defaults=values
+        # )
+        # if not created:
+        #     summary_utility = save_model(summary_utility, values)
+        # dct['saved'][0] = summary_utility.id
 
     #saving summary transfer rows
     model = SummaryTransfer
     for index, row in enumerate(params.get('rows')):
-        invalid_attrs = invalid(row, ['transfer_type', 'inward', 'outward'])
 
-        if invalid_attrs:
-            dct['invalid_attributes'][index] = invalid_attrs
+        if all_empty(row, ['cash', 'cheque', 'card']):
             continue
 
-        for attr in ['inward', 'outward']:
+        for attr in ['cash', 'cheque', 'card']:
             if row.get(attr) is None or row.get(attr) == '':
-                print attr
                 row[attr] = 0
 
-        values = {'sn': index+2, 'transfer_type_id': row.get('transfer_type'), 'inward': row.get('inward'),
-                  'outward': row.get('outward'), 'day_journal': get_journal(request)}
+        values = {'sn': index+1, 'transfer_type_id': row.get('transfer_type'), 'cash': row.get('cash'),
+                  'card': row.get('card'), 'cheque': row.get('cheque'), 'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
-        dct['saved'][index+1] = submodel.id
+        dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 

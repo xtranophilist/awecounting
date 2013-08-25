@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from dayjournal.models import DayJournal, CashSales, CashPurchase, CashReceipt, CashPayment, SummaryCash, \
     SummaryBank, SummaryEquivalent, SummaryInventory, CreditExpense, CreditIncome, CreditPurchase, \
-    CreditSales, SummaryLotto, SummaryUtility, SummaryTransfer, LottoDetailRow
+    CreditSales, SummaryLotto, SummaryTransfer, LottoDetailRow
 
 
 class CashSalesSerializer(serializers.ModelSerializer):
@@ -112,10 +112,10 @@ class SummaryTransferSerializer(serializers.ModelSerializer):
         exclude = ['day_journal']
 
 
-class SummaryUtilitySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SummaryUtility
-        exclude = ['day_journal']
+# class SummaryUtilitySerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = SummaryUtility
+#         exclude = ['day_journal']
 
 
 class SummaryInventorySerializer(serializers.ModelSerializer):
@@ -140,7 +140,7 @@ class DayJournalSerializer(serializers.ModelSerializer):
     # summary_bank = SummaryBankSerializer()
     # summary_lotto = SummaryLottoSerializer()
     summary_transfer = SummaryTransferSerializer()
-    summary_utility = SummaryUtilitySerializer()
+    # summary_utility = SummaryUtilitySerializer()
     # summary_inventory = SummaryInventorySerializer()
 
     class Meta:

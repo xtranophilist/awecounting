@@ -76,6 +76,15 @@ def invalid(row, required_fields):
     return invalid_attrs
 
 
+def all_empty(row, required_fields):
+    empty = True
+    for attr in required_fields:
+        # if one of the required attributes isn received or is not an empty string
+        if attr in row and row.get(attr) != "":
+            empty = False
+    return empty
+
+
 def save_model(model, values):
     for key, value in values.items():
         setattr(model, key, value)
