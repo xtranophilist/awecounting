@@ -214,7 +214,7 @@ function DayJournal(data) {
 
     self.summary_equivalent = new TableViewModel(key_to_options_with_extra_row('summary_equivalent', 'summary_cash', SummaryCashModel), SummaryEquivalentRow);
 
-    self.summary_transfer = new TableViewModel(key_to_options_with_extra_row('summary_transfer', 'summary_utility', SummaryUtilityModel), SummaryTransferRow);
+    self.summary_transfer = new TableViewModel(key_to_options('summary_transfer'), SummaryTransferRow);
 
     self.summary_inventory = new TableViewModel(key_to_options('summary_inventory'), SummaryEquivalentRow);
 
