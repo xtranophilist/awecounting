@@ -2,7 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, \
     CreditExpense, CreditIncome, CreditPurchase, CreditSales, LottoDetailRow, \
     SummaryEquivalent, SummaryBank, SummaryCash, SummaryInventory, SummaryTransfer, SummaryLotto
-from ledger.models import Account
+from ledger.models import Transaction, Account
 
 from datetime import date
 from dayjournal.serializers import DayJournalSerializer, DayJournalLottoSerializer
@@ -15,9 +15,9 @@ def day_journal(request, journal_date=None):
     if journal_date:
         day_journal = get_object_or_404(DayJournal, date=journal_date)
     else:
-        day_journal, created = DayJournal.objects.get_or_create(date=date.today(), company=request.user.company)
+        day_journal, created = DayJournal.objects.get_or_create(date=date.today(), company=request.user.company,
+                                                                sales_tax=0)
     day_journal_data = DayJournalSerializer(day_journal).data
-    # bank_accounts =
     base_template = 'dashboard.html'
     return render(request, 'day_journal.html', {
         'day_journal': day_journal_data,
@@ -39,15 +39,29 @@ def save_cash_sales(request):
     print params.get('deleted_rows')
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashSales
+    cash_account = Account.objects.get(name='Cash')
+    print cash_account
     for index, row in enumerate(params.get('rows')):
+        day_journal = get_journal(request)
         invalid_attrs = invalid(row, ['account_id', 'amount'])
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
+        print row
+        if row.get('transaction'):
+            transaction = Transaction.objects.get(id=row.get('transaction'))
+        else:
+            transaction = Transaction()
+        values = {'account': cash_account, 'date': day_journal.date, 'type': 'Dr', 'amount': row.get('amount')}
+        # transaction = Transaction(account=cash_account, date=day_journal.date, type='Dr', amount=row.get('amount'))
+        # transaction, created = Transaction.objects.get_or_create(id=row.get('id'), defaults=values)
+        transaction = save_model(transaction, values)
+        transaction.save()
         values = {'sn': index+1, 'sales_ledger_id': row.get('account_id'), 'amount': row.get('amount'),
-                  'day_journal': get_journal(request)}
+                  'day_journal': day_journal, 'transaction_id': transaction.id}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         #sales-cr;cash-dr
+
         if not created:
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id

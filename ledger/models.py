@@ -72,6 +72,18 @@ class Transaction(models.Model):
     current_balance = models.FloatField()
     type = models.CharField(max_length=2)  # Dr. or Cr.
 
+    # TODO change current balance on save
+    def save(self, *args, **kwargs):
+        if self.type == 'Dr':
+            self.account.current_balance += self.amount
+        if self.type == 'Cr':
+            self.account.current_balance -= self.amount
+        self.account.save()
+        self.current_balance = self.account.current_balance
+        super(Transaction, self).save(*args, **kwargs)
+
+
+
 
 class BankAccount(models.Model):
     bank_name = models.CharField(max_length=254)
