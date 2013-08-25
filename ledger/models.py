@@ -74,6 +74,7 @@ class Transaction(models.Model):
 
     # TODO change current balance on save
     def save(self, *args, **kwargs):
+        self.amount = int(self.amount)
         if self.type == 'Dr':
             self.account.current_balance += self.amount
         if self.type == 'Cr':
@@ -82,7 +83,25 @@ class Transaction(models.Model):
         self.current_balance = self.account.current_balance
         super(Transaction, self).save(*args, **kwargs)
 
+    def dr(self, account, amount, date):
+        self.type == 'Dr'
+        self.amount = int(amount)
+        self.date = date
+        self.account = account
+        self.account.current_balance += int(amount)
+        self.account.save()
+        self.current_balance = self.account.current_balance
+        self.save()
 
+    def cr(self, account, amount, date):
+        self.type == 'Cr'
+        self.amount = int(amount)
+        self.date = date
+        self.account = account
+        self.account.current_balance -= int(amount)
+        self.account.save()
+        self.current_balance = self.account.current_balance
+        self.save()
 
 
 class BankAccount(models.Model):
