@@ -22,8 +22,6 @@ function DayJournal(data) {
         }
     });
 
-    console.log(self);
-
 //    $.ajax({
 //        url: '/inventory/items/json/',
 //        dataType: 'json',
@@ -411,8 +409,9 @@ function SummaryTransferRow(row) {
     var self = this;
 
     self.transfer_type = ko.observable();
-    self.inward = ko.observable();
-    self.outward = ko.observable();
+    self.cash = ko.observable();
+    self.cheque = ko.observable();
+    self.card = ko.observable();
 
     for (var k in row) {
         self[k] = ko.observable(row[k]);
