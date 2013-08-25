@@ -127,11 +127,11 @@ class SummaryInventorySerializer(serializers.ModelSerializer):
 
 
 class DayJournalSerializer(serializers.ModelSerializer):
-    cash_sales = CashSalesSerializer()
+    # cash_sales = CashSalesSerializer()
     # cash_purchase = CashPurchaseSerializer()
     # cash_receipt = CashReceiptSerializer()
     # cash_payment = CashPaymentSerializer()
-    credit_sales = CreditSalesSerializer()
+    # credit_sales = CreditSalesSerializer()
     # credit_purchase = CreditPurchaseSerializer()
     # credit_expense = CreditExpenseSerializer()
     # credit_income = CreditIncomeSerializer()
@@ -139,8 +139,8 @@ class DayJournalSerializer(serializers.ModelSerializer):
     # summary_equivalent = SummaryEquivalentSerializer()
     # summary_bank = SummaryBankSerializer()
     # summary_lotto = SummaryLottoSerializer()
-    # summary_transfer = SummaryTransferSerializer()
-    # summary_utility = SummaryUtilitySerializer()
+    summary_transfer = SummaryTransferSerializer()
+    summary_utility = SummaryUtilitySerializer()
     # summary_inventory = SummaryInventorySerializer()
 
     class Meta:
