@@ -1,0 +1,27 @@
+{%  extends "dashboard.html" %}
+
+{% block title %}Bank Voucher{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "new_bank_voucher" %}">Bank Voucher</a></li>
+{% endblock %}
+
+{% block head_end %}
+    <script src="http://localhost/acubor_static/js/vendors/knockout.js"></script>
+    <script src="http://localhost/acubor_static/js/ko_lib.js"></script>
+    <script src="http://localhost/acubor_static/js/base.js"></script>
+    <script src="http://localhost/acubor_static/js/bank_voucher.js"></script>
+    <script>
+        $(document).ready(function () {
+            {% load filters %}
+            ko.applyBindings(new BankVoucher({{data|jsonify}}));
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    {{ data }}
+
+{% endblock %}
