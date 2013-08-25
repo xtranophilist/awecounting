@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, \
     CreditExpense, CreditIncome, CreditPurchase, CreditSales, SummaryUtility, LottoDetailRow, \
-    SummaryEquivalent, SummaryBank, SummaryCash, SummaryInventory, SummarySalesTax, SummaryTransfer, SummaryLotto
+    SummaryEquivalent, SummaryBank, SummaryCash, SummaryInventory, SummaryTransfer, SummaryLotto
 from ledger.models import Account
 
 from datetime import date
@@ -252,19 +252,19 @@ def save_summary_bank(request):
 def save_summary_sales_tax(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
-    model = SummarySalesTax
     for index, row in enumerate(params.get('rows')):
-        invalid_attrs = invalid(row, ['account_id', 'amount'])
+        print row
+        invalid_attrs = invalid(row, ['register'])
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
-        values = {'sn': index+1, 'tax_scheme_id': row.get('account_id'), 'amount': row.get('amount'),
-                  'day_journal': get_journal(request)}
-        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-        if not created:
-            submodel = save_model(submodel, values)
-        dct['saved'][index] = submodel.id
-    delete_rows(params.get('deleted_rows'), model)
+        day_journal = get_journal(request)
+        try:
+            day_journal.sales_tax = row.get('register')
+            day_journal.save()
+            dct['saved'][0] = day_journal.id
+        except:
+            pass
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
