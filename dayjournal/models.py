@@ -24,7 +24,7 @@ class CashSales(models.Model):
     sales_ledger = models.ForeignKey(Account)
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_sales')
-    transaction = models.ForeignKey(Transaction)
+    transactions = models.ManyToManyField(Transaction)
 
 
 class CashPurchase(models.Model):

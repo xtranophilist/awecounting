@@ -52,11 +52,7 @@ def save_cash_sales(request):
             transaction = Transaction.objects.get(id=row.get('transaction'))
         else:
             transaction = Transaction()
-        values = {'account': cash_account, 'date': day_journal.date, 'type': 'Dr', 'amount': row.get('amount')}
-        # transaction = Transaction(account=cash_account, date=day_journal.date, type='Dr', amount=row.get('amount'))
-        # transaction, created = Transaction.objects.get_or_create(id=row.get('id'), defaults=values)
-        transaction = save_model(transaction, values)
-        transaction.save()
+        transaction.dr(cash_account, row.get('amount'), day_journal.date)
         values = {'sn': index+1, 'sales_ledger_id': row.get('account_id'), 'amount': row.get('amount'),
                   'day_journal': day_journal, 'transaction_id': transaction.id}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
