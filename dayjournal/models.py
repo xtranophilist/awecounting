@@ -12,6 +12,9 @@ class DayJournal(models.Model):
     def get_absolute_url(self):
         return '/day/' + str(self.date)
 
+    def __str__(self):
+        return self.date
+
     class Meta:
         db_table = 'day_journal'
 
