@@ -237,31 +237,31 @@ function SummaryCashModel(data) {
     self.inward = function (root) {
         var total = 0;
         $.each(root.cash_sales.rows(), function () {
-            if (!isNaN(this.amount()))
+            if (isAN(this.amount()))
                 total += parseFloat(this.amount());
         });
         $.each(root.cash_receipt.rows(), function () {
-            if (!isNaN(this.amount()))
+            if (isAN(this.amount()))
                 total += parseFloat(this.amount());
         });
-        return total;
+        return rnum(total);
     };
 
     self.outward = function (root) {
         var total = 0;
         $.each(root.cash_purchase.rows(), function () {
-            if (!isNaN(this.amount()))
+            if (isAN(this.amount()))
                 total += parseFloat(this.amount());
         });
         $.each(root.cash_payment.rows(), function () {
-            if (!isNaN(this.amount()))
+            if (isAN(this.amount()))
                 total += parseFloat(this.amount());
         });
-        return total;
+        return rnum(total);
     };
 
     self.closing = function (root) {
-        return self.opening(root.accounts) + self.inward(root) - self.outward(root);
+        return rnum(self.opening(root.accounts) + self.inward(root) - self.outward(root));
     };
 
     self.difference = function (root) {
@@ -283,8 +283,7 @@ function LottoRow(row) {
     self.reg = ko.observable();
 
     self.diff = function () {
-        var diff = parseFloat(self.disp()) - parseFloat(self.reg());
-        return isNaN(diff) ? '' : diff;
+        return rnum(parseFloat(self.disp()) - parseFloat(self.reg()));
     };
 
     for (var k in row)
@@ -352,14 +351,14 @@ function SummaryTaxRow(row) {
     self.accounts = function(root){
         var total = 0;
         $.each(root.cash_sales.rows(), function () {
-            if (!isNaN(this.tax()))
+            if (isAN(this.tax()))
                 total += parseFloat(this.tax());
         });
         $.each(root.credit_sales.rows(), function () {
-            if (!isNaN(this.tax()))
+            if (isAN(this.tax()))
                 total += parseFloat(this.tax());
         });
-        return total;
+        return rnum(total);
     }
 
     self.difference = function(root){
