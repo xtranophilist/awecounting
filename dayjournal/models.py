@@ -93,8 +93,9 @@ class SummaryEquivalent(models.Model):
 class SummaryTransfer(models.Model):
     sn = models.IntegerField()
     transfer_type = models.ForeignKey(Account)
-    inward = models.FloatField()
-    outward = models.FloatField()
+    cash = models.FloatField(blank=True, null=True)
+    cheque = models.FloatField(blank=True, null=True)
+    card = models.FloatField(blank=True, null=True)
     day_journal = models.ForeignKey(DayJournal, related_name='summary_transfer')
 
 
@@ -130,9 +131,9 @@ class SummaryLotto(models.Model):
     day_journal = models.ForeignKey(DayJournal, related_name='summary_lotto')
 
 
-class SummaryUtility(models.Model):
-    amount = models.FloatField()
-    day_journal = models.ForeignKey(DayJournal, related_name='summary_utility')
+# class SummaryUtility(models.Model):
+#     amount = models.FloatField()
+#     day_journal = models.ForeignKey(DayJournal, related_name='summary_utility')
 
 
 class SummaryInventory(models.Model):
