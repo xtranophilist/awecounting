@@ -15,9 +15,9 @@ def day_journal(request, journal_date=None):
     if journal_date:
         day_journal = get_object_or_404(DayJournal, date=journal_date)
     else:
-        day_journal, created = DayJournal.objects.get_or_create(date=date.today(), company=request.user.company,
-                                                                sales_tax=0, cheque_deposit=0, cash_deposit=0,
-                                                                cash_withdrawal=0)
+        day_journal, created = DayJournal.objects.get_or_create(date=date.today(), defaults={
+            'company': request.user.company, 'sales_tax': 0, 'cheque_deposit': 0, 'cash_deposit': 0,
+            'cash_withdrawal': 0})
     day_journal_data = DayJournalSerializer(day_journal).data
     base_template = 'dashboard.html'
     return render(request, 'day_journal.html', {
@@ -444,4 +444,26 @@ def save_cheque_purchase(request):
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+def save_summary_bank(request):
+    params = json.loads(request.body)
+    dct = {'invalid_attributes': {}, 'saved': {}}
+    day_journal = get_journal(request)
+    invalid_attrs = invalid(params.get('rows')[0], ['deposit', 'withdrawal'])
+    print params.get('rows')
+    if invalid_attrs:
+        dct['invalid_attributes'][0] = invalid_attrs
+    else:
+        day_journal.cash_deposit = params.get('rows')[0].get('deposit')
+        day_journal.cash_withdrawal = params.get('rows')[0].get('withdrawal')
+        dct['saved'][0] = 0
+    invalid_attrs = invalid(params.get('rows')[1], ['deposit'])
+    if invalid_attrs:
+        dct['invalid_attributes'][1] = invalid_attrs
+    else:
+        day_journal.cheque_deposit = params.get('rows')[1].get('deposit')
+        dct['saved'][1] = 1
+    day_journal.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
