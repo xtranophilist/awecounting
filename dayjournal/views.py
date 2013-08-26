@@ -16,7 +16,8 @@ def day_journal(request, journal_date=None):
         day_journal = get_object_or_404(DayJournal, date=journal_date)
     else:
         day_journal, created = DayJournal.objects.get_or_create(date=date.today(), company=request.user.company,
-                                                                sales_tax=0)
+                                                                sales_tax=0, cheque_deposit=0, cash_deposit=0,
+                                                                cash_withdrawal=0)
     day_journal_data = DayJournalSerializer(day_journal).data
     base_template = 'dashboard.html'
     return render(request, 'day_journal.html', {

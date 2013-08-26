@@ -8,6 +8,9 @@ class DayJournal(models.Model):
     date = models.DateField()
     company = models.ForeignKey(Company)
     sales_tax = models.FloatField()
+    cash_deposit = models.FloatField()
+    cash_withdrawal = models.FloatField()
+    cheque_deposit = models.FloatField()
 
     def get_absolute_url(self):
         return '/day/' + str(self.date)
