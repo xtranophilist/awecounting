@@ -16,7 +16,7 @@ class DayJournal(models.Model):
         return '/day/' + str(self.date)
 
     def __str__(self):
-        return self.date
+        return str(self.date)
 
     class Meta:
         db_table = 'day_journal'

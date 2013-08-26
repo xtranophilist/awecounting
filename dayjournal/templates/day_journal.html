@@ -744,12 +744,12 @@
                 <tbody id="cheque-purchase">
                 <tr>
                     <td><b>Cash</b></td>
-                    <td data-bind="editableText: cash_deposit"></td>
-                    <td data-bind="editableText: cash_withdrawal"></td>
+                    <td data-bind="editableText: rows()[0].deposit"></td>
+                    <td data-bind="editableText: rows()[0].withdrawal"></td>
                 </tr>
                 <tr>
                     <td><b>Cheque</b></td>
-                    <td data-bind="editableText: cheque_deposit"></td>
+                    <td data-bind="editableText: rows()[1].deposit"></td>
                     <td></td>
                 </tr>
                 </tbody>
