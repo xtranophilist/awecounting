@@ -159,7 +159,7 @@ function TableViewModel(options, row_model){
     //if there are any rows
     if(self.rows().length){
         //if row has a sn() field, sort it
-        if (self.rows()[0].sn()){
+        if (typeof self.rows()[0].sn != 'undefined'){
             self.rows().sort(function (l, r) {
                 return l.sn() > r.sn() ? 1 : -1
             });
