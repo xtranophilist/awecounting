@@ -619,78 +619,111 @@
     {#        </div>#}
     {#    </div>#}
 
-{#    <div class="row-fluid collapse-group" data-bind="with: card_sales">#}
-{#        <div class="collapsible-head"><h2 data-bind="css: status">Card Sales</h2>#}
-{#            <span data-bind="text: message()"></span>#}
-{#                    <span class="collapse-show-on-expand pull-right">#}
-{#                    <button class="button" data-bind="click: save"><i class="icon-save"></i> Save</button>#}
-{#                    <button class="button" data-bind="click: reset">Reset</button>#}
-{#                    </span>#}
-{#        </div>#}
-{##}
-{#        <div class="collapse">#}
-{#            <table class="table table-bordered table-striped table-acubor table-sortable">#}
-{#                <thead>#}
-{#                <tr>#}
-{#                    <th class="span2">Amount</th>#}
-{#                    <th class="span2">Commission Out</th>#}
-{#                    <th class="span2">Net</th>#}
-{#                </tr>#}
-{#                </thead>#}
-{##}
-{#                <tbody id="card-sales">#}
-{#                <!-- ko foreach: rows -->#}
-{#                <tr>#}
-{#                    <td data-bind="editableText: amount"></td>#}
-{#                    <td data-bind="editableText: commission_out"></td>#}
-{#                    <td data-bind="text: net()"></td>#}
-{#                </tr>#}
-{#                <!-- /ko -->#}
-{#                </tbody>#}
-{#            </table>#}
-{#        </div>#}
-{#    </div>#}
+    {#    <div class="row-fluid collapse-group" data-bind="with: card_sales">#}
+    {#        <div class="collapsible-head"><h2 data-bind="css: status">Card Sales</h2>#}
+    {#            <span data-bind="text: message()"></span>#}
+    {#                    <span class="collapse-show-on-expand pull-right">#}
+    {#                    <button class="button" data-bind="click: save"><i class="icon-save"></i> Save</button>#}
+    {#                    <button class="button" data-bind="click: reset">Reset</button>#}
+    {#                    </span>#}
+    {#        </div>#}
+    {##}
+    {#        <div class="collapse">#}
+    {#            <table class="table table-bordered table-striped table-acubor table-sortable">#}
+    {#                <thead>#}
+    {#                <tr>#}
+    {#                    <th class="span2">Amount</th>#}
+    {#                    <th class="span2">Commission Out</th>#}
+    {#                    <th class="span2">Net</th>#}
+    {#                </tr>#}
+    {#                </thead>#}
+    {##}
+    {#                <tbody id="card-sales">#}
+    {#                <!-- ko foreach: rows -->#}
+    {#                <tr>#}
+    {#                    <td data-bind="editableText: amount"></td>#}
+    {#                    <td data-bind="editableText: commission_out"></td>#}
+    {#                    <td data-bind="text: net()"></td>#}
+    {#                </tr>#}
+    {#                <!-- /ko -->#}
+    {#                </tbody>#}
+    {#            </table>#}
+    {#        </div>#}
+    {#    </div>#}
 
 
-        <div class="row-fluid collapse-group" data-bind="with: cash_equivalent_sales">
-            <div class="collapsible-head"><h2 data-bind="css: status">Cash Equivalent Sales</h2>
-                <span data-bind="text: message()"></span>
-                        <span class="collapse-show-on-expand pull-right">
-                                <button class="button" data-bind="click: addRow">
-                                    <i class="icon-plus-sign" ></i> Add New Row
-                                </button>
-                            <button class="button" data-bind="click: save">Save</button>
-                            <button class="button" data-bind="click: reset">Reset</button>
-                            </span>
-            </div>
-            <div class="collapse">
-                <table class="table table-bordered table-striped table-acubor table-sortable">
-                    <thead>
-                    <tr>
-                        <th>SN</th>
-                        <th>Particular</th>
-                        <th>Amount</th>
-                        <th></th>
-                    </tr>
-                    </thead>
+    {#        <div class="row-fluid collapse-group" data-bind="with: cash_equivalent_sales">#}
+    {#            <div class="collapsible-head"><h2 data-bind="css: status">Cash Equivalent Sales</h2>#}
+    {#                <span data-bind="text: message()"></span>#}
+    {#                        <span class="collapse-show-on-expand pull-right">#}
+    {#                                <button class="button" data-bind="click: addRow">#}
+    {#                                    <i class="icon-plus-sign" ></i> Add New Row#}
+    {#                                </button>#}
+    {#                            <button class="button" data-bind="click: save">Save</button>#}
+    {#                            <button class="button" data-bind="click: reset">Reset</button>#}
+    {#                            </span>#}
+    {#            </div>#}
+    {#            <div class="collapse">#}
+    {#                <table class="table table-bordered table-striped table-acubor table-sortable">#}
+    {#                    <thead>#}
+    {#                    <tr>#}
+    {#                        <th>SN</th>#}
+    {#                        <th>Particular</th>#}
+    {#                        <th>Amount</th>#}
+    {#                        <th></th>#}
+    {#                    </tr>#}
+    {#                    </thead>#}
+    {##}
+    {#                    <tbody id='cash-equivalent-sales'>#}
+    {#                    <!-- ko foreach: rows -->#}
+    {#                    <tr data-bind="flash: true">#}
+    {#                        <td data-bind="text: $index()+1"></td>#}
+    {#                        <td>#}
+    {#                            <select class="span12" data-bind="options: $root.accounts_by_category('Cash Equivalent'), optionsText: 'name', optionsValue: 'id', value: account, select2: {placeholderOption: 'first'}"></select>#}
+    {#                        </td>#}
+    {#                        <td data-bind="editableText: amount"></td>#}
+    {#                        <td>#}
+    {#                            <button class="close" data-bind="click: $parent.removeRow">&times;</button>#}
+    {#                        </td>#}
+    {#                    </tr>#}
+    {#                    <!-- /ko -->#}
+    {#                    </tbody>#}
+    {#                </table>#}
+    {#            </div>#}
+    {#        </div>#}
 
-                    <tbody id='cash-equivalent-sales'>
-                    <!-- ko foreach: rows -->
-                    <tr data-bind="flash: true">
-                        <td data-bind="text: $index()+1"></td>
-                        <td>
-                            <select class="span12" data-bind="options: $root.accounts_by_category('Cash Equivalent'), optionsText: 'name', optionsValue: 'id', value: account, select2: {placeholderOption: 'first'}"></select>
-                        </td>
-                        <td data-bind="editableText: amount"></td>
-                        <td>
-                            <button class="close" data-bind="click: $parent.removeRow">&times;</button>
-                        </td>
-                    </tr>
-                    <!-- /ko -->
-                    </tbody>
-                </table>
-            </div>
+    <div class="row-fluid collapse-group" data-bind="with: cheque_purchase">
+        <div class="collapsible-head"><h2 data-bind="css: status">Cheque Purchase</h2>
+            <span data-bind="text: message()"></span>
+                    <span class="collapse-show-on-expand pull-right">
+                    <button class="button" data-bind="click: save"><i class="icon-save"></i> Save</button>
+                    <button class="button" data-bind="click: reset">Reset</button>
+                    </span>
         </div>
+
+        <div class="collapse">
+            <table class="table table-bordered table-striped table-acubor table-sortable">
+                <thead>
+                <tr>
+                    <th class="span2">Amount</th>
+                    <th class="span2">Commission In</th>
+                    <th class="span2">Net</th>
+                </tr>
+                </thead>
+
+                <tbody id="cheque-purchase">
+                <!-- ko foreach: rows -->
+                <tr>
+                    <td data-bind="editableText: amount"></td>
+                    <td data-bind="editableText: commission_in"></td>
+                    <td data-bind="text: net()"></td>
+                </tr>
+                <!-- /ko -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 
 
 {% endblock %}
