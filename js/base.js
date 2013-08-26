@@ -71,6 +71,12 @@ function empty_or_undefined(o){
     return false;
 }
 
+function empty_to_zero(o){
+    if (o=='' || typeof o =='undefined')
+        return 0;
+    return o;
+}
+
 function get_target(e){
     return $((e.currentTarget) ? e.currentTarget : e.srcElement); //for IE <9 compatibility
 }
