@@ -107,7 +107,6 @@ function DayJournal(data) {
     }
 
     var validate = function (msg, rows, tr_wrapper_id) {
-        console.log(tr_wrapper_id);
         var selection = $("#" + tr_wrapper_id + " > tr");
         selection.each(function (index) {
             $(selection[index]).addClass('invalid-row');
@@ -219,6 +218,8 @@ function DayJournal(data) {
     self.card_sales = new TableViewModel(key_to_options('card_sales'), CardSalesRow);
 
     self.cash_equivalent_sales = new TableViewModel(key_to_options('cash_equivalent_sales'), CashEquivalentSalesRow);
+
+    self.cheque_purchase = new TableViewModel(key_to_options('cheque_purchase'), ChequePurchaseRow);
 
 }
 
@@ -440,6 +441,21 @@ function CashEquivalentSalesRow(row) {
 
     self.account = ko.observable();
     self.amount = ko.observable();
+
+    for (var k in row)
+        self[k] = ko.observable(row[k]);
+
+}
+
+function ChequePurchaseRow(row) {
+    var self = this;
+
+    self.amount = ko.observable();
+    self.commission_in = ko.observable();
+
+    self.net = function(){
+        return rnum(empty_to_zero(self.amount()) - empty_to_zero(self.commission_in()));
+    }
 
     for (var k in row)
         self[k] = ko.observable(row[k]);
