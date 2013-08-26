@@ -3,6 +3,7 @@ from users.models import Company
 from ledger.models import Account, Transaction
 from inventory.models import InventoryAccount
 
+
 class DayJournal(models.Model):
     date = models.DateField()
     company = models.ForeignKey(Company)
@@ -183,3 +184,9 @@ class CashEquivalentSales(models.Model):
     account = models.ForeignKey(Account)
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_equivalent_sales')
+
+
+class ChequePurchase(models.Model):
+    amount = models.FloatField()
+    commission_in = models.FloatField()
+    day_journal = models.ForeignKey(DayJournal, related_name='cheque_purchase')
