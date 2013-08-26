@@ -405,3 +405,23 @@ def save_card_sales(request):
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+def save_cash_equivalent_sales(request):
+    params = json.loads(request.body)
+    dct = {'invalid_attributes': {}, 'saved': {}}
+    model = CashEquivalentSales
+    for index, row in enumerate(params.get('rows')):
+        print row
+        invalid_attrs = invalid(row, ['amount', 'account'])
+        if invalid_attrs:
+            dct['invalid_attributes'][index] = invalid_attrs
+            continue
+        values = {'sn': index+1, 'amount': row.get('amount'), 'account_id': row.get('account'),
+                  'day_journal': get_journal(request)}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct['saved'][index] = submodel.id
+    delete_rows(params.get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")

@@ -146,10 +146,9 @@ class DayJournalSerializer(serializers.ModelSerializer):
     # summary_utility = SummaryUtilitySerializer()
     # summary_inventory = SummaryInventorySerializer()
     # card_sales = CardSalesSerializer()
-    cash_equivalent_sales = CashEquivalentSales()
+    cash_equivalent_sales = CashEquivalentSalesSerializer()
 
     # summary_bank = SummaryBankSerializer()
-
 
     class Meta:
         model = DayJournal
