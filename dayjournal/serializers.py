@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from dayjournal.models import DayJournal, CashSales, CashPurchase, CashReceipt, CashPayment, SummaryCash, \
     SummaryBank, SummaryEquivalent, SummaryInventory, CreditExpense, CreditIncome, CreditPurchase, \
-    CreditSales, SummaryLotto, SummaryTransfer, LottoDetailRow
+    CreditSales, SummaryLotto, SummaryTransfer, LottoDetailRow, CardSales
 
 
 class CashSalesSerializer(serializers.ModelSerializer):
@@ -127,21 +127,23 @@ class SummaryInventorySerializer(serializers.ModelSerializer):
 
 
 class DayJournalSerializer(serializers.ModelSerializer):
-    cash_sales = CashSalesSerializer()
-    cash_purchase = CashPurchaseSerializer()
-    cash_receipt = CashReceiptSerializer()
-    cash_payment = CashPaymentSerializer()
-    credit_sales = CreditSalesSerializer()
-    credit_purchase = CreditPurchaseSerializer()
-    credit_expense = CreditExpenseSerializer()
-    credit_income = CreditIncomeSerializer()
+    # cash_sales = CashSalesSerializer()
+    # cash_purchase = CashPurchaseSerializer()
+    # cash_receipt = CashReceiptSerializer()
+    # cash_payment = CashPaymentSerializer()
+    # credit_sales = CreditSalesSerializer()
+    # credit_purchase = CreditPurchaseSerializer()
+    # credit_expense = CreditExpenseSerializer()
+    # credit_income = CreditIncomeSerializer()
     # summary_cash = SummaryCashSerializer()
     # summary_equivalent = SummaryEquivalentSerializer()
-    # summary_bank = SummaryBankSerializer()
     # summary_lotto = SummaryLottoSerializer()
-    summary_transfer = SummaryTransferSerializer()
+    # summary_transfer = SummaryTransferSerializer()
     # summary_utility = SummaryUtilitySerializer()
     # summary_inventory = SummaryInventorySerializer()
+
+    # summary_bank = SummaryBankSerializer()
+
 
     class Meta:
         model = DayJournal
@@ -158,4 +160,10 @@ class DayJournalLottoSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = DayJournal
+        exclude = ['company']
+
+
+class CardSalesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CardSales
         exclude = ['company']
