@@ -207,16 +207,16 @@ function DayJournal(data) {
 
     self.summary_lotto = new TableViewModel(key_to_options('summary_lotto'), LottoRow);
 
-
     self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), SummaryTaxRow);
     self.summary_sales_tax.rows()[0].register(self.sales_tax);
-
 
     self.summary_equivalent = new TableViewModel(key_to_options_with_extra_row('summary_equivalent', 'summary_cash', SummaryCashModel), SummaryEquivalentRow);
 
     self.summary_transfer = new TableViewModel(key_to_options('summary_transfer'), SummaryTransferRow);
 
     self.summary_inventory = new TableViewModel(key_to_options('summary_inventory'), SummaryEquivalentRow);
+
+    self.card_sales = new TableViewModel(key_to_options('card_sales'), CardSalesRow);
 
 }
 
@@ -416,5 +416,20 @@ function SummaryTransferRow(row) {
     for (var k in row) {
         self[k] = ko.observable(row[k]);
     }
+
+}
+
+function CardSalesRow(row) {
+    var self = this;
+
+    self.amount = ko.observable();
+    self.commission_out = ko.observable();
+
+    self.net = function(){
+        return rnum(empty_to_zero(self.amount()) - empty_to_zero(self.commission_out()));
+    }
+
+    for (var k in row)
+        self[k] = ko.observable(row[k]);
 
 }
