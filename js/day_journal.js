@@ -221,6 +221,12 @@ function DayJournal(data) {
 
     self.cheque_purchase = new TableViewModel(key_to_options('cheque_purchase'), ChequePurchaseRow);
 
+    self.summary_bank = new TableViewModel(key_to_options('summary_bank'));
+    self.summary_bank.cash_deposit = self.cash_deposit;
+    self.summary_bank.cash_withdrawal = self.cash_withdrawal;
+    self.summary_bank.cheque_deposit = self.cheque_deposit;
+
+
 }
 
 function SummaryCashModel(data) {
