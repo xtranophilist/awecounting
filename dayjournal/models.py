@@ -3,7 +3,6 @@ from users.models import Company
 from ledger.models import Account, Transaction
 from inventory.models import InventoryAccount
 
-
 class DayJournal(models.Model):
     date = models.DateField()
     company = models.ForeignKey(Company)
@@ -171,3 +170,10 @@ class LottoDetailRow(models.Model):
     sold_quantity = models.IntegerField()
     actual_quantity = models.IntegerField()
     day_journal = models.ForeignKey(DayJournal, related_name='lotto_details')
+
+
+class CardSales(models.Model):
+    amount = models.FloatField()
+    commission_out = models.FloatField()
+    net = models.FloatField()
+    day_journal = models.ForeignKey(DayJournal, related_name='card_sales')
