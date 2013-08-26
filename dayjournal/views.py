@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, CardSales, \
-    CreditExpense, CreditIncome, CreditPurchase, CreditSales, LottoDetailRow, \
+    CreditExpense, CreditIncome, CreditPurchase, CreditSales, LottoDetailRow, ChequePurchase, \
     CashEquivalentSales, SummaryBank, SummaryCash, SummaryInventory, SummaryTransfer, SummaryLotto
 from ledger.models import Transaction, Account
 
@@ -203,60 +203,60 @@ def save_credit_expense(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
-def save_summary_equivalent(request):
-    params = json.loads(request.body)
-    # print params
-    dct = {'invalid_attributes': {}, 'saved': {}}
-    model = SummaryEquivalent
+# def save_summary_equivalent(request):
+#     params = json.loads(request.body)
+#     # print params
+#     dct = {'invalid_attributes': {}, 'saved': {}}
+#     model = SummaryEquivalent
+#
+#     #saving summary_cash
+#     invalid_attrs = invalid(params.get('summary_cash'), ['actual'])
+#     if not invalid_attrs:
+#         values = {'actual': params.get('summary_cash').get('actual'), 'day_journal': get_journal(request)}
+#         summary_cash, created = SummaryCash.objects.get_or_create(id=params.get('summary_cash').get('id'), defaults=values)
+#         if not created:
+#             summary_cash = save_model(summary_cash, values)
+#         dct['saved'][0] = summary_cash.id
+#
+#     #saving cash equivalent rows
+#     for index, row in enumerate(params.get('rows')):
+#         invalid_attrs = invalid(row, ['account_id'])
+#         if invalid_attrs:
+#             dct['invalid_attributes'][index] = invalid_attrs
+#             continue
+#         for attr in ['inward', 'outward', 'actual']:
+#             if row.get(attr) is None or row.get(attr) == '':
+#                 print attr
+#                 row[attr] = 0
+#         values = {'sn': index+2, 'particular_id': row.get('account_id'), 'inward': row.get('inward'),
+#                   'outward': row.get('outward'), 'actual': row.get('actual'), 'day_journal': get_journal(request)}
+#         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+#         if not created:
+#             submodel = save_model(submodel, values)
+#         dct['saved'][index+1] = submodel.id
+#     delete_rows(params.get('deleted_rows'), model)
+#     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
-    #saving summary_cash
-    invalid_attrs = invalid(params.get('summary_cash'), ['actual'])
-    if not invalid_attrs:
-        values = {'actual': params.get('summary_cash').get('actual'), 'day_journal': get_journal(request)}
-        summary_cash, created = SummaryCash.objects.get_or_create(id=params.get('summary_cash').get('id'), defaults=values)
-        if not created:
-            summary_cash = save_model(summary_cash, values)
-        dct['saved'][0] = summary_cash.id
 
-    #saving cash equivalent rows
-    for index, row in enumerate(params.get('rows')):
-        invalid_attrs = invalid(row, ['account_id'])
-        if invalid_attrs:
-            dct['invalid_attributes'][index] = invalid_attrs
-            continue
-        for attr in ['inward', 'outward', 'actual']:
-            if row.get(attr) is None or row.get(attr) == '':
-                print attr
-                row[attr] = 0
-        values = {'sn': index+2, 'particular_id': row.get('account_id'), 'inward': row.get('inward'),
-                  'outward': row.get('outward'), 'actual': row.get('actual'), 'day_journal': get_journal(request)}
-        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-        if not created:
-            submodel = save_model(submodel, values)
-        dct['saved'][index+1] = submodel.id
-    delete_rows(params.get('deleted_rows'), model)
-    return HttpResponse(json.dumps(dct), mimetype="application/json")
-
-
-def save_summary_bank(request):
-    params = json.loads(request.body)
-    dct = {'invalid_attributes': {}, 'saved': {}}
-    model = SummaryBank
-    for index, row in enumerate(params.get('rows')):
-        print row
-        invalid_attrs = invalid(row, ['bank_account'])
-        if invalid_attrs:
-            dct['invalid_attributes'][index] = invalid_attrs
-            continue
-        values = {'sn': index+1, 'bank_account_id': row.get('bank_account'),
-                  'cheque_deposit': row.get('cheque_deposit'),
-                  'cash_deposit': row.get('cash_deposit'), 'day_journal': get_journal(request)}
-        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-        if not created:
-            submodel = save_model(submodel, values)
-        dct['saved'][index] = submodel.id
-    delete_rows(params.get('deleted_rows'), model)
-    return HttpResponse(json.dumps(dct), mimetype="application/json")
+# def save_summary_bank(request):
+#     params = json.loads(request.body)
+#     dct = {'invalid_attributes': {}, 'saved': {}}
+#     model = SummaryBank
+#     for index, row in enumerate(params.get('rows')):
+#         print row
+#         invalid_attrs = invalid(row, ['bank_account'])
+#         if invalid_attrs:
+#             dct['invalid_attributes'][index] = invalid_attrs
+#             continue
+#         values = {'sn': index+1, 'bank_account_id': row.get('bank_account'),
+#                   'cheque_deposit': row.get('cheque_deposit'),
+#                   'cash_deposit': row.get('cash_deposit'), 'day_journal': get_journal(request)}
+#         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+#         if not created:
+#             submodel = save_model(submodel, values)
+#         dct['saved'][index] = submodel.id
+#     delete_rows(params.get('deleted_rows'), model)
+#     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
 def save_summary_sales_tax(request):
@@ -418,6 +418,25 @@ def save_cash_equivalent_sales(request):
             dct['invalid_attributes'][index] = invalid_attrs
             continue
         values = {'sn': index+1, 'amount': row.get('amount'), 'account_id': row.get('account'),
+                  'day_journal': get_journal(request)}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct['saved'][index] = submodel.id
+    delete_rows(params.get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+def save_cheque_purchase(request):
+    params = json.loads(request.body)
+    dct = {'invalid_attributes': {}, 'saved': {}}
+    model = ChequePurchase
+    for index, row in enumerate(params.get('rows')):
+        invalid_attrs = invalid(row, ['amount', 'commission_in'])
+        if invalid_attrs:
+            dct['invalid_attributes'][index] = invalid_attrs
+            continue
+        values = {'amount': row.get('amount'), 'commission_in': row.get('commission_in'),
                   'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
