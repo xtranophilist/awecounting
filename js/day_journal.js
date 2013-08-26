@@ -224,8 +224,8 @@ function DayJournal(data) {
     self.summary_bank = new TableViewModel(key_to_options('summary_bank'), function () {
     });
     self.summary_bank.rows([
-        {'deposit': self.cash_deposit, 'withdrawal': self.cash_withdrawal},
-        {'deposit': self.cheque_deposit}
+        {'deposit': ko.observable(self.cash_deposit), 'withdrawal': ko.observable(self.cash_withdrawal)},
+        {'deposit': ko.observable(self.cheque_deposit)}
     ]);
 
 
