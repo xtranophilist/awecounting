@@ -210,13 +210,15 @@ function DayJournal(data) {
     self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), SummaryTaxRow);
     self.summary_sales_tax.rows()[0].register(self.sales_tax);
 
-    self.summary_equivalent = new TableViewModel(key_to_options_with_extra_row('summary_equivalent', 'summary_cash', SummaryCashModel), SummaryEquivalentRow);
+//    self.summary_equivalent = new TableViewModel(key_to_options_with_extra_row('summary_equivalent', 'summary_cash', SummaryCashModel), SummaryEquivalentRow);
 
     self.summary_transfer = new TableViewModel(key_to_options('summary_transfer'), SummaryTransferRow);
 
     self.summary_inventory = new TableViewModel(key_to_options('summary_inventory'), SummaryEquivalentRow);
 
     self.card_sales = new TableViewModel(key_to_options('card_sales'), CardSalesRow);
+
+    self.cash_equivalent_sales = new TableViewModel(key_to_options('cash_equivalent_sales'), CashEquivalentSalesRow);
 
 }
 
@@ -379,8 +381,7 @@ function SummaryEquivalentRow(row) {
     self.outward = ko.observable(0).extend({ numeric: 2 });
 
     self.closing = ko.computed(function () {
-        var closing = parseFloat(self.opening()) + parseFloat(self.inward()) - parseFloat(self.outward());
-        return isNaN(closing) ? '' : closing;
+        return rnum(parseFloat(self.opening()) + parseFloat(self.inward()) - parseFloat(self.outward()));
     });
 
     self.actual = ko.observable();
@@ -428,6 +429,17 @@ function CardSalesRow(row) {
     self.net = function(){
         return rnum(empty_to_zero(self.amount()) - empty_to_zero(self.commission_out()));
     }
+
+    for (var k in row)
+        self[k] = ko.observable(row[k]);
+
+}
+
+function CashEquivalentSalesRow(row) {
+    var self = this;
+
+    self.account = ko.observable();
+    self.amount = ko.observable();
 
     for (var k in row)
         self[k] = ko.observable(row[k]);
