@@ -209,7 +209,7 @@ function DayJournal(data) {
     self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), SummaryTaxRow);
     self.summary_sales_tax.rows()[0].register(self.sales_tax);
 
-//    self.summary_equivalent = new TableViewModel(key_to_options_with_extra_row('summary_equivalent', 'summary_cash', SummaryCashModel), SummaryEquivalentRow);
+//  self.summary_equivalent = new TableViewModel(key_to_options_with_extra_row('summary_equivalent', 'summary_cash', SummaryCashModel), SummaryEquivalentRow);
 
     self.summary_transfer = new TableViewModel(key_to_options('summary_transfer'), SummaryTransferRow);
 
@@ -221,10 +221,12 @@ function DayJournal(data) {
 
     self.cheque_purchase = new TableViewModel(key_to_options('cheque_purchase'), ChequePurchaseRow);
 
-    self.summary_bank = new TableViewModel(key_to_options('summary_bank'));
-    self.summary_bank.cash_deposit = self.cash_deposit;
-    self.summary_bank.cash_withdrawal = self.cash_withdrawal;
-    self.summary_bank.cheque_deposit = self.cheque_deposit;
+    self.summary_bank = new TableViewModel(key_to_options('summary_bank'), function () {
+    });
+    self.summary_bank.rows([
+        {'deposit': self.cash_deposit, 'withdrawal': self.cash_withdrawal},
+        {'deposit': self.cheque_deposit}
+    ]);
 
 
 }
@@ -314,8 +316,8 @@ function CashSalesRow(row) {
     self.account_id = ko.observable();
     self.tax_rate = ko.observable();
     self.amount = ko.observable();
-    self.tax = function(){
-        return rnum( parseFloat(self.amount()) * parseFloat(self.tax_rate()) / 100);
+    self.tax = function () {
+        return rnum(parseFloat(self.amount()) * parseFloat(self.tax_rate()) / 100);
     }
 
     for (var k in row)
@@ -342,8 +344,8 @@ function CreditSalesRow(row) {
     self.account_dr_id = ko.observable();
     self.tax_rate = ko.observable();
     self.amount = ko.observable();
-    self.tax = function(){
-        return rnum( parseFloat(self.amount()) * parseFloat(self.tax_rate()) / 100);
+    self.tax = function () {
+        return rnum(parseFloat(self.amount()) * parseFloat(self.tax_rate()) / 100);
     }
 
     for (var k in row)
@@ -355,7 +357,7 @@ function SummaryTaxRow(row) {
     var self = this;
 
     self.register = ko.observable();
-    self.accounts = function(root){
+    self.accounts = function (root) {
         var total = 0;
         $.each(root.cash_sales.rows(), function () {
             if (isAN(this.tax()))
@@ -368,7 +370,7 @@ function SummaryTaxRow(row) {
         return rnum(total);
     }
 
-    self.difference = function(root){
+    self.difference = function (root) {
         return rnum(self.register() - self.accounts(root));
     }
 
@@ -433,7 +435,7 @@ function CardSalesRow(row) {
     self.amount = ko.observable();
     self.commission_out = ko.observable();
 
-    self.net = function(){
+    self.net = function () {
         return rnum(empty_to_zero(self.amount()) - empty_to_zero(self.commission_out()));
     }
 
@@ -459,7 +461,7 @@ function ChequePurchaseRow(row) {
     self.amount = ko.observable();
     self.commission_in = ko.observable();
 
-    self.net = function(){
+    self.net = function () {
         return rnum(empty_to_zero(self.amount()) - empty_to_zero(self.commission_in()));
     }
 
