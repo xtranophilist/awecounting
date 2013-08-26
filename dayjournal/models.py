@@ -175,5 +175,4 @@ class LottoDetailRow(models.Model):
 class CardSales(models.Model):
     amount = models.FloatField()
     commission_out = models.FloatField()
-    net = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='card_sales')
