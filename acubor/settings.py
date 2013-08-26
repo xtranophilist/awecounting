@@ -84,14 +84,13 @@ SECRET_KEY = '2h7ffi6+vhk!dfi1#kn+(zm%gl2!8m)zv9g*%0+!3q+oujqb!y'
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
     'django.template.loaders.app_directories.Loader',
-#     'django.template.loaders.eggs.Loader',
+    #     'django.template.loaders.eggs.Loader',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'django.core.context_processors.static'
-    )
-
+)
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
@@ -129,6 +128,7 @@ INSTALLED_APPS = (
     'ledger',
     'dayjournal',
     'payroll',
+    'bank',
     'report',
     'mptt',
     'rest_framework',
