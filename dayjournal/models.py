@@ -91,13 +91,13 @@ class SummaryCash(models.Model):
     day_journal = models.ForeignKey(DayJournal, related_name='summary_cash')
 
 
-class SummaryEquivalent(models.Model):
-    sn = models.IntegerField()
-    particular = models.ForeignKey(Account)
-    inward = models.FloatField()
-    outward = models.FloatField()
-    actual = models.FloatField()
-    day_journal = models.ForeignKey(DayJournal, related_name='summary_equivalent')
+# class SummaryEquivalent(models.Model):
+#     sn = models.IntegerField()
+#     particular = models.ForeignKey(Account)
+#     inward = models.FloatField()
+#     outward = models.FloatField()
+#     actual = models.FloatField()
+#     day_journal = models.ForeignKey(DayJournal, related_name='summary_equivalent')
 
 
 class SummaryTransfer(models.Model):
@@ -176,3 +176,10 @@ class CardSales(models.Model):
     amount = models.FloatField()
     commission_out = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='card_sales')
+
+
+class CashEquivalentSales(models.Model):
+    sn = models.IntegerField()
+    account = models.ForeignKey(Account)
+    amount = models.FloatField()
+    day_journal = models.ForeignKey(DayJournal, related_name='cash_equivalent_sales')

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from dayjournal.models import DayJournal, CashSales, CashPurchase, CashReceipt, CashPayment, SummaryCash, \
-    SummaryBank, SummaryEquivalent, SummaryInventory, CreditExpense, CreditIncome, CreditPurchase, \
+    SummaryBank, SummaryInventory, CreditExpense, CreditIncome, CreditPurchase, \
     CreditSales, SummaryLotto, SummaryTransfer, LottoDetailRow, CardSales
 
 
