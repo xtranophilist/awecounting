@@ -1,5 +1,5 @@
 from django.shortcuts import render, get_object_or_404
-from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, \
+from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, CardSales, \
     CreditExpense, CreditIncome, CreditPurchase, CreditSales, LottoDetailRow, \
     SummaryEquivalent, SummaryBank, SummaryCash, SummaryInventory, SummaryTransfer, SummaryLotto
 from ledger.models import Transaction, Account
@@ -380,6 +380,25 @@ def save_lotto_detail(request):
                   'purchase_quantity': row.get('purchase_quantity'), 'sold_quantity': row.get('sold_quantity'),
                   'rate': row.get('rate'),
                   'actual_quantity': row.get('actual_quantity'), 'day_journal': get_journal(request)}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct['saved'][index] = submodel.id
+    delete_rows(params.get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+def save_card_sales(request):
+    params = json.loads(request.body)
+    dct = {'invalid_attributes': {}, 'saved': {}}
+    model = CardSales
+    for index, row in enumerate(params.get('rows')):
+        invalid_attrs = invalid(row, ['amount', 'commission_out'])
+        if invalid_attrs:
+            dct['invalid_attributes'][index] = invalid_attrs
+            continue
+        values = {'amount': row.get('amount'), 'commission_out': row.get('commission_out'),
+                  'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
