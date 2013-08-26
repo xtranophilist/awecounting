@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, CardSales, \
     CreditExpense, CreditIncome, CreditPurchase, CreditSales, LottoDetailRow, \
-    SummaryEquivalent, SummaryBank, SummaryCash, SummaryInventory, SummaryTransfer, SummaryLotto
+    CashEquivalentSales, SummaryBank, SummaryCash, SummaryInventory, SummaryTransfer, SummaryLotto
 from ledger.models import Transaction, Account
 
 from datetime import date

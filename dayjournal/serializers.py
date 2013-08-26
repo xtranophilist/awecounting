@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from dayjournal.models import DayJournal, CashSales, CashPurchase, CashReceipt, CashPayment, SummaryCash, \
-    SummaryBank, SummaryInventory, CreditExpense, CreditIncome, CreditPurchase, \
+    SummaryBank, SummaryInventory, CreditExpense, CreditIncome, CreditPurchase, CashEquivalentSales, \
     CreditSales, SummaryLotto, SummaryTransfer, LottoDetailRow, CardSales
 
 
@@ -78,14 +78,6 @@ class SummaryCashSerializer(serializers.ModelSerializer):
         exclude = ['day_journal']
 
 
-class SummaryEquivalentSerializer(serializers.ModelSerializer):
-    account_id = serializers.Field(source='particular_id')
-
-    class Meta:
-        model = SummaryEquivalent
-        exclude = ['day_journal', 'particular']
-
-
 class SummaryBankSerializer(serializers.ModelSerializer):
     class Meta:
         model = SummaryBank
@@ -132,6 +124,12 @@ class CardSalesSerializer(serializers.ModelSerializer):
         exclude = ['company']
 
 
+class CashEquivalentSalesSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CashEquivalentSales
+        exclude = ['company']
+
+
 class DayJournalSerializer(serializers.ModelSerializer):
     # cash_sales = CashSalesSerializer()
     # cash_purchase = CashPurchaseSerializer()
@@ -147,7 +145,8 @@ class DayJournalSerializer(serializers.ModelSerializer):
     # summary_transfer = SummaryTransferSerializer()
     # summary_utility = SummaryUtilitySerializer()
     # summary_inventory = SummaryInventorySerializer()
-    card_sales = CardSalesSerializer()
+    # card_sales = CardSalesSerializer()
+    cash_equivalent_sales = CashEquivalentSales()
 
     # summary_bank = SummaryBankSerializer()
 
