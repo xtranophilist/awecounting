@@ -31,6 +31,19 @@ class ChequeReceiptForm(KOModelForm):
 
 
 class BankCashReceiptForm(KOModelForm):
+    date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
+    bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank'), empty_label=None,
+                                          widget=forms.Select(attrs={'class': 'select2'}), label='Beneficiary Account')
+    benefactor = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
+                                        widget=forms.Select(attrs={'class': 'select2'}))
+    date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
+    attachment = ExtFileField(
+        label='Add an attachment',
+        help_text='',
+        required=False,
+        ext_whitelist=('.jpg', '.png', '.gif', '.tif', '.pdf')
+    )
+
     class Meta:
         model = BankCashReceipt
         exclude = ['company']
