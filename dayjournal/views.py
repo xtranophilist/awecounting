@@ -39,6 +39,7 @@ def save_cash_sales(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashSales
     cash_account = Account.objects.get(name='Cash', company=request.user.company)
+    sales_tax_account = Account.objects.get(name='Sales Tax', company=request.user.company)
     for index, row in enumerate(params.get('rows')):
         day_journal = get_journal(request)
         invalid_attrs = invalid(row, ['account_id', 'amount'])
@@ -49,10 +50,15 @@ def save_cash_sales(request):
                   'day_journal': day_journal}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
 
+        tax_amount = int(row.get('tax_rate'))/100 * int(row.get('amount'))
+        net_amount  = int(row.get('amount')) - tax_amount
+
         #sales-cr;cash-dr
+        print row
         set_transactions(submodel,
                          dr(cash_account, row.get('amount'), day_journal.date),
-                         cr(Account.objects.get(id=row.get('account_id')), row.get('amount'), day_journal.date),
+                         cr(Account.objects.get(id=row.get('account_id')), net_amount, day_journal.date),
+                         cr(sales_tax_account, tax_amount, day_journal.date),
         )
 
         if not created:
