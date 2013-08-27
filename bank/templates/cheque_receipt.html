@@ -81,7 +81,8 @@
                 </tr>
                 </thead>
 
-                <tbody data-bind="foreach: rows" id="particulars-body">
+                <tbody id="particulars-body">
+                <!-- ko foreach: rows -->
                 <tr>
                     <td>
                         <div class="drag_handle"><i class="icon-ellipsis-vertical"></i>
@@ -95,20 +96,31 @@
                     <td data-bind="editableText: amount, numeric: true"></td>
                     <td><a class="icon-remove-sign" href="#" data-bind="click: $parent.removeRow"></a></td>
                 </tr>
+                <!-- /ko -->
+                <tr>
+                    <td colspan="2">
+                        <a class="button" data-bind="click: addRow">
+                            <i class="icon-plus-sign"></i> Add New Row
+                        </a>
+                    </td>
+                    <td colspan="3">
+                        <span class="pull-right"><strong>Grand Total</strong></span>
+                    </td>
+                    <td colspan="2">
+                        <strong><span data-bind="text: $parent.grand_total()"></span></strong>
+                    </td>
+                </tr>
                 </tbody>
             </table>
-            <div class="pull-right"><b>Grand Total: </b> <span data-bind="text: $parent.grand_total()"></span></div>
-            <button class="btn" data-bind="click: addRow">
-                <i class="icon-plus-sign"></i> Add New Row
-            </button>
 
-            {{ form.narration.label_tag }}
-            {{ form.narration }}
-            {{ form.narration.errors }}
-            <br/>
-
-            <button type="submit" class="btn">Save</button>
         </div>
+
+        {{ form.narration.label_tag }}
+        {{ form.narration }}
+        {{ form.narration.errors }}
+        <br/>
+
+        <button type="submit" class="btn">Save</button>
     </form>
 
 

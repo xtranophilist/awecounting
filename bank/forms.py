@@ -17,7 +17,7 @@ class ChequeReceiptForm(KOModelForm):
                                         widget=forms.Select(attrs={'class': 'select2'}))
     date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
     clearing_date = forms.DateField(
-        widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
+        widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}), required=False)
 
     class Meta:
         model = ChequeReceipt
