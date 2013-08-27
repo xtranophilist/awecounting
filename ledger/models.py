@@ -50,7 +50,6 @@ class Account(models.Model):
 
     day_opening = property(get_day_opening)
 
-
     def add_category(self, category):
         # all_categories = self.get_all_categories()
         category_instance, created = Category.objects.get_or_create(name=category, company=self.company)
@@ -75,7 +74,7 @@ class Transaction(models.Model):
 
     # TODO change current balance on save
     def save(self, *args, **kwargs):
-        self.amount = int(self.amount)
+        self.amount = float(self.amount)
         if self.type == 'Dr':
             self.account.current_balance += self.amount
         if self.type == 'Cr':
@@ -94,22 +93,22 @@ class Transaction(models.Model):
 
     def dr(self, account, amount, date):
         self.type == 'Dr'
-        self.amount = int(amount)
+        self.amount = float(amount)
         self.date = date
         self.account = account
-        self.account.current_balance += int(amount)
-        self.account.save()
-        self.current_balance = self.account.current_balance
+        # self.account.current_balance += float(amount)
+        # self.account.save()
+        # self.current_balance = self.account.current_balance
         self.save()
 
     def cr(self, account, amount, date):
         self.type == 'Cr'
-        self.amount = int(amount)
+        self.amount = float(amount)
         self.date = date
         self.account = account
-        self.account.current_balance -= int(amount)
-        self.account.save()
-        self.current_balance = self.account.current_balance
+        # self.account.current_balance -= float(amount)
+        # self.account.save()
+        # self.current_balance = self.account.current_balance
         self.save()
 
 
