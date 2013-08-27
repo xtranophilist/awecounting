@@ -84,6 +84,14 @@ class Transaction(models.Model):
         self.current_balance = self.account.current_balance
         super(Transaction, self).save(*args, **kwargs)
 
+    def delete(self, *args, **kwargs):
+        if self.type == 'Dr':
+            self.account.current_balance -= self.amount
+        if self.type == 'Cr':
+            self.account.current_balance += self.amount
+        self.account.save()
+        super(Transaction, self).delete(*args, **kwargs)
+
     def dr(self, account, amount, date):
         self.type == 'Dr'
         self.amount = int(amount)
