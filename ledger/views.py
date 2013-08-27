@@ -14,9 +14,7 @@ def accounts_as_json(request):
 
 def accounts_by_day_as_json(request, day):
     accounts = Account.objects.all()
-    print 'twat'
     items_data = AccountSerializer(accounts, day=day).data
-    print 'fat'
     return HttpResponse(json.dumps(items_data), mimetype="application/json")
 
 
