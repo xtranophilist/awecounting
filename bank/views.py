@@ -68,3 +68,7 @@ def cheque_receipt(request, id=None):
         form = ChequeReceiptForm(instance=receipt)
     receipt_data = ChequeReceiptSerializer(receipt).data
     return render(request, 'cheque_receipt.html', {'form': form, 'data': receipt_data, 'scenario': scenario})
+
+
+def cash_receipt(request, id=None):
+    pass
