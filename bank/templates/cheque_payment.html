@@ -8,14 +8,19 @@
 {% endblock %}
 
 {% block head_end %}
-    <script src="http://localhost/acubor_static/js/vendors/knockout.js"></script>
-    <script src="http://localhost/acubor_static/js/ko_lib.js"></script>
+    {#    <script src="http://localhost/acubor_static/js/vendors/knockout.js"></script>#}
+    {#    <script src="http://localhost/acubor_static/js/ko_lib.js"></script>#}
     <script src="http://localhost/acubor_static/js/base.js"></script>
-    <script src="http://localhost/acubor_static/js/bank.js"></script>
+    {#    <script src="http://localhost/acubor_static/js/bank.js"></script>#}
+    {#    <script>#}
+    {#        $(document).ready(function () {#}
+    {#            {% load filters %}#}
+    {#            ko.applyBindings(new ChequePaymentViewModel({{data|jsonify}}));#}
+    {#        });#}
+    {#    </script>#}
     <script>
         $(document).ready(function () {
-            {% load filters %}
-            ko.applyBindings(new ChequePaymentViewModel({{data|jsonify}}));
+            $('.date-picker').datepicker();
         });
     </script>
 {% endblock %}
