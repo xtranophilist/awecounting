@@ -1,0 +1,90 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Cheque Receipt{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "new_cheque_receipt" %}">Cheque Receipt</a></li>
+{% endblock %}
+
+{% block head_end %}
+    <script src="http://localhost/acubor_static/js/vendors/knockout.js"></script>
+    <script src="http://localhost/acubor_static/js/ko_lib.js"></script>
+    <script src="http://localhost/acubor_static/js/base.js"></script>
+    <script src="http://localhost/acubor_static/js/bank.js"></script>
+    <script>
+        $(document).ready(function () {
+            {% load filters %}
+            ko.applyBindings(new ChequeReceiptViewModel({{data|jsonify}}));
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header position-relative">
+        <h1>
+            Cheque Receipt
+        </h1>
+    </div>
+
+    {{ data }}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <br/>
+
+        <div class="row-fluid" data-bind="with: particulars">
+
+            <input type="hidden" name="particulars" data-bind="value: ko.toJSON($data, null, 2)">
+
+            <table class="table table-bordered table-striped table-acubor table-sortable" id="voucher_table">
+                <thead>
+                <tr>
+                    <th class="span1">SN</th>
+                    <th class="span2">Cheque Number</th>
+                    <th class="span2">Cheque Date</th>
+                    <th class="span3">Drawee Bank</th>
+                    <th class="span3">Branch/Address</th>
+                    <th class="span2">Amount</th>
+                    <th class="span1"></th>
+                </tr>
+                </thead>
+
+                <tbody data-bind="foreach: rows" id="particulars-body">
+                <tr>
+                    <td>
+                        <div class="drag_handle"><i class="icon-ellipsis-vertical"></i>
+                        </div>
+                        <span class="wid-pad pull-left" data-bind="text:  $index()+1"> </span>
+                    </td>
+                    <td data-bind="editableText: cheque_number"></td>
+                    <td data-bind="editableText: cheque_date">
+                    </td>
+                    <td data-bind="editableText: drawee_bank">
+                    </td>
+                    <td data-bind="editableText: drawee_bank_address">
+                    </td>
+                    <td data-bind="editableText: amount, numeric: true">
+                    </td>
+                    <td>
+                        <a class="icon-remove-sign" href="#" data-bind="click: $parent.removeRow"></a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="pull-right"><b>Grand Total: </b> <span data-bind="text: $parent.grand_total()"></span></div>
+            <button class="btn" data-bind="click: addRow">
+                <i class="icon-plus-sign"></i> Add New Row
+            </button>
+            <br/>
+
+            <button type="submit" class="btn">Save</button>
+        </div>
+    </form>
+
+
+{% endblock %}
