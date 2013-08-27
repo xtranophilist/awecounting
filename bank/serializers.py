@@ -8,7 +8,7 @@ class ChequeReceiptRowSerializer(serializers.ModelSerializer):
 
 
 class ChequeReceiptSerializer(serializers.ModelSerializer):
-    particulars = ChequeReceiptRowSerializer()
+    rows = ChequeReceiptRowSerializer()
 
     class Meta:
         model = ChequeReceipt

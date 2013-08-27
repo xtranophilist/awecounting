@@ -6,6 +6,7 @@ from django.shortcuts import render, get_object_or_404
 from bank.models import BankAccount, ChequeReceipt, ChequeReceiptRow
 from bank.forms import BankAccountForm, ChequeReceiptForm
 from acubor.lib import invalid, save_model, delete_rows
+from bank.serializers import ChequeReceiptSerializer
 
 
 def bank_account_form(request, id=None):
@@ -62,5 +63,5 @@ def cheque_receipt(request, id=None):
 
     else:
         form = ChequeReceiptForm(instance=receipt)
-    purchase_voucher_data = PurchaseVoucherSerializer(voucher).data
-    return render(request, 'purchase_voucher.html', {'form': form, 'data': purchase_voucher_data})
+    receipt_data = ChequeReceiptSerializer(receipt).data
+    return render(request, 'purchase_voucher.html', {'form': form, 'data': receipt_data})
