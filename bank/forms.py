@@ -1,4 +1,4 @@
-from acubor.lib import KOModelForm
+from acubor.lib import KOModelForm, ExtFileField
 from django import forms
 from models import BankAccount, ChequeReceipt
 from ledger.models import Account
@@ -18,6 +18,12 @@ class ChequeReceiptForm(KOModelForm):
     date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
     clearing_date = forms.DateField(
         widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}), required=False)
+    attachment = ExtFileField(
+        label='Add an attachment',
+        help_text='',
+        required=False,
+        ext_whitelist=('.jpg', '.png', '.gif', '.tif', '.pdf')
+    )
 
     class Meta:
         model = ChequeReceipt

@@ -28,7 +28,7 @@
         </h1>
     </div>
 
-    <form method="post">
+    <form method="post"  enctype="multipart/form-data">
         {% csrf_token %}
 
         <div class="row-fluid">
@@ -115,9 +115,23 @@
 
         </div>
 
-        {{ form.narration.label_tag }}
-        {{ form.narration }}
-        {{ form.narration.errors }}
+        <div class="row-fluid">
+
+            <div class="span8">
+                {{ form.narration.label_tag }}
+                {{ form.narration }}
+                {{ form.narration.errors }}
+            </div>
+
+            <div class="span4">
+                {{ form.attachment.label_tag }}
+                {{ form.attachment }}
+                {{ form.attachment.errors }}
+            </div>
+
+
+        </div>
+
         <br/>
 
         <button type="submit" class="btn">Save</button>

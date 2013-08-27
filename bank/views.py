@@ -43,10 +43,12 @@ def cheque_receipt(request, id=None):
         receipt = ChequeReceipt(date=date.today())
         scenario = 'New'
     if request.POST:
-        form = ChequeReceiptForm(request.POST, instance=receipt)
+        form = ChequeReceiptForm(request.POST, request.FILES, instance=receipt)
         if form.is_valid():
             receipt = form.save(commit=False)
             receipt.company = request.user.company
+            if 'attachment' in request.FILES:
+                receipt.attachment = request.FILES['attachment']
             receipt.save()
         if id or form.is_valid():
             particulars = json.loads(request.POST['particulars'])
@@ -55,7 +57,8 @@ def cheque_receipt(request, id=None):
             for index, row in enumerate(particulars.get('rows')):
                 if invalid(row, ['amount']):
                     continue
-                values = {'sn': index + 1, 'cheque_number': row.get('cheque_number'), 'cheque_date': row.get('cheque_date'),
+                values = {'sn': index + 1, 'cheque_number': row.get('cheque_number'),
+                          'cheque_date': row.get('cheque_date'),
                           'drawee_bank': row.get('drawee_bank'), 'drawee_bank_address': row.get('drawee_bank_address'),
                           'amount': row.get('amount'), 'cheque_receipt': receipt}
                 submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
