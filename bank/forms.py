@@ -1,16 +1,24 @@
 from acubor.lib import KOModelForm
-# from django import forms
+from django import forms
 from models import BankAccount, ChequeReceipt
+from ledger.models import Account
 
 
 class BankAccountForm(KOModelForm):
-
     class Meta:
         model = BankAccount
         exclude = ['company', 'account']
 
 
 class ChequeReceiptForm(KOModelForm):
+    bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank'), empty_label=None,
+                                          widget=forms.Select(attrs={'class': 'select2'}))
+    benefactor = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
+                                        widget=forms.Select(attrs={'class': 'select2'}))
+    date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
+    clearing_date = forms.DateField(
+        widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
+
     class Meta:
         model = ChequeReceipt
         exclude = ['company']

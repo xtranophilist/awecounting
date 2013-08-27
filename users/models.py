@@ -87,7 +87,6 @@ class User(AbstractBaseUser):
         from core.models import CompanySetting
         return CompanySetting.objects.get(company=self.company)
 
-
     objects = UserManager()
 
     class Meta:
