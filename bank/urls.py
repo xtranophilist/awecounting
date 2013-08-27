@@ -3,6 +3,7 @@ import views
 
 urlpatterns = patterns('',
                        url(r'^account/new/$', views.bank_account_form, name='create_bank_account'),
-                       url(r'^cheque-receipt/$', views.cheque_receipt, name='new_cheque_deposit'),
+                       url(r'^cheque-receipt/$', views.cheque_receipt, name='new_cheque_receipt'),
+                       url(r'^cheque-receipt/(?P<id>[0-9]+)$', views.cheque_receipt, name='view_cheque_receipt'),
 )
 

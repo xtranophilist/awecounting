@@ -42,7 +42,7 @@ def cheque_receipt(request, id=None):
         receipt = ChequeReceipt(date=date.today())
 
     if request.POST:
-        form = ChequeReceipt(request.POST, request.FILES, instance=receipt)
+        form = ChequeReceiptForm(request.POST, instance=receipt)
         if form.is_valid():
             receipt = form.save(commit=False)
             receipt.company = request.user.company
@@ -55,7 +55,7 @@ def cheque_receipt(request, id=None):
                     continue
                 values = {'sn': index + 1, 'cheque_number': row.get('cheque_number'), 'cheque_date': row.get('cheque_date'),
                           'drawee_bank': row.get('drawee_bank'), 'drawee_bank_address': row.get('drawee_bank_address'),
-                          'amount': row.get('amount'), 'cheque_receipt': cheque_receipt}
+                          'amount': row.get('amount'), 'cheque_receipt': receipt}
                 submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
                 if not created:
                     submodel = save_model(submodel, values)
@@ -64,4 +64,4 @@ def cheque_receipt(request, id=None):
     else:
         form = ChequeReceiptForm(instance=receipt)
     receipt_data = ChequeReceiptSerializer(receipt).data
-    return render(request, 'purchase_voucher.html', {'form': form, 'data': receipt_data})
+    return render(request, 'cheque_receipt.html', {'form': form, 'data': receipt_data})

@@ -24,15 +24,15 @@ class BankAccount(models.Model):
 class ChequeReceipt(models.Model):
     date = models.DateField()
     bank_account = models.ForeignKey(Account, related_name='cheque_deposits')
-    clearing_date = models.DateField()
+    clearing_date = models.DateField(null=True, blank=True)
     benefactor = models.ForeignKey(Account)
-    narration = models.TextField()
+    narration = models.TextField(null=True, blank=True)
 
 
 class ChequeReceiptRow(models.Model):
     sn = models.IntegerField()
     cheque_number = models.CharField(max_length=50, blank=True, null=True)
-    cheque_date = models.DateField()
+    cheque_date = models.DateField(blank=True, null=True)
     drawee_bank = models.CharField(max_length=254, blank=True, null=True)
     drawee_bank_address = models.CharField(max_length=254, blank=True, null=True)
     amount = models.FloatField()

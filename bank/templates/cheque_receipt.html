@@ -30,7 +30,7 @@
 
     {{ data }}
 
-    <form method="post" enctype="multipart/form-data">
+    <form method="post">
         {% csrf_token %}
 
         {{ form.as_p }}
@@ -39,7 +39,7 @@
 
         <div class="row-fluid" data-bind="with: particulars">
 
-            <input type="hidden" name="particulars" data-bind="value: ko.toJSON($data, null, 2)">
+            <input type="hidden" name="particulars" data-bind="value: ko.toJSON($data, null, 2)" />
 
             <table class="table table-bordered table-striped table-acubor table-sortable" id="voucher_table">
                 <thead>
@@ -62,17 +62,11 @@
                         <span class="wid-pad pull-left" data-bind="text:  $index()+1"> </span>
                     </td>
                     <td data-bind="editableText: cheque_number"></td>
-                    <td data-bind="editableText: cheque_date">
-                    </td>
-                    <td data-bind="editableText: drawee_bank">
-                    </td>
-                    <td data-bind="editableText: drawee_bank_address">
-                    </td>
-                    <td data-bind="editableText: amount, numeric: true">
-                    </td>
-                    <td>
-                        <a class="icon-remove-sign" href="#" data-bind="click: $parent.removeRow"></a>
-                    </td>
+                    <td><input type="text" data-bind="value: cheque_date()" class="date-picker" /></td>
+                    <td data-bind="editableText: drawee_bank"></td>
+                    <td data-bind="editableText: drawee_bank_address"></td>
+                    <td data-bind="editableText: amount, numeric: true"></td>
+                    <td><a class="icon-remove-sign" href="#" data-bind="click: $parent.removeRow"></a></td>
                 </tr>
                 </tbody>
             </table>
