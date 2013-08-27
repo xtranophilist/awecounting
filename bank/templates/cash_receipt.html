@@ -1,0 +1,31 @@
+{% extends "dashboard.html" %}
+
+{% block title %} {{ scenario }} Bank Cash Receipt{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "new_cash_receipt" %}">Bank Cash Receipt</a></li>
+{% endblock %}
+
+{% block head_end %}
+    <script src="http://localhost/acubor_static/js/base.js"></script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header position-relative">
+        <h1>
+            {{ scenario }} Bank Cash Receipt
+        </h1>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+        
+        <button type="submit" class="btn">Save</button>
+    </form>
+
+
+{% endblock %}
