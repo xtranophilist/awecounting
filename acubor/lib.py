@@ -23,7 +23,7 @@ class ExtFileField(forms.FileField):
                 raise forms.ValidationError("This file is required")
             else:
                 return
-        else:
+        elif data is not False:
             filename = data.name
             ext = os.path.splitext(filename)[1]
             ext = ext.lower()

@@ -52,7 +52,6 @@ def cheque_receipt(request, id=None):
             receipt.save()
         if id or form.is_valid():
             particulars = json.loads(request.POST['particulars'])
-
             model = ChequeReceiptRow
             for index, row in enumerate(particulars.get('rows')):
                 if invalid(row, ['amount']):
@@ -64,11 +63,9 @@ def cheque_receipt(request, id=None):
                 submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
                 if not created:
                     submodel = save_model(submodel, values)
-            print particulars
             delete_rows(particulars.get('deleted_rows'), model)
 
-    else:
-        form = ChequeReceiptForm(instance=receipt)
+    form = ChequeReceiptForm(instance=receipt)
     receipt_data = ChequeReceiptSerializer(receipt).data
     return render(request, 'cheque_receipt.html', {'form': form, 'data': receipt_data, 'scenario': scenario})
 

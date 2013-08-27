@@ -20,6 +20,7 @@ def list_invoice(request):
 
 def invoice(request, invoice_no=None):
     from core.models import CompanySetting
+
     try:
         company_setting = CompanySetting.objects.get(company=request.user.company)
     except CompanySetting.DoesNotExist:
@@ -36,7 +37,7 @@ def invoice(request, invoice_no=None):
             except Invoice.DoesNotExist:
                 # for first invoice
                 last_invoice_no = 0
-            new_invoice_no = int(last_invoice_no)+1
+            new_invoice_no = int(last_invoice_no) + 1
             invoice.invoice_no = "0" * (int(company_setting.invoice_digit_count) - str(new_invoice_no).__len__()) \
                                  + str(new_invoice_no)
         except:
@@ -47,7 +48,7 @@ def invoice(request, invoice_no=None):
     invoice_data['read_only'] = {
         'invoice_prefix': company_setting.invoice_prefix,
         'invoice_suffix': company_setting.invoice_suffix,
-        }
+    }
     return render(request, 'invoice.html', {'form': form, 'data': invoice_data})
 
 
@@ -75,7 +76,7 @@ def save_invoice(request):
     for index, row in enumerate(params.get('particulars').get('rows')):
         if invalid(row, ['item_id', 'unit_price', 'quantity']):
             continue
-        values = {'sn': index+1, 'item_id': row.get('item_id'), 'description': row.get('description'),
+        values = {'sn': index + 1, 'item_id': row.get('item_id'), 'description': row.get('description'),
                   'unit_price': row.get('unit_price'), 'quantity': row.get('quantity'), 'discount': row.get('discount'),
                   'invoice': invoice}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
@@ -88,6 +89,7 @@ def save_invoice(request):
 
 def purchase_voucher(request, id=None):
     from core.models import CompanySetting
+
     try:
         company_setting = CompanySetting.objects.get(company=request.user.company)
     except CompanySetting.DoesNotExist:
@@ -111,16 +113,14 @@ def purchase_voucher(request, id=None):
             for index, row in enumerate(particulars.get('rows')):
                 if invalid(row, ['item_id', 'unit_price', 'quantity']):
                     continue
-                values = {'sn': index+1, 'item_id': row.get('item_id'), 'description': row.get('description'),
+                values = {'sn': index + 1, 'item_id': row.get('item_id'), 'description': row.get('description'),
                           'unit_price': row.get('unit_price'), 'quantity': row.get('quantity'),
                           'discount': row.get('discount'), 'purchase_voucher': voucher}
                 submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
                 if not created:
                     submodel = save_model(submodel, values)
             delete_rows(particulars.get('deleted_rows'), model)
-
-    else:
-        form = PurchaseVoucherForm(instance=voucher)
+    form = PurchaseVoucherForm(instance=voucher)
     purchase_voucher_data = PurchaseVoucherSerializer(voucher).data
     return render(request, 'purchase_voucher.html', {'form': form, 'data': purchase_voucher_data})
 
@@ -156,10 +156,11 @@ def save_journal_voucher(request):
     for index, row in enumerate(params.get('journal_voucher').get('rows')):
         # print row.get('dr_account_id')
         empty_to_None(row, ['dr_amount'], 'cr_amount')
-        values = {'sn': index+1, 'dr_account_id': row.get('dr_account_id'), 'dr_amount': row.get('dr_amount'),
+        values = {'sn': index + 1, 'dr_account_id': row.get('dr_account_id'), 'dr_amount': row.get('dr_amount'),
                   'cr_account_id': row.get('cr_account_id'), 'cr_amount': row.get('cr_amount'),
                   'journal_voucher': voucher}
         from django.db import transaction, IntegrityError
+
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
@@ -195,10 +196,11 @@ def save_bank_voucher(request):
     for index, row in enumerate(params.get('journal_voucher').get('rows')):
         # print row.get('dr_account_id')
         empty_to_None(row, ['dr_amount'], 'cr_amount')
-        values = {'sn': index+1, 'dr_account_id': row.get('dr_account_id'), 'dr_amount': row.get('dr_amount'),
+        values = {'sn': index + 1, 'dr_account_id': row.get('dr_account_id'), 'dr_amount': row.get('dr_amount'),
                   'cr_account_id': row.get('cr_account_id'), 'cr_amount': row.get('cr_amount'),
                   'journal_voucher': voucher}
         from django.db import transaction, IntegrityError
+
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
