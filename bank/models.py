@@ -36,3 +36,4 @@ class ChequeReceiptRow(models.Model):
     drawee_bank = models.CharField(max_length=254, blank=True, null=True)
     drawee_bank_address = models.CharField(max_length=254, blank=True, null=True)
     amount = models.FloatField()
+    cheque_receipt = models.ForeignKey(ChequeReceipt)
