@@ -174,7 +174,7 @@ function TableViewModel(options, row_model) {
             }
         }
 
-        self.deleted_rows = [];
+        self.deleted_rows = ko.observableArray();
 
         self.hasNoRows = ko.computed(function () {
             return self.rows().length === 0;
@@ -186,6 +186,7 @@ function TableViewModel(options, row_model) {
         };
 
         self.removeRow = function (row) {
+            console.log('Deleting row...');
             self.rows.remove(row);
             self.deleted_rows.push(row);
         };

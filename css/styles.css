@@ -211,3 +211,8 @@ tbody > tr > td[contenteditable="true"] {
     height: auto;
     overflow: visible;
 }
+
+textarea[name="narration"]{
+    width: 40em;
+    height: 4em;
+}
