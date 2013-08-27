@@ -96,16 +96,25 @@ def save_model(model, values):
 def delete_rows(rows, model):
     for row in rows:
         if row.get('id'):
-            model.objects.get(id=row.get('id')).delete()
+            try:
+                instance = model.objects.get(id=row.get('id'))
+                [transaction.delete() for transaction in instance.transactions.all()]
+                instance.delete()
+            except:
+                pass
 
 
 def dr(account, amount, date):
+    if amount is None:
+        return
     transaction = Transaction(account=account, date=date, amount=amount, type='Dr')
     transaction.save()
     return transaction
 
 
 def cr(account, amount, date):
+    if amount is None:
+        return
     transaction = Transaction(account=account, date=date, amount=amount, type='Cr')
     transaction.save()
     return transaction
@@ -113,4 +122,5 @@ def cr(account, amount, date):
 
 def set_transactions(submodel, *args):
     [transaction.delete() for transaction in submodel.transactions.all()]
+    args = [arg for arg in args if arg is not None]
     submodel.transactions.add(*args)
