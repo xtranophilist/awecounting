@@ -12,8 +12,13 @@ function ChequeReceiptViewModel(data) {
     for (var k in data)
         self[k] = ko.observable(data[k]);
 
-    self.grand_total = function(){
-        return 10;
+    self.grand_total = function () {
+        var total = 0;
+        $.each(self.particulars.rows(), function () {
+            if (isAN(this.amount()))
+                total += parseFloat(this.amount());
+        });
+        return rnum(total);
     }
 
 
@@ -117,6 +122,8 @@ function ChequePurchaseRow(row) {
     self.drawee_bank_address = ko.observable();
     self.amount = ko.observable();
 
-    for (var k in row)
-        self[k] = ko.observable(row[k]);
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
+    }
 }
