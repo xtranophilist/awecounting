@@ -38,9 +38,10 @@ def bank_account_form(request, id=None):
 def cheque_receipt(request, id=None):
     if id:
         receipt = get_object_or_404(ChequeReceipt, id=id)
+        scenario = 'Update'
     else:
         receipt = ChequeReceipt(date=date.today())
-
+        scenario = 'New'
     if request.POST:
         form = ChequeReceiptForm(request.POST, instance=receipt)
         if form.is_valid():
@@ -66,4 +67,4 @@ def cheque_receipt(request, id=None):
     else:
         form = ChequeReceiptForm(instance=receipt)
     receipt_data = ChequeReceiptSerializer(receipt).data
-    return render(request, 'cheque_receipt.html', {'form': form, 'data': receipt_data})
+    return render(request, 'cheque_receipt.html', {'form': form, 'data': receipt_data, 'scenario': scenario})

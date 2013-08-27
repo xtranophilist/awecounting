@@ -1,6 +1,6 @@
 {% extends "dashboard.html" %}
 
-{% block title %}Cheque Receipt{% endblock %}
+{% block title %} {{ scenario }} Cheque Receipt{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
@@ -24,7 +24,7 @@
 
     <div class="page-header position-relative">
         <h1>
-            Cheque Receipt
+            {{ scenario }} Cheque Receipt
         </h1>
     </div>
 
