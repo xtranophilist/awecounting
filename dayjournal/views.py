@@ -8,7 +8,7 @@ from datetime import date
 from dayjournal.serializers import DayJournalSerializer, DayJournalLottoSerializer
 from django.http import HttpResponse
 import json
-from acubor.lib import delete_rows, invalid, save_model, all_empty
+from acubor.lib import delete_rows, invalid, save_model, all_empty, dr, cr, set_transactions
 
 
 def day_journal(request, journal_date=None):
@@ -23,7 +23,7 @@ def day_journal(request, journal_date=None):
     return render(request, 'day_journal.html', {
         'day_journal': day_journal_data,
         'base_template': base_template,
-        })
+    })
 
 
 def get_journal(request):
@@ -36,28 +36,24 @@ def get_journal(request):
 
 def save_cash_sales(request):
     params = json.loads(request.body)
-    print params.get('rows')
-    print params.get('deleted_rows')
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashSales
-    cash_account = Account.objects.get(name='Cash')
-    print cash_account
+    cash_account = Account.objects.get(name='Cash', company=request.user.company)
     for index, row in enumerate(params.get('rows')):
         day_journal = get_journal(request)
         invalid_attrs = invalid(row, ['account_id', 'amount'])
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
-        print row
-        if row.get('transaction'):
-            transaction = Transaction.objects.get(id=row.get('transaction'))
-        else:
-            transaction = Transaction()
-        transaction.dr(cash_account, row.get('amount'), day_journal.date)
-        values = {'sn': index+1, 'sales_ledger_id': row.get('account_id'), 'amount': row.get('amount'),
-                  'day_journal': day_journal, 'transaction_id': transaction.id}
+        values = {'sn': index + 1, 'sales_ledger_id': row.get('account_id'), 'amount': row.get('amount'),
+                  'day_journal': day_journal}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+
         #sales-cr;cash-dr
+        set_transactions(submodel,
+                         dr(cash_account, row.get('amount'), day_journal.date),
+                         cr(Account.objects.get(id=row.get('account_id')), row.get('amount'), day_journal.date),
+        )
 
         if not created:
             submodel = save_model(submodel, values)
@@ -75,7 +71,7 @@ def save_cash_purchase(request):
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
-        values = {'sn': index+1, 'purchase_ledger_id': row.get('account_id'), 'amount': row.get('amount'),
+        values = {'sn': index + 1, 'purchase_ledger_id': row.get('account_id'), 'amount': row.get('amount'),
                   'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         #cash-cr;purchase-dr
@@ -95,7 +91,7 @@ def save_cash_payment(request):
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
-        values = {'sn': index+1, 'payment_to_id': row.get('account_id'), 'amount': row.get('amount'),
+        values = {'sn': index + 1, 'payment_to_id': row.get('account_id'), 'amount': row.get('amount'),
                   'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
@@ -115,7 +111,7 @@ def save_cash_receipt(request):
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
-        values = {'sn': index+1, 'received_from_id': row.get('account_id'), 'amount': row.get('amount'),
+        values = {'sn': index + 1, 'received_from_id': row.get('account_id'), 'amount': row.get('amount'),
                   'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
@@ -135,7 +131,7 @@ def save_credit_sales(request):
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
-        values = {'sn': index+1, 'sales_ledger_id': row.get('account_cr_id'), 'customer_id': row.get('account_dr_id'),
+        values = {'sn': index + 1, 'sales_ledger_id': row.get('account_cr_id'), 'customer_id': row.get('account_dr_id'),
                   'amount': row.get('amount'), 'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
@@ -155,7 +151,8 @@ def save_credit_purchase(request):
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
-        values = {'sn': index+1, 'purchase_ledger_id': row.get('account_dr_id'), 'supplier_id': row.get('account_cr_id'),
+        values = {'sn': index + 1, 'purchase_ledger_id': row.get('account_dr_id'),
+                  'supplier_id': row.get('account_cr_id'),
                   'amount': row.get('amount'), 'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
@@ -174,7 +171,8 @@ def save_credit_income(request):
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
-        values = {'sn': index+1, 'income_head_id': row.get('account_dr_id'), 'income_from_id': row.get('account_cr_id'),
+        values = {'sn': index + 1, 'income_head_id': row.get('account_dr_id'),
+                  'income_from_id': row.get('account_cr_id'),
                   'amount': row.get('amount'), 'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
@@ -193,7 +191,7 @@ def save_credit_expense(request):
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
-        values = {'sn': index+1, 'expense_head_id': row.get('account_cr_id'),
+        values = {'sn': index + 1, 'expense_head_id': row.get('account_cr_id'),
                   'expense_claimed_by_id': row.get('account_dr_id'),
                   'amount': row.get('amount'), 'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
@@ -288,7 +286,7 @@ def save_summary_lotto(request):
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
-        values = {'sn': index+1, 'particular_id': row.get('particular'),
+        values = {'sn': index + 1, 'particular_id': row.get('particular'),
                   'disp': row.get('disp'),
                   'reg': row.get('reg'), 'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
@@ -307,13 +305,13 @@ def save_summary_transfer(request):
     # invalid_attrs = invalid(params.get('summary_utility'), ['amount'])
     # if not invalid_attrs:
     #     values = {'amount': params.get('summary_utility').get('amount'), 'day_journal': get_journal(request)}
-        # summary_utility, created = SummaryUtility.objects.get_or_create(
-        #     id=params.get('summary_utility').get('id'),
-        #     defaults=values
-        # )
-        # if not created:
-        #     summary_utility = save_model(summary_utility, values)
-        # dct['saved'][0] = summary_utility.id
+    # summary_utility, created = SummaryUtility.objects.get_or_create(
+    #     id=params.get('summary_utility').get('id'),
+    #     defaults=values
+    # )
+    # if not created:
+    #     summary_utility = save_model(summary_utility, values)
+    # dct['saved'][0] = summary_utility.id
 
     #saving summary transfer rows
     model = SummaryTransfer
@@ -326,7 +324,7 @@ def save_summary_transfer(request):
             if row.get(attr) is None or row.get(attr) == '':
                 row[attr] = 0
 
-        values = {'sn': index+1, 'transfer_type_id': row.get('transfer_type'), 'cash': row.get('cash'),
+        values = {'sn': index + 1, 'transfer_type_id': row.get('transfer_type'), 'cash': row.get('cash'),
                   'card': row.get('card'), 'cheque': row.get('cheque'), 'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
@@ -345,7 +343,7 @@ def save_summary_inventory(request):
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
-        values = {'sn': index+1, 'purchase': row.get('inward'), 'particular_id': row.get('account_id'),
+        values = {'sn': index + 1, 'purchase': row.get('inward'), 'particular_id': row.get('account_id'),
                   'sales': row.get('outward'), 'actual': row.get('actual'), 'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
@@ -365,7 +363,7 @@ def lotto_detail(request, journal_date=None):
     return render(request, 'day_lotto.html', {
         'day_journal': day_journal_data,
         'base_template': base_template,
-        })
+    })
 
 
 def save_lotto_detail(request):
@@ -377,7 +375,7 @@ def save_lotto_detail(request):
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
-        values = {'sn': index+1, 'type_id': row.get('type'), 'purchase_pack': row.get('purchase_pack'),
+        values = {'sn': index + 1, 'type_id': row.get('type'), 'purchase_pack': row.get('purchase_pack'),
                   'purchase_quantity': row.get('purchase_quantity'), 'sold_quantity': row.get('sold_quantity'),
                   'rate': row.get('rate'),
                   'actual_quantity': row.get('actual_quantity'), 'day_journal': get_journal(request)}
@@ -418,7 +416,7 @@ def save_cash_equivalent_sales(request):
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
-        values = {'sn': index+1, 'amount': row.get('amount'), 'account_id': row.get('account'),
+        values = {'sn': index + 1, 'amount': row.get('amount'), 'account_id': row.get('account'),
                   'day_journal': get_journal(request)}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
