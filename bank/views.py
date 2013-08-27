@@ -3,8 +3,8 @@ import json
 
 from django.shortcuts import render, get_object_or_404
 
-from bank.models import BankAccount, ChequeReceipt, ChequeReceiptRow, BankCashReceipt
-from bank.forms import BankAccountForm, ChequeReceiptForm, BankCashReceiptForm
+from bank.models import BankAccount, ChequeReceipt, ChequeReceiptRow, BankCashReceipt, ChequePayment
+from bank.forms import BankAccountForm, ChequeReceiptForm, BankCashReceiptForm, ChequePaymentForm
 from acubor.lib import invalid, save_model, delete_rows
 from bank.serializers import ChequeReceiptSerializer
 
@@ -88,3 +88,23 @@ def cash_receipt(request, id=None):
     else:
         form = BankCashReceiptForm(instance=receipt)
     return render(request, 'cash_receipt.html', {'form': form, 'scenario': scenario})
+
+
+def cheque_payment(request, id=None):
+    if id:
+        payment = get_object_or_404(ChequePayment, id=id)
+        scenario = 'Update'
+    else:
+        payment = ChequePayment(date=date.today())
+        scenario = 'New'
+    if request.POST:
+        form = ChequePaymentForm(request.POST, request.FILES, instance=payment)
+        if form.is_valid():
+            payment = form.save(commit=False)
+            payment.company = request.user.company
+            if 'attachment' in request.FILES:
+                payment.attachment = request.FILES['attachment']
+            payment.save()
+    else:
+        form = ChequePaymentForm(instance=payment)
+    return render(request, 'cheque_payment.html', {'form': form, 'scenario': scenario})

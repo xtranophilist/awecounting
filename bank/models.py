@@ -57,6 +57,6 @@ class ChequePayment(models.Model):
     beneficiary = models.ForeignKey(Account)
     bank_account = models.ForeignKey(Account, related_name='cheque_payments')
     amount = models.FloatField()
-    attachment = models.FileField(upload_to='bank_cash_receipts/%Y/%m/%d', blank=True, null=True)
+    attachment = models.FileField(upload_to='cheque_payments/%Y/%m/%d', blank=True, null=True)
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)

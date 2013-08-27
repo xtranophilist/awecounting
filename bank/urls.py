@@ -7,5 +7,7 @@ urlpatterns = patterns('',
                        url(r'^cheque-receipt/(?P<id>[0-9]+)$', views.cheque_receipt, name='view_cheque_receipt'),
                        url(r'^cash-receipt/$', views.cash_receipt, name='new_cash_receipt'),
                        url(r'^cash-receipt/(?P<id>[0-9]+)$', views.cash_receipt, name='view_cash_receipt'),
+                       url(r'^cheque-payment/$', views.cheque_payment, name='new_cheque_payment'),
+                       url(r'^cheque-payment/(?P<id>[0-9]+)$', views.cheque_payment, name='view_cheque_payment'),
 )
 

@@ -1,6 +1,6 @@
 from acubor.lib import KOModelForm, ExtFileField
 from django import forms
-from models import BankAccount, ChequeReceipt, BankCashReceipt
+from models import BankAccount, ChequeReceipt, BankCashReceipt, ChequePayment
 from ledger.models import Account
 
 
@@ -46,4 +46,22 @@ class BankCashReceiptForm(KOModelForm):
 
     class Meta:
         model = BankCashReceipt
+        exclude = ['company']
+
+
+class ChequePaymentForm(KOModelForm):
+    bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank'), empty_label=None,
+                                          widget=forms.Select(attrs={'class': 'select2'}))
+    beneficiary = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
+                                        widget=forms.Select(attrs={'class': 'select2'}))
+    date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
+    attachment = ExtFileField(
+        label='Add an attachment',
+        help_text='',
+        required=False,
+        ext_whitelist=('.jpg', '.png', '.gif', '.tif', '.pdf')
+    )
+
+    class Meta:
+        model = ChequePayment
         exclude = ['company']

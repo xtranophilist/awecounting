@@ -1,0 +1,85 @@
+{% extends "dashboard.html" %}
+
+{% block title %} {{ scenario }} Cheque Payment{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "new_cheque_payment" %}">Cheque Payment</a></li>
+{% endblock %}
+
+{% block head_end %}
+    <script src="http://localhost/acubor_static/js/vendors/knockout.js"></script>
+    <script src="http://localhost/acubor_static/js/ko_lib.js"></script>
+    <script src="http://localhost/acubor_static/js/base.js"></script>
+    <script src="http://localhost/acubor_static/js/bank.js"></script>
+    <script>
+        $(document).ready(function () {
+            {% load filters %}
+            ko.applyBindings(new ChequePaymentViewModel({{data|jsonify}}));
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header position-relative">
+        <h1>
+            {{ scenario }} Cheque Payment
+        </h1>
+    </div>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+
+        {{ form.bank_account.label_tag }}
+        {{ form.bank_account }}
+        {{ form.bank_account.errors }}
+
+        <br/><br/>
+
+        {{ form.cheque_number.label_tag }}
+        {{ form.cheque_number }}
+        {{ form.bank_account.errors }}
+
+        <br/>
+
+        {{ form.date.label_tag }}
+        {{ form.date }}
+        {{ form.date.errors }}
+
+        <br/>
+
+        {{ form.beneficiary.label_tag }}
+        {{ form.beneficiary }}
+        {{ form.beneficiary.errors }}
+
+        <br/><br/>
+
+        {{ form.amount.label_tag }}
+        {{ form.amount }}
+        {{ form.amount.errors }}
+
+        <div class="row-fluid">
+
+            <div class="span8">
+                {{ form.narration.label_tag }}
+                {{ form.narration }}
+                {{ form.narration.errors }}
+            </div>
+
+            <div class="span4">
+                {{ form.attachment.label_tag }}
+                {{ form.attachment }}
+                {{ form.attachment.errors }}
+            </div>
+
+        </div>
+
+        <br/>
+
+        <button type="submit" class="btn">Save</button>
+
+    </form>
+
+{% endblock %}
