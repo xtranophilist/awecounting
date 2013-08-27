@@ -1,5 +1,6 @@
 import os
 from django import forms
+from ledger.models import Transaction
 
 
 class ExtFileField(forms.FileField):
@@ -10,6 +11,7 @@ class ExtFileField(forms.FileField):
     ...
     ValidationError: [u'Not allowed filetype!']
     """
+
     def __init__(self, *args, **kwargs):
         ext_whitelist = kwargs.pop("ext_whitelist")
         self.ext_whitelist = [i.lower() for i in ext_whitelist]
@@ -34,7 +36,6 @@ class ExtFileField(forms.FileField):
 
 
 class KOModelForm(forms.ModelForm):
-
     class EmailTypeInput(forms.widgets.TextInput):
         input_type = 'email'
 
@@ -62,7 +63,7 @@ class KOModelForm(forms.ModelForm):
             # add HTML5 required attribute for required fields
             if field.required:
                 field.widget.attrs['required'] = 'required'
-            field.widget.attrs['data-bind'] = 'value: '+name
+            field.widget.attrs['data-bind'] = 'value: ' + name
 
 
 def invalid(row, required_fields):
@@ -96,3 +97,20 @@ def delete_rows(rows, model):
     for row in rows:
         if row.get('id'):
             model.objects.get(id=row.get('id')).delete()
+
+
+def dr(account, amount, date):
+    transaction = Transaction(account=account, date=date, amount=amount, type='Dr')
+    transaction.save()
+    return transaction
+
+
+def cr(account, amount, date):
+    transaction = Transaction(account=account, date=date, amount=amount, type='Cr')
+    transaction.save()
+    return transaction
+
+
+def set_transactions(submodel, *args):
+    [transaction.delete() for transaction in submodel.transactions.all()]
+    submodel.transactions.add(*args)
