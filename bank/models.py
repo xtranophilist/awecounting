@@ -49,3 +49,14 @@ class BankCashReceipt(models.Model):
     attachment = models.FileField(upload_to='bank_cash_receipts/%Y/%m/%d', blank=True, null=True)
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)
+
+
+class ChequePayment(models.Model):
+    cheque_number = models.CharField(max_length=50)
+    date = models.DateField()
+    beneficiary = models.ForeignKey(Account)
+    bank_account = models.ForeignKey(Account, related_name='cheque_payments')
+    amount = models.FloatField()
+    attachment = models.FileField(upload_to='bank_cash_receipts/%Y/%m/%d', blank=True, null=True)
+    narration = models.TextField(null=True, blank=True)
+    company = models.ForeignKey(Company)
