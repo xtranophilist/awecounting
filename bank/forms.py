@@ -1,6 +1,6 @@
 from acubor.lib import KOModelForm
 # from django import forms
-from models import BankAccount
+from models import BankAccount, ChequeReceipt
 
 
 class BankAccountForm(KOModelForm):
@@ -9,3 +9,8 @@ class BankAccountForm(KOModelForm):
         model = BankAccount
         exclude = ['company', 'account']
 
+
+class ChequeReceiptForm(KOModelForm):
+    class Meta:
+        model = ChequeReceipt
+        exclude = ['company']
