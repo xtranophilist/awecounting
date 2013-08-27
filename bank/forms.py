@@ -1,6 +1,6 @@
 from acubor.lib import KOModelForm, ExtFileField
 from django import forms
-from models import BankAccount, ChequeReceipt
+from models import BankAccount, ChequeReceipt, BankCashReceipt
 from ledger.models import Account
 
 
@@ -27,4 +27,10 @@ class ChequeReceiptForm(KOModelForm):
 
     class Meta:
         model = ChequeReceipt
+        exclude = ['company']
+
+
+class BankCashReceiptForm(KOModelForm):
+    class Meta:
+        model = BankCashReceipt
         exclude = ['company']

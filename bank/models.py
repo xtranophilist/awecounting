@@ -28,6 +28,7 @@ class ChequeReceipt(models.Model):
     benefactor = models.ForeignKey(Account)
     attachment = models.FileField(upload_to='cheque_receipts/%Y/%m/%d', blank=True, null=True)
     narration = models.TextField(null=True, blank=True)
+    company = models.ForeignKey(Company)
 
 
 class ChequeReceiptRow(models.Model):
@@ -47,3 +48,4 @@ class BankCashReceipt(models.Model):
     amount = models.FloatField()
     attachment = models.FileField(upload_to='bank_cash_receipts/%Y/%m/%d', blank=True, null=True)
     narration = models.TextField(null=True, blank=True)
+    company = models.ForeignKey(Company)
