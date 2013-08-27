@@ -51,10 +51,11 @@ class Account(models.Model):
     day_opening = property(get_day_opening)
 
 
-    def add_category(self, category, company):
+    def add_category(self, category):
         # all_categories = self.get_all_categories()
-        category_instance, created = Category.objects.get_or_create(name=category, company=company)
-        self.categories.add(category_instance)
+        category_instance, created = Category.objects.get_or_create(name=category, company=self.company)
+        # self.categories.add(category_instance)
+        self.category = category_instance
 
     def get_all_categories(self):
         return self.category.get_ancestors(include_self=True)
@@ -102,23 +103,6 @@ class Transaction(models.Model):
         self.account.save()
         self.current_balance = self.account.current_balance
         self.save()
-
-
-class BankAccount(models.Model):
-    bank_name = models.CharField(max_length=254)
-    ac_no = models.IntegerField()
-    branch_name = models.CharField(max_length=254, blank=True, null=True)
-    account = models.OneToOneField(Account)
-    company = models.ForeignKey(Company)
-
-    def save(self, *args, **kwargs):
-        if self.pk is None:
-            account = Account(code=self.ac_no, name=self.bank_name)
-            account.company = self.company
-            account.save()
-            account.add_category('Bank', self.company)
-            self.account = account
-        super(BankAccount, self).save(*args, **kwargs)
 
 
 class Party(models.Model):

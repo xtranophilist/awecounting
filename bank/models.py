@@ -1,5 +1,24 @@
 from django.db import models
 from ledger.models import Account
+from users.models import Company
+
+
+class BankAccount(models.Model):
+    bank_name = models.CharField(max_length=254)
+    ac_no = models.IntegerField()
+    branch_name = models.CharField(max_length=254, blank=True, null=True)
+    account = models.OneToOneField(Account)
+    company = models.ForeignKey(Company)
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            account = Account(code=self.ac_no, name=self.bank_name)
+            account.company = self.company
+            # account
+            account.add_category('Bank')
+            account.save()
+            self.account = account
+        super(BankAccount, self).save(*args, **kwargs)
 
 
 class ChequeDeposit(models.Model):

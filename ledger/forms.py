@@ -1,6 +1,6 @@
 from acubor.lib import KOModelForm
 # from django import forms
-from models import Account, BankAccount, Category
+from models import Account, Category
 from mptt.forms import TreeNodeChoiceField
 
 
@@ -10,11 +10,3 @@ class AccountForm(KOModelForm):
     class Meta:
         model = Account
         exclude = ['company', 'parent']
-
-
-class BankAccountForm(KOModelForm):
-
-    class Meta:
-        model = BankAccount
-        exclude = ['company', 'account']
-
