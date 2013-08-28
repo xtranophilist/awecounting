@@ -245,3 +245,7 @@ table.tree-table tr.expanded span.indenter a:before {
     text-align: center;
     padding: 0.5em;
 }
+
+.controls a {
+    cursor: pointer;
+}
