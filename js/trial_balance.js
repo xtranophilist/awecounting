@@ -1,17 +1,19 @@
 function TrialBalance(data) {
 
-    console.log(data);
-
     var self = this;
 
-//    for (var k in data)
-//        self[k] = data[k];
+    self.root_nodes = [];
 
     self.categories = ko.observableArray(ko.utils.arrayMap(data.categories, function (item) {
+        self.root_nodes.push(item.id);
         return new CategoryViewModel(item);
     }));
 
-    console.log(self);
+    self.expandRoot = function () {
+        for (var k in self.root_nodes) {
+            $('.tree-table').treetable('expandNode', self.root_nodes[k]);
+        }
+    }
 
 }
 
