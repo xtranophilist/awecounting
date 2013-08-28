@@ -24,6 +24,7 @@ function CategoryViewModel(data, parent_id) {
     self.name = data.name;
     self.code = '';
     self.parent_id = parent_id;
+    self.cls = 'category';
 
     self.current_balance = function () {
         return 100;
@@ -55,6 +56,7 @@ function AccountViewModel(data, parent_id) {
     self.name = data.name;
     self.current_balance = data.current_balance;
     self.parent_id = parent_id;
+    self.cls = 'account';
 
     self.dr_amount = function () {
         return self.current_balance;
