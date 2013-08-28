@@ -16,13 +16,55 @@
 {% endblock %}
 
 {% block content %}
+
+    <script id="categories" type="text/html">
+        <tr>
+            <th data-bind="text: code"></th>
+            <th data-bind="text: name"></th>
+            <th data-bind="text: dr_amount()"></th>
+            <th data-bind="text: cr_amount()"></th>
+        </tr>
+        <!-- ko foreach: accounts -->
+        <tr>
+            <th data-bind="text: code"></th>
+            <th data-bind="text: name"></th>
+            <th data-bind="text: dr_amount()"></th>
+            <th data-bind="text: cr_amount()"></th>
+        </tr>
+        <!-- /ko -->
+
+
+        <!-- ko template: { name: 'categories',
+                                foreach: categories } -->
+        <!-- /ko -->
+
+
+    </script>
+
     <div class="page-header position-relative">
         <h1>
-        Trial Balance
+            Trial Balance
         </h1>
     </div>
 
     {{ dict }}
+
+    <table class="table table-bordered table-striped table-acubor table-sortable">
+        <thead>
+        <tr>
+            <th class="span3">Code</th>
+            <th class="span4">Ledger</th>
+            <th class="span2">Dr</th>
+            <th class="span2">Cr</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <!-- ko template: { name: 'categories',
+                                foreach: categories } -->
+        <!-- /ko -->
+        </tbody>
+    </table>
 
 
 {% endblock %}
