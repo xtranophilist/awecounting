@@ -11,6 +11,11 @@ def recursive_node_to_dict(node):
         'name': node.name,
     }
     children = [recursive_node_to_dict(c) for c in node.get_children()]
+    accounts = []
+    for account in node.accounts.all():
+        a = {'id': account.id, 'code': account.code, 'name': account.name, 'current_balance': account.current_balance}
+        accounts.append(a)
+    result['accounts'] = accounts
     if children:
         result['children'] = children
     return result
@@ -26,8 +31,7 @@ def to_dict(model):
 
 def trial_balance(request):
     categories = Category.objects.filter(company=request.user.company)
-    dicts = to_dict(Category)
-    print json.dumps(dicts, indent=4)
     return render(request, 'trial_balance.html', {
+        'dict': to_dict(Category),
         'categories': categories
     })
