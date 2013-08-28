@@ -8,13 +8,13 @@
     <script src="http://localhost/acubor_static/js/base.js"></script>
     <script src="http://localhost/acubor_static/js/trial_balance.js"></script>
     <link href="http://localhost/acubor_static/css/vendors/jquery.treetable.css" rel="stylesheet" type="text/css"/>
+    {#    <link href="http://localhost/acubor_static/css/vendors/jquery.treetable.theme.default.css" rel="stylesheet"#}
     <script src="http://localhost/acubor_static/js/vendors/jquery.treetable.js"></script>
     <script>
         $(document).ready(function () {
             {% load filters %}
             ko.applyBindings(new TrialBalance({{ dict|jsonify }}));
-            $("#table1").treetable({initialState: 'expanded', clickableNodeNames: true}, true);
-            {#            $("#table2").treetable({initialState: 'expanded', clickableNodeNames: true}, true);#}
+            $(".tree-table").treetable({initialState: 'collapsed', clickableNodeNames: true, expandable: true });
         });
     </script>
 {% endblock %}
@@ -22,14 +22,14 @@
 {% block content %}
 
     <script id="categories" type="text/html">
-        <tr data-bind="attr: {'data-tt-id': id, 'data-tt-parent-id': parent_id}">
+        <tr data-bind="attr: {'data-tt-id': id, 'data-tt-parent-id': parent_id}, css: cls">
             <td data-bind="text: name"></td>
             <td data-bind="text: code"></td>
             <td data-bind="text: dr_amount()"></td>
             <td data-bind="text: cr_amount()"></td>
         </tr>
         <!-- ko foreach: accounts -->
-        <tr data-bind="attr: {'data-tt-id': id, 'data-tt-parent-id': parent_id}">
+        <tr data-bind="attr: {'data-tt-id': id, 'data-tt-parent-id': parent_id}, css: cls">
             <td data-bind="text: name"></td>
             <td data-bind="text: code"></td>
             <td data-bind="text: dr_amount()"></td>
@@ -50,10 +50,12 @@
             Trial Balance
         </h1>
     </div>
+    {#    {{ dict }}#}
+    <div class="controls">
+        <a onclick="$('.tree-table').treetable('expandAll'); return false;" href="#">Expand all</a>
+    </div>
 
-    {{ dict }}
-
-    <table class="table table-bordered table-striped table-acubor table-sortable tree-table" id="table1">
+    <table class="table table-bordered table-striped table-acubor table-sortable tree-table">
         <thead>
         <tr>
             <th class="span4">Ledger</th>
