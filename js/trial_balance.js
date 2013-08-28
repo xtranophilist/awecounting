@@ -15,29 +15,53 @@ function TrialBalance(data) {
 
 }
 
-function CategoryViewModel(data) {
+function CategoryViewModel(data, parent_id) {
 
     var self = this;
 
 
     self.id = data.id;
     self.name = data.name;
+    self.code = '';
+    self.parent_id = parent_id;
+
+    self.current_balance = function () {
+        return 100;
+    }
+
+    self.dr_amount = function () {
+        return self.current_balance();
+    }
+
+    self.cr_amount = function () {
+        return self.current_balance();
+    }
 
     self.accounts = ko.observableArray(ko.utils.arrayMap(data.accounts, function (item) {
-        return new AccountViewModel(item);
+        return new AccountViewModel(item, self.id);
     }));
 
     self.categories = ko.observableArray(ko.utils.arrayMap(data.children, function (item) {
-        return new CategoryViewModel(item);
+        return new CategoryViewModel(item, self.id);
     }));
 
 
 }
 
-function AccountViewModel(data) {
+function AccountViewModel(data, parent_id) {
     var self = this;
     self.id = data.id;
     self.code = data.code;
     self.name = data.name;
     self.current_balance = data.current_balance;
+    self.parent_id = parent_id;
+
+    self.dr_amount = function () {
+        return self.current_balance;
+    }
+
+    self.cr_amount = function () {
+        return self.current_balance;
+    }
+
 }

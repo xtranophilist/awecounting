@@ -1,6 +1,7 @@
 function DayJournal(data) {
     var self = this;
     self.sales_tax = ko.observable();
+
     for (var k in data)
         self[k] = data[k];
 
