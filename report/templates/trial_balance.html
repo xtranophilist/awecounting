@@ -7,10 +7,13 @@
     <script src="http://localhost/acubor_static/js/ko_lib.js"></script>
     <script src="http://localhost/acubor_static/js/base.js"></script>
     <script src="http://localhost/acubor_static/js/trial_balance.js"></script>
+    <link href="http://localhost/acubor_static/css/vendors/jquery.treetable.css" rel="stylesheet" type="text/css"/>
+    <script src="http://localhost/acubor_static/js/vendors/jquery.treetable.js"></script>
     <script>
         $(document).ready(function () {
             {% load filters %}
             ko.applyBindings(new TrialBalance({{ dict|jsonify }}));
+            $("#table1").treetable({initialState: 'expanded', clickableNodeNames: true}, true);
         });
     </script>
 {% endblock %}
@@ -49,7 +52,7 @@
 
     {{ dict }}
 
-    <table class="table table-bordered table-striped table-acubor table-sortable">
+    <table class="table table-bordered table-striped table-acubor table-sortable tree-table" id="table1">
         <thead>
         <tr>
             <th class="span3">Code</th>
