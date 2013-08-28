@@ -232,3 +232,16 @@ input[type="checkbox"], input[type="radio"] {
     opacity: 1 !important;
     position: relative !important;
 }
+
+table.tree-table tr.collapsed span.indenter a:before {
+    content: "\f116";
+}
+
+table.tree-table tr.expanded span.indenter a:before {
+    content: "\f117";
+}
+
+.controls {
+    text-align: center;
+    padding: 0.5em;
+}
