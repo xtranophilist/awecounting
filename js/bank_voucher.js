@@ -123,6 +123,8 @@ function BankRow(row) {
     self.cheque_deposit = ko.observable();
     self.cash_deposit = ko.observable();
 
-    for (var k in row)
-        self[k] = ko.observable(row[k]);
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
+    }
 }

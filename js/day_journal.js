@@ -279,8 +279,9 @@ function SummaryCashModel(data) {
 
     self.actual = ko.observable();
 
-    for (var k in data) {
-        self[k] = ko.observable(data[k]);
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
     }
 }
 
@@ -295,8 +296,10 @@ function LottoRow(row) {
         return rnum(parseFloat(self.disp()) - parseFloat(self.reg()));
     };
 
-    for (var k in row)
-        self[k] = ko.observable(row[k]);
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
+    }
 }
 
 function CashRow(row) {
@@ -305,8 +308,10 @@ function CashRow(row) {
     self.account_id = ko.observable();
     self.amount = ko.observable();
 
-    for (var k in row)
-        self[k] = ko.observable(row[k]);
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
+    }
 
 }
 
@@ -320,8 +325,10 @@ function CashSalesRow(row) {
         return rnum(parseFloat(self.amount()) * parseFloat(self.tax_rate()) / 100);
     }
 
-    for (var k in row)
-        self[k] = ko.observable(row[k]);
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
+    }
 
 }
 
@@ -332,8 +339,10 @@ function CreditRow(row) {
     self.account_dr_id = ko.observable();
     self.amount = ko.observable();
 
-    for (var k in row)
-        self[k] = ko.observable(row[k]);
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
+    }
 
 }
 
@@ -348,8 +357,10 @@ function CreditSalesRow(row) {
         return rnum(parseFloat(self.amount()) * parseFloat(self.tax_rate()) / 100);
     }
 
-    for (var k in row)
-        self[k] = ko.observable(row[k]);
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
+    }
 
 }
 
@@ -374,8 +385,10 @@ function SummaryTaxRow(row) {
         return rnum(self.register() - self.accounts(root));
     }
 
-    for (var k in row)
-        self[k] = ko.observable(row[k]);
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
+    }
 
 }
 
@@ -399,8 +412,10 @@ function SummaryEquivalentRow(row) {
         return rnum(self.actual() - self.closing());
     };
 
-    for (var k in row)
-        self[k] = ko.observable(row[k]);
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
+    }
 
 }
 
@@ -409,8 +424,9 @@ function SummaryUtilityModel(data) {
 
     self.amount = ko.observable();
 
-    for (var k in data) {
-        self[k] = ko.observable(data[k]);
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
     }
 
 }
@@ -424,7 +440,8 @@ function SummaryTransferRow(row) {
     self.card = ko.observable();
 
     for (var k in row) {
-        self[k] = ko.observable(row[k]);
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
     }
 
 }
@@ -439,8 +456,10 @@ function CardSalesRow(row) {
         return rnum(empty_to_zero(self.amount()) - empty_to_zero(self.commission_out()));
     }
 
-    for (var k in row)
-        self[k] = ko.observable(row[k]);
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
+    }
 
 }
 
@@ -450,8 +469,10 @@ function CashEquivalentSalesRow(row) {
     self.account = ko.observable();
     self.amount = ko.observable();
 
-    for (var k in row)
-        self[k] = ko.observable(row[k]);
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
+    }
 
 }
 
@@ -465,7 +486,9 @@ function ChequePurchaseRow(row) {
         return rnum(empty_to_zero(self.amount()) - empty_to_zero(self.commission_in()));
     }
 
-    for (var k in row)
-        self[k] = ko.observable(row[k]);
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
+    }
 
 }

@@ -186,7 +186,6 @@ function TableViewModel(options, row_model) {
         };
 
         self.removeRow = function (row) {
-            console.log('Deleting row...');
             self.rows.remove(row);
             self.deleted_rows.push(row);
         };
