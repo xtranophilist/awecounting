@@ -11,6 +11,10 @@ class DayJournal(models.Model):
     cash_deposit = models.FloatField()
     cash_withdrawal = models.FloatField()
     cheque_deposit = models.FloatField()
+    cash_deposit_transactions = models.ManyToManyField(Transaction, related_name='journal_for_deposits')
+    cash_withdrawal_transactions = models.ManyToManyField(Transaction, related_name='journal_for_withdrawals')
+    cheque_deposit_transactions = models.ManyToManyField(Transaction, related_name='journal_for_cheque_deposits')
+
 
     def get_absolute_url(self):
         return '/day/' + str(self.date)
