@@ -31,7 +31,11 @@ def to_dict(model):
 
 def trial_balance(request):
     categories = Category.objects.filter(company=request.user.company)
+
+    dict = {
+        'categories': to_dict(Category)
+    }
     return render(request, 'trial_balance.html', {
-        'dict': to_dict(Category),
+        'dict': dict,
         'categories': categories
     })

@@ -2,12 +2,27 @@
 
 {% block title %}Trial Balance{% endblock %}
 
+{% block head_end %}
+    <script src="http://localhost/acubor_static/js/vendors/knockout.js"></script>
+    <script src="http://localhost/acubor_static/js/ko_lib.js"></script>
+    <script src="http://localhost/acubor_static/js/base.js"></script>
+    <script src="http://localhost/acubor_static/js/trial_balance.js"></script>
+    <script>
+        $(document).ready(function () {
+            {% load filters %}
+            ko.applyBindings(new TrialBalance({{ dict|jsonify }}));
+        });
+    </script>
+{% endblock %}
+
 {% block content %}
     <div class="page-header position-relative">
         <h1>
         Trial Balance
         </h1>
     </div>
+
+    {{ dict }}
 
 
 {% endblock %}
