@@ -52,7 +52,10 @@
     </div>
     {#    {{ dict }}#}
     <div class="controls">
-        <a onclick="$('.tree-table').treetable('expandAll'); return false;" href="#">Expand all</a>
+        <a onclick="$('.tree-table').treetable('expandAll'); return false;">Expand all</a> |
+        <a data-bind="click: expandRoot">Expand Base Accounts</a> |
+        <a onclick="$('.tree-table').treetable('collapseAll'); return false;">Collapse all</a>
+
     </div>
 
     <table class="table table-bordered table-striped table-acubor table-sortable tree-table">
