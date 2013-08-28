@@ -53,7 +53,7 @@ function CategoryViewModel(data, parent_id) {
             if (isAN(this.current_balance()))
                 total += parseFloat(this.current_balance());
         });
-        return rnum(total);
+        return rnum(round2(total));
     }
 
 }
@@ -68,11 +68,11 @@ function AccountViewModel(data, parent_id) {
     self.cls = 'account';
 
     self.dr_amount = function () {
-        return self.current_balance;
+        return round2(self.current_balance);
     }
 
     self.cr_amount = function () {
-        return self.current_balance;
+        return round2(self.current_balance);
     }
 
 }

@@ -80,6 +80,10 @@ function empty_to_zero(o) {
     return o;
 }
 
+function round2(n) {
+    return Math.round(n * 100) / 100
+}
+
 function get_target(e) {
     return $((e.currentTarget) ? e.currentTarget : e.srcElement); //for IE <9 compatibility
 }
