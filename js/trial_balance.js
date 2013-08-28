@@ -21,16 +21,11 @@ function CategoryViewModel(data, parent_id) {
 
     var self = this;
 
-
     self.id = data.id;
     self.name = data.name;
     self.code = '';
     self.parent_id = parent_id;
     self.cls = 'category';
-
-    self.current_balance = function () {
-        return 100;
-    }
 
     self.dr_amount = function () {
         return self.current_balance();
@@ -48,6 +43,18 @@ function CategoryViewModel(data, parent_id) {
         return new CategoryViewModel(item, self.id);
     }));
 
+    self.current_balance = function () {
+        var total = 0;
+        $.each(self.accounts(), function () {
+            if (isAN(this.current_balance))
+                total += parseFloat(this.current_balance);
+        });
+        $.each(self.categories(), function () {
+            if (isAN(this.current_balance()))
+                total += parseFloat(this.current_balance());
+        });
+        return rnum(total);
+    }
 
 }
 
