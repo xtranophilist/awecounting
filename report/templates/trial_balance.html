@@ -18,14 +18,14 @@
 {% block content %}
 
     <script id="categories" type="text/html">
-        <tr>
+        <tr data-bind="attr: {'data-tt-id': id, 'data-tt-parent-id': parent_id}">
             <th data-bind="text: code"></th>
             <th data-bind="text: name"></th>
             <th data-bind="text: dr_amount()"></th>
             <th data-bind="text: cr_amount()"></th>
         </tr>
         <!-- ko foreach: accounts -->
-        <tr>
+        <tr data-bind="attr: {'data-tt-id': id, 'data-tt-parent-id': parent_id}">
             <th data-bind="text: code"></th>
             <th data-bind="text: name"></th>
             <th data-bind="text: dr_amount()"></th>
