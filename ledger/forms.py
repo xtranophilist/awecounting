@@ -5,7 +5,7 @@ from mptt.forms import TreeNodeChoiceField
 
 
 class AccountForm(KOModelForm):
-    category = TreeNodeChoiceField(queryset=Category.objects.all())
+    category = TreeNodeChoiceField(queryset=Category.objects.all(), required=False)
 
     class Meta:
         model = Account
