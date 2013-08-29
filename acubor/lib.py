@@ -164,3 +164,10 @@ def set_transactions(submodel, date, *args):
         journal_entry.transactions.add(transaction)
 
 
+def add(*args):
+    total = 0
+    for arg in args:
+        if arg == '':
+            arg = 0
+        total += float(arg)
+    return total
