@@ -75,12 +75,15 @@ class Transaction(models.Model):
     # TODO change current balance on save
     def save(self, *args, **kwargs):
         self.amount = float(self.amount)
+        print '1. amount is ' + str(self.amount)
+        print '2. current balance is ' + str(self.account.current_balance)
         if self.type == 'Dr':
             self.account.current_balance += self.amount
         if self.type == 'Cr':
             self.account.current_balance -= self.amount
         self.account.save()
         self.current_balance = self.account.current_balance
+        print '3. current balance is ' + str(self.account.current_balance)
         super(Transaction, self).save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
@@ -91,25 +94,27 @@ class Transaction(models.Model):
         self.account.save()
         super(Transaction, self).delete(*args, **kwargs)
 
-    def dr(self, account, amount, date):
-        self.type == 'Dr'
-        self.amount = float(amount)
-        self.date = date
-        self.account = account
-        # self.account.current_balance += float(amount)
-        # self.account.save()
-        # self.current_balance = self.account.current_balance
-        self.save()
 
-    def cr(self, account, amount, date):
-        self.type == 'Cr'
-        self.amount = float(amount)
-        self.date = date
-        self.account = account
-        # self.account.current_balance -= float(amount)
-        # self.account.save()
-        # self.current_balance = self.account.current_balance
-        self.save()
+    # def dr(self, account, amount, date):
+    #     self.type == 'Dr'
+    #     self.amount = float(amount)
+    #     self.date = date
+    #     self.account = account
+    #     # self.account.current_balance += float(amount)
+    #     # self.account.save()
+    #     # self.current_balance = self.account.current_balance
+    #     self.save()
+    #
+    #
+    # def cr(self, account, amount, date):
+    #     self.type == 'Cr'
+    #     self.amount = float(amount)
+    #     self.date = date
+    #     self.account = account
+    #     # self.account.current_balance -= float(amount)
+    #     # self.account.save()
+    #     # self.current_balance = self.account.current_balance
+    #     self.save()
 
 
 class Party(models.Model):

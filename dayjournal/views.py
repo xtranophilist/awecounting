@@ -28,7 +28,8 @@ def day_journal(request, journal_date=None):
 
 def get_journal(request):
     journal, created = DayJournal.objects.get_or_create(date=json.loads(request.body).get('day_journal_date'),
-                                                        company=request.user.company)
+                                                        company=request.user.company, defaults={
+            'sales_tax': 0, 'cheque_deposit': 0, 'cash_deposit': 0, 'cash_withdrawal': 0})
     if created:
         journal.save()
     return journal
@@ -49,7 +50,8 @@ def save_cash_sales(request):
         values = {'sn': index + 1, 'sales_ledger_id': row.get('account_id'), 'amount': row.get('amount'),
                   'day_journal': day_journal}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-
+        if row.get('tax_rate') is None:
+            row['tax_rate'] = 0
         tax_amount = float(row.get('tax_rate')) / 100 * float(row.get('amount'))
         net_amount = float(row.get('amount')) - tax_amount
 
@@ -111,7 +113,7 @@ def save_cash_payment(request):
         dct['saved'][index] = submodel.id
         #cash-cr;payment-dr
         set_transactions(submodel,
-                         cr(cash_account, row.get('amount'), day_journal.date),
+                         # cr(cash_account, row.get('amount'), day_journal.date),
                          dr(Account.objects.get(id=row.get('account_id')), row.get('amount'), day_journal.date),
         )
     delete_rows(params.get('deleted_rows'), model)
