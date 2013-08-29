@@ -87,7 +87,7 @@ def save_cash_purchase(request):
         if not created:
             submodel = save_model(submodel, values)
             #cash-cr;purchase-dr
-        set_transactions(submodel,
+        set_transactions(submodel, day_journal.date,
                          ['cr', cash_account, row.get('amount')],
                          ['dr', Account.objects.get(id=row.get('account_id')), row.get('amount')],
         )
@@ -114,7 +114,7 @@ def save_cash_payment(request):
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
         #cash-cr;payment-dr
-        set_transactions(submodel,
+        set_transactions(submodel, day_journal.date,
                          # ['cr', cash_account, row.get('amount')],
                          ['dr', Account.objects.get(id=row.get('account_id')), row.get('amount')],
         )
@@ -140,7 +140,7 @@ def save_cash_receipt(request):
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
         #cash-dr;r_from-cr
-        set_transactions(submodel,
+        set_transactions(submodel, day_journal.date,
                          ['dr', cash_account, row.get('amount')],
                          ['cr', Account.objects.get(id=row.get('account_id')), row.get('amount')],
         )
@@ -165,7 +165,7 @@ def save_credit_sales(request):
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
         #sales-cr;customer-dr
-        set_transactions(submodel,
+        set_transactions(submodel, day_journal.date,
                          ['dr', Account.objects.get(id=row.get('account_dr_id')), row.get('amount')],
                          ['cr', Account.objects.get(id=row.get('account_cr_id')), row.get('amount')],
         )
@@ -190,7 +190,7 @@ def save_credit_purchase(request):
         if not created:
             submodel = save_model(submodel, values)
             #purchase-dr, vendor-cr
-        set_transactions(submodel,
+        set_transactions(submodel, day_journal.date,
                          ['dr', Account.objects.get(id=row.get('account_dr_id')), row.get('amount')],
                          ['cr', Account.objects.get(id=row.get('account_cr_id')), row.get('amount')],
         )
@@ -216,7 +216,7 @@ def save_credit_income(request):
         if not created:
             submodel = save_model(submodel, values)
             # income-cr,from-dr
-        set_transactions(submodel,
+        set_transactions(submodel, day_journal.date,
                          ['dr', Account.objects.get(id=row.get('account_dr_id')), row.get('amount')],
                          ['cr', Account.objects.get(id=row.get('account_cr_id')), row.get('amount')],
         )
@@ -242,7 +242,7 @@ def save_credit_expense(request):
         if not created:
             submodel = save_model(submodel, values)
             # expense_head-dr
-        set_transactions(submodel,
+        set_transactions(submodel, day_journal.date,
                          ['dr', Account.objects.get(id=row.get('account_dr_id')), row.get('amount')],
                          ['cr', Account.objects.get(id=row.get('account_cr_id')), row.get('amount')],
         )
@@ -387,7 +387,7 @@ def save_summary_transfer(request):
             submodel = save_model(submodel, values)
         print row
         # Cash - Dr	; Cheque - Dr	; Bill-payment - Cr; Card - Dr
-        set_transactions(submodel,
+        set_transactions(submodel, day_journal.date,
                          ['dr', cash_account, row.get('cash')],
                          ['dr', card_account, row.get('card')],
                          ['dr', cheque_account, row.get('cheque')],
@@ -475,7 +475,7 @@ def save_card_sales(request):
             submodel = save_model(submodel, values)
 
         net_amount = float(row.get('amount')) - float(row.get('commission_out'))
-        set_transactions(submodel,
+        set_transactions(submodel, day_journal.date,
                          ['dr', card_account, net_amount],
                          ['dr', commission_out_account, row.get('commission_out')],
                          ['cr', cash_account, row.get('amount')],
@@ -502,7 +502,7 @@ def save_cash_equivalent_sales(request):
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
-        set_transactions(submodel,
+        set_transactions(submodel, day_journal.date,
                          ['dr', Account.objects.get(id=row.get('account')), row.get('amount')],
                          ['cr', cash_account, row.get('amount')],
         )
@@ -530,7 +530,7 @@ def save_cheque_purchase(request):
         if not created:
             submodel = save_model(submodel, values)
         net_amount = float(row.get('amount')) - float(row.get('commission_in'))
-        set_transactions(submodel,
+        set_transactions(submodel, day_journal.date,
                          ['dr', cheque_account, row.get('amount')],
                          ['cr', cash_account, net_amount],
                          ['cr', commission_in_account, row.get('commission_in')],
