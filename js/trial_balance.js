@@ -28,14 +28,6 @@ function CategoryViewModel(data, parent_id) {
     self.parent_id = parent_id;
     self.cls = 'category';
 
-    self.dr_amount = function () {
-        return self.current_balance();
-    }
-
-    self.cr_amount = function () {
-        return self.current_balance();
-    }
-
     self.accounts = ko.observableArray(ko.utils.arrayMap(data.accounts, function (item) {
         return new AccountViewModel(item, self.id);
     }));
@@ -44,15 +36,28 @@ function CategoryViewModel(data, parent_id) {
         return new CategoryViewModel(item, self.id);
     }));
 
-    self.current_balance = function () {
+    self.dr = function () {
         var total = 0;
         $.each(self.accounts(), function () {
-            if (isAN(this.current_balance))
-                total += parseFloat(this.current_balance);
+            if (isAN(this.dr()))
+                total += parseFloat(this.dr());
         });
         $.each(self.categories(), function () {
-            if (isAN(this.current_balance()))
-                total += parseFloat(this.current_balance());
+            if (isAN(this.dr()))
+                total += parseFloat(this.dr());
+        });
+        return rnum(round2(total));
+    }
+
+    self.cr = function () {
+        var total = 0;
+        $.each(self.accounts(), function () {
+            if (isAN(this.cr()))
+                total += parseFloat(this.cr());
+        });
+        $.each(self.categories(), function () {
+            if (isAN(this.cr()))
+                total += parseFloat(this.cr());
         });
         return rnum(round2(total));
     }
@@ -67,13 +72,7 @@ function AccountViewModel(data, parent_id) {
     self.current_balance = data.current_balance;
     self.parent_id = parent_id;
     self.cls = 'account';
-
-    self.dr_amount = function () {
-        return round2(self.current_balance);
-    }
-
-    self.cr_amount = function () {
-        return round2(self.current_balance);
-    }
+    self.cr = ko.observable(data.cr);
+    self.dr = ko.observable(data.dr);
 
 }
