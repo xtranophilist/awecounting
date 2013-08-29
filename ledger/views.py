@@ -14,7 +14,8 @@ def accounts_as_json(request):
 
 def accounts_by_day_as_json(request, day):
     accounts = Account.objects.all()
-    items_data = AccountSerializer(accounts, day=day).data
+    # items_data = AccountSerializer(accounts, day=day).data
+    items_data = AccountSerializer(accounts).data
     return HttpResponse(json.dumps(items_data), mimetype="application/json")
 
 
