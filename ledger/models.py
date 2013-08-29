@@ -73,10 +73,10 @@ class JournalEntry(models.Model):
 
 class Transaction(models.Model):
     account = models.ForeignKey(Account)
-    dr_amount = models.FloatField()
-    cr_amount = models.FloatField()
-    current_dr = models.FloatField()
-    current_cr = models.FloatField()
+    dr_amount = models.FloatField(null=True, blank=True)
+    cr_amount = models.FloatField(null=True, blank=True)
+    current_dr = models.FloatField(null=True, blank=True)
+    current_cr = models.FloatField(null=True, blank=True)
     journal_entry = models.ForeignKey(JournalEntry)
 
 
