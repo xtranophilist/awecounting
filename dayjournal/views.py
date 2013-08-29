@@ -8,7 +8,7 @@ from datetime import date
 from dayjournal.serializers import DayJournalSerializer, DayJournalLottoSerializer
 from django.http import HttpResponse
 import json
-from acubor.lib import delete_rows, invalid, save_model, all_empty, dr, cr, set_transactions
+from acubor.lib import delete_rows, invalid, save_model, all_empty, dr, cr, set_transactions, add
 
 
 def day_journal(request, journal_date=None):
@@ -115,7 +115,7 @@ def save_cash_payment(request):
         dct['saved'][index] = submodel.id
         #cash-cr;payment-dr
         set_transactions(submodel, day_journal.date,
-                         # ['cr', cash_account, row.get('amount')],
+                         ['cr', cash_account, row.get('amount')],
                          ['dr', Account.objects.get(id=row.get('account_id')), row.get('amount')],
         )
     delete_rows(params.get('deleted_rows'), model)
@@ -369,31 +369,25 @@ def save_summary_transfer(request):
     cash_account = Account.objects.get(name='Cash', company=request.user.company)
     card_account = Account.objects.get(name='Card', company=request.user.company)
     cheque_account = Account.objects.get(name='Cheque', company=request.user.company)
-
     for index, row in enumerate(params.get('rows')):
-
         if all_empty(row, ['cash', 'cheque', 'card']):
             continue
-
         for attr in ['cash', 'cheque', 'card']:
             if row.get(attr) is None or row.get(attr) == '':
                 row[attr] = None
-
         day_journal = get_journal(request)
         values = {'sn': index + 1, 'transfer_type_id': row.get('transfer_type'), 'cash': row.get('cash'),
                   'card': row.get('card'), 'cheque': row.get('cheque'), 'day_journal': day_journal}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
-        print row
-        # Cash - Dr	; Cheque - Dr	; Bill-payment - Cr; Card - Dr
+            # Cash - Dr	; Cheque - Dr	; Bill-payment - Cr; Card - Dr
         set_transactions(submodel, day_journal.date,
                          ['dr', cash_account, row.get('cash')],
                          ['dr', card_account, row.get('card')],
                          ['dr', cheque_account, row.get('cheque')],
-                         ['cr', Account.objects.get(id=row.get('transfer_type')), row.get('cash')],
-                         ['cr', Account.objects.get(id=row.get('transfer_type')), row.get('card')],
-                         ['cr', Account.objects.get(id=row.get('transfer_type')), row.get('cheque')],
+                         ['cr', Account.objects.get(id=row.get('transfer_type')),
+                          add(row.get('cash'), row.get('card'), row.get('cheque'))],
         )
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
