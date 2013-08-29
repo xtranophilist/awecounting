@@ -10,6 +10,7 @@ function TrialBalance(data) {
     }));
 
     self.expandRoot = function () {
+        $('.tree-table').treetable('collapseAll');
         for (var k in self.root_nodes) {
             $('.tree-table').treetable('expandNode', self.root_nodes[k]);
         }
