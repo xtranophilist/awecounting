@@ -30,7 +30,7 @@
         </tr>
         <!-- ko foreach: accounts -->
         <tr data-bind="attr: {'data-tt-id': id, 'data-tt-parent-id': parent_id}, css: cls">
-            <td data-bind="text: name"></td>
+            <td><a data-bind="text: name, attr: {href:'/ledger/'+id }"></a> </td>
             <td data-bind="text: code"></td>
             <td data-bind="text: dr()||''"></td>
             <td data-bind="text: cr()||''"></td>
@@ -72,6 +72,11 @@
         <!-- ko template: { name: 'categories',
                                 foreach: categories } -->
         <!-- /ko -->
+        <tr>
+            <td colspan=2><b class="pull-right">TOTAL</b></td>
+            <td data-bind="text: dr_total()"></td>
+            <td data-bind="text: cr_total()"></td>
+        </tr>
         </tbody>
     </table>
 
