@@ -80,17 +80,23 @@ class Transaction(models.Model):
     current_cr = models.FloatField(null=True, blank=True)
     journal_entry = models.ForeignKey(JournalEntry, related_name='transactions')
 
+    def __str__(self):
+        return str(self.account) + ' [' + str(self.dr_amount) + ' / ' + str(self.cr_amount) + ']'
+
     def save(self, *args, **kwargs):
         # import pdb
         # pdb.set_trace()
         if self.dr_amount:
-            if self.current_dr is None:
-                self.current_dr = 0
-            self.current_dr += self.dr_amount
+            if self.account.current_dr is None:
+                self.account.current_dr = 0
+            self.account.current_dr += float(self.dr_amount)
         if self.cr_amount:
-            if self.current_cr is None:
-                self.current_cr = 0
-            self.current_cr += self.cr_amount
+            if self.account.current_cr is None:
+                self.account.current_cr = 0
+            self.account.current_cr += float(self.cr_amount)
+        self.account.save()
+        self.current_dr = self.account.current_dr
+        self.current_cr = self.account.current_cr
         super(Transaction, self).save(*args, **kwargs)
 
 

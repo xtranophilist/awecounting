@@ -28,8 +28,10 @@ def day_journal(request, journal_date=None):
 
 def get_journal(request):
     journal, created = DayJournal.objects.get_or_create(date=json.loads(request.body).get('day_journal_date'),
-                                                        company=request.user.company, defaults={
-            'sales_tax': 0, 'cheque_deposit': 0, 'cash_deposit': 0, 'cash_withdrawal': 0})
+                                                        company=request.user.company, defaults={'sales_tax': 0,
+                                                                                                'cheque_deposit': 0,
+                                                                                                'cash_deposit': 0,
+                                                                                                'cash_withdrawal': 0})
     if created:
         journal.save()
     return journal
@@ -56,10 +58,10 @@ def save_cash_sales(request):
         net_amount = float(row.get('amount')) - tax_amount
 
         #sales-cr;cash-dr
-        set_transactions(submodel,
-                         dr(cash_account, row.get('amount'), day_journal.date),
-                         cr(Account.objects.get(id=row.get('account_id')), net_amount, day_journal.date),
-                         cr(sales_tax_account, tax_amount, day_journal.date),
+        set_transactions(submodel, day_journal.date,
+                         ['dr', cash_account, row.get('amount')],
+                         # cr(Account.objects.get(id=row.get('account_id')), net_amount),
+                         # cr(sales_tax_account, tax_amount),
         )
         if not created:
             submodel = save_model(submodel, values)
