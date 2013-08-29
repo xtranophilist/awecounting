@@ -3,6 +3,9 @@ from users.models import Company
 from datetime import date
 from mptt.models import MPTTModel, TreeForeignKey
 
+from django.db.models.signals import pre_delete
+from django.dispatch.dispatcher import receiver
+
 
 class Category(MPTTModel):
     name = models.CharField(max_length=50)
@@ -83,21 +86,44 @@ class Transaction(models.Model):
     def __str__(self):
         return str(self.account) + ' [' + str(self.dr_amount) + ' / ' + str(self.cr_amount) + ']'
 
-    def save(self, *args, **kwargs):
-        # import pdb
-        # pdb.set_trace()
-        if self.dr_amount:
-            if self.account.current_dr is None:
-                self.account.current_dr = 0
-            self.account.current_dr += float(self.dr_amount)
-        if self.cr_amount:
-            if self.account.current_cr is None:
-                self.account.current_cr = 0
-            self.account.current_cr += float(self.cr_amount)
-        self.account.save()
-        self.current_dr = self.account.current_dr
-        self.current_cr = self.account.current_cr
-        super(Transaction, self).save(*args, **kwargs)
+    # def save(self, *args, **kwargs):
+    #     # import pdb
+    #     # pdb.set_trace()
+    #     if self.dr_amount:
+    #         if self.account.current_dr is None:
+    #             self.account.current_dr = 0
+    #         self.account.current_dr += float(self.dr_amount)
+    #     if self.cr_amount:
+    #         if self.account.current_cr is None:
+    #             self.account.current_cr = 0
+    #         self.account.current_cr += float(self.cr_amount)
+    #     self.account.save()
+    #     self.current_dr = self.account.current_dr
+    #     self.current_cr = self.account.current_cr
+    #     super(Transaction, self).save(*args, **kwargs)
+    #
+    # def delete(self, *args, **kwargs):
+    #     print 'hi'
+    #     # if self.type == 'Dr':
+    #     #     self.account.current_balance -= self.amount
+    #     # if self.type == 'Cr':
+    #     #     self.account.current_balance += self.amount
+    #     # self.account.save()
+    #     super(Transaction, self).delete(*args, **kwargs)
+
+
+@receiver(pre_delete, sender=Transaction)
+def _transaction_delete(sender, instance, **kwargs):
+    transaction = instance
+    print transaction
+    # cancel out existing dr_amount and cr_amount from account's current_dr and current_cr
+    if transaction.dr_amount:
+        transaction.account.current_dr -= transaction.dr_amount
+
+    if transaction.cr_amount:
+        transaction.account.current_cr -= transaction.cr_amount
+
+    transaction.account.save()
 
 
 # class Transaction(models.Model):
