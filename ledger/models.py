@@ -30,25 +30,25 @@ class Account(models.Model):
     def get_absolute_url(self):
         return '/account/' + str(self.id)
 
-    def get_last_day_last_transaction(self):
-        transactions = Transaction.objects.filter(account=self, date__lt=date.today()).order_by('-id', '-date')[:1]
-        if len(transactions) > 0:
-            return transactions[0]
+    # def get_last_day_last_transaction(self):
+    #     transactions = Transaction.objects.filter(account=self, date__lt=date.today()).order_by('-id', '-date')[:1]
+    #     if len(transactions) > 0:
+    #         return transactions[0]
+    #
+    # def get_last_transaction_before(self, before_date):
+    #     transactions = Transaction.objects.filter(account=self, date__lt=before_date).order_by('-id', '-date')[:1]
+    #     if len(transactions) > 0:
+    #         return transactions[0]
+    #
+    # def get_day_opening(self, before_date=None):
+    #     if not before_date:
+    #         day = date.today()
+    #     transactions = Transaction.objects.filter(account=self, date__lt=day).order_by('-id', '-date')[:1]
+    #     if len(transactions) > 0:
+    #         return transactions[0].current_balance
+    #     return self.current_balance
 
-    def get_last_transaction_before(self, before_date):
-        transactions = Transaction.objects.filter(account=self, date__lt=before_date).order_by('-id', '-date')[:1]
-        if len(transactions) > 0:
-            return transactions[0]
-
-    def get_day_opening(self, before_date=None):
-        if not before_date:
-            day = date.today()
-        transactions = Transaction.objects.filter(account=self, date__lt=day).order_by('-id', '-date')[:1]
-        if len(transactions) > 0:
-            return transactions[0].current_balance
-        return self.current_balance
-
-    day_opening = property(get_day_opening)
+    # day_opening = property(get_day_opening)
 
     def add_category(self, category):
         # all_categories = self.get_all_categories()
@@ -65,56 +65,71 @@ class Account(models.Model):
         return self.name
 
 
-class Transaction(models.Model):
-    account = models.ForeignKey(Account, related_name='transactions')
+class JournalEntry(models.Model):
     date = models.DateField()
-    amount = models.FloatField()
-    current_balance = models.FloatField()
-    type = models.CharField(max_length=2)  # Dr. or Cr.
-
-    # TODO change current balance on save
-    def save(self, *args, **kwargs):
-        self.amount = float(self.amount)
-        print '1. amount is ' + str(self.amount)
-        print '2. current balance is ' + str(self.account.current_balance)
-        if self.type == 'Dr':
-            self.account.current_balance += self.amount
-        if self.type == 'Cr':
-            self.account.current_balance -= self.amount
-        self.account.save()
-        self.current_balance = self.account.current_balance
-        print '3. current balance is ' + str(self.account.current_balance)
-        super(Transaction, self).save(*args, **kwargs)
-
-    def delete(self, *args, **kwargs):
-        if self.type == 'Dr':
-            self.account.current_balance -= self.amount
-        if self.type == 'Cr':
-            self.account.current_balance += self.amount
-        self.account.save()
-        super(Transaction, self).delete(*args, **kwargs)
+    model = models.CharField(max_length=50)
+    model_id = models.IntegerField()
 
 
-    # def dr(self, account, amount, date):
-    #     self.type == 'Dr'
-    #     self.amount = float(amount)
-    #     self.date = date
-    #     self.account = account
-    #     # self.account.current_balance += float(amount)
-    #     # self.account.save()
-    #     # self.current_balance = self.account.current_balance
-    #     self.save()
-    #
-    #
-    # def cr(self, account, amount, date):
-    #     self.type == 'Cr'
-    #     self.amount = float(amount)
-    #     self.date = date
-    #     self.account = account
-    #     # self.account.current_balance -= float(amount)
-    #     # self.account.save()
-    #     # self.current_balance = self.account.current_balance
-    #     self.save()
+# class Transaction(models.Model):
+#     account = models.ForeignKey(Account)
+#     dr_amount = models.FloatField()
+#     cr_amount = models.FloatField()
+#     current_dr = models.FloatField()
+#     current_cr = models.FloatField()
+#     journal_entry = models.ForeignKey(JournalEntry)
+
+
+# class Transaction(models.Model):
+#     account = models.ForeignKey(Account, related_name='transactions')
+#     date = models.DateField()
+#     amount = models.FloatField()
+#     current_balance = models.FloatField()
+#     type = models.CharField(max_length=2)  # Dr. or Cr.
+#
+#     # TODO change current balance on save
+#     def save(self, *args, **kwargs):
+#         self.amount = float(self.amount)
+#         print '1. amount is ' + str(self.amount)
+#         print '2. current balance is ' + str(self.account.current_balance)
+#         if self.type == 'Dr':
+#             self.account.current_balance += self.amount
+#         if self.type == 'Cr':
+#             self.account.current_balance -= self.amount
+#         self.account.save()
+#         self.current_balance = self.account.current_balance
+#         print '3. current balance is ' + str(self.account.current_balance)
+#         super(Transaction, self).save(*args, **kwargs)
+#
+#     def delete(self, *args, **kwargs):
+#         if self.type == 'Dr':
+#             self.account.current_balance -= self.amount
+#         if self.type == 'Cr':
+#             self.account.current_balance += self.amount
+#         self.account.save()
+#         super(Transaction, self).delete(*args, **kwargs)
+#
+#
+#     # def dr(self, account, amount, date):
+#     #     self.type == 'Dr'
+#     #     self.amount = float(amount)
+#     #     self.date = date
+#     #     self.account = account
+#     #     # self.account.current_balance += float(amount)
+#     #     # self.account.save()
+#     #     # self.current_balance = self.account.current_balance
+#     #     self.save()
+#     #
+#     #
+#     # def cr(self, account, amount, date):
+#     #     self.type == 'Cr'
+#     #     self.amount = float(amount)
+#     #     self.date = date
+#     #     self.account = account
+#     #     # self.account.current_balance -= float(amount)
+#     #     # self.account.save()
+#     #     # self.current_balance = self.account.current_balance
+#     #     self.save()
 
 
 class Party(models.Model):

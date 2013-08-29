@@ -86,7 +86,7 @@ def all_empty(row, required_fields):
     return empty
 
 
-def save_model(model, values):
+def save_model(model, values) :
     for key, value in values.items():
         setattr(model, key, value)
     model.save()
