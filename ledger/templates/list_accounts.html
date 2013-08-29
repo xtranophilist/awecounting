@@ -15,7 +15,8 @@
         <th>Code</th>
         <th>Name</th>
         <th>Category</th>
-        <th>Current Balance</th>
+        <th>Dr</th>
+        <th>Cr</th>
         <th>Actions</th>
         </thead>
         <tbody>
@@ -34,7 +35,8 @@
                 <td>
                         {{ account.category }}
                 </td>
-                <td>{{ account.current_balance }}</td>
+                <td>{{ account.current_dr }}</td>
+                <td>{{ account.current_cr }}</td>
                 <td>
                     <a href="{% url "update_account" account.id %}">
                         Edit

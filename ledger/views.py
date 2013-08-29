@@ -54,10 +54,10 @@ def list_accounts(request):
 
 def view_account(request, id):
     account = get_object_or_404(Account, id=id)
-    transactions = account.transactions
+    # transactions = account.transactions
     base_template = 'dashboard.html'
     return render(request, 'view_account.html', {
         'account': account,
-        'transactions': transactions.all(),
+        # 'transactions': transactions.all(),
         'base_template': base_template,
     })
