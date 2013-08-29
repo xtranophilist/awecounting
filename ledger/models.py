@@ -71,13 +71,13 @@ class JournalEntry(models.Model):
     model_id = models.IntegerField()
 
 
-# class Transaction(models.Model):
-#     account = models.ForeignKey(Account)
-#     dr_amount = models.FloatField()
-#     cr_amount = models.FloatField()
-#     current_dr = models.FloatField()
-#     current_cr = models.FloatField()
-#     journal_entry = models.ForeignKey(JournalEntry)
+class Transaction(models.Model):
+    account = models.ForeignKey(Account)
+    dr_amount = models.FloatField()
+    cr_amount = models.FloatField()
+    current_dr = models.FloatField()
+    current_cr = models.FloatField()
+    journal_entry = models.ForeignKey(JournalEntry)
 
 
 # class Transaction(models.Model):
