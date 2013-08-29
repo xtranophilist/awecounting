@@ -13,7 +13,8 @@ def recursive_node_to_dict(node):
     children = [recursive_node_to_dict(c) for c in node.get_children()]
     accounts = []
     for account in node.accounts.all():
-        a = {'id': account.id, 'code': account.code, 'name': account.name, 'current_balance': account.current_balance}
+        a = {'id': account.id, 'code': account.code, 'name': account.name, 'dr': account.current_dr,
+             'cr': account.current_cr}
         accounts.append(a)
     result['accounts'] = accounts
     if children:

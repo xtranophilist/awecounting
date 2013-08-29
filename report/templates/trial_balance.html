@@ -25,15 +25,15 @@
         <tr data-bind="attr: {'data-tt-id': id, 'data-tt-parent-id': parent_id}, css: cls">
             <td data-bind="text: name"></td>
             <td data-bind="text: code"></td>
-            <td data-bind="text: dr_amount()"></td>
-            <td data-bind="text: cr_amount()"></td>
+            <td data-bind="text: dr()||''"></td>
+            <td data-bind="text: cr()||''"></td>
         </tr>
         <!-- ko foreach: accounts -->
         <tr data-bind="attr: {'data-tt-id': id, 'data-tt-parent-id': parent_id}, css: cls">
             <td data-bind="text: name"></td>
             <td data-bind="text: code"></td>
-            <td data-bind="text: dr_amount()"></td>
-            <td data-bind="text: cr_amount()"></td>
+            <td data-bind="text: dr()||''"></td>
+            <td data-bind="text: cr()||''"></td>
         </tr>
         <!-- /ko -->
 
