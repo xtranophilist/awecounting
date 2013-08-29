@@ -96,12 +96,9 @@ def save_model(model, values):
 def delete_rows(rows, model):
     for row in rows:
         if row.get('id'):
-            try:
-                instance = model.objects.get(id=row.get('id'))
-                # [transaction.delete() for transaction in instance.transactions.all()]
-                instance.delete()
-            except:
-                pass
+            instance = model.objects.get(id=row.get('id'))
+            JournalEntry.objects.get(model='CashSales', model_id=instance.id).delete()
+            instance.delete()
 
 
 def dr(account, amount):
@@ -125,19 +122,45 @@ def set_transactions(submodel, date, *args):
         'date': date
     })
     for arg in args:
-        print arg
         # transaction = Transaction(account=arg[1], dr_amount=arg[2])
         matches = journal_entry.transactions.filter(account=arg[1])
-        if matches is []:
+        if not matches:
             transaction = Transaction()
+            transaction.account = arg[1]
+            if arg[0] == 'dr':
+                transaction.dr_amount = float(arg[2])
+                transaction.account.current_dr += transaction.dr_amount
+                transaction.current_dr = transaction.account.current_dr
+            if arg[0] == 'cr':
+                transaction.cr_amount = float(arg[2])
+                transaction.account.current_cr += transaction.cr_amount
+                transaction.current_cr = transaction.account.current_cr
+
         else:
             transaction = matches[0]
-        transaction.account = arg[1]
-        if arg[0] == 'dr':
-            transaction.dr_amount = arg[2]
-        else:
-            transaction.cr_amount = arg[2]
-        print transaction
+            transaction.account = arg[1]
+
+            # cancel out existing dr_amount and cr_amount from current_dr and current_cr
+            if transaction.dr_amount:
+                transaction.current_dr -= transaction.dr_amount
+                transaction.account.current_dr -= transaction.dr_amount
+
+            if transaction.cr_amount:
+                transaction.current_cr -= transaction.cr_amount
+                transaction.account.current_cr -= transaction.cr_amount
+
+            # save new dr_amount and add it to current_dr/cr
+            if arg[0] == 'dr':
+                transaction.dr_amount = float(arg[2])
+                transaction.current_dr += transaction.dr_amount
+                transaction.account.current_dr += transaction.dr_amount
+            else:
+                transaction.cr_amount = float(arg[2])
+                transaction.current_cr += transaction.cr_amount
+                transaction.account.current_cr += transaction.cr_amount
+
+        transaction.account.save()
+
         journal_entry.transactions.add(transaction)
 
 
