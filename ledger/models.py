@@ -22,7 +22,8 @@ class Account(models.Model):
     code = models.CharField(max_length=10)
     name = models.CharField(max_length=100)
     company = models.ForeignKey(Company)
-    current_balance = models.FloatField(default=0)
+    current_dr = models.FloatField(default=0)
+    current_cr = models.FloatField(default=0)
     parent = models.ForeignKey('self', blank=True, null=True, related_name='children')
     category = models.ForeignKey(Category, related_name='accounts', blank=True)
     tax_rate = models.FloatField(blank=True, null=True)
@@ -30,25 +31,25 @@ class Account(models.Model):
     def get_absolute_url(self):
         return '/account/' + str(self.id)
 
-    # def get_last_day_last_transaction(self):
-    #     transactions = Transaction.objects.filter(account=self, date__lt=date.today()).order_by('-id', '-date')[:1]
-    #     if len(transactions) > 0:
-    #         return transactions[0]
-    #
-    # def get_last_transaction_before(self, before_date):
-    #     transactions = Transaction.objects.filter(account=self, date__lt=before_date).order_by('-id', '-date')[:1]
-    #     if len(transactions) > 0:
-    #         return transactions[0]
-    #
-    # def get_day_opening(self, before_date=None):
-    #     if not before_date:
-    #         day = date.today()
-    #     transactions = Transaction.objects.filter(account=self, date__lt=day).order_by('-id', '-date')[:1]
-    #     if len(transactions) > 0:
-    #         return transactions[0].current_balance
-    #     return self.current_balance
+    def get_last_day_last_transaction(self):
+        transactions = Transaction.objects.filter(account=self, date__lt=date.today()).order_by('-id', '-date')[:1]
+        if len(transactions) > 0:
+            return transactions[0]
 
-    # day_opening = property(get_day_opening)
+    def get_last_transaction_before(self, before_date):
+        transactions = Transaction.objects.filter(account=self, date__lt=before_date).order_by('-id', '-date')[:1]
+        if len(transactions) > 0:
+            return transactions[0]
+
+    def get_day_opening(self, before_date=None):
+        if not before_date:
+            day = date.today()
+        transactions = Transaction.objects.filter(account=self, date__lt=day).order_by('-id', '-date')[:1]
+        if len(transactions) > 0:
+            return transactions[0].current_balance
+        return self.current_balance
+
+    day_opening = property(get_day_opening)
 
     def add_category(self, category):
         # all_categories = self.get_all_categories()
@@ -77,7 +78,20 @@ class Transaction(models.Model):
     cr_amount = models.FloatField(null=True, blank=True)
     current_dr = models.FloatField(null=True, blank=True)
     current_cr = models.FloatField(null=True, blank=True)
-    journal_entry = models.ForeignKey(JournalEntry)
+    journal_entry = models.ForeignKey(JournalEntry, related_name='transactions')
+
+    def save(self, *args, **kwargs):
+        # import pdb
+        # pdb.set_trace()
+        if self.dr_amount:
+            if self.current_dr is None:
+                self.current_dr = 0
+            self.current_dr += self.dr_amount
+        if self.cr_amount:
+            if self.current_cr is None:
+                self.current_cr = 0
+            self.current_cr += self.cr_amount
+        super(Transaction, self).save(*args, **kwargs)
 
 
 # class Transaction(models.Model):
