@@ -1,6 +1,6 @@
 import os
 from django import forms
-from ledger.models import Transaction
+from ledger.models import JournalEntry, Transaction
 
 
 class ExtFileField(forms.FileField):
@@ -86,7 +86,7 @@ def all_empty(row, required_fields):
     return empty
 
 
-def save_model(model, values) :
+def save_model(model, values):
     for key, value in values.items():
         setattr(model, key, value)
     model.save()
@@ -98,29 +98,46 @@ def delete_rows(rows, model):
         if row.get('id'):
             try:
                 instance = model.objects.get(id=row.get('id'))
-                [transaction.delete() for transaction in instance.transactions.all()]
+                # [transaction.delete() for transaction in instance.transactions.all()]
                 instance.delete()
             except:
                 pass
 
 
-def dr(account, amount, date):
+def dr(account, amount):
     if amount is None:
         return
-    transaction = Transaction(account=account, date=date, amount=amount, type='Dr')
-    transaction.save()
+    transaction = Transaction(account=account, dr_amount=amount)
     return transaction
 
 
 def cr(account, amount, date):
     if amount is None:
         return
-    transaction = Transaction(account=account, date=date, amount=amount, type='Cr')
-    transaction.save()
+    transaction = Transaction(account=account, cr_amount=amount)
     return transaction
 
 
-def set_transactions(submodel, *args):
-    [transaction.delete() for transaction in submodel.transactions.all()]
-    args = [arg for arg in args if arg is not None]
-    submodel.transactions.add(*args)
+def set_transactions(submodel, date, *args):
+    # [transaction.delete() for transaction in submodel.transactions.all()]
+    # args = [arg for arg in args if arg is not None]
+    journal_entry, created = JournalEntry.objects.get_or_create(model='CashSales', model_id=submodel.id, defaults={
+        'date': date
+    })
+    for arg in args:
+        print arg
+        # transaction = Transaction(account=arg[1], dr_amount=arg[2])
+        matches = journal_entry.transactions.filter(account=arg[1])
+        if matches is []:
+            transaction = Transaction()
+        else:
+            transaction = matches[0]
+        transaction.account = arg[1]
+        if arg[0] == 'dr':
+            transaction.dr_amount = arg[2]
+        else:
+            transaction.cr_amount = arg[2]
+        print transaction
+        journal_entry.transactions.add(transaction)
+
+
