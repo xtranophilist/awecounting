@@ -14,7 +14,30 @@ function TrialBalance(data) {
         for (var k in self.root_nodes) {
             $('.tree-table').treetable('expandNode', self.root_nodes[k]);
         }
-    }
+    };
+
+    self.dr_total = function () {
+        var total = 0;
+        $.each(self.categories(), function () {
+            if (isAN(this.dr()))
+                total += parseFloat(this.dr());
+        });
+        return rnum(round2(total));
+    };
+
+    self.cr_total = function () {
+        var total = 0;
+        $.each(self.categories(), function () {
+            if (isAN(this.cr()))
+                total += parseFloat(this.cr());
+        });
+        return rnum(round2(total));
+    };
+
+    self.balanced = function () {
+        return self.cr_total() == self.dr_total();
+    };
+
 
 }
 
