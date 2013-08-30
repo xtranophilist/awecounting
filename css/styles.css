@@ -249,3 +249,7 @@ table.tree-table tr.expanded span.indenter a:before {
 .controls a {
     cursor: pointer;
 }
+
+tr.highlighted td{
+    background-color: #fbd972 !important;
+}
