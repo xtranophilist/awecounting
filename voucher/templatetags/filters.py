@@ -50,6 +50,7 @@ def remove_account(transactions, account):
             transaction.account.id is not account.id and (
                 transaction.dr_amount or transaction.cr_amount)]
 
+
 @register.filter
 def if_not_none(obj):
     if obj is None:
@@ -64,3 +65,12 @@ def subtract(value, arg):
     if arg is None:
         arg = 0
     return value - arg
+
+
+@register.filter
+def url_for_content(value):
+    #TODO DB Optimisation
+    obj = value.content_type.get_object_for_this_type(id=value.model_id)
+    return obj.get_absolute_url()
+    # import pdb
+    # pdb.set_trace()

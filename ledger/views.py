@@ -58,7 +58,7 @@ def view_account(request, id):
     base_template = 'dashboard.html'
     journal_entries = JournalEntry.objects.filter(transactions__account_id=account.id).order_by('id',
                                                                                                 'date').prefetch_related(
-        'transactions', 'transactions__account').select_related()
+        'transactions', 'content_type', 'transactions__account').select_related()
     return render(request, 'view_account.html', {
         'account': account,
         # 'transactions': transactions.all(),

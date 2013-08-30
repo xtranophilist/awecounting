@@ -1,6 +1,4 @@
-from django.http import HttpResponse
-import json
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render
 from ledger.models import Category
 from mptt.templatetags.mptt_tags import cache_tree_children
 
