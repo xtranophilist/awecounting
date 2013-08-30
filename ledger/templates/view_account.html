@@ -9,9 +9,9 @@
     <script src="http://localhost/acubor_static/js/day_journal.js"></script>
     <script>
         $(document).ready(function () {
-            if (window.location.hash){
+            if (window.location.hash) {
                 var hash = window.location.hash.substring(1);
-                $('#row-'+hash).addClass('highlighted');
+                $('#row-' + hash).addClass('highlighted');
             }
         });
     </script>
@@ -45,7 +45,6 @@
         <th>Cr</th>
         <th>Dr Balance</th>
         <th>Cr Balance</th>
-        <th>Balance</th>
         </thead>
         <tbody>
         {% for entry in journal_entries %}
@@ -59,7 +58,7 @@
 
                     {% for transaction in entry.transactions.all|remove_account:account %}
                         {% if not forloop.first %}, {% endif %}
-                        <a href="{{ transaction.account.get_absolute_url }}#{{ entry.id }}">{{ transaction.account.name }}</a>
+                        <a href="{{ transaction.account.get_absolute_url }}/#{{ entry.id }}">{{ transaction.account.name }}</a>
                     {% endfor %}
 
                 </td>
@@ -73,13 +72,10 @@
                             {{ transaction.cr_amount|if_not_none }}
                         </td>
                         <td>
-                            {{ transaction.current_dr|subtract:transaction.current_cr }}
+                            {{ transaction.current_dr|if_not_none }}
                         </td>
                         <td>
-                            {{ transaction.current_dr|subtract:transaction.current_cr }}
-                        </td>
-                        <td>
-                            {{ transaction.current_dr|subtract:transaction.current_cr }}
+                            {{ transaction.current_cr|if_not_none }}
                         </td>
                     {% endif %}
 
