@@ -33,6 +33,9 @@ class CashSales(models.Model):
     day_journal = models.ForeignKey(DayJournal, related_name='cash_sales')
     # transactions = models.ManyToManyField(Transaction)
 
+    def get_absolute_url(self):
+        return '/day/' + str(self.day_journal.date) + '#cash-sales'
+
 
 class CashPurchase(models.Model):
     sn = models.IntegerField()
@@ -40,6 +43,9 @@ class CashPurchase(models.Model):
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_purchase')
     # transactions = models.ManyToManyField(Transaction)
+
+    def get_absolute_url(self):
+        return '/day/' + str(self.day_journal.date) + '#cash-purchase'
 
 
 class CashReceipt(models.Model):

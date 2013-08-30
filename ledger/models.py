@@ -33,7 +33,7 @@ class Account(models.Model):
     tax_rate = models.FloatField(blank=True, null=True)
 
     def get_absolute_url(self):
-        return '/account/' + str(self.id)
+        return '/ledger/' + str(self.id)
 
     # def get_last_day_last_transaction(self):
     #     transactions = Transaction.objects.filter(account=self, date__lt=date.today()).order_by('-id', '-date')[:1]
