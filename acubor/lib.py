@@ -1,6 +1,7 @@
 import os
 from django import forms
 from ledger.models import JournalEntry, Transaction
+from django.contrib.contenttypes.models import ContentType
 
 
 class ExtFileField(forms.FileField):
@@ -118,10 +119,11 @@ def cr(account, amount, date):
 def set_transactions(submodel, date, *args):
     # [transaction.delete() for transaction in submodel.transactions.all()]
     # args = [arg for arg in args if arg is not None]
-    journal_entry, created = JournalEntry.objects.get_or_create(model=type(submodel).__name__, model_id=submodel.id,
-                                                                defaults={
-                                                                    'date': date
-                                                                })
+    journal_entry, created = JournalEntry.objects.get_or_create(
+        content_type=ContentType.objects.get_for_model(submodel), model_id=submodel.id,
+        defaults={
+            'date': date
+        })
     for arg in args:
         # transaction = Transaction(account=arg[1], dr_amount=arg[2])
         matches = journal_entry.transactions.filter(account=arg[1])
