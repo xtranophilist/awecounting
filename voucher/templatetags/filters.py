@@ -32,9 +32,9 @@ def jsonify(object):
 @register.filter
 def user_to_json(user):
     if hasattr(user, '_wrapped') and hasattr(user, '_setup'):
-            if user._wrapped.__class__ == object:
-                user._setup()
-            user = user._wrapped
+        if user._wrapped.__class__ == object:
+            user._setup()
+        user = user._wrapped
     user_dict = {'id': user.id, 'username': user.username}
     return mark_safe(json.dumps(user_dict))
 
@@ -42,3 +42,25 @@ def user_to_json(user):
 @register.filter
 def get_item(dictionary, key):
     return dictionary.get(key)
+
+
+@register.filter
+def remove_account(transactions, account):
+    return [transaction for transaction in transactions if
+            transaction.account.id is not account.id and (
+                transaction.dr_amount or transaction.cr_amount)]
+
+@register.filter
+def if_not_none(obj):
+    if obj is None:
+        return ''
+    return obj
+
+
+@register.filter
+def subtract(value, arg):
+    if value is None:
+        value = 0
+    if arg is None:
+        arg = 0
+    return value - arg
