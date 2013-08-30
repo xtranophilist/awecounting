@@ -2,6 +2,7 @@ from django.db import models
 from users.models import Company
 from datetime import date
 from mptt.models import MPTTModel, TreeForeignKey
+from django.contrib.contenttypes.models import ContentType
 
 from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver
@@ -34,25 +35,25 @@ class Account(models.Model):
     def get_absolute_url(self):
         return '/account/' + str(self.id)
 
-    def get_last_day_last_transaction(self):
-        transactions = Transaction.objects.filter(account=self, date__lt=date.today()).order_by('-id', '-date')[:1]
-        if len(transactions) > 0:
-            return transactions[0]
+    # def get_last_day_last_transaction(self):
+    #     transactions = Transaction.objects.filter(account=self, date__lt=date.today()).order_by('-id', '-date')[:1]
+    #     if len(transactions) > 0:
+    #         return transactions[0]
+    #
+    # def get_last_transaction_before(self, before_date):
+    #     transactions = Transaction.objects.filter(account=self, date__lt=before_date).order_by('-id', '-date')[:1]
+    #     if len(transactions) > 0:
+    #         return transactions[0]
+    #
+    # def get_day_opening(self, before_date=None):
+    #     if not before_date:
+    #         day = date.today()
+    #     transactions = Transaction.objects.filter(account=self, date__lt=day).order_by('-id', '-date')[:1]
+    #     if len(transactions) > 0:
+    #         return transactions[0].current_balance
+    #     return self.current_balance
 
-    def get_last_transaction_before(self, before_date):
-        transactions = Transaction.objects.filter(account=self, date__lt=before_date).order_by('-id', '-date')[:1]
-        if len(transactions) > 0:
-            return transactions[0]
-
-    def get_day_opening(self, before_date=None):
-        if not before_date:
-            day = date.today()
-        transactions = Transaction.objects.filter(account=self, date__lt=day).order_by('-id', '-date')[:1]
-        if len(transactions) > 0:
-            return transactions[0].current_balance
-        return self.current_balance
-
-    day_opening = property(get_day_opening)
+    # day_opening = property(get_day_opening)
 
     def add_category(self, category):
         # all_categories = self.get_all_categories()
@@ -71,8 +72,11 @@ class Account(models.Model):
 
 class JournalEntry(models.Model):
     date = models.DateField()
-    model = models.CharField(max_length=50)
+    content_type = models.ForeignKey(ContentType)
     model_id = models.IntegerField()
+
+    class Meta:
+        verbose_name_plural = u'Journal Entries'
 
 
 class Transaction(models.Model):
@@ -86,30 +90,30 @@ class Transaction(models.Model):
     def __str__(self):
         return str(self.account) + ' [' + str(self.dr_amount) + ' / ' + str(self.cr_amount) + ']'
 
-    # def save(self, *args, **kwargs):
-    #     # import pdb
-    #     # pdb.set_trace()
-    #     if self.dr_amount:
-    #         if self.account.current_dr is None:
-    #             self.account.current_dr = 0
-    #         self.account.current_dr += float(self.dr_amount)
-    #     if self.cr_amount:
-    #         if self.account.current_cr is None:
-    #             self.account.current_cr = 0
-    #         self.account.current_cr += float(self.cr_amount)
-    #     self.account.save()
-    #     self.current_dr = self.account.current_dr
-    #     self.current_cr = self.account.current_cr
-    #     super(Transaction, self).save(*args, **kwargs)
-    #
-    # def delete(self, *args, **kwargs):
-    #     print 'hi'
-    #     # if self.type == 'Dr':
-    #     #     self.account.current_balance -= self.amount
-    #     # if self.type == 'Cr':
-    #     #     self.account.current_balance += self.amount
-    #     # self.account.save()
-    #     super(Transaction, self).delete(*args, **kwargs)
+        # def save(self, *args, **kwargs):
+        #     # import pdb
+        #     # pdb.set_trace()
+        #     if self.dr_amount:
+        #         if self.account.current_dr is None:
+        #             self.account.current_dr = 0
+        #         self.account.current_dr += float(self.dr_amount)
+        #     if self.cr_amount:
+        #         if self.account.current_cr is None:
+        #             self.account.current_cr = 0
+        #         self.account.current_cr += float(self.cr_amount)
+        #     self.account.save()
+        #     self.current_dr = self.account.current_dr
+        #     self.current_cr = self.account.current_cr
+        #     super(Transaction, self).save(*args, **kwargs)
+        #
+        # def delete(self, *args, **kwargs):
+        #     print 'hi'
+        #     # if self.type == 'Dr':
+        #     #     self.account.current_balance -= self.amount
+        #     # if self.type == 'Cr':
+        #     #     self.account.current_balance += self.amount
+        #     # self.account.save()
+        #     super(Transaction, self).delete(*args, **kwargs)
 
 
 @receiver(pre_delete, sender=Transaction)
