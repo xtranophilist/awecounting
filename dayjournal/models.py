@@ -1,6 +1,6 @@
 from django.db import models
 from users.models import Company
-from ledger.models import Account, Transaction
+from ledger.models import Account
 from inventory.models import InventoryAccount
 
 
@@ -11,9 +11,9 @@ class DayJournal(models.Model):
     cash_deposit = models.FloatField()
     cash_withdrawal = models.FloatField()
     cheque_deposit = models.FloatField()
-    cash_deposit_transactions = models.ManyToManyField(Transaction, related_name='journal_for_deposits')
-    cash_withdrawal_transactions = models.ManyToManyField(Transaction, related_name='journal_for_withdrawals')
-    cheque_deposit_transactions = models.ManyToManyField(Transaction, related_name='journal_for_cheque_deposits')
+    # cash_deposit_transactions = models.ManyToManyField(Transaction, related_name='journal_for_deposits')
+    # cash_withdrawal_transactions = models.ManyToManyField(Transaction, related_name='journal_for_withdrawals')
+    # cheque_deposit_transactions = models.ManyToManyField(Transaction, related_name='journal_for_cheque_deposits')
 
 
     def get_absolute_url(self):
@@ -31,7 +31,10 @@ class CashSales(models.Model):
     sales_ledger = models.ForeignKey(Account)
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_sales')
-    transactions = models.ManyToManyField(Transaction)
+    # transactions = models.ManyToManyField(Transaction)
+
+    def get_absolute_url(self):
+        return '/day/' + str(self.day_journal.date) + '#cash-sales'
 
 
 class CashPurchase(models.Model):
@@ -39,7 +42,10 @@ class CashPurchase(models.Model):
     purchase_ledger = models.ForeignKey(Account)
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_purchase')
-    transactions = models.ManyToManyField(Transaction)
+    # transactions = models.ManyToManyField(Transaction)
+
+    def get_absolute_url(self):
+        return '/day/' + str(self.day_journal.date) + '#cash-purchase'
 
 
 class CashReceipt(models.Model):
@@ -47,7 +53,7 @@ class CashReceipt(models.Model):
     received_from = models.ForeignKey(Account)
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_receipt')
-    transactions = models.ManyToManyField(Transaction)
+    # transactions = models.ManyToManyField(Transaction)
 
 
 class CashPayment(models.Model):
@@ -55,7 +61,7 @@ class CashPayment(models.Model):
     payment_to = models.ForeignKey(Account)
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_payment')
-    transactions = models.ManyToManyField(Transaction)
+    # transactions = models.ManyToManyField(Transaction)
 
 
 class CreditSales(models.Model):
@@ -64,7 +70,7 @@ class CreditSales(models.Model):
     customer = models.ForeignKey(Account, related_name='customer')
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='credit_sales')
-    transactions = models.ManyToManyField(Transaction)
+    # transactions = models.ManyToManyField(Transaction)
 
 
 class CreditPurchase(models.Model):
@@ -73,7 +79,7 @@ class CreditPurchase(models.Model):
     supplier = models.ForeignKey(Account, related_name='supplier')
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='credit_purchase')
-    transactions = models.ManyToManyField(Transaction)
+    # transactions = models.ManyToManyField(Transaction)
 
 
 class CreditExpense(models.Model):
@@ -82,7 +88,7 @@ class CreditExpense(models.Model):
     expense_claimed_by = models.ForeignKey(Account, related_name='expense_claimed_by')
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='credit_expense')
-    transactions = models.ManyToManyField(Transaction)
+    # transactions = models.ManyToManyField(Transaction)
 
 
 class CreditIncome(models.Model):
@@ -91,7 +97,7 @@ class CreditIncome(models.Model):
     income_from = models.ForeignKey(Account, related_name='income_from')
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='credit_income')
-    transactions = models.ManyToManyField(Transaction)
+    # transactions = models.ManyToManyField(Transaction)
 
 
 class SummaryCash(models.Model):
@@ -115,7 +121,7 @@ class SummaryTransfer(models.Model):
     cheque = models.FloatField(blank=True, null=True)
     card = models.FloatField(blank=True, null=True)
     day_journal = models.ForeignKey(DayJournal, related_name='summary_transfer')
-    transactions = models.ManyToManyField(Transaction)
+    # transactions = models.ManyToManyField(Transaction)
 
 
 class SummaryBank(models.Model):
@@ -124,7 +130,7 @@ class SummaryBank(models.Model):
     cheque_deposit = models.FloatField()
     cash_deposit = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='summary_bank')
-    transactions = models.ManyToManyField(Transaction)
+    # transactions = models.ManyToManyField(Transaction)
 
 
 # class SummarySalesTax(models.Model):
@@ -149,7 +155,7 @@ class SummaryLotto(models.Model):
     disp = models.FloatField()
     reg = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='summary_lotto')
-    transactions = models.ManyToManyField(Transaction)
+    # transactions = models.ManyToManyField(Transaction)
 
 
 # class SummaryUtility(models.Model):
@@ -166,7 +172,7 @@ class CardSales(models.Model):
     amount = models.FloatField()
     commission_out = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='card_sales')
-    transactions = models.ManyToManyField(Transaction)
+    # transactions = models.ManyToManyField(Transaction)
 
 
 class CashEquivalentSales(models.Model):
@@ -174,14 +180,14 @@ class CashEquivalentSales(models.Model):
     account = models.ForeignKey(Account)
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_equivalent_sales')
-    transactions = models.ManyToManyField(Transaction)
+    # transactions = models.ManyToManyField(Transaction)
 
 
 class ChequePurchase(models.Model):
     amount = models.FloatField()
     commission_in = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cheque_purchase')
-    transactions = models.ManyToManyField(Transaction)
+    # transactions = models.ManyToManyField(Transaction)
 
 
 class SummaryInventory(models.Model):

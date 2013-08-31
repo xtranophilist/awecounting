@@ -8,7 +8,7 @@ from datetime import date
 from dayjournal.serializers import DayJournalSerializer, DayJournalLottoSerializer
 from django.http import HttpResponse
 import json
-from acubor.lib import delete_rows, invalid, save_model, all_empty, dr, cr, set_transactions
+from acubor.lib import delete_rows, invalid, save_model, all_empty, dr, cr, set_transactions, add
 
 
 def day_journal(request, journal_date=None):
@@ -28,7 +28,10 @@ def day_journal(request, journal_date=None):
 
 def get_journal(request):
     journal, created = DayJournal.objects.get_or_create(date=json.loads(request.body).get('day_journal_date'),
-                                                        company=request.user.company)
+                                                        company=request.user.company, defaults={'sales_tax': 0,
+                                                                                                'cheque_deposit': 0,
+                                                                                                'cash_deposit': 0,
+                                                                                                'cash_withdrawal': 0})
     if created:
         journal.save()
     return journal
@@ -49,15 +52,16 @@ def save_cash_sales(request):
         values = {'sn': index + 1, 'sales_ledger_id': row.get('account_id'), 'amount': row.get('amount'),
                   'day_journal': day_journal}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-
+        if row.get('tax_rate') is None:
+            row['tax_rate'] = 0
         tax_amount = float(row.get('tax_rate')) / 100 * float(row.get('amount'))
         net_amount = float(row.get('amount')) - tax_amount
 
         #sales-cr;cash-dr
-        set_transactions(submodel,
-                         dr(cash_account, row.get('amount'), day_journal.date),
-                         cr(Account.objects.get(id=row.get('account_id')), net_amount, day_journal.date),
-                         cr(sales_tax_account, tax_amount, day_journal.date),
+        set_transactions(submodel, day_journal.date,
+                         ['dr', cash_account, row.get('amount')],
+                         ['cr', Account.objects.get(id=row.get('account_id')), net_amount],
+                         ['cr', sales_tax_account, tax_amount],
         )
         if not created:
             submodel = save_model(submodel, values)
@@ -83,9 +87,9 @@ def save_cash_purchase(request):
         if not created:
             submodel = save_model(submodel, values)
             #cash-cr;purchase-dr
-        set_transactions(submodel,
-                         cr(cash_account, row.get('amount'), day_journal.date),
-                         dr(Account.objects.get(id=row.get('account_id')), row.get('amount'), day_journal.date),
+        set_transactions(submodel, day_journal.date,
+                         ['cr', cash_account, row.get('amount')],
+                         ['dr', Account.objects.get(id=row.get('account_id')), row.get('amount')],
         )
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
@@ -110,9 +114,9 @@ def save_cash_payment(request):
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
         #cash-cr;payment-dr
-        set_transactions(submodel,
-                         cr(cash_account, row.get('amount'), day_journal.date),
-                         dr(Account.objects.get(id=row.get('account_id')), row.get('amount'), day_journal.date),
+        set_transactions(submodel, day_journal.date,
+                         ['cr', cash_account, row.get('amount')],
+                         ['dr', Account.objects.get(id=row.get('account_id')), row.get('amount')],
         )
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
@@ -136,9 +140,9 @@ def save_cash_receipt(request):
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
         #cash-dr;r_from-cr
-        set_transactions(submodel,
-                         dr(cash_account, row.get('amount'), day_journal.date),
-                         cr(Account.objects.get(id=row.get('account_id')), row.get('amount'), day_journal.date),
+        set_transactions(submodel, day_journal.date,
+                         ['dr', cash_account, row.get('amount')],
+                         ['cr', Account.objects.get(id=row.get('account_id')), row.get('amount')],
         )
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
@@ -161,9 +165,9 @@ def save_credit_sales(request):
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
         #sales-cr;customer-dr
-        set_transactions(submodel,
-                         dr(Account.objects.get(id=row.get('account_dr_id')), row.get('amount'), day_journal.date),
-                         cr(Account.objects.get(id=row.get('account_cr_id')), row.get('amount'), day_journal.date),
+        set_transactions(submodel, day_journal.date,
+                         ['dr', Account.objects.get(id=row.get('account_dr_id')), row.get('amount')],
+                         ['cr', Account.objects.get(id=row.get('account_cr_id')), row.get('amount')],
         )
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
@@ -186,9 +190,9 @@ def save_credit_purchase(request):
         if not created:
             submodel = save_model(submodel, values)
             #purchase-dr, vendor-cr
-        set_transactions(submodel,
-                         dr(Account.objects.get(id=row.get('account_dr_id')), row.get('amount'), day_journal.date),
-                         cr(Account.objects.get(id=row.get('account_cr_id')), row.get('amount'), day_journal.date),
+        set_transactions(submodel, day_journal.date,
+                         ['dr', Account.objects.get(id=row.get('account_dr_id')), row.get('amount')],
+                         ['cr', Account.objects.get(id=row.get('account_cr_id')), row.get('amount')],
         )
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
@@ -212,9 +216,9 @@ def save_credit_income(request):
         if not created:
             submodel = save_model(submodel, values)
             # income-cr,from-dr
-        set_transactions(submodel,
-                         dr(Account.objects.get(id=row.get('account_dr_id')), row.get('amount'), day_journal.date),
-                         cr(Account.objects.get(id=row.get('account_cr_id')), row.get('amount'), day_journal.date),
+        set_transactions(submodel, day_journal.date,
+                         ['dr', Account.objects.get(id=row.get('account_dr_id')), row.get('amount')],
+                         ['cr', Account.objects.get(id=row.get('account_cr_id')), row.get('amount')],
         )
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
@@ -238,9 +242,9 @@ def save_credit_expense(request):
         if not created:
             submodel = save_model(submodel, values)
             # expense_head-dr
-        set_transactions(submodel,
-                         dr(Account.objects.get(id=row.get('account_dr_id')), row.get('amount'), day_journal.date),
-                         cr(Account.objects.get(id=row.get('account_cr_id')), row.get('amount'), day_journal.date),
+        set_transactions(submodel, day_journal.date,
+                         ['dr', Account.objects.get(id=row.get('account_dr_id')), row.get('amount')],
+                         ['cr', Account.objects.get(id=row.get('account_cr_id')), row.get('amount')],
         )
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
@@ -365,31 +369,25 @@ def save_summary_transfer(request):
     cash_account = Account.objects.get(name='Cash', company=request.user.company)
     card_account = Account.objects.get(name='Card', company=request.user.company)
     cheque_account = Account.objects.get(name='Cheque', company=request.user.company)
-
     for index, row in enumerate(params.get('rows')):
-
         if all_empty(row, ['cash', 'cheque', 'card']):
             continue
-
         for attr in ['cash', 'cheque', 'card']:
             if row.get(attr) is None or row.get(attr) == '':
                 row[attr] = None
-
         day_journal = get_journal(request)
         values = {'sn': index + 1, 'transfer_type_id': row.get('transfer_type'), 'cash': row.get('cash'),
                   'card': row.get('card'), 'cheque': row.get('cheque'), 'day_journal': day_journal}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
-        print row
-        # Cash - Dr	; Cheque - Dr	; Bill-payment - Cr; Card - Dr
-        set_transactions(submodel,
-                         dr(cash_account, row.get('cash'), day_journal.date),
-                         dr(card_account, row.get('card'), day_journal.date),
-                         dr(cheque_account, row.get('cheque'), day_journal.date),
-                         cr(Account.objects.get(id=row.get('transfer_type')), row.get('cash'), day_journal.date),
-                         cr(Account.objects.get(id=row.get('transfer_type')), row.get('card'), day_journal.date),
-                         cr(Account.objects.get(id=row.get('transfer_type')), row.get('cheque'), day_journal.date),
+            # Cash - Dr	; Cheque - Dr	; Bill-payment - Cr; Card - Dr
+        set_transactions(submodel, day_journal.date,
+                         ['dr', cash_account, row.get('cash')],
+                         ['dr', card_account, row.get('card')],
+                         ['dr', cheque_account, row.get('cheque')],
+                         ['cr', Account.objects.get(id=row.get('transfer_type')),
+                          add(row.get('cash'), row.get('card'), row.get('cheque'))],
         )
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
@@ -471,10 +469,10 @@ def save_card_sales(request):
             submodel = save_model(submodel, values)
 
         net_amount = float(row.get('amount')) - float(row.get('commission_out'))
-        set_transactions(submodel,
-                         dr(card_account, net_amount, day_journal.date),
-                         dr(commission_out_account, row.get('commission_out'), day_journal.date),
-                         cr(cash_account, row.get('amount'), day_journal.date),
+        set_transactions(submodel, day_journal.date,
+                         ['dr', card_account, net_amount],
+                         ['dr', commission_out_account, row.get('commission_out')],
+                         ['cr', cash_account, row.get('amount')],
         )
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
@@ -498,9 +496,9 @@ def save_cash_equivalent_sales(request):
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
-        set_transactions(submodel,
-                         dr(Account.objects.get(id=row.get('account')), row.get('amount'), day_journal.date),
-                         cr(cash_account, row.get('amount'), day_journal.date),
+        set_transactions(submodel, day_journal.date,
+                         ['dr', Account.objects.get(id=row.get('account')), row.get('amount')],
+                         ['cr', cash_account, row.get('amount')],
         )
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
@@ -526,10 +524,10 @@ def save_cheque_purchase(request):
         if not created:
             submodel = save_model(submodel, values)
         net_amount = float(row.get('amount')) - float(row.get('commission_in'))
-        set_transactions(submodel,
-                         dr(cheque_account, row.get('amount'), day_journal.date),
-                         cr(cash_account, net_amount, day_journal.date),
-                         cr(commission_in_account, row.get('commission_in'), day_journal.date),
+        set_transactions(submodel, day_journal.date,
+                         ['dr', cheque_account, row.get('amount')],
+                         ['cr', cash_account, net_amount],
+                         ['cr', commission_in_account, row.get('commission_in')],
         )
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
@@ -552,13 +550,13 @@ def save_summary_bank(request):
         day_journal.cash_withdrawal = params.get('rows')[0].get('withdrawal')
         [transaction.delete() for transaction in day_journal.cash_deposit_transactions.all()]
         day_journal.cash_deposit_transactions.add(
-            dr(bank_account, params.get('rows')[0].get('deposit'), day_journal.date),
-            cr(cash_account, params.get('rows')[0].get('deposit'), day_journal.date),
+            ['dr', bank_account, params.get('rows')[0].get('deposit')],
+            ['cr', cash_account, params.get('rows')[0].get('deposit')],
         )
         [transaction.delete() for transaction in day_journal.cash_withdrawal_transactions.all()]
         day_journal.cash_withdrawal_transactions.add(
-            cr(bank_account, params.get('rows')[0].get('withdrawal'), day_journal.date),
-            dr(cash_account, params.get('rows')[0].get('withdrawal'), day_journal.date),
+            ['cr', bank_account, params.get('rows')[0].get('withdrawal')],
+            ['dr', cash_account, params.get('rows')[0].get('withdrawal')],
         )
         dct['saved'][0] = 0
     invalid_attrs = invalid(params.get('rows')[1], ['deposit'])
@@ -568,8 +566,8 @@ def save_summary_bank(request):
         day_journal.cheque_deposit = params.get('rows')[1].get('deposit')
         [transaction.delete() for transaction in day_journal.cheque_deposit_transactions.all()]
         day_journal.cheque_deposit_transactions.add(
-            dr(bank_account, params.get('rows')[1].get('deposit'), day_journal.date),
-            cr(cheque_account, params.get('rows')[0].get('deposit'), day_journal.date),
+            ['dr', bank_account, params.get('rows')[1].get('deposit')],
+            ['cr', cheque_account, params.get('rows')[0].get('deposit')],
         )
         dct['saved'][1] = 1
     day_journal.save()

@@ -8,12 +8,13 @@
     <script src="http://localhost/acubor_static/js/base.js"></script>
     <script src="http://localhost/acubor_static/js/trial_balance.js"></script>
     <link href="http://localhost/acubor_static/css/vendors/jquery.treetable.css" rel="stylesheet" type="text/css"/>
+    {#    <link href="http://localhost/acubor_static/css/vendors/jquery.treetable.theme.default.css" rel="stylesheet"#}
     <script src="http://localhost/acubor_static/js/vendors/jquery.treetable.js"></script>
     <script>
         $(document).ready(function () {
             {% load filters %}
             ko.applyBindings(new TrialBalance({{ dict|jsonify }}));
-            $("#table1").treetable({initialState: 'expanded', clickableNodeNames: true}, true);
+            $(".tree-table").treetable({initialState: 'collapsed', clickableNodeNames: true, expandable: true });
         });
     </script>
 {% endblock %}
@@ -21,18 +22,18 @@
 {% block content %}
 
     <script id="categories" type="text/html">
-        <tr data-bind="attr: {'data-tt-id': id, 'data-tt-parent-id': parent_id}">
-            <th data-bind="text: code"></th>
-            <th data-bind="text: name"></th>
-            <th data-bind="text: dr_amount()"></th>
-            <th data-bind="text: cr_amount()"></th>
+        <tr data-bind="attr: {'data-tt-id': id, 'data-tt-parent-id': parent_id}, css: cls">
+            <td data-bind="text: name"></td>
+            <td data-bind="text: code"></td>
+            <td data-bind="text: dr()||''"></td>
+            <td data-bind="text: cr()||''"></td>
         </tr>
         <!-- ko foreach: accounts -->
-        <tr data-bind="attr: {'data-tt-id': id, 'data-tt-parent-id': parent_id}">
-            <th data-bind="text: code"></th>
-            <th data-bind="text: name"></th>
-            <th data-bind="text: dr_amount()"></th>
-            <th data-bind="text: cr_amount()"></th>
+        <tr data-bind="attr: {'data-tt-id': id, 'data-tt-parent-id': parent_id}, css: cls">
+            <td><a data-bind="text: name, attr: {href:'/ledger/'+id }"></a> </td>
+            <td data-bind="text: code"></td>
+            <td data-bind="text: dr()||''"></td>
+            <td data-bind="text: cr()||''"></td>
         </tr>
         <!-- /ko -->
 
@@ -49,14 +50,19 @@
             Trial Balance
         </h1>
     </div>
+    {#    {{ dict }}#}
+    <div class="controls">
+        <a onclick="$('.tree-table').treetable('expandAll'); return false;">Expand all</a> |
+        <a data-bind="click: expandRoot">Expand Base Accounts</a> |
+        <a onclick="$('.tree-table').treetable('collapseAll'); return false;">Collapse all</a>
 
-    {{ dict }}
+    </div>
 
-    <table class="table table-bordered table-striped table-acubor table-sortable tree-table" id="table1">
+    <table class="table table-bordered table-striped table-acubor table-sortable tree-table">
         <thead>
         <tr>
-            <th class="span3">Code</th>
             <th class="span4">Ledger</th>
+            <th class="span3">Code</th>
             <th class="span2">Dr</th>
             <th class="span2">Cr</th>
         </tr>
@@ -66,8 +72,12 @@
         <!-- ko template: { name: 'categories',
                                 foreach: categories } -->
         <!-- /ko -->
+        <tr>
+            <td colspan=2><b class="pull-right">TOTAL</b></td>
+            <td data-bind="text: dr_total()"></td>
+            <td data-bind="text: cr_total()"></td>
+        </tr>
         </tbody>
     </table>
-
 
 {% endblock %}

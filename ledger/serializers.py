@@ -5,14 +5,15 @@ from datetime import date
 
 
 class AccountSerializer(serializers.ModelSerializer):
-    opening = serializers.SerializerMethodField('get_last_day_closing')
+    # opening = serializers.SerializerMethodField('get_last_day_closing')
     # opening = serializers.Field(source='day_opening')
     categories = serializers.Field()
 
     class Meta:
         model = Account
         # exclude = ['code', 'company', 'parent', 'current_balance']
-        fields = ['id', 'name', 'categories', 'opening', 'tax_rate']
+        # fields = ['id', 'name', 'categories', 'opening', 'tax_rate']
+        fields = ['id', 'name', 'categories', 'tax_rate']
 
     def __init__(self, *args, **kwargs):
         day = kwargs.pop('day', None)
@@ -22,8 +23,8 @@ class AccountSerializer(serializers.ModelSerializer):
         else:
             self.day = date.today()
 
-    def get_last_day_closing(self, obj):
-        transaction = obj.get_last_transaction_before(self.day)
-        if transaction:
-            return transaction.current_balance
+            # def get_last_day_closing(self, obj):
+            #     transaction = obj.get_last_transaction_before(self.day)
+            #     if transaction:
+            #         return transaction.current_balance
 

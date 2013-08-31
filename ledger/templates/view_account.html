@@ -2,6 +2,21 @@
 
 {% block title %}{{ account.name }}{% endblock %}
 
+{% block head_end %}
+    <script src="http://localhost/acubor_static/js/vendors/knockout.js"></script>
+    <script src="http://localhost/acubor_static/js/ko_lib.js"></script>
+    <script src="http://localhost/acubor_static/js/base.js"></script>
+    <script src="http://localhost/acubor_static/js/day_journal.js"></script>
+    <script>
+        $(document).ready(function () {
+            if (window.location.hash) {
+                var hash = window.location.hash.substring(1);
+                $('#row-' + hash).addClass('highlighted');
+            }
+        });
+    </script>
+{% endblock %}
+
 {% block content %}
 
     <div class="page-header position-relative">
@@ -11,7 +26,8 @@
     </div>
 
     Code: {{ account.code }} <br/>
-    Current Balance: {{ account.current_balance }} <br/>
+    Dr Amount: {{ account.current_dr }} <br/>
+    Cr Amount: {{ account.current_cr }} <br/>
     Category: {{ account.category }}<br/>
     <a href="{% url "update_account" account.id %}">
         Edit Account Details
@@ -24,23 +40,48 @@
     <table class="table table-bordered table-striped table-sortable">
         <thead>
         <th>Date</th>
-        <th>Amount</th>
-        <th>Type</th>
-        <th>Balance</th>
+        <th>Particulars</th>
+        <th>Dr</th>
+        <th>Cr</th>
+        <th>Dr Balance</th>
+        <th>Cr Balance</th>
         </thead>
         <tbody>
-        {% for transaction in transactions %}
-            <tr>
+        {% for entry in journal_entries %}
+            <tr id="row-{{ entry.id }}">
                 <td>
-                    {{ transaction.date }}
+                    <a href="{{ entry|url_for_content }}">
+                        {{ entry.date }}
+                    </a>
                 </td>
                 <td>
-                    {{ transaction.amount }}
+
+                    {% for transaction in entry.transactions.all|remove_account:account %}
+                        {% if not forloop.first %}, {% endif %}
+                        <a href="{{ transaction.account.get_absolute_url }}/#{{ entry.id }}">{{ transaction.account.name }}</a>
+                    {% endfor %}
+
                 </td>
-                <td>{{ transaction.type }}</td>
-                <td>
-                    {{ transaction.current_balance }}
-                </td>
+                {% for transaction in entry.transactions.all %}
+                    {% if transaction.account.id == account.id %}
+                        <td>
+                            {{ transaction.dr_amount|if_not_none }}
+                        </td>
+                        <td>
+
+                            {{ transaction.cr_amount|if_not_none }}
+                        </td>
+                        <td>
+                            {{ transaction.current_dr|if_not_none }}
+                        </td>
+                        <td>
+                            {{ transaction.current_cr|if_not_none }}
+                        </td>
+                    {% endif %}
+
+
+
+                {% endfor %}
             </tr>
 
         {% endfor %}

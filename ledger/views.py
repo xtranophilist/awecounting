@@ -1,4 +1,4 @@
-from ledger.models import Account
+from ledger.models import Account, JournalEntry
 from ledger.serializers import AccountSerializer
 from django.http import HttpResponse
 import json
@@ -14,7 +14,8 @@ def accounts_as_json(request):
 
 def accounts_by_day_as_json(request, day):
     accounts = Account.objects.all()
-    items_data = AccountSerializer(accounts, day=day).data
+    # items_data = AccountSerializer(accounts, day=day).data
+    items_data = AccountSerializer(accounts).data
     return HttpResponse(json.dumps(items_data), mimetype="application/json")
 
 
@@ -53,10 +54,14 @@ def list_accounts(request):
 
 def view_account(request, id):
     account = get_object_or_404(Account, id=id)
-    transactions = account.transactions
+    # transactions = account.transactions
     base_template = 'dashboard.html'
+    journal_entries = JournalEntry.objects.filter(transactions__account_id=account.id).order_by('id',
+                                                                                                'date').prefetch_related(
+        'transactions', 'content_type', 'transactions__account').select_related()
     return render(request, 'view_account.html', {
         'account': account,
-        'transactions': transactions.all(),
+        # 'transactions': transactions.all(),
+        'journal_entries': journal_entries,
         'base_template': base_template,
     })

@@ -274,7 +274,7 @@
                             <select class="span12" data-bind="options: $root.accounts_by_category('Purchase'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
                         </td>
                         <td>
-                            <select class="span12" data-bind="options: $root.accounts_by_category('Creditors'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}"></select>
+                            <select class="span12" data-bind="options: $root.accounts_by_category('Accounts Payable'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}"></select>
                         </td>
                         <td data-bind="editableText: amount"></td>
                         <td>
@@ -315,7 +315,7 @@
                             <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                         </td>
                         <td>
-                            <select class="span12" data-bind="options: $root.accounts_by_category('Expense'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
+                            <select class="span12" data-bind="options: $root.accounts_by_category('Expenses'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
                         </td>
                         <td>
                             <select class="span12" data-bind="options: $root.accounts_by_category('Liabilities'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}"></select>
@@ -734,7 +734,7 @@
                     <th class="span2">Withdrawals</th>
                 </tr>
                 </thead>
-                <tbody id="cheque-purchase">
+                <tbody id="summary-bank">
                 <tr>
                     <td><b>Cash</b></td>
                     <td data-bind="editableText: rows()[0].deposit"></td>
