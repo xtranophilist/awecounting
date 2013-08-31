@@ -65,6 +65,8 @@ function rnum(o) {
 function isAN(n) {
     if (n == '')
         return false;
+    if (n == null)
+        return false;
     return !isNaN(n);
 }
 
