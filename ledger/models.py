@@ -1,11 +1,14 @@
-from django.db import models
-from users.models import Company
 from datetime import date
+
+from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
 from django.contrib.contenttypes.models import ContentType
-
 from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver
+from django.db.models import F
+
+from users.models import Company
+from acubor.lib import zero_for_none, none_for_zero
 
 
 class Category(MPTTModel):
@@ -116,20 +119,6 @@ class Transaction(models.Model):
         #     super(Transaction, self).delete(*args, **kwargs)
 
 
-@receiver(pre_delete, sender=Transaction)
-def _transaction_delete(sender, instance, **kwargs):
-    transaction = instance
-    print transaction
-    # cancel out existing dr_amount and cr_amount from account's current_dr and current_cr
-    if transaction.dr_amount:
-        transaction.account.current_dr -= transaction.dr_amount
-
-    if transaction.cr_amount:
-        transaction.account.current_cr -= transaction.cr_amount
-
-    transaction.account.save()
-
-
 # class Transaction(models.Model):
 #     account = models.ForeignKey(Account, related_name='transactions')
 #     date = models.DateField()
@@ -207,3 +196,103 @@ class Party(models.Model):
 
     class Meta:
         db_table = 'party'
+
+
+def alter(account, date, dr_difference, cr_difference):
+    print 'altering for' + str(account)
+    print dr_difference
+    Transaction.objects.filter(journal_entry__date__gt=date, account=account).update(
+        current_dr=none_for_zero(zero_for_none(F('current_dr')) + zero_for_none(dr_difference)),
+        current_cr=none_for_zero(zero_for_none(F('current_cr')) + zero_for_none(cr_difference)))
+
+
+def set_transactions(submodel, date, *args):
+    # [transaction.delete() for transaction in submodel.transactions.all()]
+    # args = [arg for arg in args if arg is not None]
+    journal_entry, created = JournalEntry.objects.get_or_create(
+        content_type=ContentType.objects.get_for_model(submodel), model_id=submodel.id,
+        defaults={
+            'date': date
+        })
+    for arg in args:
+        # transaction = Transaction(account=arg[1], dr_amount=arg[2])
+        matches = journal_entry.transactions.filter(account=arg[1])
+        if not matches:
+            transaction = Transaction()
+            transaction.account = arg[1]
+            if arg[0] == 'dr':
+                transaction.dr_amount = float(arg[2])
+                transaction.account.current_dr = none_for_zero(
+                    zero_for_none(transaction.account.current_dr) + transaction.dr_amount)
+                transaction.current_dr = transaction.account.current_dr
+                alter(arg[1], date, float(arg[2]), 0)
+            if arg[0] == 'cr':
+                transaction.cr_amount = float(arg[2])
+                transaction.account.current_cr = none_for_zero(
+                    zero_for_none(transaction.account.current_cr) + transaction.cr_amount)
+                transaction.current_cr = transaction.account.current_cr
+                alter(arg[1], date, 0, float(arg[2]))
+        else:
+            transaction = matches[0]
+            transaction.account = arg[1]
+
+            # cancel out existing dr_amount and cr_amount from current_dr and current_cr
+            # if transaction.dr_amount:
+            #     transaction.current_dr -= transaction.dr_amount
+            #     transaction.account.current_dr -= transaction.dr_amount
+            #
+            # if transaction.cr_amount:
+            #     transaction.current_cr -= transaction.cr_amount
+            #     transaction.account.current_cr -= transaction.cr_amount
+
+            # save new dr_amount and add it to current_dr/cr
+            if arg[0] == 'dr':
+                dr_difference = float(arg[2]) - zero_for_none(transaction.dr_amount)
+                cr_difference = zero_for_none(transaction.cr_amount) * -1
+                alter(arg[1], transaction.journal_entry.date, dr_difference, cr_difference)
+                transaction.dr_amount = float(arg[2])
+                transaction.cr_amount = None
+            else:
+                cr_difference = float(arg[2]) - zero_for_none(transaction.cr_amount)
+                dr_difference = zero_for_none(transaction.dr_amount) * -1
+                alter(arg[1], transaction.journal_entry.date, dr_difference, cr_difference)
+                transaction.cr_amount = float(arg[2])
+                transaction.dr_amount = None
+
+            transaction.current_dr = none_for_zero(zero_for_none(transaction.current_dr) + dr_difference)
+            transaction.current_cr = none_for_zero(zero_for_none(transaction.current_cr) + cr_difference)
+            transaction.account.current_dr = none_for_zero(
+                zero_for_none(transaction.account.current_dr) + dr_difference)
+            transaction.account.current_cr = none_for_zero(
+                zero_for_none(transaction.account.current_cr) + cr_difference)
+
+        transaction.account.save()
+
+        journal_entry.transactions.add(transaction)
+
+
+def delete_rows(rows, model):
+    for row in rows:
+        if row.get('id'):
+            instance = model.objects.get(id=row.get('id'))
+            JournalEntry.objects.get(content_type=ContentType.objects.get_for_model(model),
+                                     model_id=instance.id).delete()
+            instance.delete()
+
+
+@receiver(pre_delete, sender=Transaction)
+def _transaction_delete(sender, instance, **kwargs):
+    transaction = instance
+    print transaction
+    # cancel out existing dr_amount and cr_amount from account's current_dr and current_cr
+    if transaction.dr_amount:
+        transaction.account.current_dr -= transaction.dr_amount
+
+    if transaction.cr_amount:
+        transaction.account.current_cr -= transaction.cr_amount
+
+    print transaction.dr_amount
+    alter(transaction.account, transaction.journal_entry.date, float(zero_for_none(transaction.dr_amount)) * -1,
+          float(zero_for_none(transaction.cr_amount)) * -1)
+
+    transaction.account.save()
