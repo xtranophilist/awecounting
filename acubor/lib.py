@@ -2,6 +2,8 @@ import os
 from django import forms
 from ledger.models import JournalEntry, Transaction
 from django.contrib.contenttypes.models import ContentType
+from django.db.models import F
+from django.db import connection
 
 
 class ExtFileField(forms.FileField):
@@ -98,7 +100,8 @@ def delete_rows(rows, model):
     for row in rows:
         if row.get('id'):
             instance = model.objects.get(id=row.get('id'))
-            JournalEntry.objects.get(model='CashSales', model_id=instance.id).delete()
+            JournalEntry.objects.get(content_type=ContentType.objects.get_for_model(model),
+                                     model_id=instance.id).delete()
             instance.delete()
 
 
@@ -114,6 +117,29 @@ def cr(account, amount, date):
         return
     transaction = Transaction(account=account, cr_amount=amount)
     return transaction
+
+
+def zero_for_none(obj):
+    if obj is None:
+        return 0
+    else:
+        return obj
+
+
+def none_for_zero(obj):
+    if not obj:
+        return None
+    else:
+        return obj
+
+
+def alter(account, date, dr_difference, cr_difference):
+    print 'altering for' + str(account)
+    print dr_difference
+    s = Transaction.objects.filter(journal_entry__date__gt=date, account=account).update(
+        current_dr=none_for_zero(zero_for_none(F('current_dr')) + zero_for_none(dr_difference)),
+        current_cr=none_for_zero(zero_for_none(F('current_cr')) + zero_for_none(cr_difference)))
+    # print connection.queries
 
 
 def set_transactions(submodel, date, *args):
@@ -132,35 +158,49 @@ def set_transactions(submodel, date, *args):
             transaction.account = arg[1]
             if arg[0] == 'dr':
                 transaction.dr_amount = float(arg[2])
-                transaction.account.current_dr += transaction.dr_amount
+                transaction.account.current_dr = none_for_zero(
+                    zero_for_none(transaction.account.current_dr) + transaction.dr_amount)
                 transaction.current_dr = transaction.account.current_dr
+                alter(arg[1], date, float(arg[2]), 0)
             if arg[0] == 'cr':
                 transaction.cr_amount = float(arg[2])
-                transaction.account.current_cr += transaction.cr_amount
+                transaction.account.current_cr = none_for_zero(
+                    zero_for_none(transaction.account.current_cr) + transaction.cr_amount)
                 transaction.current_cr = transaction.account.current_cr
-
+                alter(arg[1], date, 0, float(arg[2]))
         else:
             transaction = matches[0]
             transaction.account = arg[1]
 
             # cancel out existing dr_amount and cr_amount from current_dr and current_cr
-            if transaction.dr_amount:
-                transaction.current_dr -= transaction.dr_amount
-                transaction.account.current_dr -= transaction.dr_amount
-
-            if transaction.cr_amount:
-                transaction.current_cr -= transaction.cr_amount
-                transaction.account.current_cr -= transaction.cr_amount
+            # if transaction.dr_amount:
+            #     transaction.current_dr -= transaction.dr_amount
+            #     transaction.account.current_dr -= transaction.dr_amount
+            #
+            # if transaction.cr_amount:
+            #     transaction.current_cr -= transaction.cr_amount
+            #     transaction.account.current_cr -= transaction.cr_amount
 
             # save new dr_amount and add it to current_dr/cr
             if arg[0] == 'dr':
+                dr_difference = float(arg[2]) - zero_for_none(transaction.dr_amount)
+                cr_difference = zero_for_none(transaction.cr_amount) * -1
+                alter(arg[1], transaction.journal_entry.date, dr_difference, cr_difference)
                 transaction.dr_amount = float(arg[2])
-                transaction.current_dr += transaction.dr_amount
-                transaction.account.current_dr += transaction.dr_amount
+                transaction.cr_amount = None
             else:
+                cr_difference = float(arg[2]) - zero_for_none(transaction.cr_amount)
+                dr_difference = zero_for_none(transaction.dr_amount) * -1
+                alter(arg[1], transaction.journal_entry.date, dr_difference, cr_difference)
                 transaction.cr_amount = float(arg[2])
-                transaction.current_cr += transaction.cr_amount
-                transaction.account.current_cr += transaction.cr_amount
+                transaction.dr_amount = None
+
+            transaction.current_dr = none_for_zero(zero_for_none(transaction.current_dr) + dr_difference)
+            transaction.current_cr = none_for_zero(zero_for_none(transaction.current_cr) + cr_difference)
+            transaction.account.current_dr = none_for_zero(
+                zero_for_none(transaction.account.current_dr) + dr_difference)
+            transaction.account.current_cr = none_for_zero(
+                zero_for_none(transaction.account.current_cr) + cr_difference)
 
         transaction.account.save()
 
