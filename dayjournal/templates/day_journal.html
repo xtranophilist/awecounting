@@ -867,4 +867,39 @@
 {#            </div>#}
 {#        </div>#}
 
+    <div class="row-fluid collapse-group" data-bind="with: summary_cash">
+        <div class="collapsible-head"><h2 data-bind="css: status">Summary: Cash</h2>
+            <span data-bind="text: message()"></span>
+                    <span class="collapse-show-on-expand pull-right">
+                    <button class="button" data-bind="click: save"><i class="icon-save"></i> Save</button>
+                    </span>
+        </div>
+
+        <div class="collapse">
+            <table class="table table-bordered table-striped table-acubor table-sortable">
+                <thead>
+                <tr>
+                    <th class="span2">Opening</th>
+                    <th class="span2">Inward</th>
+                    <th class="span2">Outward</th>
+                    <th class="span2">Closing</th>
+                    <th class="span2">Actual</th>
+                    <th class="span2">Difference</th>
+                </tr>
+                </thead>
+                <tbody id="summary-cash">
+                <tr>
+                    <td data-bind="text: rows()[0].opening($root)"></td>
+                    <td data-bind="text: rows()[0].inward($root)"></td>
+                    <td data-bind="text: rows()[0].outward($root)"></td>
+                    <td data-bind="text: rows()[0].closing($root)"></td>
+                    <td data-bind="editableText: rows()[0].actual"></td>
+                    <td data-bind="text: rows()[0].difference($root)"></td>
+                </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
 {% endblock %}
