@@ -69,6 +69,21 @@ class Account(models.Model):
 
     categories = property(get_all_categories)
 
+    def get_cr_amount(self, day):
+        #journal_entry= JournalEntry.objects.filter(date__lt=day,transactions__account=self).order_by('-id','-date')[:1]
+        transactions = Transaction.objects.filter(journal_entry__date__lt=day, account=self).order_by(
+            '-journal_entry__id', '-journal_entry__date')[:1]
+        if len(transactions) > 0:
+            return transactions[0].current_cr
+
+
+    def get_dr_amount(self, day):
+        #journal_entry= JournalEntry.objects.filter(date__lt=day,transactions__account=self).order_by('-id','-date')[:1]
+        transactions = Transaction.objects.filter(journal_entry__date__lt=day, account=self).order_by(
+            '-journal_entry__id', '-journal_entry__date')[:1]
+        if len(transactions) > 0:
+            return transactions[0].current_dr
+
     def __unicode__(self):
         return self.name
 
