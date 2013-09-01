@@ -206,7 +206,7 @@ tbody > tr > td[contenteditable="true"] {
 }
 
 .collapsible-head {
-    background: #F0F0F0;
+    background: #ececec;
     border-radius: 0.3em 0.3em 0 0;
     padding-left: 1em;
 }
@@ -217,6 +217,10 @@ tbody > tr > td[contenteditable="true"] {
 
 .collapse-group h2 {
     display: inline;
+    color: #686868;
+    font-weight: 100;
+    font-family: tahoma;
+    font-size: 20px;
 }
 
 .collapse-group table {
