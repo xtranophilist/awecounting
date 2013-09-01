@@ -13,7 +13,6 @@ class DayJournal(models.Model):
     cheque_deposit = models.FloatField()
     cash_actual = models.FloatField()
 
-
     def get_absolute_url(self):
         return '/day/' + str(self.date)
 
