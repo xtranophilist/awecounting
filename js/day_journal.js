@@ -229,6 +229,9 @@ function DayJournal(data) {
         {'deposit': ko.observable(self.cheque_deposit)}
     ]);
 
+    self.summary_cash = new TableViewModel(key_to_options('summary_cash'), SummaryCashRow);
+    self.summary_cash.rows()[0].actual(self.cash_actual);
+
 
 }
 
@@ -492,4 +495,58 @@ function ChequePurchaseRow(row) {
             self[k] = ko.observable(row[k]);
     }
 
+}
+
+function SummaryCashRow(row) {
+    var self = this;
+
+   self.opening = function (root) {
+        var cash_account = root.accounts.filter(function(element, index, array){
+            if (element.name == 'Cash')
+                return element;
+        })[0];
+        return cash_account.opening;
+    };
+
+    self.inward = function (root) {
+        var total = 0;
+        $.each(root.cash_sales.rows(), function () {
+            if (isAN(this.amount()))
+                total += parseFloat(this.amount());
+        });
+        $.each(root.cash_receipt.rows(), function () {
+            if (isAN(this.amount()))
+                total += parseFloat(this.amount());
+        });
+        return rnum(total);
+    };
+
+    self.outward = function (root) {
+        var total = 0;
+        $.each(root.cash_purchase.rows(), function () {
+            if (isAN(this.amount()))
+                total += parseFloat(this.amount());
+        });
+        $.each(root.cash_payment.rows(), function () {
+            if (isAN(this.amount()))
+                total += parseFloat(this.amount());
+        });
+        return rnum(total);
+    };
+
+    self.closing = function (root) {
+        return rnum(self.opening(root) + self.inward(root) - self.outward(root));
+    };
+
+    self.actual = ko.observable();
+
+    self.difference = function (root) {
+        return rnum(self.actual() - self.closing(root));
+    };
+
+
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
+    }
 }
