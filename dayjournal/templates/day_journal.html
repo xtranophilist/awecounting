@@ -16,13 +16,16 @@
         $(document).ready(function () {
             {% load filters %}
             ko.applyBindings(new DayJournal({{ day_journal|jsonify }}));
+            $(document).on('click', '.alert', function(){
+              $(this).addClass('hide').removeClass('show');
+            });
         });
     </script>
 {% endblock %}
 
 {% block content %}
 
-    {{ day_journal }}
+    <!-- {{ day_journal }} -->
 
     <div class="page-header position-relative">
       <h1>
@@ -54,143 +57,132 @@
         <div class="tab-content">
 
             <div id="cash_sales" class="tab-pane active">
-              
-              <div class="row-fluid collapse-group" data-bind="with: cash_sales">
-                
-                <div class="collapsible-head">
-                  <h2 data-bind="css: status()">Cash Sales</h2>
+              <div class="row-fluid" data-bind="with: cash_sales">
+                <table class="table table-bordered table-striped table-acubor table-sortable">
+                  <thead>
+                    <tr>
+                      <th class="span1">SN</th>
+                      <th class="span2">Sales Ledger</th>
+                      <th class="span2">Amount</th>
+                      <th class="span2">Tax</th>
+                      <th class="span1"></th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="cash-sales">
+                    <!-- ko foreach: rows -->
+                    <tr data-bind="flash: true">
+                      <td>
+                        <span data-bind="text: $index()+1"> </span>
+                      </td>
+                      <td class="with_ip">
+                          <select class="span12" data-bind="options: $root.accounts_by_category(['Sales', 'Lotto', 'Lottery'], true), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {}, event: {change: $root.account_changed}"></select>
+                      </td>
+                      <td data-bind="editableText: amount, numeric: true"></td>
+                      <td data-bind="text: tax()"></td>
+                      <td align="center">
+                          <a href="" class="close" data-bind="click: $parent.removeRow">
+                              <i class="icon-trash"></i>
+                          </a>
+                      </td>
+                    </tr>
+                    <!-- /ko -->
+                  </tbody>
+                </table>
+                <div data-bind="css: status()" class="pull-left">
                   <span data-bind="text: message()">
                   </span>
-                  <div class="collapse-show-on-expand pull-right">
-                    <button class="button" data-bind="click: addRow"><i class="icon-plus-sign" ></i> Add New Row</button>
-                    <button class="button" data-bind="click: save"><i class="icon-save"></i> Save</button>
-                    <button class="button" data-bind="click: reset">Reset</button>
-                  </div>
                 </div>
-
-                <div class="collapse">
-                  <table class="table table-bordered table-striped table-acubor table-sortable">
-                    <thead>
-                      <tr>
-                        <th class="span1">SN</th>
-                        <th class="span2">Sales Ledger</th>
-                        <th class="span2">Amount</th>
-                        <th class="span2">Tax</th>
-                        <th class="span1"></th>
-                      </tr>
-                    </thead>
-
-                    <tbody id="cash-sales">
-                      <!-- ko foreach: rows -->
-                      <tr data-bind="flash: true">
-                        <td>
-                          <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
-                        </td>
-                        <td>
-                            <select class="span12" data-bind="options: $root.accounts_by_category(['Sales', 'Lotto', 'Lottery'], true), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {}, event: {change: $root.account_changed}"></select>
-                        </td>
-                        <td data-bind="editableText: amount, numeric: true"></td>
-                        <td data-bind="text: tax()"></td>
-                        <td align="center">
-                            <button class="button" data-bind="click: $parent.removeRow">
-                                <i class="icon-remove"></i>
-                            </button>
-                        </td>
-                      </tr>
-                      <!-- /ko -->
-                    </tbody>
-                  </table>
+                <div class="pull-right">
+                  <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign" ></i> Add New Row</button>
+                  <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
+                  <button class="btn btn-small" data-bind="click: reset">Reset</button>
                 </div>
-
               </div>
             </div>
 
             <div id="credit_sales" class="tab-pane">
-              <div class="row-fluid collapse-group" data-bind="with: credit_sales">
-                  <div class="collapsible-head"><h2 data-bind="css: status">Credit Sales</h2>
-                      <span data-bind="text: message()"></span>
-                              <span class="collapse-show-on-expand pull-right">
-                                  <button class="button" data-bind="click: addRow"><i class="icon-plus-sign" ></i> Add New Row</button>
-                              <button class="button" data-bind="click: save"><i class="icon-save"></i> Save</button>
-                              <button class="button" data-bind="click: reset">Reset</button>
-                              </span>
-                  </div>
+              <div class="row-fluid" data-bind="with: credit_sales">
 
-                  <div class="collapse">
-                      <table class="table table-bordered table-striped table-acubor table-sortable">
-                          <thead>
-                          <tr>
-                              <th class="span1">SN</th>
-                              <th class="span2">Sales Ledger</th>
-                              <th class="span2">Customer</th>
-                              <th class="span2">Amount</th>
-                              <th class="span2">Tax</th>
-                              <th class="span1"></th>
-                          </tr>
-                          </thead>
+                <table class="table table-bordered table-striped table-acubor table-sortable">
+                    <thead>
+                      <tr>
+                          <th class="span1">SN</th>
+                          <th class="span2">Sales Ledger</th>
+                          <th class="span2">Customer</th>
+                          <th class="span2">Amount</th>
+                          <th class="span2">Tax</th>
+                          <th class="span1"></th>
+                      </tr>
+                    </thead>
 
-                          <tbody id="credit-sales">
-                          <!-- ko foreach: rows -->
-                          <tr data-bind="flash: true">
-                              <td>
-                                  <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
-                              </td>
-                              <td>
-                                  <select class="span12" data-bind="options: $root.accounts_by_category('Sales'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}, event: {change: $root.account_cr_changed}"></select>
-                              </td>
-                              <td>
-                                  <select class="span12" data-bind="options: $root.accounts_by_category('Debtors'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
-                              </td>
-                              <td data-bind="editableText: amount"></td>
-                              <td data-bind="text: tax()"></td>
-                              <td align="center">
-                                  <button class="button" data-bind="click: $parent.removeRow">
-                                      <i class="icon-remove"></i>
-                                  </button>
-                              </td>
-                          </tr>
-                          <!-- /ko -->
-                          </tbody>
-                      </table>
-                  </div>
+                    <tbody id="credit-sales">
+                      <!-- ko foreach: rows -->
+                      <tr data-bind="flash: true">
+                          <td>
+                              <span data-bind="text: $index()+1"> </span>
+                          </td>
+                          <td class="with_ip">
+                              <select class="span12" data-bind="options: $root.accounts_by_category('Sales'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}, event: {change: $root.account_cr_changed}"></select>
+                          </td>
+                          <td class="with_ip">
+                              <select class="span12" data-bind="options: $root.accounts_by_category('Debtors'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
+                          </td>
+                          <td data-bind="editableText: amount"></td>
+                          <td data-bind="text: tax()"></td>
+                          <td align="center">
+                              <a class="close" href="" data-bind="click: $parent.removeRow">
+                                  <i class="icon-trash"></i>
+                              </a>
+                          </td>
+                      </tr>
+                      <!-- /ko -->
+                    </tbody>
+                </table>
+                <div data-bind="css: status()" class="pull-left">
+                  <span data-bind="text: message()">
+                  </span>
+                </div>
+                <div class="pull-right">
+                  <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign" ></i> Add New Row</button>
+                  <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
+                  <button class="btn btn-small" data-bind="click: reset">Reset</button>
+                </div>
               </div>
             </div>
 
             <div id="card_sales" class="tab-pane">
 
-                <div class="row-fluid collapse-group" data-bind="with: card_sales">
-                    <div class="collapsible-head"><h2 data-bind="css: status">Card Sales</h2>
-                        <span data-bind="text: message()"></span>
-                            <span class="collapse-show-on-expand pull-right">
-                            <button class="button" data-bind="click: save"><i class="icon-save"></i> Save</button>
-                            <button class="button" data-bind="click: reset">Reset</button>
-                        </span>
-                    </div>
+              <div class="row-fluid" data-bind="with: card_sales">
+                <table class="table table-bordered table-striped table-acubor table-sortable">
+                    <thead>
+                    <tr>
+                        <th class="span2">Amount</th>
+                        <th class="span2">Commission Out</th>
+                        <th class="span2">Net</th>
+                    </tr>
+                    </thead>
 
-                    <div class="collapse">
-                        <table class="table table-bordered table-striped table-acubor table-sortable">
-                            <thead>
-                            <tr>
-                                <th class="span2">Amount</th>
-                                <th class="span2">Commission Out</th>
-                                <th class="span2">Net</th>
-                            </tr>
-                            </thead>
-
-                            <tbody id="card-sales">
-                            <!-- ko foreach: rows -->
-                            <tr>
-                                <td data-bind="editableText: amount"></td>
-                                <td data-bind="editableText: commission_out"></td>
-                                <td data-bind="text: net()"></td>
-                            </tr>
-                            <!-- /ko -->
-                            </tbody>
-                        </table>
-                    </div>
+                    <tbody id="card-sales">
+                    <!-- ko foreach: rows -->
+                    <tr>
+                        <td data-bind="editableText: amount"></td>
+                        <td data-bind="editableText: commission_out"></td>
+                        <td data-bind="text: net()"></td>
+                    </tr>
+                    <!-- /ko -->
+                    </tbody>
+                </table>
+                <div data-bind="css: status()" class="pull-left">
+                  <span data-bind="text: message()">
+                  </span>
                 </div>
+                <div class="pull-right">
+                  <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
+                  <button class="btn btn-small" data-bind="click: reset">Reset</button>
+                </div>
+              </div>
             </div>
-
         </div>
     </div>
     <!-- EOF Sales Tab -->
@@ -218,129 +210,123 @@
         </ul>
         <div class="tab-content">
             <div id="cash_purchase" class="tab-pane active">
-                <div class="row-fluid collapse-group" data-bind="with: cash_purchase">
-                    <div class="collapsible-head">
-                        <h2 data-bind="css: status">Cash Purchase</h2>
-                        <span data-bind="text: message()"></span>
-                        <span class="collapse-show-on-expand pull-right">
-                            <button class="button" data-bind="click: addRow"><i class="icon-plus-sign" ></i> Add New Row</button>
-                            <button class="button" data-bind="click: save"><i class="icon-save"></i> Save</button>
-                            <button class="button" data-bind="click: reset">Reset</button>
-                        </span>
-                    </div>
-                    <div class="collapse">
-                        <table class="table table-bordered table-striped table-acubor table-sortable">
-                            <thead>
-                            <tr>
-                                <th class="span1">SN</th>
-                                <th class="span2">Purchase Ledger</th>
-                                <th class="span2">Amount</th>
-                                <th class="span1"></th>
-                            </tr>
-                            </thead>
+                <div class="row-fluid" data-bind="with: cash_purchase">
+                    <table class="table table-bordered table-striped table-acubor table-sortable">
+                      <thead>
+                        <tr>
+                            <th class="span1">SN</th>
+                            <th class="span2">Purchase Ledger</th>
+                            <th class="span2">Amount</th>
+                            <th class="span1"></th>
+                        </tr>
+                      </thead>
 
-                            <tbody id="cash-purchase">
-                            <!-- ko foreach: rows -->
-                            <tr data-bind="flash: true">
-                                <td>
-                                    <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
-                                </td>
-                                <td>
-                                    <select class="span12" data-bind="options: $root.accounts_by_category('Purchase'), optionsText: 'name', optionsValue: 'id', value: account_id, select2: {}"></select>
-                                </td>
-                                <td data-bind="editableText: amount"></td>
-                                <td>
-                                    <button class="button" data-bind="click: $parent.removeRow">
-                                        <i class="icon-remove"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <!-- /ko -->
-                            </tbody>
-                        </table>
+                      <tbody id="cash-purchase">
+                        <!-- ko foreach: rows -->
+                        <tr data-bind="flash: true">
+                            <td>
+                                <span data-bind="text: $index()+1"> </span>
+                            </td>
+                            <td class="with_ip">
+                                <select class="span12" data-bind="options: $root.accounts_by_category('Purchase'), optionsText: 'name', optionsValue: 'id', value: account_id, select2: {}"></select>
+                            </td>
+                            <td data-bind="editableText: amount"></td>
+                            <td>
+                                <a class="close" data-bind="click: $parent.removeRow">
+                                    <i class="icon-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        <!-- /ko -->
+                      </tbody>
+                    </table>
+                     <div data-bind="css: status()" class="pull-left">
+                      <span data-bind="text: message()">
+                      </span>
+                    </div>
+                    <div class="pull-right">
+                      <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign" ></i> Add New Row</button>
+                      <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
+                      <button class="btn btn-small" data-bind="click: reset">Reset</button>
                     </div>
                 </div>
             </div>
 
             <div id="credit_purchase" class="tab-pane">
-                <div class="row-fluid collapse-group" data-bind="with: credit_purchase">
-                    <div class="collapsible-head"><h2 data-bind="css: status">Credit Purchase</h2>
-                        <span data-bind="text: message()"></span>
-                            <span class="collapse-show-on-expand pull-right">
-                                <button class="button" data-bind="click: addRow"><i class="icon-plus-sign" ></i> Add New Row</button>
-                            <button class="button" data-bind="click: save"><i class="icon-save"></i> Save</button>
-                            <button class="button" data-bind="click: reset">Reset</button>
-                            </span>
-                    </div>
-                    <div class="collapse">
-                        <table class="table table-bordered table-striped table-acubor table-sortable">
-                            <thead>
-                            <tr>
-                                <th class="span1">SN</th>
-                                <th class="span2">Purchase Ledger</th>
-                                <th class="span2">Suppliers/Vendors</th>
-                                <th class="span2">Amount</th>
-                                <th class="span1"></th>
-                            </tr>
-                            </thead>
-
-                            <tbody id="credit-purchase">
-                            <!-- ko foreach: rows -->
-                            <tr data-bind="flash: true">
-                                <td>
-                                    <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
-                                </td>
-                                <td>
-                                    <select class="span12" data-bind="options: $root.accounts_by_category('Purchase'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
-                                </td>
-                                <td>
-                                    <select class="span12" data-bind="options: $root.accounts_by_category('Accounts Payable'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}"></select>
-                                </td>
-                                <td data-bind="editableText: amount"></td>
-                                <td>
-                                  <button class="button" data-bind="click: $parent.removeRow">
-                                      <i class="icon-remove"></i>
-                                  </button>
-                                </td>
-                            </tr>
-                            <!-- /ko -->
-                            </tbody>
-                        </table>
-                    </div>
+              <div class="row-fluid" data-bind="with: credit_purchase">
+                <table class="table table-bordered table-striped table-acubor table-sortable">
+                  <thead>
+                    <tr>
+                        <th class="span1">SN</th>
+                        <th class="span2">Purchase Ledger</th>
+                        <th class="span2">Suppliers/Vendors</th>
+                        <th class="span2">Amount</th>
+                        <th class="span1"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="credit-purchase">
+                    <!-- ko foreach: rows -->
+                    <tr data-bind="flash: true">
+                        <td>
+                            <span data-bind="text: $index()+1"> </span>
+                        </td>
+                        <td class="with_ip">
+                            <select class="span12" data-bind="options: $root.accounts_by_category('Purchase'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
+                        </td>
+                        <td class="with_ip">
+                            <select class="span12" data-bind="options: $root.accounts_by_category('Accounts Payable'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}"></select>
+                        </td>
+                        <td data-bind="editableText: amount"></td>
+                        <td>
+                          <a class="close" data-bind="click: $parent.removeRow">
+                              <i class="icon-trash"></i>
+                          </a>
+                        </td>
+                    </tr>
+                  <!-- /ko -->
+                  </tbody>
+                </table>
+                <div data-bind="css: status()" class="pull-left">
+                  <span data-bind="text: message()">
+                  </span>
                 </div>
+                <div class="pull-right">
+                  <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign" ></i> Add New Row</button>
+                  <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
+                  <button class="btn btn-small" data-bind="click: reset">Reset</button>
+                </div>
+              </div>
             </div>
 
             <div id="cheque_purchase" class="tab-pane">
-                <div class="row-fluid collapse-group" data-bind="with: cheque_purchase">
-                    <div class="collapsible-head"><h2 data-bind="css: status">Cheque Purchase</h2>
-                        <span data-bind="text: message()"></span>
-                                <span class="collapse-show-on-expand pull-right">
-                                <button class="button" data-bind="click: save"><i class="icon-save"></i> Save</button>
-                                <button class="button" data-bind="click: reset">Reset</button>
-                                </span>
-                    </div>
+                <div class="row-fluid" data-bind="with: cheque_purchase">
+                  <table class="table table-bordered table-striped table-acubor table-sortable">
+                      <thead>
+                      <tr>
+                          <th class="span2">Amount</th>
+                          <th class="span2">Commission In</th>
+                          <th class="span2">Net</th>
+                      </tr>
+                      </thead>
 
-                    <div class="collapse">
-                        <table class="table table-bordered table-striped table-acubor table-sortable">
-                            <thead>
-                            <tr>
-                                <th class="span2">Amount</th>
-                                <th class="span2">Commission In</th>
-                                <th class="span2">Net</th>
-                            </tr>
-                            </thead>
-
-                            <tbody id="cheque-purchase">
-                            <!-- ko foreach: rows -->
-                            <tr>
-                                <td data-bind="editableText: amount"></td>
-                                <td data-bind="editableText: commission_in"></td>
-                                <td data-bind="text: net()"></td>
-                            </tr>
-                            <!-- /ko -->
-                            </tbody>
-                        </table>
-                    </div>
+                      <tbody id="cheque-purchase">
+                      <!-- ko foreach: rows -->
+                      <tr>
+                          <td data-bind="editableText: amount"></td>
+                          <td data-bind="editableText: commission_in"></td>
+                          <td data-bind="text: net()"></td>
+                      </tr>
+                      <!-- /ko -->
+                      </tbody>
+                  </table>
+                  <div data-bind="css: status()" class="pull-left">
+                    <span data-bind="text: message()">
+                    </span>
+                  </div>
+                  <div class="pull-right">
+                    <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
+                    <button class="btn btn-small" data-bind="click: reset">Reset</button>
+                  </div>
                 </div>
             </div>
         </div>
