@@ -48,14 +48,34 @@ class Account(models.Model):
     #     if len(transactions) > 0:
     #         return transactions[0]
     #
-    # def get_day_opening(self, before_date=None):
-    #     if not before_date:
-    #         day = date.today()
-    #     transactions = Transaction.objects.filter(account=self, date__lt=day).order_by('-id', '-date')[:1]
-    #     if len(transactions) > 0:
-    #         return transactions[0].current_balance
-    #     return self.current_balance
 
+    def get_day_opening_dr(self, before_date=None):
+        if not before_date:
+            before_date = date.today()
+        transactions = Transaction.objects.filter(account=self, journal_entry__date__lt=before_date).order_by(
+            '-journal_entry__id', '-journal_entry__date')[:1]
+        if len(transactions) > 0:
+            return transactions[0].current_dr
+        return self.current_dr
+
+    def get_day_opening_cr(self, before_date=None):
+        if not before_date:
+            before_date = date.today()
+        transactions = Transaction.objects.filter(account=self, journal_entry__date__lt=before_date).order_by(
+            '-journal_entry__id', '-journal_entry__date')[:1]
+        if len(transactions) > 0:
+            return transactions[0].current_cr
+        return self.current_cr
+
+    def get_day_opening(self, before_date=None):
+        if self.name == 'Cash':
+            print self.get_day_opening_dr(before_date)
+            print self.get_day_opening_cr(before_date)
+        return zero_for_none(self.get_day_opening_dr(before_date)) - zero_for_none(self.get_day_opening_cr(before_date))
+
+    # day_opening_dr = property(get_day_opening_dr)
+    # day_opening_cr = property(get_day_opening_cr)
+    #
     # day_opening = property(get_day_opening)
 
     def add_category(self, category):
