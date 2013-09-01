@@ -12,11 +12,22 @@ from django.http import HttpResponse
 import json
 from acubor.lib import invalid, save_model
 from ledger.models import delete_rows
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 def list_invoice(request):
     all_invoices = Invoice.objects.all()
-    return render(request, 'list_invoice.html', {'invoices': all_invoices})
+    paginator = Paginator(all_invoices, 25)  # Show 25 invoices per page
+    page = request.GET.get('page')
+    try:
+        invoices = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        invoices = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        invoices = paginator.page(paginator.num_pages)
+    return render(request, 'list_invoice.html', {'invoices': invoices})
 
 
 def invoice(request, invoice_no=None):

@@ -1,4 +1,4 @@
-{%  extends "dashboard.html" %}
+{% extends "dashboard.html" %}
 
 {% block title %}Invoices{% endblock %}
 
@@ -29,18 +29,34 @@
         <tbody>
         {% for invoice in invoices %}
             <tr>
-            <td>
-                <a href="{% url "view_invoice" invoice.invoice_no %}">
-                {{ invoice.invoice_no }}
-                </a>
-            </td>
-            <td>{{ invoice.party }}</td>
-            <td>{{ invoice.date }}</td>
-            <td>{{ invoice.due_date }}</td>
+                <td>
+                    <a href="{% url "view_invoice" invoice.invoice_no %}">
+                        {{ invoice.invoice_no }}
+                    </a>
+                </td>
+                <td>{{ invoice.party }}</td>
+                <td>{{ invoice.date }}</td>
+                <td>{{ invoice.due_date }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+
+    <div class="pagination">
+    <span class="step-links">
+        {% if invoices.has_previous %}
+            <a href="?page={{ invoices.previous_page_number }}">Previous</a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ invoices.number }} of {{ invoices.paginator.num_pages }}.
+        </span>
+
+        {% if invoices.has_next %}
+            <a href="?page={{ invoices.next_page_number }}">Next</a>
+        {% endif %}
+    </span>
+    </div>
 
 
 {% endblock %}
