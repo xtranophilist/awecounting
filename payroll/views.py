@@ -1,9 +1,9 @@
-# Create your views here.
 from django.shortcuts import render, redirect, get_object_or_404
 from payroll.models import Entry, EntryRow
 from payroll.serializers import EntrySerializer
 import json
-from acubor.lib import save_model, invalid, delete_rows
+from acubor.lib import save_model, invalid
+from ledger.models import delete_rows
 from django.http import HttpResponse
 
 
@@ -35,7 +35,7 @@ def save_entry(request):
     for index, row in enumerate(params.get('rows')):
         if invalid(row, ['pay_heading', 'account_id', 'amount', 'tax']):
             continue
-        values = {'sn': index+1, 'employee_id': row.get('account_id'), 'pay_heading_id': row.get('pay_heading'),
+        values = {'sn': index + 1, 'employee_id': row.get('account_id'), 'pay_heading_id': row.get('pay_heading'),
                   'tax': row.get('tax'), 'remarks': row.get('remarks'), 'hours': row.get('hours'),
                   'amount': row.get('amount'), 'entry': entry}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)

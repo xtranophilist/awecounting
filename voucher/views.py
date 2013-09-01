@@ -10,7 +10,8 @@ from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, Jo
     JournalVoucherSerializer
 from django.http import HttpResponse
 import json
-from acubor.lib import delete_rows, invalid, save_model
+from acubor.lib import invalid, save_model
+from ledger.models import delete_rows
 
 
 def list_invoice(request):

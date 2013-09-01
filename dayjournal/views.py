@@ -2,13 +2,13 @@ from django.shortcuts import render, get_object_or_404
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, CardSales, \
     CreditExpense, CreditIncome, CreditPurchase, CreditSales, LottoDetailRow, ChequePurchase, \
     CashEquivalentSales, SummaryBank, SummaryCash, SummaryInventory, SummaryTransfer, SummaryLotto
-from ledger.models import Transaction, Account
+from ledger.models import Transaction, Account, set_transactions, delete_rows
 
 from datetime import date
 from dayjournal.serializers import DayJournalSerializer, DayJournalLottoSerializer
 from django.http import HttpResponse
 import json
-from acubor.lib import delete_rows, invalid, save_model, all_empty, dr, cr, set_transactions, add
+from acubor.lib import invalid, save_model, all_empty, add
 
 
 def day_journal(request, journal_date=None):

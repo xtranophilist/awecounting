@@ -5,7 +5,8 @@ from django.shortcuts import render, get_object_or_404
 
 from bank.models import BankAccount, ChequeReceipt, ChequeReceiptRow, BankCashReceipt, ChequePayment
 from bank.forms import BankAccountForm, ChequeReceiptForm, BankCashReceiptForm, ChequePaymentForm
-from acubor.lib import invalid, save_model, delete_rows
+from acubor.lib import invalid, save_model
+from ledger.models import delete_rows
 from bank.serializers import ChequeReceiptSerializer
 
 
