@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, timedelta
 
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
@@ -95,7 +95,7 @@ class Account(models.Model):
             '-journal_entry__id', '-journal_entry__date')[:1]
         if len(transactions) > 0:
             return transactions[0].current_cr
-
+        return 0
 
     def get_dr_amount(self, day):
         #journal_entry= JournalEntry.objects.filter(date__lt=day,transactions__account=self).order_by('-id','-date')[:1]
@@ -103,6 +103,7 @@ class Account(models.Model):
             '-journal_entry__id', '-journal_entry__date')[:1]
         if len(transactions) > 0:
             return transactions[0].current_dr
+        return 0
 
     def __unicode__(self):
         return self.name
@@ -263,16 +264,22 @@ def set_transactions(submodel, date, *args):
             transaction.account = arg[1]
             if arg[0] == 'dr':
                 transaction.dr_amount = float(arg[2])
+                transaction.cr_amount = None
                 transaction.account.current_dr = none_for_zero(
                     zero_for_none(transaction.account.current_dr) + transaction.dr_amount)
-                transaction.current_dr = transaction.account.current_dr
                 alter(arg[1], date, float(arg[2]), 0)
             if arg[0] == 'cr':
                 transaction.cr_amount = float(arg[2])
+                transaction.dr_amount = None
                 transaction.account.current_cr = none_for_zero(
                     zero_for_none(transaction.account.current_cr) + transaction.cr_amount)
-                transaction.current_cr = transaction.account.current_cr
                 alter(arg[1], date, 0, float(arg[2]))
+            transaction.current_dr = none_for_zero(
+                zero_for_none(transaction.account.get_dr_amount(date + timedelta(days=1)))
+                + zero_for_none(transaction.dr_amount))
+            transaction.current_cr = none_for_zero(
+                zero_for_none(transaction.account.get_cr_amount(date + timedelta(days=1)))
+                + zero_for_none(transaction.cr_amount))
         else:
             transaction = matches[0]
             transaction.account = arg[1]
@@ -307,8 +314,8 @@ def set_transactions(submodel, date, *args):
             transaction.account.current_cr = none_for_zero(
                 zero_for_none(transaction.account.current_cr) + cr_difference)
 
+        #the following code lies outside if,else block, inside for loop
         transaction.account.save()
-
         journal_entry.transactions.add(transaction)
 
 
