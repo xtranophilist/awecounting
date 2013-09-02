@@ -8,15 +8,15 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'ChequeDepositRow.cheque_receipt'
-        db.add_column(u'bank_chequereceiptrow', 'cheque_receipt',
+        # Adding field 'ChequeDepositRow.cheque_deposit'
+        db.add_column(u'bank_chequereceiptrow', 'cheque_deposit',
                       self.gf('django.db.models.fields.related.ForeignKey')(default=None, to=orm['bank.ChequeDeposit']),
                       keep_default=False)
 
 
     def backwards(self, orm):
-        # Deleting field 'ChequeDepositRow.cheque_receipt'
-        db.delete_column(u'bank_chequereceiptrow', 'cheque_receipt_id')
+        # Deleting field 'ChequeDepositRow.cheque_deposit'
+        db.delete_column(u'bank_chequereceiptrow', 'cheque_deposit_id')
 
 
     models = {
@@ -43,7 +43,7 @@ class Migration(SchemaMigration):
             'amount': ('django.db.models.fields.FloatField', [], {}),
             'cheque_date': ('django.db.models.fields.DateField', [], {}),
             'cheque_number': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'cheque_receipt': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['bank.ChequeDeposit']"}),
+            'cheque_deposit': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['bank.ChequeDeposit']"}),
             'drawee_bank': ('django.db.models.fields.CharField', [], {'max_length': '254', 'null': 'True', 'blank': 'True'}),
             'drawee_bank_address': ('django.db.models.fields.CharField', [], {'max_length': '254', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),

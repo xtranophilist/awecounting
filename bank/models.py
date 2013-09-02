@@ -26,7 +26,7 @@ class ChequeDeposit(models.Model):
     bank_account = models.ForeignKey(Account, related_name='cheque_deposits')
     clearing_date = models.DateField(null=True, blank=True)
     benefactor = models.ForeignKey(Account)
-    attachment = models.FileField(upload_to='cheque_receipts/%Y/%m/%d', blank=True, null=True)
+    attachment = models.FileField(upload_to='cheque_deposits/%Y/%m/%d', blank=True, null=True)
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)
 
@@ -38,7 +38,7 @@ class ChequeDepositRow(models.Model):
     drawee_bank = models.CharField(max_length=254, blank=True, null=True)
     drawee_bank_address = models.CharField(max_length=254, blank=True, null=True)
     amount = models.FloatField()
-    cheque_receipt = models.ForeignKey(ChequeDeposit, related_name='rows')
+    cheque_deposit = models.ForeignKey(ChequeDeposit, related_name='rows')
 
 
 class BankCashReceipt(models.Model):

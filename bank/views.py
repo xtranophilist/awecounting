@@ -36,7 +36,7 @@ def bank_account_form(request, id=None):
     })
 
 
-def cheque_receipt(request, id=None):
+def cheque_deposit(request, id=None):
     if id:
         receipt = get_object_or_404(ChequeDeposit, id=id)
         scenario = 'Update'
@@ -60,7 +60,7 @@ def cheque_receipt(request, id=None):
                 values = {'sn': index + 1, 'cheque_number': row.get('cheque_number'),
                           'cheque_date': row.get('cheque_date'),
                           'drawee_bank': row.get('drawee_bank'), 'drawee_bank_address': row.get('drawee_bank_address'),
-                          'amount': row.get('amount'), 'cheque_receipt': receipt}
+                          'amount': row.get('amount'), 'cheque_deposit': receipt}
                 submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
                 if not created:
                     submodel = save_model(submodel, values)
@@ -68,7 +68,7 @@ def cheque_receipt(request, id=None):
 
     form = ChequeDepositForm(instance=receipt)
     receipt_data = ChequeDepositSerializer(receipt).data
-    return render(request, 'cheque_receipt.html', {'form': form, 'data': receipt_data, 'scenario': scenario})
+    return render(request, 'cheque_deposit.html', {'form': form, 'data': receipt_data, 'scenario': scenario})
 
 
 def cash_receipt(request, id=None):
