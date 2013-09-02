@@ -235,59 +235,59 @@ function DayJournal(data) {
 
 }
 
-function SummaryCashModel(data) {
-    var self = this;
-
-    self.opening = function (all_accounts) {
-//        var cash_account = all_accounts.filter(function(element, index, array){
-//            if (element.name == 'Cash Account')
-//                return element;
-//        })[0];
-//        return cash_account.current_balance;
-        return 100;
-    };
-
-    self.inward = function (root) {
-        var total = 0;
-        $.each(root.cash_sales.rows(), function () {
-            if (isAN(this.amount()))
-                total += parseFloat(this.amount());
-        });
-        $.each(root.cash_receipt.rows(), function () {
-            if (isAN(this.amount()))
-                total += parseFloat(this.amount());
-        });
-        return rnum(total);
-    };
-
-    self.outward = function (root) {
-        var total = 0;
-        $.each(root.cash_purchase.rows(), function () {
-            if (isAN(this.amount()))
-                total += parseFloat(this.amount());
-        });
-        $.each(root.cash_payment.rows(), function () {
-            if (isAN(this.amount()))
-                total += parseFloat(this.amount());
-        });
-        return rnum(total);
-    };
-
-    self.closing = function (root) {
-        return rnum(self.opening(root.accounts) + self.inward(root) - self.outward(root));
-    };
-
-    self.difference = function (root) {
-        return rnum(self.actual() - self.closing(root));
-    };
-
-    self.actual = ko.observable();
-
-    for (var k in row) {
-        if (row[k] != null)
-            self[k] = ko.observable(row[k]);
-    }
-}
+//function SummaryCashModel(data) {
+//    var self = this;
+//
+//    self.opening = function (all_accounts) {
+////        var cash_account = all_accounts.filter(function(element, index, array){
+////            if (element.name == 'Cash Account')
+////                return element;
+////        })[0];
+////        return cash_account.current_balance;
+//        return 100;
+//    };
+//
+//    self.inward = function (root) {
+//        var total = 0;
+//        $.each(root.cash_sales.rows(), function () {
+//            if (isAN(this.amount()))
+//                total += parseFloat(this.amount());
+//        });
+//        $.each(root.cash_receipt.rows(), function () {
+//            if (isAN(this.amount()))
+//                total += parseFloat(this.amount());
+//        });
+//        return rnum(total);
+//    };
+//
+//    self.outward = function (root) {
+//        var total = 0;
+//        $.each(root.cash_purchase.rows(), function () {
+//            if (isAN(this.amount()))
+//                total += parseFloat(this.amount());
+//        });
+//        $.each(root.cash_payment.rows(), function () {
+//            if (isAN(this.amount()))
+//                total += parseFloat(this.amount());
+//        });
+//        return rnum(total);
+//    };
+//
+//    self.closing = function (root) {
+//        return rnum(self.opening(root.accounts) + self.inward(root) - self.outward(root));
+//    };
+//
+//    self.difference = function (root) {
+//        return rnum(self.actual() - self.closing(root));
+//    };
+//
+//    self.actual = ko.observable();
+//
+//    for (var k in row) {
+//        if (row[k] != null)
+//            self[k] = ko.observable(row[k]);
+//    }
+//}
 
 function LottoRow(row) {
     var self = this;
@@ -326,7 +326,7 @@ function CashSalesRow(row) {
     self.tax_rate = ko.observable();
     self.amount = ko.observable();
     self.tax = function () {
-        return rnum(parseFloat(self.amount()) * parseFloat(self.tax_rate()) / 100);
+        return round2(parseFloat(self.amount()) * parseFloat(self.tax_rate()) / 100);
     }
 
     for (var k in row) {
@@ -423,17 +423,17 @@ function SummaryEquivalentRow(row) {
 
 }
 
-function SummaryUtilityModel(data) {
-    var self = this;
-
-    self.amount = ko.observable();
-
-    for (var k in row) {
-        if (row[k] != null)
-            self[k] = ko.observable(row[k]);
-    }
-
-}
+//function SummaryUtilityModel(data) {
+//    var self = this;
+//
+//    self.amount = ko.observable();
+//
+//    for (var k in row) {
+//        if (row[k] != null)
+//            self[k] = ko.observable(row[k]);
+//    }
+//
+//}
 
 function SummaryTransferRow(row) {
     var self = this;
@@ -505,7 +505,7 @@ function SummaryCashRow(row) {
             if (element.name == 'Cash')
                 return element;
         })[0];
-        return cash_account.opening;
+        return round2(cash_account.opening);
     };
 
     self.inward = function (root) {
@@ -524,7 +524,7 @@ function SummaryCashRow(row) {
         });
         if (isAN(root.summary_bank.rows()[0].withdrawal()))
             total += parseFloat(root.summary_bank.rows()[0].withdrawal());
-        return rnum(total);
+        return round2(total);
     };
 
     self.outward = function (root) {
@@ -551,17 +551,17 @@ function SummaryCashRow(row) {
         });
         if (isAN(root.summary_bank.rows()[0].deposit()))
             total += parseFloat(root.summary_bank.rows()[0].deposit());
-        return rnum(total);
+        return round2(total);
     };
 
     self.closing = function (root) {
-        return rnum(self.opening(root) + self.inward(root) - self.outward(root));
+        return round2(self.opening(root) + self.inward(root) - self.outward(root));
     };
 
     self.actual = ko.observable();
 
     self.difference = function (root) {
-        return rnum(self.actual() - self.closing(root));
+        return round2(self.actual() - self.closing(root));
     };
 
 
