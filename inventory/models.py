@@ -9,6 +9,7 @@ class Category(models.Model):
     code = models.CharField(max_length=10, blank=True, null=True)
     name = models.CharField(max_length=254)
     description = models.TextField(blank=True, null=True)
+    company = models.ForeignKey(Company, related_name='inventory_categories')
 
     def __unicode__(self):
         return '[' + str(self.code) + '] ' + str(self.name)
