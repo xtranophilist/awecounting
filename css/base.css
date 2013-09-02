@@ -2,21 +2,62 @@ body{ font-family: 'Open Sans', helvetica, arial;}
 .fixed-header{ padding-top: 62px; }
 h2.intro{ color: #fff;}
 .navbar-inverse .navbar-inner{
-    padding: 8px 0px;
+    padding: 0px;
     background: #163B55;
     border-color: #036;
+    min-height: 40px
 }
 .navbar-inverse a.brand{ color: #fff; font-weight: bold;}
 .navbar-inverse .nav .active > a, .navbar-inverse .nav .active > a:hover, .navbar-inverse .nav .active > a:focus{
     background: none;
     text-shadow: none;
-    border-bottom: 2px solid #fff;
     color: #fff;
     box-shadow: none;
 }
-.navbar-inverse .brand, .navbar-inverse .nav > li > a{ color: rgb(186, 216, 247); }
+.navbar-inverse .nav li.dropdown.open>.dropdown-toggle{
+    background-color: #103047;
+}
+.navbar-inverse .brand, .navbar-inverse .nav > li > a{ color: #90ADC2; font-weight: bold; }
 .navbar .brand{
     margin-left: 0;
+}
+.sidebar-collapse{
+    padding: 10px 0px 9px 0px;
+    border-bottom: 1px solid #e0e0e0;
+    background-color: #f3f3f3;
+    text-align: center;
+    position: relative;
+}
+.sidebar-collapse:before{
+    top: 20px;
+    content: "";
+    display: inline-block;
+    height: 0;
+    border-top: 1px solid #e0e0e0;
+    position: absolute;
+    left: 15px;
+    right: 15px;
+}
+.sidebar-collapse>[class*="icon-"] {
+    display: inline-block;
+    cursor: pointer;
+    font-size: 14px;
+    color: #aaa;
+    border: 1px solid #bbb;
+    padding: 0 5px;
+    line-height: 18px;
+    border-radius: 16px;
+    background-color: #fff;
+    position: relative;
+}
+.btn{
+    border-width: 4px;
+}
+.btn:hover{
+    background-color: #C6D2DA;
+}
+.btn:active{
+    background: #BDCAD3;
 }
 .acubor-splash{
     margin-top: 15px;
