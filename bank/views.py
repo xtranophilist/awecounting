@@ -3,11 +3,11 @@ import json
 
 from django.shortcuts import render, get_object_or_404
 
-from bank.models import BankAccount, ChequeReceipt, ChequeReceiptRow, BankCashReceipt, ChequePayment
-from bank.forms import BankAccountForm, ChequeReceiptForm, BankCashReceiptForm, ChequePaymentForm
+from bank.models import BankAccount, ChequeDeposit, ChequeDepositRow, BankCashReceipt, ChequePayment
+from bank.forms import BankAccountForm, ChequeDepositForm, BankCashReceiptForm, ChequePaymentForm
 from acubor.lib import invalid, save_model
 from ledger.models import delete_rows
-from bank.serializers import ChequeReceiptSerializer
+from bank.serializers import ChequeDepositSerializer
 
 
 def bank_account_form(request, id=None):
@@ -38,13 +38,13 @@ def bank_account_form(request, id=None):
 
 def cheque_receipt(request, id=None):
     if id:
-        receipt = get_object_or_404(ChequeReceipt, id=id)
+        receipt = get_object_or_404(ChequeDeposit, id=id)
         scenario = 'Update'
     else:
-        receipt = ChequeReceipt(date=date.today())
+        receipt = ChequeDeposit(date=date.today())
         scenario = 'New'
     if request.POST:
-        form = ChequeReceiptForm(request.POST, request.FILES, instance=receipt)
+        form = ChequeDepositForm(request.POST, request.FILES, instance=receipt)
         if form.is_valid():
             receipt = form.save(commit=False)
             receipt.company = request.user.company
@@ -53,7 +53,7 @@ def cheque_receipt(request, id=None):
             receipt.save()
         if id or form.is_valid():
             particulars = json.loads(request.POST['particulars'])
-            model = ChequeReceiptRow
+            model = ChequeDepositRow
             for index, row in enumerate(particulars.get('rows')):
                 if invalid(row, ['amount']):
                     continue
@@ -66,8 +66,8 @@ def cheque_receipt(request, id=None):
                     submodel = save_model(submodel, values)
             delete_rows(particulars.get('deleted_rows'), model)
 
-    form = ChequeReceiptForm(instance=receipt)
-    receipt_data = ChequeReceiptSerializer(receipt).data
+    form = ChequeDepositForm(instance=receipt)
+    receipt_data = ChequeDepositSerializer(receipt).data
     return render(request, 'cheque_receipt.html', {'form': form, 'data': receipt_data, 'scenario': scenario})
 
 

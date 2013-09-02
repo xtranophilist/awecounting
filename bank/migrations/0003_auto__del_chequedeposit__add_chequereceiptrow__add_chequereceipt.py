@@ -11,7 +11,7 @@ class Migration(SchemaMigration):
         # Deleting model 'ChequeDeposit'
         db.delete_table(u'bank_chequedeposit')
 
-        # Adding model 'ChequeReceiptRow'
+        # Adding model 'ChequeDepositRow'
         db.create_table(u'bank_chequereceiptrow', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('sn', self.gf('django.db.models.fields.IntegerField')()),
@@ -21,9 +21,9 @@ class Migration(SchemaMigration):
             ('drawee_bank_address', self.gf('django.db.models.fields.CharField')(max_length=254, null=True, blank=True)),
             ('amount', self.gf('django.db.models.fields.FloatField')()),
         ))
-        db.send_create_signal(u'bank', ['ChequeReceiptRow'])
+        db.send_create_signal(u'bank', ['ChequeDepositRow'])
 
-        # Adding model 'ChequeReceipt'
+        # Adding model 'ChequeDeposit'
         db.create_table(u'bank_chequereceipt', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('date', self.gf('django.db.models.fields.DateField')()),
@@ -32,7 +32,7 @@ class Migration(SchemaMigration):
             ('benefactor', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ledger.Account'])),
             ('narration', self.gf('django.db.models.fields.TextField')()),
         ))
-        db.send_create_signal(u'bank', ['ChequeReceipt'])
+        db.send_create_signal(u'bank', ['ChequeDeposit'])
 
 
     def backwards(self, orm):
@@ -50,10 +50,10 @@ class Migration(SchemaMigration):
         ))
         db.send_create_signal(u'bank', ['ChequeDeposit'])
 
-        # Deleting model 'ChequeReceiptRow'
+        # Deleting model 'ChequeDepositRow'
         db.delete_table(u'bank_chequereceiptrow')
 
-        # Deleting model 'ChequeReceipt'
+        # Deleting model 'ChequeDeposit'
         db.delete_table(u'bank_chequereceipt')
 
 
@@ -68,7 +68,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         u'bank.chequereceipt': {
-            'Meta': {'object_name': 'ChequeReceipt'},
+            'Meta': {'object_name': 'ChequeDeposit'},
             'bank_account': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'cheque_deposits'", 'to': u"orm['ledger.Account']"}),
             'benefactor': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ledger.Account']"}),
             'clearing_date': ('django.db.models.fields.DateField', [], {}),
@@ -77,7 +77,7 @@ class Migration(SchemaMigration):
             'narration': ('django.db.models.fields.TextField', [], {})
         },
         u'bank.chequereceiptrow': {
-            'Meta': {'object_name': 'ChequeReceiptRow'},
+            'Meta': {'object_name': 'ChequeDepositRow'},
             'amount': ('django.db.models.fields.FloatField', [], {}),
             'cheque_date': ('django.db.models.fields.DateField', [], {}),
             'cheque_number': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),

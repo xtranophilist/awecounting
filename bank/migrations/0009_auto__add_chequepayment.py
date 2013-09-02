@@ -60,7 +60,7 @@ class Migration(SchemaMigration):
             'narration': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
         },
         u'bank.chequereceipt': {
-            'Meta': {'object_name': 'ChequeReceipt'},
+            'Meta': {'object_name': 'ChequeDeposit'},
             'attachment': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'bank_account': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'cheque_deposits'", 'to': u"orm['ledger.Account']"}),
             'benefactor': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ledger.Account']"}),
@@ -71,11 +71,11 @@ class Migration(SchemaMigration):
             'narration': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'})
         },
         u'bank.chequereceiptrow': {
-            'Meta': {'object_name': 'ChequeReceiptRow'},
+            'Meta': {'object_name': 'ChequeDepositRow'},
             'amount': ('django.db.models.fields.FloatField', [], {}),
             'cheque_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
             'cheque_number': ('django.db.models.fields.CharField', [], {'max_length': '50', 'null': 'True', 'blank': 'True'}),
-            'cheque_receipt': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'rows'", 'to': u"orm['bank.ChequeReceipt']"}),
+            'cheque_receipt': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'rows'", 'to': u"orm['bank.ChequeDeposit']"}),
             'drawee_bank': ('django.db.models.fields.CharField', [], {'max_length': '254', 'null': 'True', 'blank': 'True'}),
             'drawee_bank_address': ('django.db.models.fields.CharField', [], {'max_length': '254', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),

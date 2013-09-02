@@ -1,17 +1,17 @@
 from rest_framework import serializers
-from bank.models import ChequeReceipt, ChequeReceiptRow, ChequePayment
+from bank.models import ChequeDeposit, ChequeDepositRow, ChequePayment
 
 
-class ChequeReceiptRowSerializer(serializers.ModelSerializer):
+class ChequeDepositRowSerializer(serializers.ModelSerializer):
     class Meta:
-        model = ChequeReceiptRow
+        model = ChequeDepositRow
 
 
-class ChequeReceiptSerializer(serializers.ModelSerializer):
-    rows = ChequeReceiptRowSerializer()
+class ChequeDepositSerializer(serializers.ModelSerializer):
+    rows = ChequeDepositRowSerializer()
 
     class Meta:
-        model = ChequeReceipt
+        model = ChequeDeposit
 
 
 class ChequePaymentSerializer(serializers.ModelSerializer):
