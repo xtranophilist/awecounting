@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, PurchaseParticular, JournalVoucher, \
-    JournalVoucherRow, BankDetailRow, BankDetail
+    JournalVoucherRow
 
 
 class InvoiceParticularSerializer(serializers.ModelSerializer):
@@ -52,19 +52,3 @@ class JournalVoucherSerializer(serializers.ModelSerializer):
     class Meta:
         model = JournalVoucher
         exclude = ['company']
-
-
-class BankDetailRowSerializer(serializers.ModelSerializer):
-    account_id = serializers.Field('account_id')
-
-    class Meta:
-        model = BankDetailRow
-        exclude = ['bank_detail']
-
-
-class BankDetailSerializer(serializers.ModelSerializer):
-    rows = BankDetailRowSerializer()
-
-    class Meta:
-        model = BankDetail
-        exclude = ['day_journal']

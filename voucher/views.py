@@ -5,8 +5,8 @@ from datetime import date
 
 from forms import InvoiceForm, PurchaseVoucherForm
 from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, PurchaseParticular, JournalVoucher, \
-    JournalVoucherRow, BankDetail, BankDetailRow
-from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, JournalVoucherRowSerializer, \
+    JournalVoucherRow
+from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, \
     JournalVoucherSerializer
 from django.http import HttpResponse
 import json
