@@ -361,3 +361,7 @@ tr.highlighted td {
 table .select2-container .select2-choice {
     border: 0;
 }
+
+.hidden{
+    display: none;
+}

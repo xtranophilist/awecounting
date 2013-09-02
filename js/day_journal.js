@@ -500,8 +500,8 @@ function ChequePurchaseRow(row) {
 function SummaryCashRow(row) {
     var self = this;
 
-   self.opening = function (root) {
-        var cash_account = root.accounts.filter(function(element, index, array){
+    self.opening = function (root) {
+        var cash_account = root.accounts.filter(function (element, index, array) {
             if (element.name == 'Cash')
                 return element;
         })[0];
@@ -518,6 +518,12 @@ function SummaryCashRow(row) {
             if (isAN(this.amount()))
                 total += parseFloat(this.amount());
         });
+        $.each(root.summary_transfer.rows(), function () {
+            if (isAN(this.cash()))
+                total += parseFloat(this.cash());
+        });
+        if (isAN(root.summary_bank.rows()[0].withdrawal()))
+            total += parseFloat(root.summary_bank.rows()[0].withdrawal());
         return rnum(total);
     };
 
@@ -531,6 +537,20 @@ function SummaryCashRow(row) {
             if (isAN(this.amount()))
                 total += parseFloat(this.amount());
         });
+        $.each(root.card_sales.rows(), function () {
+            if (isAN(this.amount()))
+                total += parseFloat(this.amount());
+        });
+        $.each(root.cash_equivalent_sales.rows(), function () {
+            if (isAN(this.amount()))
+                total += parseFloat(this.amount());
+        });
+        $.each(root.cheque_purchase.rows(), function () {
+            if (isAN(this.net()))
+                total += parseFloat(this.net());
+        });
+        if (isAN(root.summary_bank.rows()[0].deposit()))
+            total += parseFloat(root.summary_bank.rows()[0].deposit());
         return rnum(total);
     };
 
