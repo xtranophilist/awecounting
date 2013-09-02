@@ -229,6 +229,5 @@ class LottoRow(models.Model):
     rate = models.FloatField()
     pack_count = models.IntegerField(default=1)
     day_close = models.IntegerField()
-    sold_quantity = models.IntegerField()
-    actual_quantity = models.IntegerField()
+    addition = models.IntegerField()
     day_journal = models.ForeignKey(DayJournal, related_name='lotto_details')
