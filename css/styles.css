@@ -92,21 +92,21 @@ tbody > tr > td[contenteditable="true"]:focus {
     opacity: 1;
 }
 
-.table-acubor{
+.table-acubor {
     margin-bottom: 10px;
 }
 
-.table-acubor th{
+.table-acubor th {
     padding: 5px;
     vertical-align: middle;
 }
 
-.table-acubor td{
+.table-acubor td {
     padding: 6px;
     vertical-align: middle;
 }
 
-.table-acubor .with_ip{
+.table-acubor .with_ip {
     padding: 0px;
     border: #B9B9B9 1px solid;
 }
@@ -268,24 +268,28 @@ table.tree-table tr.expanded span.indenter a:before {
     cursor: pointer;
 }
 
-tr.highlighted td{
+tr.highlighted td {
     background-color: #fbd972 !important;
 }
-.tab-content{
+
+.tab-content {
     padding: 0px;
     border: 0px;
     clear: both;
 }
-.nav-tabs>li>a{
+
+.nav-tabs>li>a {
     font-weight: bold;
     background: #fff;
 }
-.nav-tabs>li.active>a,.nav-tabs>li.active>a:hover,.nav-tabs>li.active>a:focus{
+
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:hover, .nav-tabs>li.active>a:focus {
     background: #f9f9f9;
     border-bottom-color: #ddd;
     border-top-color: rgb(95, 156, 201);
 }
-.flip-container{
+
+.flip-container {
     background: gray;
     width: 160px;
     height: 160px;
@@ -296,11 +300,13 @@ tr.highlighted td{
     margin-right: 20px;
     margin-bottom: 20px;
 }
-.flip-container .icon-container{
+
+.flip-container .icon-container {
     text-align: center;
     padding-top: 10px;
 }
-.flip-body{
+
+.flip-body {
     width: 160px;
     height: 160px;
     position: absolute;
@@ -312,38 +318,46 @@ tr.highlighted td{
     -o-transition: all 200ms linear .3s;
     transition: all 200ms linear .3s;
 }
-.flip-container:hover .flip-body{
+
+.flip-container:hover .flip-body {
     top: 0px;
 }
-.flip-body h2{
+
+.flip-body h2 {
     background: #444343;
     color: #ECECEC;
     margin: 0px;
     font-weight: normal;
 }
-.flip-body ul{
+
+.flip-body ul {
     list-style: none;
     margin: 0;
     padding: 0;
     text-align: left;
 }
-.flip-body ul li{
+
+.flip-body ul li {
     margin: 0px;
 }
-.flip-body ul li a{
+
+.flip-body ul li a {
     padding: 4px 8px;
     display: block;
 }
-.flip-body ul li a:hover{
+
+.flip-body ul li a:hover {
     background: #69c;
     color: #fff;
     text-decoration: none;
 }
-.flip-container i{
+
+.flip-container i {
     font-size: 100px;
     color: #fff;
     text-shadow: 1px 1px 1px #333;
 }
-table .select2-container .select2-choice{
+
+table .select2-container .select2-choice {
     border: 0;
 }
