@@ -205,7 +205,7 @@ function DayJournal(data) {
 
     self.credit_expense = new TableViewModel(key_to_options('credit_expense'), CreditRow);
 
-    self.summary_lotto = new TableViewModel(key_to_options('summary_lotto'), LottoRow);
+    self.summary_lotto = new TableViewModel(key_to_options('summary_lotto'), SummaryLottoRow);
 
     self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), SummaryTaxRow);
     self.summary_sales_tax.rows()[0].register(self.sales_tax);
@@ -231,6 +231,8 @@ function DayJournal(data) {
 
     self.summary_cash = new TableViewModel(key_to_options('summary_cash'), SummaryCashRow);
     self.summary_cash.rows()[0].actual(self.cash_actual);
+
+    self.lotto_detail = new TableViewModel(key_to_options('lotto_detail'), LottoDetailRow);
 
 
 }
@@ -289,7 +291,26 @@ function DayJournal(data) {
 //    }
 //}
 
-function LottoRow(row) {
+function LottoDetailRow(row) {
+
+    var self = this;
+
+    self.rate = ko.observable();
+    self.pack_count = ko.observable();
+    self.day_open = ko.observable();
+    self.day_close = ko.observable();
+    self.addition = ko.observable(0);
+    self.sales = function () {
+        return round2(((self.pack_count() * self.addition()) + (self.day_close() - self.day_open())) * self.rate());
+    }
+
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
+    }
+}
+
+function SummaryLottoRow(row) {
     var self = this;
 
     self.particular = ko.observable();
