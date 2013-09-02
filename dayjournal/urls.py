@@ -23,9 +23,9 @@ urlpatterns = patterns('',
                        url(r'^save/cash_equivalent_sales/$', views.save_cash_equivalent_sales, name='save_cash_equivalent_sales'),
                        url(r'^save/cheque_purchase/$', views.save_cheque_purchase, name='save_cheque_purchase'),
                        # url(r'^day/save/(?P<submodel>[a-zA-Z0-9_.-]+)/$', views.save_submodel, name='save_submodel'),
-                       url(r'^lotto$', views.lotto_detail, name='new_lotto_detail'),
-                       url(r'^(?P<journal_date>\d{4}-\d{2}-\d{2})/$', views.lotto_detail, name='view_lotto_journal'),
-                       url(r'^save/lotto_detail/$', views.save_lotto_detail, name='save_lotto_detail'),
+                       # url(r'^lotto$', views.lotto_detail, name='new_lotto_detail'),
+                       # url(r'^(?P<journal_date>\d{4}-\d{2}-\d{2})/$', views.lotto_detail, name='view_lotto_journal'),
+                       # url(r'^save/lotto_detail/$', views.save_lotto_detail, name='save_lotto_detail'),
                        # url(r'^save/bank_detail/(?P<account_id>[0-9]+)/$', views.save_bank_detail, name='save_bank_detail'),
 )
 
