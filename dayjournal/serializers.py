@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from dayjournal.models import DayJournal, CashSales, CashPurchase, CashReceipt, CashPayment, \
     SummaryInventory, CreditExpense, CreditIncome, CreditPurchase, CashEquivalentSales, \
-    CreditSales, SummaryLotto, SummaryTransfer, CardSales, ChequePurchase
+    CreditSales, SummaryLotto, SummaryTransfer, CardSales, ChequePurchase, LottoRow
 
 
 class CashSalesSerializer(serializers.ModelSerializer):
@@ -110,6 +110,12 @@ class ChequePurchaseSerializer(serializers.ModelSerializer):
         exclude = ['day_journal']
 
 
+class LottoDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = LottoRow
+        exclude = ['day_journal']
+
+
 class DayJournalSerializer(serializers.ModelSerializer):
     cash_sales = CashSalesSerializer()
     cash_purchase = CashPurchaseSerializer()
@@ -125,6 +131,7 @@ class DayJournalSerializer(serializers.ModelSerializer):
     card_sales = CardSalesSerializer()
     cash_equivalent_sales = CashEquivalentSalesSerializer()
     cheque_purchase = ChequePurchaseSerializer()
+    lotto_detail = LottoDetailSerializer()
 
     class Meta:
         model = DayJournal

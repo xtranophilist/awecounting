@@ -224,7 +224,7 @@ class SummaryInventory(models.Model):
 #     # transactions = models.ManyToManyField(Transaction)
 
 
-class LottoRow(models.Model):
+class LottoDetail(models.Model):
     sn = models.IntegerField()
     rate = models.FloatField()
     pack_count = models.IntegerField(default=1)
