@@ -1,7 +1,7 @@
 from rest_framework import serializers
-from dayjournal.models import DayJournal, CashSales, CashPurchase, CashReceipt, CashPayment, SummaryCash, \
-    SummaryBank, SummaryInventory, CreditExpense, CreditIncome, CreditPurchase, CashEquivalentSales, \
-    CreditSales, SummaryLotto, SummaryTransfer, LottoDetailRow, CardSales, ChequePurchase
+from dayjournal.models import DayJournal, CashSales, CashPurchase, CashReceipt, CashPayment, \
+    SummaryInventory, CreditExpense, CreditIncome, CreditPurchase, CashEquivalentSales, \
+    CreditSales, SummaryLotto, SummaryTransfer, CardSales, ChequePurchase
 
 
 class CashSalesSerializer(serializers.ModelSerializer):
@@ -72,26 +72,6 @@ class CreditIncomeSerializer(serializers.ModelSerializer):
         exclude = ['day_journal', 'income_head', 'income_from']
 
 
-class SummaryCashSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SummaryCash
-        exclude = ['day_journal']
-
-
-class SummaryBankSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = SummaryBank
-        exclude = ['day_journal']
-
-
-# class SummarySalesTax(serializers.ModelSerializer):
-#     account_id = serializers.Field(source='tax_scheme_id')
-#
-#     class Meta:
-#         model = SummarySalesTax
-#         exclude = ['day_journal', 'tax_scheme']
-
-
 class SummaryLottoSerializer(serializers.ModelSerializer):
     class Meta:
         model = SummaryLotto
@@ -102,12 +82,6 @@ class SummaryTransferSerializer(serializers.ModelSerializer):
     class Meta:
         model = SummaryTransfer
         exclude = ['day_journal']
-
-
-# class SummaryUtilitySerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = SummaryUtility
-#         exclude = ['day_journal']
 
 
 class SummaryInventorySerializer(serializers.ModelSerializer):
@@ -145,30 +119,12 @@ class DayJournalSerializer(serializers.ModelSerializer):
     credit_purchase = CreditPurchaseSerializer()
     credit_expense = CreditExpenseSerializer()
     credit_income = CreditIncomeSerializer()
-    summary_cash = SummaryCashSerializer()
-    # summary_equivalent = SummaryEquivalentSerializer()
     summary_lotto = SummaryLottoSerializer()
     summary_transfer = SummaryTransferSerializer()
-    # summary_utility = SummaryUtilitySerializer()
     summary_inventory = SummaryInventorySerializer()
     card_sales = CardSalesSerializer()
     cash_equivalent_sales = CashEquivalentSalesSerializer()
     cheque_purchase = ChequePurchaseSerializer()
-
-    # summary_bank = SummaryBankSerializer()
-
-    class Meta:
-        model = DayJournal
-        exclude = ['company']
-
-
-class LottoDetailSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = LottoDetailRow
-
-
-class DayJournalLottoSerializer(serializers.ModelSerializer):
-    lotto_details = LottoDetailSerializer()
 
     class Meta:
         model = DayJournal

@@ -1,11 +1,11 @@
 from django.shortcuts import render, get_object_or_404
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, CardSales, \
-    CreditExpense, CreditIncome, CreditPurchase, CreditSales, LottoDetailRow, ChequePurchase, \
-    CashEquivalentSales, SummaryBank, SummaryCash, SummaryInventory, SummaryTransfer, SummaryLotto
+    CreditExpense, CreditIncome, CreditPurchase, CreditSales, ChequePurchase, LottoRow, \
+    CashEquivalentSales, SummaryInventory, SummaryTransfer, SummaryLotto
 from ledger.models import Transaction, Account, set_transactions, delete_rows
 
 from datetime import date
-from dayjournal.serializers import DayJournalSerializer, DayJournalLottoSerializer
+from dayjournal.serializers import DayJournalSerializer
 from django.http import HttpResponse
 import json
 from acubor.lib import invalid, save_model, all_empty, add
@@ -415,23 +415,23 @@ def save_summary_inventory(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
-def lotto_detail(request, journal_date=None):
-    if journal_date:
-        day_journal = get_object_or_404(DayJournal, date=journal_date)
-    else:
-        day_journal, created = DayJournal.objects.get_or_create(date=date.today(), company=request.user.company)
-    day_journal_data = DayJournalLottoSerializer(day_journal).data
-    base_template = 'dashboard.html'
-    return render(request, 'day_lotto.html', {
-        'day_journal': day_journal_data,
-        'base_template': base_template,
-    })
+# def lotto_detail(request, journal_date=None):
+#     if journal_date:
+#         day_journal = get_object_or_404(DayJournal, date=journal_date)
+#     else:
+#         day_journal, created = DayJournal.objects.get_or_create(date=date.today(), company=request.user.company)
+#     day_journal_data = DayJournalLottoSerializer(day_journal).data
+#     base_template = 'dashboard.html'
+#     return render(request, 'day_lotto.html', {
+#         'day_journal': day_journal_data,
+#         'base_template': base_template,
+#     })
 
 
 def save_lotto_detail(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
-    model = LottoDetailRow
+    model = LottoRow
     day_journal = get_journal(request)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['type', 'purchase_pack', 'purchase_quantity', 'sold_quantity', 'actual_quantity'])

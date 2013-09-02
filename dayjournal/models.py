@@ -100,9 +100,9 @@ class CreditIncome(models.Model):
     # transactions = models.ManyToManyField(Transaction)
 
 
-class SummaryCash(models.Model):
-    actual = models.FloatField()
-    day_journal = models.ForeignKey(DayJournal, related_name='summary_cash')
+# class SummaryCash(models.Model):
+#     actual = models.FloatField()
+#     day_journal = models.ForeignKey(DayJournal, related_name='summary_cash')
 
 
 # class SummaryEquivalent(models.Model):
@@ -124,12 +124,12 @@ class SummaryTransfer(models.Model):
     # transactions = models.ManyToManyField(Transaction)
 
 
-class SummaryBank(models.Model):
-    sn = models.IntegerField()
-    bank_account = models.ForeignKey(Account)
-    cheque_deposit = models.FloatField()
-    cash_deposit = models.FloatField()
-    day_journal = models.ForeignKey(DayJournal, related_name='summary_bank')
+# class SummaryBank(models.Model):
+#     sn = models.IntegerField()
+#     bank_account = models.ForeignKey(Account)
+#     cheque_deposit = models.FloatField()
+#     cash_deposit = models.FloatField()
+#     day_journal = models.ForeignKey(DayJournal, related_name='summary_bank')
     # transactions = models.ManyToManyField(Transaction)
 
 
@@ -213,12 +213,22 @@ class SummaryInventory(models.Model):
         return '/day/' + str(self.day_journal.date) + '#cash-payment'
 
 
-class LottoDetailRow(models.Model):
+# class LottoDetailRow(models.Model):
+#     sn = models.IntegerField()
+#     rate = models.FloatField()
+#     pack_quantity = models.IntegerField(default=1)
+#     day_open = models.IntegerField()
+#     sold_quantity = models.IntegerField()
+#     actual_quantity = models.IntegerField()
+#     day_journal = models.ForeignKey(DayJournal, related_name='lotto_details')
+#     # transactions = models.ManyToManyField(Transaction)
+
+
+class LottoRow(models.Model):
     sn = models.IntegerField()
     rate = models.FloatField()
-    pack_quantity = models.IntegerField(default=1)
-    day_open = models.IntegerField()
+    pack_count = models.IntegerField(default=1)
+    day_close = models.IntegerField()
     sold_quantity = models.IntegerField()
     actual_quantity = models.IntegerField()
     day_journal = models.ForeignKey(DayJournal, related_name='lotto_details')
-    # transactions = models.ManyToManyField(Transaction)
