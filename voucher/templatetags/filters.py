@@ -72,5 +72,11 @@ def url_for_content(value):
     #TODO DB Optimisation
     obj = value.content_type.get_object_for_this_type(id=value.model_id)
     return obj.get_absolute_url()
-    # import pdb
-    # pdb.set_trace()
+
+
+@register.filter
+def dr_or_cr(val):
+    if val < 0:
+        return str(val * -1) + ' (Cr)'
+    else:
+        return str(val) + ' (Dr)'

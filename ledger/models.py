@@ -125,6 +125,9 @@ class Transaction(models.Model):
     current_cr = models.FloatField(null=True, blank=True)
     journal_entry = models.ForeignKey(JournalEntry, related_name='transactions')
 
+    def get_balance(self):
+        return zero_for_none(self.current_dr) - zero_for_none(self.current_cr)
+
     def __str__(self):
         return str(self.account) + ' [' + str(self.dr_amount) + ' / ' + str(self.cr_amount) + ']'
 
