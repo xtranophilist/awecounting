@@ -434,14 +434,13 @@ def save_lotto_detail(request):
     model = LottoDetail
     day_journal = get_journal(request)
     for index, row in enumerate(params.get('rows')):
-        invalid_attrs = invalid(row, ['type', 'purchase_pack', 'purchase_quantity', 'sold_quantity', 'actual_quantity'])
+        invalid_attrs = invalid(row, ['rate', 'pack_count', 'day_open', 'day_close', 'addition'])
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
-        values = {'sn': index + 1, 'type_id': row.get('type'), 'purchase_pack': row.get('purchase_pack'),
-                  'purchase_quantity': row.get('purchase_quantity'), 'sold_quantity': row.get('sold_quantity'),
-                  'rate': row.get('rate'),
-                  'actual_quantity': row.get('actual_quantity'), 'day_journal': day_journal}
+        values = {'sn': index + 1, 'rate': row.get('rate'), 'pack_count': row.get('pack_count'),
+                  'day_open': row.get('day_open'), 'day_close': row.get('day_close'),
+                  'addition': row.get('addition'), 'day_journal': day_journal}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
