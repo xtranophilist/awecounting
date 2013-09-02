@@ -501,204 +501,204 @@
     </ul>
     <div class="tab-content">
 
-        <div id="credit_sales" class="tab-pane active">
-            <div class="row-fluid" data-bind="with: credit_sales">
-                <table class="table table-bordered table-striped table-acubor table-sortable">
-                    <thead>
-                    <tr>
-                        <th class="span1">SN</th>
-                        <th class="span2">Sales Ledger</th>
-                        <th class="span2">Customer</th>
-                        <th class="span2">Amount</th>
-                        <th class="span2">Tax</th>
-                        <th class="span1"></th>
-                    </tr>
-                    </thead>
+    <div id="credit_sales" class="tab-pane active">
+        <div class="row-fluid" data-bind="with: credit_sales">
+            <table class="table table-bordered table-striped table-acubor table-sortable">
+                <thead>
+                <tr>
+                    <th class="span1">SN</th>
+                    <th class="span2">Sales Ledger</th>
+                    <th class="span2">Customer</th>
+                    <th class="span2">Amount</th>
+                    <th class="span2">Tax</th>
+                    <th class="span1"></th>
+                </tr>
+                </thead>
 
-                    <tbody id="credit-sales">
-                    <!-- ko foreach: rows -->
-                    <tr data-bind="flash: true">
-                        <td>
-                            <span data-bind="text: $index()+1"> </span>
-                        </td>
-                        <td class="with_ip">
-                            <select class="span12"
-                                    data-bind="options: $root.accounts_by_category('Sales'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}, event: {change: $root.account_cr_changed}"></select>
-                        </td>
-                        <td class="with_ip">
-                            <select class="span12"
-                                    data-bind="options: $root.accounts_by_category('Debtors'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
-                        </td>
-                        <td data-bind="editableText: amount"></td>
-                        <td data-bind="text: tax()"></td>
-                        <td align="center">
-                            <a class="close" href="" data-bind="click: $parent.removeRow">
-                                <i class="icon-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    <!-- /ko -->
-                    </tbody>
-                </table>
-                <div data-bind="css: status()" class="pull-left">
+                <tbody id="credit-sales">
+                <!-- ko foreach: rows -->
+                <tr data-bind="flash: true">
+                    <td>
+                        <span data-bind="text: $index()+1"> </span>
+                    </td>
+                    <td class="with_ip">
+                        <select class="span12"
+                                data-bind="options: $root.accounts_by_category('Sales'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}, event: {change: $root.account_cr_changed}"></select>
+                    </td>
+                    <td class="with_ip">
+                        <select class="span12"
+                                data-bind="options: $root.accounts_by_category('Debtors'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
+                    </td>
+                    <td data-bind="editableText: amount"></td>
+                    <td data-bind="text: tax()"></td>
+                    <td align="center">
+                        <a class="close" href="" data-bind="click: $parent.removeRow">
+                            <i class="icon-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                <!-- /ko -->
+                </tbody>
+            </table>
+            <div data-bind="css: status()" class="pull-left">
               <span data-bind="text: message()">
               </span>
-                </div>
-                <div class="pull-right">
-                    <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i> Add New Row
-                    </button>
-                    <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
-                    <button class="btn btn-small" data-bind="click: reset">Reset</button>
-                </div>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i> Add New Row
+                </button>
+                <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
+                <button class="btn btn-small" data-bind="click: reset">Reset</button>
             </div>
         </div>
+    </div>
 
-        <div id="credit_purchase" class="tab-pane">
-            <div class="row-fluid" data-bind="with: credit_purchase">
-                <table class="table table-bordered table-striped table-acubor table-sortable">
-                    <thead>
-                    <tr>
-                        <th class="span1">SN</th>
-                        <th class="span2">Purchase Ledger</th>
-                        <th class="span2">Suppliers/Vendors</th>
-                        <th class="span2">Amount</th>
-                        <th class="span1"></th>
-                    </tr>
-                    </thead>
-                    <tbody id="credit-purchase">
-                    <!-- ko foreach: rows -->
-                    <tr data-bind="flash: true">
-                        <td>
-                            <span data-bind="text: $index()+1"> </span>
-                        </td>
-                        <td class="with_ip">
-                            <select class="span12"
-                                    data-bind="options: $root.accounts_by_category('Purchase'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
-                        </td>
-                        <td class="with_ip">
-                            <select class="span12"
-                                    data-bind="options: $root.accounts_by_category('Accounts Payable'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}"></select>
-                        </td>
-                        <td data-bind="editableText: amount"></td>
-                        <td>
-                            <a class="close" data-bind="click: $parent.removeRow">
-                                <i class="icon-trash"></i>
-                            </a>
-                        </td>
-                    </tr>
-                    <!-- /ko -->
-                    </tbody>
-                </table>
-                <div data-bind="css: status()" class="pull-left">
+    <div id="credit_purchase" class="tab-pane">
+        <div class="row-fluid" data-bind="with: credit_purchase">
+            <table class="table table-bordered table-striped table-acubor table-sortable">
+                <thead>
+                <tr>
+                    <th class="span1">SN</th>
+                    <th class="span2">Purchase Ledger</th>
+                    <th class="span2">Suppliers/Vendors</th>
+                    <th class="span2">Amount</th>
+                    <th class="span1"></th>
+                </tr>
+                </thead>
+                <tbody id="credit-purchase">
+                <!-- ko foreach: rows -->
+                <tr data-bind="flash: true">
+                    <td>
+                        <span data-bind="text: $index()+1"> </span>
+                    </td>
+                    <td class="with_ip">
+                        <select class="span12"
+                                data-bind="options: $root.accounts_by_category('Purchase'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
+                    </td>
+                    <td class="with_ip">
+                        <select class="span12"
+                                data-bind="options: $root.accounts_by_category('Accounts Payable'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}"></select>
+                    </td>
+                    <td data-bind="editableText: amount"></td>
+                    <td>
+                        <a class="close" data-bind="click: $parent.removeRow">
+                            <i class="icon-trash"></i>
+                        </a>
+                    </td>
+                </tr>
+                <!-- /ko -->
+                </tbody>
+            </table>
+            <div data-bind="css: status()" class="pull-left">
               <span data-bind="text: message()">
               </span>
-                </div>
-                <div class="pull-right">
-                    <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i> Add New Row
-                    </button>
-                    <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
-                    <button class="btn btn-small" data-bind="click: reset">Reset</button>
-                </div>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i> Add New Row
+                </button>
+                <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
+                <button class="btn btn-small" data-bind="click: reset">Reset</button>
             </div>
         </div>
+    </div>
 
-        <div id="credit_expense" class="tab-pane">
-            <div class="row-fluid" data-bind="with: credit_expense">
-                <table class="table table-bordered table-striped table-acubor table-sortable">
-                    <thead>
-                    <tr>
-                        <th class="span1">SN</th>
-                        <th class="span2">Expense Head</th>
-                        <th class="span2">Claimed By</th>
-                        <th class="span2">Amount</th>
-                        <th class="span1"></th>
-                    </tr>
-                    </thead>
+    <div id="credit_expense" class="tab-pane">
+        <div class="row-fluid" data-bind="with: credit_expense">
+            <table class="table table-bordered table-striped table-acubor table-sortable">
+                <thead>
+                <tr>
+                    <th class="span1">SN</th>
+                    <th class="span2">Expense Head</th>
+                    <th class="span2">Claimed By</th>
+                    <th class="span2">Amount</th>
+                    <th class="span1"></th>
+                </tr>
+                </thead>
 
-                    <tbody id="credit-expense">
-                    <!-- ko foreach: rows -->
-                    <tr data-bind="flash: true">
-                        <td>
-                            <span data-bind="text: $index()+1"> </span>
-                        </td>
-                        <td class="with_ip">
-                            <select class="span12"
-                                    data-bind="options: $root.accounts_by_category('Expenses'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
-                        </td>
-                        <td class="with_ip">
-                            <select class="span12"
-                                    data-bind="options: $root.accounts_by_category('Liabilities'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}"></select>
-                        </td>
-                        <td data-bind="editableText: amount"></td>
-                        <td>
-                            <button class="close" data-bind="click: $parent.removeRow"><i class="icon-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <!-- /ko -->
-                    </tbody>
-                </table>
-                <div data-bind="css: status()" class="pull-left">
+                <tbody id="credit-expense">
+                <!-- ko foreach: rows -->
+                <tr data-bind="flash: true">
+                    <td>
+                        <span data-bind="text: $index()+1"> </span>
+                    </td>
+                    <td class="with_ip">
+                        <select class="span12"
+                                data-bind="options: $root.accounts_by_category('Expenses'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
+                    </td>
+                    <td class="with_ip">
+                        <select class="span12"
+                                data-bind="options: $root.accounts_by_category('Liabilities'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}"></select>
+                    </td>
+                    <td data-bind="editableText: amount"></td>
+                    <td>
+                        <button class="close" data-bind="click: $parent.removeRow"><i class="icon-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <!-- /ko -->
+                </tbody>
+            </table>
+            <div data-bind="css: status()" class="pull-left">
               <span data-bind="text: message()">
               </span>
-                </div>
-                <div class="pull-right">
-                    <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i> Add New Row
-                    </button>
-                    <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
-                    <button class="btn btn-small" data-bind="click: reset">Reset</button>
-                </div>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i> Add New Row
+                </button>
+                <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
+                <button class="btn btn-small" data-bind="click: reset">Reset</button>
             </div>
         </div>
+    </div>
 
-        <div id="credit_income" class="tab-pane">
-            <div class="row-fluid" data-bind="with: credit_income">
-                <table class="table table-bordered table-striped table-acubor table-sortable">
-                    <thead>
-                    <tr>
-                        <th class="span1">SN</th>
-                        <th class="span2">Income Head</th>
-                        <th class="span2">Income From</th>
-                        <th class="span2">Amount</th>
-                        <th class="span1"></th>
-                    </tr>
-                    </thead>
+    <div id="credit_income" class="tab-pane">
+        <div class="row-fluid" data-bind="with: credit_income">
+            <table class="table table-bordered table-striped table-acubor table-sortable">
+                <thead>
+                <tr>
+                    <th class="span1">SN</th>
+                    <th class="span2">Income Head</th>
+                    <th class="span2">Income From</th>
+                    <th class="span2">Amount</th>
+                    <th class="span1"></th>
+                </tr>
+                </thead>
 
-                    <tbody id="credit-income">
-                    <!-- ko foreach: rows -->
-                    <tr data-bind="flash: true">
-                        <td>
-                            <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
-                        </td>
-                        <td>
-                            <select class="span12"
-                                    data-bind="options: $root.accounts_by_category('Income'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}"></select>
-                        </td>
-                        <td>
-                            <select class="span12"
-                                    data-bind="options: $root.accounts_by_category('Assets', 'Equity', 'Liabilities'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
-                        </td>
-                        <td data-bind="editableText: amount"></td>
-                        <td>
-                            <button class="close" data-bind="click: $parent.removeRow"><i class="icon-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <!-- /ko -->
-                    </tbody>
-                </table>
-                <div data-bind="css: status()" class="pull-left">
+                <tbody id="credit-income">
+                <!-- ko foreach: rows -->
+                <tr data-bind="flash: true">
+                    <td>
+                        <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
+                    </td>
+                    <td>
+                        <select class="span12"
+                                data-bind="options: $root.accounts_by_category('Income'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}"></select>
+                    </td>
+                    <td>
+                        <select class="span12"
+                                data-bind="options: $root.accounts_by_category('Assets', 'Equity', 'Liabilities'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
+                    </td>
+                    <td data-bind="editableText: amount"></td>
+                    <td>
+                        <button class="close" data-bind="click: $parent.removeRow"><i class="icon-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <!-- /ko -->
+                </tbody>
+            </table>
+            <div data-bind="css: status()" class="pull-left">
               <span data-bind="text: message()">
               </span>
-                </div>
-                <div class="pull-right">
-                    <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i> Add New Row
-                    </button>
-                    <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
-                    <button class="btn btn-small" data-bind="click: reset">Reset</button>
-                </div>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i> Add New Row
+                </button>
+                <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
+                <button class="btn btn-small" data-bind="click: reset">Reset</button>
             </div>
         </div>
+    </div>
 
     </div>
     </div>

@@ -60,6 +60,9 @@ class CashPayment(models.Model):
     day_journal = models.ForeignKey(DayJournal, related_name='cash_payment')
     # transactions = models.ManyToManyField(Transaction)
 
+    def get_absolute_url(self):
+        return '/day/' + str(self.day_journal.date) + '#cash-payment'
+
 
 class CreditSales(models.Model):
     sn = models.IntegerField()
@@ -171,6 +174,9 @@ class CardSales(models.Model):
     day_journal = models.ForeignKey(DayJournal, related_name='card_sales')
     # transactions = models.ManyToManyField(Transaction)
 
+    def get_absolute_url(self):
+        return '/day/' + str(self.day_journal.date) + '#cash-payment'
+
 
 class CashEquivalentSales(models.Model):
     sn = models.IntegerField()
@@ -179,12 +185,18 @@ class CashEquivalentSales(models.Model):
     day_journal = models.ForeignKey(DayJournal, related_name='cash_equivalent_sales')
     # transactions = models.ManyToManyField(Transaction)
 
+    def get_absolute_url(self):
+        return '/day/' + str(self.day_journal.date) + '#cash-payment'
+
 
 class ChequePurchase(models.Model):
     amount = models.FloatField()
     commission_in = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cheque_purchase')
     # transactions = models.ManyToManyField(Transaction)
+
+    def get_absolute_url(self):
+        return '/day/' + str(self.day_journal.date) + '#cash-payment'
 
 
 class SummaryInventory(models.Model):
@@ -197,13 +209,15 @@ class SummaryInventory(models.Model):
     day_journal = models.ForeignKey(DayJournal, related_name='summary_inventory')
     # transactions = models.ManyToManyField(Transaction)
 
+    def get_absolute_url(self):
+        return '/day/' + str(self.day_journal.date) + '#cash-payment'
+
 
 class LottoDetailRow(models.Model):
     sn = models.IntegerField()
-    type = models.ForeignKey(Account, null=True, blank=True)
     rate = models.FloatField()
-    purchase_pack = models.IntegerField(default=1)
-    purchase_quantity = models.IntegerField()
+    pack_quantity = models.IntegerField(default=1)
+    day_open = models.IntegerField()
     sold_quantity = models.IntegerField()
     actual_quantity = models.IntegerField()
     day_journal = models.ForeignKey(DayJournal, related_name='lotto_details')
