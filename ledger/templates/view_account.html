@@ -40,6 +40,8 @@
     <table class="table table-bordered table-striped table-sortable">
         <thead>
         <th>Date</th>
+        <th>Source</th>
+        <th>Voucher ID</th>
         <th>Particulars</th>
         <th>Dr</th>
         <th>Cr</th>
@@ -49,8 +51,18 @@
         {% for entry in journal_entries %}
             <tr id="row-{{ entry.id }}">
                 <td>
+                    {{ entry.date }}
+                </td>
+                <td>
+                    {% if entry.content_type.app_label == 'dayjournal' %}
+                        Day Journal
+                    {% else %}
+                        entry.content_type
+                    {% endif %}
+                </td>
+                <td>
                     <a href="{{ entry|url_for_content }}">
-                        {{ entry.date }}
+                        {{ entry.model_id }}
                     </a>
                 </td>
                 <td>
@@ -71,11 +83,9 @@
                             {{ transaction.get_balance|dr_or_cr }}
                         </td>
                     {% endif %}
-
-
-
                 {% endfor %}
             </tr>
+
 
         {% endfor %}
 
