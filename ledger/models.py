@@ -113,6 +113,9 @@ class JournalEntry(models.Model):
     content_type = models.ForeignKey(ContentType)
     model_id = models.IntegerField()
 
+    def __str__(self):
+        return str(self.content_type) + ': ' + str(self.model_id) + ' [' + str(self.date) + ']'
+
     class Meta:
         verbose_name_plural = u'Journal Entries'
 
