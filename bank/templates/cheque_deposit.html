@@ -15,7 +15,7 @@
     <script>
         $(document).ready(function () {
             {% load filters %}
-            ko.applyBindings(new ChequeDepositViewModel({{data|jsonify}}));
+            ko.applyBindings(new ChequeReceiptViewModel({{data|jsonify}}));
         });
     </script>
 {% endblock %}

@@ -71,7 +71,7 @@ def cheque_deposit(request, id=None):
     return render(request, 'cheque_deposit.html', {'form': form, 'data': receipt_data, 'scenario': scenario})
 
 
-def cash_receipt(request, id=None):
+def cash_deposit(request, id=None):
     if id:
         receipt = get_object_or_404(BankCashDeposit, id=id)
         scenario = 'Update'
@@ -88,7 +88,7 @@ def cash_receipt(request, id=None):
             receipt.save()
     else:
         form = BankCashDepositForm(instance=receipt)
-    return render(request, 'cash_receipt.html', {'form': form, 'scenario': scenario})
+    return render(request, 'cash_deposit.html', {'form': form, 'scenario': scenario})
 
 
 def cheque_payment(request, id=None):
