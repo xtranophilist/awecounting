@@ -78,15 +78,15 @@ class JournalVoucherRow(models.Model):
     journal_voucher = models.ForeignKey(JournalVoucher, related_name='rows')
 
 
-class BankDetail(models.Model):
-    bank_account = models.ForeignKey(Account)
-    day = models.DateField()
-    company = models.ForeignKey(Company)
-
-
-class BankDetailRow(models.Model):
-    sn = models.IntegerField()
-    account = models.ForeignKey(Account)
-    type = models.CharField(max_length=3)
-    amount = models.FloatField()
-    bank_detail = models.ForeignKey(BankDetail, related_name='rows')
+# class BankDetail(models.Model):
+#     bank_account = models.ForeignKey(Account)
+#     day = models.DateField()
+#     company = models.ForeignKey(Company)
+#
+#
+# class BankDetailRow(models.Model):
+#     sn = models.IntegerField()
+#     account = models.ForeignKey(Account)
+#     type = models.CharField(max_length=3)
+#     amount = models.FloatField()
+#     bank_detail = models.ForeignKey(BankDetail, related_name='rows')
