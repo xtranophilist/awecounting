@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, CardSales, \
-    CreditExpense, CreditIncome, CreditPurchase, CreditSales, ChequePurchase, LottoRow, \
+    CreditExpense, CreditIncome, CreditPurchase, CreditSales, ChequePurchase, LottoDetail, \
     CashEquivalentSales, SummaryInventory, SummaryTransfer, SummaryLotto
 from ledger.models import Transaction, Account, set_transactions, delete_rows
 
@@ -431,7 +431,7 @@ def save_summary_inventory(request):
 def save_lotto_detail(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
-    model = LottoRow
+    model = LottoDetail
     day_journal = get_journal(request)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['type', 'purchase_pack', 'purchase_quantity', 'sold_quantity', 'actual_quantity'])

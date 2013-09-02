@@ -230,4 +230,4 @@ class LottoDetail(models.Model):
     pack_count = models.IntegerField(default=1)
     day_close = models.IntegerField()
     addition = models.IntegerField()
-    day_journal = models.ForeignKey(DayJournal, related_name='lotto_details')
+    day_journal = models.ForeignKey(DayJournal, related_name='lotto_detail')
