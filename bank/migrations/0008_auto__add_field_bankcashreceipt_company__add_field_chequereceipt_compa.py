@@ -8,7 +8,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding field 'BankCashReceipt.company'
+        # Adding field 'BankCashDeposit.company'
         db.add_column(u'bank_bankcashreceipt', 'company',
                       self.gf('django.db.models.fields.related.ForeignKey')(default=5, to=orm['users.Company']),
                       keep_default=False)
@@ -20,7 +20,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        # Deleting field 'BankCashReceipt.company'
+        # Deleting field 'BankCashDeposit.company'
         db.delete_column(u'bank_bankcashreceipt', 'company_id')
 
         # Deleting field 'ChequeDeposit.company'
@@ -38,7 +38,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         u'bank.bankcashreceipt': {
-            'Meta': {'object_name': 'BankCashReceipt'},
+            'Meta': {'object_name': 'BankCashDeposit'},
             'amount': ('django.db.models.fields.FloatField', [], {}),
             'attachment': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'bank_account': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'cash_deposits'", 'to': u"orm['ledger.Account']"}),

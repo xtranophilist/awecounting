@@ -8,7 +8,7 @@ from django.db import models
 class Migration(SchemaMigration):
 
     def forwards(self, orm):
-        # Adding model 'BankCashReceipt'
+        # Adding model 'BankCashDeposit'
         db.create_table(u'bank_bankcashreceipt', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('date', self.gf('django.db.models.fields.DateField')()),
@@ -18,7 +18,7 @@ class Migration(SchemaMigration):
             ('attachment', self.gf('django.db.models.fields.files.FileField')(max_length=100, null=True, blank=True)),
             ('narration', self.gf('django.db.models.fields.TextField')(null=True, blank=True)),
         ))
-        db.send_create_signal(u'bank', ['BankCashReceipt'])
+        db.send_create_signal(u'bank', ['BankCashDeposit'])
 
         # Adding field 'ChequeDeposit.attachment'
         db.add_column(u'bank_chequereceipt', 'attachment',
@@ -27,7 +27,7 @@ class Migration(SchemaMigration):
 
 
     def backwards(self, orm):
-        # Deleting model 'BankCashReceipt'
+        # Deleting model 'BankCashDeposit'
         db.delete_table(u'bank_bankcashreceipt')
 
         # Deleting field 'ChequeDeposit.attachment'
@@ -45,7 +45,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         u'bank.bankcashreceipt': {
-            'Meta': {'object_name': 'BankCashReceipt'},
+            'Meta': {'object_name': 'BankCashDeposit'},
             'amount': ('django.db.models.fields.FloatField', [], {}),
             'attachment': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'bank_account': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'cash_deposits'", 'to': u"orm['ledger.Account']"}),

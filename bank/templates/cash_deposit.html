@@ -1,10 +1,10 @@
 {% extends "dashboard.html" %}
 
-{% block title %}{{ scenario }} Bank Cash Receipt{% endblock %}
+{% block title %}{{ scenario }} Bank Cash Deposit{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li class="active"><a href="{% url "new_cash_receipt" %}">Bank Cash Receipt</a></li>
+    <li class="active"><a href="{% url "new_cheque_deposit" %}">Bank Cash Deposit</a></li>
 {% endblock %}
 
 {% block head_end %}

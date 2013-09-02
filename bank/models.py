@@ -41,12 +41,12 @@ class ChequeDepositRow(models.Model):
     cheque_deposit = models.ForeignKey(ChequeDeposit, related_name='rows')
 
 
-class BankCashReceipt(models.Model):
+class BankCashDeposit(models.Model):
     date = models.DateField()
     bank_account = models.ForeignKey(Account, related_name='cash_deposits')
     benefactor = models.ForeignKey(Account)
     amount = models.FloatField()
-    attachment = models.FileField(upload_to='bank_cash_receipts/%Y/%m/%d', blank=True, null=True)
+    attachment = models.FileField(upload_to='bank_cash_deposits/%Y/%m/%d', blank=True, null=True)
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)
 

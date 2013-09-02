@@ -30,7 +30,7 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         u'bank.bankcashreceipt': {
-            'Meta': {'object_name': 'BankCashReceipt'},
+            'Meta': {'object_name': 'BankCashDeposit'},
             'amount': ('django.db.models.fields.FloatField', [], {}),
             'attachment': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'bank_account': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'cash_deposits'", 'to': u"orm['ledger.Account']"}),

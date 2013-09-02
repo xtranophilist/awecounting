@@ -1,6 +1,6 @@
 from acubor.lib import KOModelForm, ExtFileField
 from django import forms
-from models import BankAccount, ChequeDeposit, BankCashReceipt, ChequePayment
+from models import BankAccount, ChequeDeposit, BankCashDeposit, ChequePayment
 from ledger.models import Account
 
 
@@ -30,7 +30,7 @@ class ChequeDepositForm(KOModelForm):
         exclude = ['company']
 
 
-class BankCashReceiptForm(KOModelForm):
+class BankCashDepositForm(KOModelForm):
     date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
     bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank'), empty_label=None,
                                           widget=forms.Select(attrs={'class': 'select2'}), label='Beneficiary Account')
@@ -45,7 +45,7 @@ class BankCashReceiptForm(KOModelForm):
     )
 
     class Meta:
-        model = BankCashReceipt
+        model = BankCashDeposit
         exclude = ['company']
 
 
