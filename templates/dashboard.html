@@ -59,9 +59,16 @@
                     <li><a href="#contact">Get A Demo</a></li>
                 </ul>
                 {% if user.is_authenticated %}
-                    <ul class="pull-right nav">
-                        <li><a href="/user/{{user.email}}">{{user.email}}</a></li>
-                        <li><a href="/user/logout">Logout</a></li>
+                    <ul class="pull-right nav ">
+                        <li class="dropdown">
+                            <a href="/user/{{user.email}}" class="dropdown-toggle" data-toggle="dropdown">
+                                {{user.email}} <b class="caret"></b>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="">Settings</a></li>
+                                <li><a href="/user/logout">Logout</a></li>
+                            </ul>
+                        </li>
                     </ul>
                 {% else %}
                     <form method="post" action="{% url 'django.contrib.auth.views.login' %}" class="navbar-form header-login pull-right">
@@ -90,35 +97,10 @@
 </a>
 
 <div id="sidebar">
-<div id="sidebar-shortcuts">
-    <div id="sidebar-shortcuts-large">
-        <button class="btn btn-small btn-success">
-            <i class="icon-signal"></i>
-        </button>
 
-        <button class="btn btn-small btn-info">
-            <i class="icon-pencil"></i>
-        </button>
-
-        <button class="btn btn-small btn-warning">
-            <i class="icon-group"></i>
-        </button>
-
-        <button class="btn btn-small btn-danger">
-            <i class="icon-cogs"></i>
-        </button>
-    </div>
-
-    <div id="sidebar-shortcuts-mini">
-        <span class="btn btn-success"></span>
-
-        <span class="btn btn-info"></span>
-
-        <span class="btn btn-warning"></span>
-
-        <span class="btn btn-danger"></span>
-    </div>
-</div><!--#sidebar-shortcuts-->
+<div class="sidebar-collapse">
+    <i class="icon-double-angle-left"></i>
+</div>
 
 <ul class="nav nav-list">
 
@@ -353,7 +335,7 @@
 </li>
 </ul><!--/.nav-list-->
 
-<div id="sidebar-collapse">
+<div class="sidebar-collapse">
     <i class="icon-double-angle-left"></i>
 </div>
 </div>
@@ -376,16 +358,8 @@
 
         </ul><!--.breadcrumb-->
 
-        <a href="javascript:window.print();"><i class="icon-print"></i> Print</a>
+        <a href="javascript:window.print();" class="pull-right"><i class="icon-print"></i> Print</a>
 
-        <div id="nav-search">
-            <form class="form-search">
-              <span class="input-icon">
-                <input type="text" placeholder="Search ..." class="input-small search-query" id="nav-search-input" autocomplete="off" />
-                <i class="icon-search" id="nav-search-icon"></i>
-              </span>
-            </form>
-        </div><!--#nav-search-->
     </div>
 
     <div id="page-content" class="clearfix">
