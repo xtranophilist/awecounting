@@ -10,6 +10,12 @@ from ledger.models import delete_rows
 from bank.serializers import ChequeDepositSerializer
 
 
+def list_bank_accounts(request):
+    items = BankAccount.objects.filter(company=request.user.company)
+    print items
+    return render(request, 'list_bank_accounts.html', {'items': items})
+
+
 def bank_account_form(request, id=None):
     if id:
         bank_account = get_object_or_404(BankAccount, id=id)
