@@ -365,3 +365,11 @@ table .select2-container .select2-choice {
 .hidden{
     display: none;
 }
+
+.flip-container input{
+    width: 6em;
+}
+
+.flip-container button{
+    margin-top: -1em;
+}
