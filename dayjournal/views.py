@@ -11,9 +11,14 @@ import json
 from acubor.lib import invalid, save_model, all_empty, add
 
 
+def all_day_journals(request):
+    day_journals = DayJournal.objects.filter(company=request.user.company)
+    return render(request, 'all_day_journals.html', {'day_journals': day_journals})
+
+
 def day_journal(request, journal_date=None):
     if journal_date:
-        day_journal = get_object_or_404(DayJournal, date=journal_date)
+        day_journal = get_object_or_404(DayJournal, date=journal_date, company=request.user.company)
     else:
         day_journal, created = DayJournal.objects.get_or_create(date=date.today(), defaults={
             'company': request.user.company, 'sales_tax': 0, 'cheque_deposit': 0, 'cash_deposit': 0,

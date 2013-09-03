@@ -1,0 +1,28 @@
+{% extends "dashboard.html" %}
+
+{% block title %}All Day Journals {% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "all_day_journals" %}">All Day Journals</a></li>
+{% endblock %}
+
+
+
+
+{% block content %}
+
+    <div class="page-header position-relative">
+        <h1>
+            All Day Journals
+        </h1>
+    </div>
+
+    {% for journal in day_journals %}
+
+        {{ journal }}
+
+    {% endfor %}
+
+
+{% endblock %}
