@@ -140,6 +140,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'pagination',
     'django_sorting',
+    # 'sorter',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.admindocs',

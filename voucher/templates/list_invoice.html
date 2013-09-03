@@ -31,12 +31,12 @@
     </div>
 
     <form action="" method="get">
-        {{ invoices.form.as_p }}
-        <input type="submit"/>
+        {{ objects.form.as_p }}
+        <input type="submit" value="Search"/>
     </form>
 
-    {% autosort invoices %}
-    {% autopaginate invoices 25 %}
+    {% autosort objects.qs as sorted_objects %}
+    {% autopaginate sorted_objects 2 as paginated_objects %}
 
     <table class="table table-bordered table-striped table-sortable">
         <thead>
@@ -46,16 +46,16 @@
         <th>{% anchor due_date 'Due Date' %}</th>
         </thead>
         <tbody>
-        {% for invoice in invoices %}
+        {% for item in paginated_objects %}
             <tr>
                 <td>
-                    <a href="{% url "view_invoice" invoice.invoice_no %}">
-                        {{ invoice.invoice_no }}
+                    <a href="{% url "view_invoice" item.invoice_no %}">
+                        {{ item.invoice_no }}
                     </a>
                 </td>
-                <td>{{ invoice.party }}</td>
-                <td>{{ invoice.date }}</td>
-                <td>{{ invoice.due_date }}</td>
+                <td>{{ item.party }}</td>
+                <td>{{ item.date }}</td>
+                <td>{{ item.due_date }}</td>
             </tr>
         {% endfor %}
         </tbody>

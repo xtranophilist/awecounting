@@ -8,4 +8,4 @@ django-debug-toolbar
 django-mptt
 django-pagination
 django-filter
-django-sorting
+ -e git://github.com/camilonova/django-sorting.git#egg=django_sorting

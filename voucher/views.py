@@ -17,9 +17,9 @@ from voucher.filters import InvoiceFilter
 
 
 def all_invoices(request):
-    all_invoices = Invoice.objects.filter(company=request.user.company)
-    # f = InvoiceFilter(request.GET, queryset=all_invoices, company=request.user.company)
-    return render(request, 'list_invoice.html', {'invoices': all_invoices})
+    items = Invoice.objects.filter(company=request.user.company)
+    filtered_items = InvoiceFilter(request.GET, queryset=items, company=request.user.company)
+    return render(request, 'list_invoice.html', {'objects': filtered_items})
 
 
 def all_purchase_vouchers(request):
