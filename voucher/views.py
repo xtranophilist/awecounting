@@ -15,7 +15,7 @@ from ledger.models import delete_rows
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
-def list_invoice(request):
+def all_invoices(request):
     all_invoices = Invoice.objects.all()
     paginator = Paginator(all_invoices, 25)  # Show 25 invoices per page
     page = request.GET.get('page')
@@ -28,6 +28,21 @@ def list_invoice(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         invoices = paginator.page(paginator.num_pages)
     return render(request, 'list_invoice.html', {'invoices': invoices})
+
+
+def all_purchase_vouchers(request):
+    all_vouchers = PurchaseVoucher.objects.all()
+    paginator = Paginator(all_vouchers, 25)  # Show 25 invoices per page
+    page = request.GET.get('page')
+    try:
+        vouchers = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        vouchers = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        vouchers = paginator.page(paginator.num_pages)
+    return render(request, 'all_purchase_vouchers.html', {'invoices': vouchers})
 
 
 def invoice(request, invoice_no=None):

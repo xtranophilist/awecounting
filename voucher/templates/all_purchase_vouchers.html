@@ -1,10 +1,10 @@
 {% extends "dashboard.html" %}
 
-{% block title %}Invoices{% endblock %}
+{% block title %}All Purchase Vouchers{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li class="active"><a href="{% url "all_invoices" %}">Invoices</a></li>
+    <li class="active"><a href="{% url "all_purchase_vouchers" %}">All Purchase Vouchers</a></li>
 {% endblock %}
 
 {% block head_end %}
@@ -15,7 +15,7 @@
 
     <div class="page-header position-relative">
         <h1>
-            Invoices
+            All Purchase Vouchers
         </h1>
     </div>
 
@@ -27,11 +27,11 @@
         <th>Due Date</th>
         </thead>
         <tbody>
-        {% for invoice in invoices %}
+        {% for voucher in vouchers %}
             <tr>
                 <td>
-                    <a href="{% url "view_invoice" invoice.invoice_no %}">
-                        {{ invoice.invoice_no }}
+                    <a href="{% url "view_purchase_voucher" voucher.id %}">
+                        haha
                     </a>
                 </td>
                 <td>{{ invoice.party }}</td>

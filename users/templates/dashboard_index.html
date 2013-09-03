@@ -10,10 +10,11 @@
 
 {% endblock %}
 
+{% block title %}Acubor Accounting Dashboard {% endblock %}
+
 {% block head_end %}
     <script type="text/javascript" src="http://localhost/acubor_static/js/dashboard.js"></script>
 {% endblock %}
-
 
 {% block content %}
 
@@ -107,14 +108,22 @@
                                     <i class="icon-file"></i>
                                 </div>
                                 <div class="flip-body">
-                                    <h2>INVOICES</h2>
+                                    <h2>VOUCHERS</h2>
                                     <ul class="dashboard-flip-menu">
                                         <li>
-                                            <a href="#" tabindex="-1">All Invoices</a>
+                                            <a href="/voucher/invoices/" tabindex="-1">All Invoices</a>
                                         </li>
 
                                         <li>
-                                            <a href="#" tabindex="-1">New Invoice</a>
+                                            <a href="/voucher/invoice/new" tabindex="-1">New Invoice</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="/voucher/purchases/" tabindex="-1">Purchase Vouchers</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="/voucher/purchase/new" tabindex="-1">New Purchase Voucher</a>
                                         </li>
 
                                         <li>
