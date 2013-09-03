@@ -37,13 +37,6 @@ urlpatterns = patterns('',
                        (r'^report/', include('report.urls')),
 
                        url(r'^settings/company/$', core_views.company_settings, name='company_settings'),
-                       url(r'^party/create/$', core_views.party_form, name='create_party'),
-                       url(r'^party/(?P<id>[0-9]+)/$', core_views.party_form, name='update_party'),
-
-                       url(r'^categories/$', core_views.list_categories, name='list_category'),
-                       url(r'^category/create$', core_views.create_category, name='create_category'),
-                       url(r'^category/(?P<id>[0-9]+)/$', core_views.update_category, name='update_category'),
-                       url(r'^category/(?P<id>[0-9]+)/delete$', core_views.delete_category, name='delete_category'),
 
                        url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
                        url(r'^', include(router.urls)),

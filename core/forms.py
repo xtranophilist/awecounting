@@ -1,7 +1,5 @@
 from django import forms
 from core.models import CompanySetting, Currency
-from ledger.models import Party, Category
-from acubor.lib import KOModelForm
 
 
 class CompanySettingsForm(forms.ModelForm):
@@ -12,14 +10,3 @@ class CompanySettingsForm(forms.ModelForm):
         exclude = ['company']
 
 
-class PartyForm(KOModelForm):
-
-    class Meta:
-        model = Party
-        exclude = ['company']
-
-
-class CategoryForm(KOModelForm):
-    class Meta:
-        model = Category
-        exclude = ['company']
