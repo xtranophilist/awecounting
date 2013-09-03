@@ -10,6 +10,10 @@
 
 {% endblock %}
 
+{% block head_end %}
+    <script type="text/javascript" src="http://localhost/acubor_static/js/dashboard.js"></script>
+{% endblock %}
+
 
 {% block content %}
 
@@ -30,6 +34,33 @@
                     <div class="widget-content">
 
                         <div class="shortcuts">
+
+                            <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
+                                <div class="icon-container">
+                                    <i class="icon-calendar"></i>
+                                </div>
+                                <div class="flip-body">
+                                    <h2>Day Journal</h2>
+                                    <ul class="dashboard-flip-menu">
+                                        <li>
+                                            <a href="/day/" tabindex="-1">For Today</a>
+                                        </li>
+                                        <li>
+                                            <a href="/day/{{ date }}" tabindex="-1">For Yesterday</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="/day/journals" tabindex="-1">All Day Journals</a>
+                                        </li>
+
+                                        <li>
+                                            <input type="text" id="day-journal-date" class="date-picker"
+                                                   data-date-format="yyyy-mm-dd" width="2em"/>
+                                            <button id="day-journal-selection-button">Go</button>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
 
                             <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
                                 <div class="icon-container">
