@@ -11,15 +11,14 @@ from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, \
 from django.http import HttpResponse
 import json
 from acubor.lib import invalid, save_model
-from ledger.models import delete_rows
+from ledger.models import delete_rows, Party
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from voucher.filters import InvoiceFilter
 
 
 def all_invoices(request):
     all_invoices = Invoice.objects.filter(company=request.user.company)
-    f = InvoiceFilter(request.GET, queryset=all_invoices)
-
+    f = InvoiceFilter(request.GET, queryset=all_invoices, company=request.user.company)
     paginator = Paginator(all_invoices, 25)  # Show 25 invoices per page
     page = request.GET.get('page')
     try:
