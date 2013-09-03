@@ -15,6 +15,21 @@ def list_bank_accounts(request):
     return render(request, 'list_bank_accounts.html', {'items': items})
 
 
+def list_cheque_deposits(request):
+    items = ChequeDeposit.objects.filter(company=request.user.company)
+    return render(request, 'list_cheque_deposits.html', {'items': items})
+
+
+def list_cheque_payments(request):
+    items = ChequePayment.objects.filter(company=request.user.company)
+    return render(request, 'list_cheque_payments.html', {'items': items})
+
+
+def list_cash_deposits(request):
+    items = BankCashDeposit.objects.filter(company=request.user.company)
+    return render(request, 'list_cash_deposits.html', {'items': items})
+
+
 def bank_account_form(request, id=None):
     if id:
         bank_account = get_object_or_404(BankAccount, id=id)

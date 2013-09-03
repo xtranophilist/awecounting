@@ -1,0 +1,49 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Cheque Deposits{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "list_bank_accounts" %}">Bank Accounts</a></li>
+    <span class="divider"><i class="icon-angle-right"></i></span>
+    <li class="active">Cheque Deposits</li>
+{% endblock %}
+
+{% block head_end %}
+
+{% endblock %}
+
+{% block content %}
+
+    <div class="page-header position-relative">
+        <h1>
+            Cheque Deposits
+        </h1>
+    </div>
+
+    <table class="table table-bordered table-striped table-sortable">
+        <thead>
+        <th>Date</th>
+        <th>Bank Account</th>
+        <th>Clearing Date</th>
+        <th>Benefactor (Given By)</th>
+        <th>Actions</th>
+        </thead>
+        <tbody>
+        {% for item in items %}
+            <tr>
+                <td>
+                    {{ item.date }}
+                </td>
+                <td>{{ item.bank_account }}</td>
+                <td>{{ item.clearing_date }}</td>
+                <td>{{ item.benefactor }}</td>
+                <td>
+                    <a href="{% url 'update_cheque_deposit' item.id %}">Edit</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
