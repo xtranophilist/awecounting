@@ -12,7 +12,6 @@ from bank.serializers import ChequeDepositSerializer
 
 def list_bank_accounts(request):
     items = BankAccount.objects.filter(company=request.user.company)
-    print items
     return render(request, 'list_bank_accounts.html', {'items': items})
 
 

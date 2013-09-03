@@ -1,6 +1,13 @@
 {% extends base_template %}
 
-{% block title %} {{ scenario }} Bank Account {% endblock %}
+{% block title %}{{ scenario }} Bank Account {% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "list_bank_accounts" %}">Bank Accounts</a></li>
+    <span class="divider"><i class="icon-angle-right"></i></span>
+    <li class="active">{{ scenario }} Bank Account</li>
+{% endblock %}
 
 {% block content %}
     <div class="page-header position-relative">
@@ -13,7 +20,7 @@
         {{ form.as_p }}
         <div class="row">
             <div class="span12">
-                <input type="submit" value="Submit" class="btn" />
+                <input type="submit" value="Submit" class="btn"/>
             </div>
         </div>
     </form>
