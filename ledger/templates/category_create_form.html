@@ -2,6 +2,13 @@
 
 {% block title %} Create Category {% endblock %}
 
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "list_category" %}">Categories</a></li>
+    <span class="divider"><i class="icon-angle-right"></i></span>
+    <li class="active">Create Category</li>
+{% endblock %}
+
 {% block content %}
 <div class="page-header position-relative">
     <h1>
