@@ -19,6 +19,8 @@
     </script>
 {% endblock %}
 
+{% load pagination_tags %}
+
 {% block content %}
 
     <div class="page-header position-relative">
@@ -40,6 +42,7 @@
         <th>Due Date</th>
         </thead>
         <tbody>
+        {% autopaginate invoices 2 %}
         {% for invoice in invoices %}
             <tr>
                 <td>
@@ -55,21 +58,7 @@
         </tbody>
     </table>
 
-    <div class="pagination">
-    <span class="step-links">
-        {% if invoices.has_previous %}
-            <a href="?page={{ invoices.previous_page_number }}">Previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ invoices.number }} of {{ invoices.paginator.num_pages }}
-        </span>
-
-        {% if invoices.has_next %}
-            <a href="?page={{ invoices.next_page_number }}">Next</a>
-        {% endif %}
-    </span>
-    </div>
+{% paginate %}
 
 
 {% endblock %}

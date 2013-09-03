@@ -89,7 +89,8 @@ TEMPLATE_LOADERS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
-    'django.core.context_processors.static'
+    'django.core.context_processors.static',
+    'django.core.context_processors.request'
 )
 
 MIDDLEWARE_CLASSES = (
@@ -98,6 +99,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'pagination.middleware.PaginationMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -135,6 +137,7 @@ INSTALLED_APPS = (
     'report',
     'mptt',
     'debug_toolbar',
+    'pagination',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.admindocs',

@@ -6,3 +6,5 @@ django-registration
 djangorestframework
 django-debug-toolbar
 django-mptt
+django-pagination
+django-filter

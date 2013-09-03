@@ -18,18 +18,8 @@ from voucher.filters import InvoiceFilter
 
 def all_invoices(request):
     all_invoices = Invoice.objects.filter(company=request.user.company)
-    f = InvoiceFilter(request.GET, queryset=all_invoices, company=request.user.company)
-    paginator = Paginator(all_invoices, 25)  # Show 25 invoices per page
-    page = request.GET.get('page')
-    try:
-        invoices = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        invoices = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        invoices = paginator.page(paginator.num_pages)
-    return render(request, 'list_invoice.html', {'invoices': f})
+    # f = InvoiceFilter(request.GET, queryset=all_invoices, company=request.user.company)
+    return render(request, 'list_invoice.html', {'invoices': all_invoices})
 
 
 def all_purchase_vouchers(request):
