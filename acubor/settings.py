@@ -100,6 +100,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'pagination.middleware.PaginationMiddleware',
+    'django_sorting.middleware.SortingMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -138,6 +139,7 @@ INSTALLED_APPS = (
     'mptt',
     'debug_toolbar',
     'pagination',
+    'django_sorting',
     'rest_framework',
     'django.contrib.admin',
     'django.contrib.admindocs',

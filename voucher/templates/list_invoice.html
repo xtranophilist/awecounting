@@ -20,6 +20,7 @@
 {% endblock %}
 
 {% load pagination_tags %}
+{% load sorting_tags %}
 
 {% block content %}
 
@@ -34,15 +35,17 @@
         <input type="submit"/>
     </form>
 
+    {% autosort invoices %}
+    {% autopaginate invoices 25 %}
+
     <table class="table table-bordered table-striped table-sortable">
         <thead>
-        <th>Inv. No.</th>
-        <th>To</th>
-        <th>Date</th>
-        <th>Due Date</th>
+        <th>{% anchor invoice_no 'Invoice No' %}</th>
+        <th>{% anchor party 'To' %}</th>
+        <th>{% anchor date 'Date' %}</th>
+        <th>{% anchor due_date 'Due Date' %}</th>
         </thead>
         <tbody>
-        {% autopaginate invoices 2 %}
         {% for invoice in invoices %}
             <tr>
                 <td>
@@ -58,7 +61,7 @@
         </tbody>
     </table>
 
-{% paginate %}
+    {% paginate %}
 
 
 {% endblock %}
