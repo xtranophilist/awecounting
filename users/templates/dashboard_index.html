@@ -1,118 +1,129 @@
 {% extends "dashboard.html" %}
 
+{% block breadcrumbs %}
+    <li>
+        <i class="icon-home"></i>
+        <a href="{% url "home" %}">Dashboard</a>
+                    <span class="divider">
+                    </span>
+    </li>
+
+{% endblock %}
+
+
 {% block content %}
-    
 
-
-        <div id="page-content" class="clearfix">
-          <div class="page-header position-relative">
+    <div id="page-content" class="clearfix">
+        <div class="page-header position-relative">
             <h1>
-              Dashboard
+                Dashboard
             </h1>
-          </div><!--/.page-header-->
+        </div>
+        <!--/.page-header-->
 
-          <div class="row-fluid">
+        <div class="row-fluid">
             <!--PAGE CONTENT BEGINS HERE-->
 
             <div class="space-6"></div>
             <div class="row-fluid">
-              <div class="span12">
-                <div class="widget-content">
+                <div class="span12">
+                    <div class="widget-content">
 
-          <div class="shortcuts">
+                        <div class="shortcuts">
 
-            <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
-              <div class="icon-container">
-                <i class="icon-user"></i>
-              </div>
-              <div class="flip-body">
-                <h2>ACCOUNTS</h2>
-                <ul class="dashboard-flip-menu">
-                  <li>
-                    <a href="#" tabindex="-1">All Accounts</a>
-                  </li>
+                            <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
+                                <div class="icon-container">
+                                    <i class="icon-user"></i>
+                                </div>
+                                <div class="flip-body">
+                                    <h2>ACCOUNTS</h2>
+                                    <ul class="dashboard-flip-menu">
+                                        <li>
+                                            <a href="#" tabindex="-1">All Accounts</a>
+                                        </li>
 
-                  <li>
-                    <a href="#" tabindex="-1">New Account</a>
-                  </li>
+                                        <li>
+                                            <a href="#" tabindex="-1">New Account</a>
+                                        </li>
 
-                  <li>
-                    <a href="#" tabindex="-1">Account Categories</a>
-                  </li>
-                </ul>
-              </div>
+                                        <li>
+                                            <a href="#" tabindex="-1">Account Categories</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
+                                <div class="icon-container">
+                                    <i class="icon-money"></i>
+                                </div>
+                                <div class="flip-body">
+                                    <h2>SALES</h2>
+                                    <ul class="dashboard-flip-menu">
+                                        <li>
+                                            <a href="#" tabindex="-1">All Sales</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="#" tabindex="-1">New Sales</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
+                                <div class="icon-container">
+                                    <i class="icon-file"></i>
+                                </div>
+                                <div class="flip-body">
+                                    <h2>INVOICES</h2>
+                                    <ul class="dashboard-flip-menu">
+                                        <li>
+                                            <a href="#" tabindex="-1">All Invoices</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="#" tabindex="-1">New Invoice</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="#" tabindex="-1">Invoice</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
+                                <div class="icon-container">
+                                    <i class="icon-briefcase"></i>
+                                </div>
+                                <div class="flip-body">
+                                    <h2>INVENTORY</h2>
+                                    <ul class="dashboard-flip-menu">
+                                        <li>
+                                            <a href="#" tabindex="-1">All Items</a>
+                                        </li>
+
+                                        <li>
+                                            <a href="#" tabindex="-1">New Item</a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                        <!-- /shortcuts -->
+
+                    </div>
+                </div>
             </div>
-
-            <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
-              <div class="icon-container">
-                <i class="icon-money"></i>
-              </div>
-              <div class="flip-body">
-                <h2>SALES</h2>
-                <ul class="dashboard-flip-menu">
-                  <li>
-                    <a href="#" tabindex="-1">All Sales</a>
-                  </li>
-
-                  <li>
-                    <a href="#" tabindex="-1">New Sales</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
-              <div class="icon-container">
-                <i class="icon-file"></i>
-              </div>
-              <div class="flip-body">
-                <h2>INVOICES</h2>
-                <ul class="dashboard-flip-menu">
-                  <li>
-                    <a href="#" tabindex="-1">All Invoices</a>
-                  </li>
-
-                  <li>
-                    <a href="#" tabindex="-1">New Invoice</a>
-                  </li>
-
-                  <li>
-                    <a href="#" tabindex="-1">Invoice</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-            <div class="flip-container" ontouchstart="this.classList.toggle('hover');">
-              <div class="icon-container">
-                <i class="icon-briefcase"></i>
-              </div>
-              <div class="flip-body">
-                <h2>INVENTORY</h2>
-                <ul class="dashboard-flip-menu">
-                  <li>
-                    <a href="#" tabindex="-1">All Items</a>
-                  </li>
-
-                  <li>
-                    <a href="#" tabindex="-1">New Item</a>
-                  </li>
-                </ul>
-              </div>
-            </div>
-
-          </div> <!-- /shortcuts -->
-
-        </div>
-              </div>
-            </div>
-
 
 
             <!--PAGE CONTENT ENDS HERE-->
-          </div><!--/row-->
-        </div><!--/#page-content-->
+        </div>
+        <!--/row-->
+    </div><!--/#page-content-->
 
-       
+
 
 {% endblock %}

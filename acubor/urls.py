@@ -5,9 +5,10 @@ from core import views as core_views
 from rest_framework import viewsets, routers
 from django.contrib.auth import get_user_model
 
-
 from django.contrib import admin
+
 admin.autodiscover()
+
 
 # ViewSets define the view behavior.
 class UserViewSet(viewsets.ModelViewSet):
@@ -48,4 +49,4 @@ urlpatterns = patterns('',
                        url(r'^', include(router.urls)),
                        url(r'^acubor-admin/doc/', include('django.contrib.admindocs.urls')),
                        url(r'^acubor-admin/', include(admin.site.urls)),
-                       )
+)
