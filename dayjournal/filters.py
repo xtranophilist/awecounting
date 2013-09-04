@@ -1,8 +1,7 @@
 import django_filters
-from inventory.models import InventoryAccount, Item, Category
+from inventory.models import InventoryAccount, Item
 from acubor import filter_extra
 from ledger.models import Account
-from tax.models import TaxScheme
 
 
 class InventoryItemFilter(django_filters.FilterSet):
@@ -12,8 +11,7 @@ class InventoryItemFilter(django_filters.FilterSet):
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
         super(InventoryItemFilter, self).__init__(*args, **kwargs)
-        self.filters['category'].field.queryset = Category.objects.filter(company=company)
-        self.filters['sales_tax_scheme'].field.queryset = TaxScheme.objects.filter(company=company)
+
 
     class Meta:
         model = Item
