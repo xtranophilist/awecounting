@@ -17,12 +17,11 @@ def all_day_journals(request):
 
 
 def day_journal(request, journal_date=None):
-    if journal_date:
-        day_journal = get_object_or_404(DayJournal, date=journal_date, company=request.user.company)
-    else:
-        day_journal, created = DayJournal.objects.get_or_create(date=date.today(), defaults={
-            'company': request.user.company, 'sales_tax': 0, 'cheque_deposit': 0, 'cash_deposit': 0,
-            'cash_withdrawal': 0, 'cash_actual': 0})
+    if not journal_date:
+        journal_date = date.today()
+    day_journal, created = DayJournal.objects.get_or_create(date=journal_date, defaults={
+        'company': request.user.company, 'sales_tax': 0, 'cheque_deposit': 0, 'cash_deposit': 0,
+        'cash_withdrawal': 0, 'cash_actual': 0})
     day_journal_data = DayJournalSerializer(day_journal).data
     base_template = 'dashboard.html'
     return render(request, 'day_journal.html', {
