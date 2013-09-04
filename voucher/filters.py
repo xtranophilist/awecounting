@@ -9,13 +9,13 @@ class InvoiceFilter(django_filters.FilterSet):
     invoice_no = django_filters.CharFilter(lookup_type='icontains')
     date = filter_extra.DateRangeFilter(label='Date Range')
     due_date = filter_extra.DateRangeFilter(label='Due Date Range')
-    # party = django_filters.ModelChoiceFilter(queryset=Party.objects.filter(company=self.company))
+    party = django_filters.ModelChoiceFilter(queryset=Party.objects.all(), label='To')
 
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
         super(InvoiceFilter, self).__init__(*args, **kwargs)
         if company:
-            self.filters['party'] = django_filters.ModelChoiceFilter(queryset=Party.objects.filter(company=company))
+            self.filters.queryset = Party.objects.filter(company=company)
 
     class Meta:
         model = Invoice
@@ -26,11 +26,13 @@ class PurchaseVoucherFilter(django_filters.FilterSet):
     reference = django_filters.CharFilter(lookup_type='icontains')
     date = filter_extra.DateRangeFilter(label='Date Range')
     due_date = filter_extra.DateRangeFilter(label='Due Date Range')
+    party = django_filters.ModelChoiceFilter(queryset=Party.objects.all(), label='From')
 
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
         super(PurchaseVoucherFilter, self).__init__(*args, **kwargs)
-        self.filters['party'] = django_filters.ModelChoiceFilter(queryset=Party.objects.filter(company=company))
+        if company:
+            self.filters.queryset = Party.objects.filter(company=company)
 
     class Meta:
         model = PurchaseVoucher
