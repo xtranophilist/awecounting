@@ -27,7 +27,7 @@ def account_form(request, id=None):
         account = Account()
         scenario = 'Create'
     if request.POST:
-        form = AccountForm(data=request.POST, instance=account)
+        form = AccountForm(data=request.POST, instance=account, company=request.user.company)
         if form.is_valid():
             item = form.save(commit=False)
             item.company = request.user.company
@@ -35,7 +35,7 @@ def account_form(request, id=None):
             form.save_m2m()
             return redirect('/ledger/')
     else:
-        form = AccountForm(instance=account)
+        form = AccountForm(instance=account, company=request.user.company)
     if request.is_ajax():
         base_template = 'modal.html'
     else:
