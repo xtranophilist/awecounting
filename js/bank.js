@@ -1,5 +1,7 @@
 $(document).ready(function () {
-    $('.date-picker').datepicker();
+    $(document).on("click", ".date-picker", function() {
+        $(this).datepicker('show');
+    });
 });
 
 
