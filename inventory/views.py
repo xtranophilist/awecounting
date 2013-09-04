@@ -1,5 +1,5 @@
 import json
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from models import Item, InventoryAccount
 from serializers import ItemSerializer, InventoryAccountSerializer
@@ -32,6 +32,7 @@ def item_form(request, id=None):
             item = form.save(commit=False)
             item.company = request.user.company
             item.save()
+            redirect('/inventory/items/')
     else:
         form = ItemForm(instance=item, company=request.user.company)
     if request.is_ajax():

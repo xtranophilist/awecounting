@@ -144,6 +144,7 @@ def party_form(request, id=None):
             party = form.save(commit=False)
             party.company = request.user.company
             party.save()
+            redirect('/ledger/parties')
     else:
         form = PartyForm(instance=party)
     if request.is_ajax():

@@ -21,6 +21,12 @@ def all_invoices(request):
     return render(request, 'list_invoice.html', {'objects': filtered_items})
 
 
+def list_journal_vouchers(request):
+    items = JournalVoucher.objects.filter(company=request.user.company)
+    # filtered_items = JournalVoucherFilter(request.GET, queryset=items, company=request.user.company)
+    return render(request, 'list_invoice.html', {'objects': items})
+
+
 def all_purchase_vouchers(request):
     items = PurchaseVoucher.objects.filter(company=request.user.company)
     filtered_items = PurchaseVoucherFilter(request.GET, queryset=items, company=request.user.company)
@@ -130,6 +136,7 @@ def purchase_voucher(request, id=None):
                 if not created:
                     submodel = save_model(submodel, values)
             delete_rows(particulars.get('deleted_rows'), model)
+            redirect('/voucher/purchases')
     form = PurchaseVoucherForm(instance=voucher, company=request.user.company)
     purchase_voucher_data = PurchaseVoucherSerializer(voucher).data
     return render(request, 'purchase_voucher.html', {'form': form, 'data': purchase_voucher_data})
@@ -178,68 +185,68 @@ def save_journal_voucher(request):
     delete_rows(params.get('journal_voucher').get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
-
-def bank_voucher(request, id=None):
-    if id:
-        voucher = get_object_or_404(JournalVoucher, id=id)
-    else:
-        voucher = JournalVoucher()
-    data = JournalVoucherSerializer(voucher).data
-    return render(request, 'bank_voucher.html', {'data': data})
-
-
-def save_bank_voucher(request):
-    params = json.loads(request.body)
-    dct = {'rows': {}}
-
-    del [params['accounts']]
-    del [params['journal_voucher']['_initial_rows']]
-
-    voucher_values = {'date': params.get('date'), 'company': request.user.company}
-    if params.get('id'):
-        voucher = JournalVoucher.objects.get(id=params.get('id'))
-    else:
-        voucher = JournalVoucher()
-    voucher = save_model(voucher, voucher_values)
-    dct['id'] = voucher.id
-    model = JournalVoucherRow
-    for index, row in enumerate(params.get('journal_voucher').get('rows')):
-        # print row.get('dr_account_id')
-        empty_to_None(row, ['dr_amount'], 'cr_amount')
-        values = {'sn': index + 1, 'dr_account_id': row.get('dr_account_id'), 'dr_amount': row.get('dr_amount'),
-                  'cr_account_id': row.get('cr_account_id'), 'cr_amount': row.get('cr_amount'),
-                  'journal_voucher': voucher}
-        from django.db import transaction, IntegrityError
-
-        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-        if not created:
-            submodel = save_model(submodel, values)
-        dct['rows'][index] = submodel.id
-    delete_rows(params.get('journal_voucher').get('deleted_rows'), model)
-    return HttpResponse(json.dumps(dct), mimetype="application/json")
-
-
-def save_bank_detail(request, account_id):
-    # bank_account = Account.objects.get(id=account_id)
-    # params = json.loads(request.body)
-    # day_journal = get_journal(request)
-    # bank_detail, created = BankDetail.objects.get_or_create(day_journal=day_journal, bank_account=bank_account)
-    dct = {'invalid_attributes': {}, 'saved': {}}
-    # model = BankDetailRow
-    # print params
-    # for index, row in enumerate(params.get('rows')):
-    #     invalid_attrs = invalid(row, ['type', 'account_id', 'amount'])
-    #     if invalid_attrs:
-    #         dct['invalid_attributes'][index] = invalid_attrs
-    #         continue
-    #     values = {'sn': index+1, 'type': row.get('type'), 'amount': row.get('amount'),
-    #               'account_id': row.get('account_id'), 'bank_detail': bank_detail}
-    #     submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-    #     if not created:
-    #         submodel = save_model(submodel, values)
-    #     dct['saved'][index] = submodel.id
-    # delete_rows(params.get('deleted_rows'), model)
-    return HttpResponse(json.dumps(dct), mimetype="application/json")
+#
+# def bank_voucher(request, id=None):
+#     if id:
+#         voucher = get_object_or_404(JournalVoucher, id=id)
+#     else:
+#         voucher = JournalVoucher()
+#     data = JournalVoucherSerializer(voucher).data
+#     return render(request, 'bank_voucher.html', {'data': data})
+#
+#
+# def save_bank_voucher(request):
+#     params = json.loads(request.body)
+#     dct = {'rows': {}}
+#
+#     del [params['accounts']]
+#     del [params['journal_voucher']['_initial_rows']]
+#
+#     voucher_values = {'date': params.get('date'), 'company': request.user.company}
+#     if params.get('id'):
+#         voucher = JournalVoucher.objects.get(id=params.get('id'))
+#     else:
+#         voucher = JournalVoucher()
+#     voucher = save_model(voucher, voucher_values)
+#     dct['id'] = voucher.id
+#     model = JournalVoucherRow
+#     for index, row in enumerate(params.get('journal_voucher').get('rows')):
+#         # print row.get('dr_account_id')
+#         empty_to_None(row, ['dr_amount'], 'cr_amount')
+#         values = {'sn': index + 1, 'dr_account_id': row.get('dr_account_id'), 'dr_amount': row.get('dr_amount'),
+#                   'cr_account_id': row.get('cr_account_id'), 'cr_amount': row.get('cr_amount'),
+#                   'journal_voucher': voucher}
+#         from django.db import transaction, IntegrityError
+#
+#         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+#         if not created:
+#             submodel = save_model(submodel, values)
+#         dct['rows'][index] = submodel.id
+#     delete_rows(params.get('journal_voucher').get('deleted_rows'), model)
+#     return HttpResponse(json.dumps(dct), mimetype="application/json")
+#
+#
+# def save_bank_detail(request, account_id):
+#     # bank_account = Account.objects.get(id=account_id)
+#     # params = json.loads(request.body)
+#     # day_journal = get_journal(request)
+#     # bank_detail, created = BankDetail.objects.get_or_create(day_journal=day_journal, bank_account=bank_account)
+#     dct = {'invalid_attributes': {}, 'saved': {}}
+#     # model = BankDetailRow
+#     # print params
+#     # for index, row in enumerate(params.get('rows')):
+#     #     invalid_attrs = invalid(row, ['type', 'account_id', 'amount'])
+#     #     if invalid_attrs:
+#     #         dct['invalid_attributes'][index] = invalid_attrs
+#     #         continue
+#     #     values = {'sn': index+1, 'type': row.get('type'), 'amount': row.get('amount'),
+#     #               'account_id': row.get('account_id'), 'bank_detail': bank_detail}
+#     #     submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+#     #     if not created:
+#     #         submodel = save_model(submodel, values)
+#     #     dct['saved'][index] = submodel.id
+#     # delete_rows(params.get('deleted_rows'), model)
+#     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
 

@@ -1,7 +1,7 @@
 from datetime import date
 import json
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 
 from bank.models import BankAccount, ChequeDeposit, ChequeDepositRow, BankCashDeposit, ChequePayment
 from bank.forms import BankAccountForm, ChequeDepositForm, BankCashDepositForm, ChequePaymentForm
@@ -47,6 +47,7 @@ def bank_account_form(request, id=None):
             item = form.save(commit=False)
             item.company = request.user.company
             item.save()
+            redirect('/bank/accounts/')
     else:
         form = BankAccountForm(instance=bank_account)
     if request.is_ajax():
@@ -110,6 +111,7 @@ def cash_deposit(request, id=None):
             if 'attachment' in request.FILES:
                 receipt.attachment = request.FILES['attachment']
             receipt.save()
+            redirect('/bank/cash-deposits/')
     else:
         form = BankCashDepositForm(instance=receipt, company=request.user.company)
     return render(request, 'cash_deposit.html', {'form': form, 'scenario': scenario})
@@ -130,6 +132,7 @@ def cheque_payment(request, id=None):
             if 'attachment' in request.FILES:
                 payment.attachment = request.FILES['attachment']
             payment.save()
+            redirect('/bank/cheque-payments/')
     else:
         form = ChequePaymentForm(instance=payment, company=request.user.company)
     return render(request, 'cheque_payment.html', {'form': form, 'scenario': scenario})
