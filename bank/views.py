@@ -24,7 +24,8 @@ def list_cheque_deposits(request):
 
 def list_cheque_payments(request):
     items = ChequePayment.objects.filter(company=request.user.company)
-    return render(request, 'list_cheque_payments.html', {'items': items})
+    filtered_items = ChequePaymentFilter(request.GET, queryset=items, company=request.user.company)
+    return render(request, 'list_cheque_payments.html', {'objects': filtered_items})
 
 
 def list_cash_deposits(request):

@@ -11,8 +11,8 @@ class CashDepositFilter(django_filters.FilterSet):
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
         super(CashDepositFilter, self).__init__(*args, **kwargs)
-        self.filters['bank_account'] = django_filters.ModelChoiceFilter(queryset=Account.objects.filter(company=company, category__name='Bank'))
-        self.filters['benefactor'] = django_filters.ModelChoiceFilter(queryset=Account.objects.filter(company=company))
+        self.filters['bank_account'].field.queryset = Account.objects.filter(company=company, category__name='Bank')
+        self.filters['benefactor'].field.queryset = Account.objects.filter(company=company)
 
     class Meta:
         model = BankCashDeposit
@@ -26,8 +26,8 @@ class ChequeDepositFilter(django_filters.FilterSet):
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
         super(ChequeDepositFilter, self).__init__(*args, **kwargs)
-        self.filters['bank_account'] = django_filters.ModelChoiceFilter(queryset=Account.objects.filter(company=company, category__name='Bank'))
-        self.filters['benefactor'] = django_filters.ModelChoiceFilter(queryset=Account.objects.filter(company=company))
+        self.filters['bank_account'].field.queryset = Account.objects.filter(company=company, category__name='Bank')
+        self.filters['benefactor'].field.queryset = Account.objects.filter(company=company)
 
     class Meta:
         model = ChequeDeposit
@@ -35,15 +35,15 @@ class ChequeDepositFilter(django_filters.FilterSet):
 
 
 class ChequePaymentFilter(django_filters.FilterSet):
-    # reference = django_filters.CharFilter(lookup_type='icontains')
-    # date = filter_extra.DateRangeFilter(label='Date Range')
-    # due_date = filter_extra.DateRangeFilter(label='Due Date Range')
+    cheque_number = django_filters.CharFilter(lookup_type='icontains')
+    date = filter_extra.DateRangeFilter(label='Date Range')
 
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
         super(ChequePaymentFilter, self).__init__(*args, **kwargs)
-        # self.filters['party'] = django_filters.ModelChoiceFilter(queryset=Party.objects.filter(company=company))
+        self.filters['bank_account'].field.queryset = Account.objects.filter(company=company, category__name='Bank')
+        self.filters['beneficiary'].field.queryset = Account.objects.filter(company=company)
 
     class Meta:
         model = ChequePayment
-        # fields = ['reference', 'date', 'due_date', 'party', 'tax']
+        fields = ['bank_account', 'cheque_number', 'date', 'beneficiary', 'amount']

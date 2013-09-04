@@ -21,17 +21,34 @@
         </h1>
     </div>
 
+    {% load pagination_tags %}
+    {% load sorting_tags %}
+
+    <div class="search-form">
+        <a href="#" class="search-link">Search</a>
+
+        <form action="" method="get">
+            {{ objects.form.as_p }}
+            <input type="submit" value="Search"/>
+        </form>
+    </div>
+
+
+
+    {% autosort objects.qs as sorted_objects %}
+    {% autopaginate sorted_objects 25 as paginated_objects %}
+
     <table class="table table-bordered table-striped table-sortable">
         <thead>
-        <th>Date</th>
-        <th>Bank Account</th>
-        <th>Cheque No.</th>
-        <th>Beneficiary</th>
-        <th>Amount</th>
+        <th>{% anchor date 'Date' %}</th>
+        <th>{% anchor bank_account 'Bank Account' %}</th>
+        <th>{% anchor cheque_number 'Cheque No.' %}</th>
+        <th>{% anchor beneficiary 'Beneficiary (Given T0)' %}</th>
+        <th>{% anchor amount 'Amount' %}</th>
         <th>Actions</th>
         </thead>
         <tbody>
-        {% for item in items %}
+        {% for item in paginated_objects %}
             <tr>
                 <td>
                     {{ item.date }}
