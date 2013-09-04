@@ -1,5 +1,10 @@
 {% extends "dashboard.html" %}
 
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "trial_balance" %}">Trial Balance</a></li>
+{% endblock %}
+
 {% block title %}Trial Balance{% endblock %}
 
 {% block head_end %}
