@@ -8,6 +8,7 @@ from ledger.models import Party
 class InvoiceFilter(django_filters.FilterSet):
     invoice_no = django_filters.CharFilter(lookup_type='icontains')
     date = filter_extra.DateRangeFilter(label='Date Range')
+    due_date = filter_extra.DateRangeFilter(label='Due Date Range')
 
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
@@ -16,4 +17,4 @@ class InvoiceFilter(django_filters.FilterSet):
 
     class Meta:
         model = Invoice
-        fields = ['invoice_no', 'date', 'party']
+        fields = ['invoice_no', 'date', 'due_date', 'party', 'tax']
