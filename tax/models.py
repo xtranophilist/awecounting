@@ -7,5 +7,5 @@ class TaxScheme(models.Model):
     percent = models.FloatField()
     company = models.ForeignKey(Company)
 
-    def __unicode__(self):
-        return self.name
+    def __str__(self):
+        return self.name + ' (' + str(self.percent) + '%)'
