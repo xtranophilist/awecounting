@@ -39,8 +39,8 @@
         </form>
     </div>
 
-    {% autosort objects.qs as sorted_objects %}
-    {% autopaginate sorted_objects 25 as paginated_objects %}
+{#    {% autosort objects.qs as sorted_objects %}#}
+{#    {% autopaginate sorted_objects 25 as paginated_objects %}#}
 
     <table class="table table-bordered table-striped table-sortable">
         <thead>
@@ -50,7 +50,7 @@
         <th>{% anchor due_date 'Due Date' %}</th>
         </thead>
         <tbody>
-        {% for item in paginated_objects %}
+        {% for item in objects %}
             <tr>
                 <td>
                     <a href="{% url "view_invoice" item.invoice_no %}">

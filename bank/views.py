@@ -29,7 +29,8 @@ def list_cheque_payments(request):
 
 def list_cash_deposits(request):
     items = BankCashDeposit.objects.filter(company=request.user.company)
-    return render(request, 'list_cash_deposits.html', {'items': items})
+    filtered_items = CashDepositFilter(request.GET, queryset=items, company=request.user.company)
+    return render(request, 'list_cash_deposits.html', {'objects': filtered_items})
 
 
 def bank_account_form(request, id=None):
@@ -66,7 +67,7 @@ def cheque_deposit(request, id=None):
         receipt = ChequeDeposit(date=date.today())
         scenario = 'New'
     if request.POST:
-        form = ChequeDepositForm(request.POST, request.FILES, instance=receipt)
+        form = ChequeDepositForm(request.POST, request.FILES, instance=receipt, company=request.user.company)
         if form.is_valid():
             receipt = form.save(commit=False)
             receipt.company = request.user.company
@@ -88,7 +89,7 @@ def cheque_deposit(request, id=None):
                     submodel = save_model(submodel, values)
             delete_rows(particulars.get('deleted_rows'), model)
 
-    form = ChequeDepositForm(instance=receipt)
+    form = ChequeDepositForm(instance=receipt, company=request.user.company)
     receipt_data = ChequeDepositSerializer(receipt).data
     return render(request, 'cheque_deposit.html', {'form': form, 'data': receipt_data, 'scenario': scenario})
 
@@ -101,7 +102,7 @@ def cash_deposit(request, id=None):
         receipt = BankCashDeposit(date=date.today())
         scenario = 'New'
     if request.POST:
-        form = BankCashDepositForm(request.POST, request.FILES, instance=receipt)
+        form = BankCashDepositForm(request.POST, request.FILES, instance=receipt, company=request.user.company)
         if form.is_valid():
             receipt = form.save(commit=False)
             receipt.company = request.user.company
@@ -109,7 +110,7 @@ def cash_deposit(request, id=None):
                 receipt.attachment = request.FILES['attachment']
             receipt.save()
     else:
-        form = BankCashDepositForm(instance=receipt)
+        form = BankCashDepositForm(instance=receipt, company=request.user.company)
     return render(request, 'cash_deposit.html', {'form': form, 'scenario': scenario})
 
 
@@ -121,7 +122,7 @@ def cheque_payment(request, id=None):
         payment = ChequePayment(date=date.today())
         scenario = 'New'
     if request.POST:
-        form = ChequePaymentForm(request.POST, request.FILES, instance=payment)
+        form = ChequePaymentForm(request.POST, request.FILES, instance=payment, company=request.user.company)
         if form.is_valid():
             payment = form.save(commit=False)
             payment.company = request.user.company
@@ -129,5 +130,5 @@ def cheque_payment(request, id=None):
                 payment.attachment = request.FILES['attachment']
             payment.save()
     else:
-        form = ChequePaymentForm(instance=payment)
+        form = ChequePaymentForm(instance=payment, company=request.user.company)
     return render(request, 'cheque_payment.html', {'form': form, 'scenario': scenario})

@@ -52,7 +52,7 @@ def invoice(request, invoice_no=None):
         except:
             invoice.invoice_no = ''
 
-    form = InvoiceForm(data=request.POST, instance=invoice)
+    form = InvoiceForm(data=request.POST, instance=invoice, company=request.user.company)
     invoice_data = InvoiceSerializer(invoice).data
     invoice_data['read_only'] = {
         'invoice_prefix': company_setting.invoice_prefix,
@@ -109,7 +109,7 @@ def purchase_voucher(request, id=None):
         voucher = PurchaseVoucher(date=date.today(), currency=company_setting.default_currency)
 
     if request.POST:
-        form = PurchaseVoucherForm(request.POST, request.FILES, instance=voucher)
+        form = PurchaseVoucherForm(request.POST, request.FILES, instance=voucher, company=request.user.company)
         if form.is_valid():
             voucher = form.save(commit=False)
             if 'attachment' in request.FILES:
@@ -129,7 +129,7 @@ def purchase_voucher(request, id=None):
                 if not created:
                     submodel = save_model(submodel, values)
             delete_rows(particulars.get('deleted_rows'), model)
-    form = PurchaseVoucherForm(instance=voucher)
+    form = PurchaseVoucherForm(instance=voucher, company=request.user.company)
     purchase_voucher_data = PurchaseVoucherSerializer(voucher).data
     return render(request, 'purchase_voucher.html', {'form': form, 'data': purchase_voucher_data})
 

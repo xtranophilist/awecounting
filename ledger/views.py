@@ -7,13 +7,13 @@ from forms import AccountForm, CategoryForm, PartyForm
 
 
 def accounts_as_json(request):
-    accounts = Account.objects.all()
+    accounts = Account.objects.filter(company=request.user.company)
     items_data = AccountSerializer(accounts).data
     return HttpResponse(json.dumps(items_data), mimetype="application/json")
 
 
 def accounts_by_day_as_json(request, day):
-    accounts = Account.objects.all()
+    accounts = Account.objects.filter(company=request.user.company)
     items_data = AccountSerializer(accounts, day=day).data
     # items_data = AccountSerializer(accounts).data
     return HttpResponse(json.dumps(items_data), mimetype="application/json")

@@ -9,11 +9,13 @@ class InvoiceFilter(django_filters.FilterSet):
     invoice_no = django_filters.CharFilter(lookup_type='icontains')
     date = filter_extra.DateRangeFilter(label='Date Range')
     due_date = filter_extra.DateRangeFilter(label='Due Date Range')
+    # party = django_filters.ModelChoiceFilter(queryset=Party.objects.filter(company=self.company))
 
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
         super(InvoiceFilter, self).__init__(*args, **kwargs)
-        self.filters['party'] = django_filters.ModelChoiceFilter(queryset=Party.objects.filter(company=company))
+        if company:
+            self.filters['party'] = django_filters.ModelChoiceFilter(queryset=Party.objects.filter(company=company))
 
     class Meta:
         model = Invoice

@@ -25,6 +25,12 @@ class ChequeDepositForm(KOModelForm):
         ext_whitelist=('.jpg', '.png', '.gif', '.tif', '.pdf')
     )
 
+    def __init__(self, *args, **kwargs):
+        company = kwargs.pop('company', None)
+        super(ChequeDepositForm, self).__init__(*args, **kwargs)
+        self.fields['bank_account'].queryset = Account.objects.filter(company=company, category__name='Bank')
+        self.fields['benefactor'].queryset = Account.objects.filter(company=company)
+
     class Meta:
         model = ChequeDeposit
         exclude = ['company']
@@ -44,6 +50,12 @@ class BankCashDepositForm(KOModelForm):
         ext_whitelist=('.jpg', '.png', '.gif', '.tif', '.pdf')
     )
 
+    def __init__(self, *args, **kwargs):
+        company = kwargs.pop('company', None)
+        super(BankCashDepositForm, self).__init__(*args, **kwargs)
+        self.fields['bank_account'].queryset = Account.objects.filter(company=company, category__name='Bank')
+        self.fields['benefactor'].queryset = Account.objects.filter(company=company)
+
     class Meta:
         model = BankCashDeposit
         exclude = ['company']
@@ -61,6 +73,12 @@ class ChequePaymentForm(KOModelForm):
         required=False,
         ext_whitelist=('.jpg', '.png', '.gif', '.tif', '.pdf')
     )
+
+    def __init__(self, *args, **kwargs):
+        company = kwargs.pop('company', None)
+        super(ChequePaymentForm, self).__init__(*args, **kwargs)
+        self.fields['bank_account'].queryset = Account.objects.filter(company=company, category__name='Bank')
+        self.fields['beneficiary'].queryset = Account.objects.filter(company=company)
 
     class Meta:
         model = ChequePayment
