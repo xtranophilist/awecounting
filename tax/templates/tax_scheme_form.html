@@ -1,0 +1,27 @@
+{% extends base_template %}
+
+{% block title %}{{ scenario }} Tax Scheme {% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "list_tax_schemes" %}">Tax Schemes</a></li>
+    <span class="divider"><i class="icon-angle-right"></i></span>
+    <li class="active">{{ scenario }} Tax Scheme</li>
+{% endblock %}
+
+{% block content %}
+    <div class="page-header position-relative">
+        <h1>
+            {{ scenario }} Tax Scheme
+        </h1>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <div class="row">
+            <div class="span12">
+                <input type="submit" value="Submit" class="btn"/>
+            </div>
+        </div>
+    </form>
+{% endblock %}

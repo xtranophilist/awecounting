@@ -34,6 +34,7 @@ def trial_balance(request):
     dict = {
         'categories': to_dict(Category)
     }
+    # print request.get
     return render(request, 'trial_balance.html', {
         'dict': dict,
         'categories': categories
