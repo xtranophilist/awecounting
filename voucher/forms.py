@@ -13,7 +13,7 @@ class InvoiceForm(KOModelForm):
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
         super(InvoiceForm, self).__init__(*args, **kwargs)
-        self.fields['party'].queryset = Account.objects.filter(company=company)
+        self.fields['party'].queryset = Party.objects.filter(company=company)
 
     class Meta:
         model = Invoice
@@ -34,7 +34,7 @@ class PurchaseVoucherForm(KOModelForm):
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
         super(PurchaseVoucherForm, self).__init__(*args, **kwargs)
-        self.fields['party'].queryset = Account.objects.filter(company=company)
+        self.fields['party'].queryset = Party.objects.filter(company=company)
 
     class Meta:
         model = PurchaseVoucher

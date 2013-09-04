@@ -68,26 +68,27 @@ def save_invoice(request):
                       'reference': params.get('reference'), 'date': params.get('date'),
                       'due_date': params.get('due_date'), 'tax': params.get('tax'),
                       'currency_id': params.get('currency'), 'company': request.user.company}
-    try:
-        if params.get('id'):
-            invoice = Invoice.objects.get(id=params.get('id'))
-        else:
-            invoice = Invoice()
-            # if not created:
-        invoice = save_model(invoice, invoice_values)
-        dct['id'] = invoice.id
-    except Exception as e:
-        if hasattr(e, 'messages'):
-            dct['error_message'] = '; '.join(e.messages)
-        else:
-            dct['error_message'] = 'Error in form data!'
+    # try:
+    if params.get('id'):
+        invoice = Invoice.objects.get(id=params.get('id'))
+    else:
+        invoice = Invoice()
+        # if not created:
+    invoice = save_model(invoice, invoice_values)
+    dct['id'] = invoice.id
+    # except Exception as e:
+    #
+    #     if hasattr(e, 'messages'):
+    #         dct['error_message'] = '; '.join(e.messages)
+    #     else:
+    #         dct['error_message'] = 'Error in form data!'
     model = InvoiceParticular
     for index, row in enumerate(params.get('particulars').get('rows')):
         if invalid(row, ['item_id', 'unit_price', 'quantity']):
             continue
         values = {'sn': index + 1, 'item_id': row.get('item_id'), 'description': row.get('description'),
                   'unit_price': row.get('unit_price'), 'quantity': row.get('quantity'), 'discount': row.get('discount'),
-                  'invoice': invoice}
+                  'tax_scheme_id': row.get('tax_scheme'), 'invoice': invoice}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
