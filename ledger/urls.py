@@ -12,6 +12,7 @@ urlpatterns = patterns('',
                        url(r'^accounts/(?P<day>\d{4}-\d{2}-\d{2}).json$', views.accounts_by_day_as_json,
                            name='accounts_by_day_as_json'),
                        url(r'^(?P<id>[0-9]+)/$', views.view_account, name='view_account'),
+                       url(r'^account/(?P<id>[0-9]+)/delete$', views.delete_account, name='delete_account'),
 
                        url(r'^party/create/$', views.party_form, name='create_party'),
                        url(r'^party/(?P<id>[0-9]+)/$', views.party_form, name='update_party'),

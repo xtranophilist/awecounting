@@ -120,6 +120,12 @@ def delete_category(request, id):
     return redirect('/categories/')
 
 
+def delete_account(request, id):
+    object = get_object_or_404(Account, id=id)
+    object.delete()
+    return redirect('/ledger/')
+
+
 def party_form(request, id=None):
     if id:
         party = get_object_or_404(Party, id=id)
