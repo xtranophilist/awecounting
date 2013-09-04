@@ -3,8 +3,8 @@ from django.db.models.query import QuerySet
 from django.template import Library
 from django.utils.safestring import mark_safe
 from django.db.models import Model
-# from django.forms.models import model_to_dict
 import json
+from datetime import date, timedelta
 
 register = Library()
 
@@ -80,3 +80,12 @@ def dr_or_cr(val):
         return str(val * -1) + ' (Cr)'
     else:
         return str(val) + ' (Dr)'
+
+
+@register.simple_tag
+def yesterday():
+    today = date.today()
+    yesterday = today - timedelta(days=1)
+    return yesterday
+
+

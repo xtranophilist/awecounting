@@ -16,6 +16,8 @@
     <script type="text/javascript" src="http://localhost/acubor_static/js/dashboard.js"></script>
 {% endblock %}
 
+{% load filters %}
+
 {% block content %}
 
     <div id="page-content" class="clearfix">
@@ -47,7 +49,7 @@
                                             <a href="/day/" tabindex="-1">For Today</a>
                                         </li>
                                         <li>
-                                            <a href="/day/{{ date }}" tabindex="-1">For Yesterday</a>
+                                            <a href="/day/{% yesterday %}" tabindex="-1">For Yesterday</a>
                                         </li>
 
                                         <li>
