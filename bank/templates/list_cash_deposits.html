@@ -21,6 +21,18 @@
         </h1>
     </div>
 
+    {% load pagination_tags %}
+    {% load sorting_tags %}
+
+    <div class="search-form">
+        <a href="#" class="search-link">Search</a>
+
+        <form action="" method="get">
+            {{ objects.form.as_p }}
+            <input type="submit" value="Search"/>
+        </form>
+    </div>
+
     <table class="table table-bordered table-striped table-sortable">
         <thead>
         <th>Date</th>

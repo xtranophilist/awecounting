@@ -8,6 +8,7 @@ from bank.forms import BankAccountForm, ChequeDepositForm, BankCashDepositForm, 
 from acubor.lib import invalid, save_model
 from ledger.models import delete_rows
 from bank.serializers import ChequeDepositSerializer
+from bank.filters import ChequeDepositFilter, CashDepositFilter, ChequePaymentFilter
 
 
 def list_bank_accounts(request):
@@ -17,7 +18,8 @@ def list_bank_accounts(request):
 
 def list_cheque_deposits(request):
     items = ChequeDeposit.objects.filter(company=request.user.company)
-    return render(request, 'list_cheque_deposits.html', {'items': items})
+    filtered_items = ChequeDepositFilter(request.GET, queryset=items, company=request.user.company)
+    return render(request, 'list_cheque_deposits.html', {'objects': filtered_items})
 
 
 def list_cheque_payments(request):
