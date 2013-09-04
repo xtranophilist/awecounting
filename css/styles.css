@@ -385,3 +385,8 @@ table .select2-container .select2-choice {
 a.inline{
     display: inline !important;
 }
+table .date-picker
+{
+    margin-bottom: 0px;
+    margin-left: 6px;
+}
