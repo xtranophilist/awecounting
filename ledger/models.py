@@ -231,8 +231,8 @@ class Party(models.Model):
         if is_new:
             account = Account(name=self.name)
             account.company = self.company
+            account.add_category('Party')
             account.save()
-            account.add_category('Party', self.company)
             self.account = account
         super(Party, self).save(*args, **kwargs)
 
