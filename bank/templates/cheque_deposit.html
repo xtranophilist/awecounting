@@ -90,11 +90,11 @@
                         <span class="wid-pad pull-left" data-bind="text:  $index()+1"> </span>
                     </td>
                     <td data-bind="editableText: cheque_number"></td>
-                    <td><input type="text" data-bind="value: cheque_date" class="date-picker"/></td>
+                    <td class="with_ip"><input type="text" data-bind="value: cheque_date" class="date-picker"/></td>
                     <td data-bind="editableText: drawee_bank"></td>
                     <td data-bind="editableText: drawee_bank_address"></td>
                     <td data-bind="editableText: amount, numeric: true"></td>
-                    <td><a class="icon-remove-sign" href="#" data-bind="click: $parent.removeRow"></a></td>
+                    <td><button class="close"  data-bind="click: $parent.removeRow"><i class="icon-trash"></i></button></td>
                 </tr>
                 <!-- /ko -->
                 <tr>
