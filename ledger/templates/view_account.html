@@ -1,6 +1,13 @@
 {% extends "dashboard.html" %}
 
-{% block title %}{{ account.name }}{% endblock %}
+{% block title %}{{ account.name }} Ledger View {% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "list_account" %}">Accounts</a></li>
+    <span class="divider"><i class="icon-angle-right"></i></span>
+    <li class="active">{{ account.name }}</li>
+{% endblock %}
 
 {% block head_end %}
     <script src="http://localhost/acubor_static/js/vendors/knockout.js"></script>
