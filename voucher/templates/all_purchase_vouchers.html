@@ -19,44 +19,43 @@
         </h1>
     </div>
 
+    {% load pagination_tags %}
+    {% load sorting_tags %}
+
+    <div class="search-form">
+        <a href="#" class="search-link">Search</a>
+
+        <form action="" method="get">
+            {{ objects.form.as_p }}
+            <input type="submit" value="Search"/>
+        </form>
+    </div>
+
+    {% autosort objects.qs as sorted_objects %}
+    {% autopaginate sorted_objects 25 as paginated_objects %}
+
     <table class="table table-bordered table-striped table-sortable">
         <thead>
-        <th>Inv. No.</th>
-        <th>To</th>
-        <th>Date</th>
-        <th>Due Date</th>
+        <th>{% anchor reference 'Reference' %}</th>
+        <th>{% anchor party 'From' %}</th>
+        <th>{% anchor date 'Date' %}</th>
+        <th>{% anchor due_date 'Due Date' %}</th>
         </thead>
         <tbody>
-        {% for voucher in vouchers %}
+        {% for item in paginated_objects %}
             <tr>
                 <td>
-                    <a href="{% url "view_purchase_voucher" voucher.id %}">
-                        haha
-                    </a>
+                        {{ item.reference }}
                 </td>
-                <td>{{ invoice.party }}</td>
-                <td>{{ invoice.date }}</td>
-                <td>{{ invoice.due_date }}</td>
+                <td>{{ item.party }}</td>
+                <td>{{ item.date }}</td>
+                <td>{{ item.due_date }}</td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
 
-    <div class="pagination">
-    <span class="step-links">
-        {% if invoices.has_previous %}
-            <a href="?page={{ invoices.previous_page_number }}">Previous</a>
-        {% endif %}
-
-        <span class="current">
-            Page {{ invoices.number }} of {{ invoices.paginator.num_pages }}
-        </span>
-
-        {% if invoices.has_next %}
-            <a href="?page={{ invoices.next_page_number }}">Next</a>
-        {% endif %}
-    </span>
-    </div>
+    {% paginate %}
 
 
 {% endblock %}

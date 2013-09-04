@@ -12,8 +12,7 @@ from django.http import HttpResponse
 import json
 from acubor.lib import invalid, save_model
 from ledger.models import delete_rows, Party
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from voucher.filters import InvoiceFilter
+from voucher.filters import InvoiceFilter, PurchaseVoucherFilter
 
 
 def all_invoices(request):
@@ -23,18 +22,9 @@ def all_invoices(request):
 
 
 def all_purchase_vouchers(request):
-    all_vouchers = PurchaseVoucher.objects.all()
-    paginator = Paginator(all_vouchers, 25)  # Show 25 invoices per page
-    page = request.GET.get('page')
-    try:
-        vouchers = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        vouchers = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        vouchers = paginator.page(paginator.num_pages)
-    return render(request, 'all_purchase_vouchers.html', {'invoices': vouchers})
+    items = PurchaseVoucher.objects.filter(company=request.user.company)
+    filtered_items = PurchaseVoucherFilter(request.GET, queryset=items, company=request.user.company)
+    return render(request, 'all_purchase_vouchers.html', {'objects': filtered_items})
 
 
 def invoice(request, invoice_no=None):
