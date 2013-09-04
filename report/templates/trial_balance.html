@@ -35,7 +35,7 @@
         </tr>
         <!-- ko foreach: accounts -->
         <tr data-bind="attr: {'data-tt-id': id, 'data-tt-parent-id': parent_id}, css: cls">
-            <td><a data-bind="text: name, attr: {href:'/ledger/'+id }"></a> </td>
+            <td><a data-bind="text: name, attr: {href:'/ledger/'+id }"></a></td>
             <td data-bind="text: code"></td>
             <td data-bind="text: dr()||''"></td>
             <td data-bind="text: cr()||''"></td>
@@ -56,6 +56,15 @@
         </h1>
     </div>
     {#    {{ dict }}#}
+
+
+    <form method="get" action="" class="center">
+        <input type="text" name="from" class="date-picker" data-date-format="yyyy-mm-dd" placeholder="From"/> -
+        <input type="text" name="to" class="date-picker" data-date-format="yyyy-mm-dd" placeholder="To"/>
+        <input type="submit" value="Go!" class="btn hidden">
+    </form>
+
+
     <div class="controls">
         <a onclick="$('.tree-table').treetable('expandAll'); return false;">Expand all</a> |
         <a data-bind="click: expandRoot">Expand Base Accounts</a> |
