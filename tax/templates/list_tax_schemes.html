@@ -29,17 +29,17 @@
         {% for item in objects %}
             <tr>
                 <td>
-                    <a href="{% url "update_bank_account" item.id %}">
                         {{ item.name }}
-                    </a>
                 </td>
                 <td>{{ item.percent }}</td>
                 <td>
-                    <a href="{% url 'update_bank_account' item.id %}">Edit</a>
+                    <a href="{% url 'update_tax_scheme' item.id %}">Edit</a>
                 </td>
             </tr>
         {% endfor %}
         </tbody>
     </table>
+
+    <a class="btn" href="{% url 'create_tax_scheme' %}">Create New Tax Scheme</a>
 
 {% endblock %}
