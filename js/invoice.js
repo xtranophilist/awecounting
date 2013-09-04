@@ -16,10 +16,21 @@ function InvoiceViewModel(data){
         }
     });
 
+    $.ajax({
+        url: '/tax/schemes/json/',
+        dataType: 'json',
+        async: false,
+        success: function(data) {
+            self.tax_schemes = data;
+        }
+    });
+
     for (var k in data)
         self[k]=data[k];
 
     self.message = ko.observable('');
+
+
 
     var invoice_options = {
         rows: data.particulars
@@ -68,7 +79,7 @@ function InvoiceViewModel(data){
         });
     }
 
-    self.grand_total = function(){
+    self.sub_total = function(){
         var sum = 0;
         self.particulars.rows().forEach(function(i){
             sum += i.amount();
