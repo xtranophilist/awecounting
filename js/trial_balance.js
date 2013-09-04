@@ -1,3 +1,7 @@
+$(document).ready(function () {
+    $('.date-picker').datepicker().data('datepicker');
+});
+
 function TrialBalance(data) {
 
     var self = this;
