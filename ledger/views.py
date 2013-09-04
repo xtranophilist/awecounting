@@ -21,7 +21,7 @@ def accounts_by_day_as_json(request, day):
 
 def account_form(request, id=None):
     if id:
-        account = get_object_or_404(Account, id=id)
+        account = get_object_or_404(Account, id=id, company=request.user.company)
         scenario = 'Update'
     else:
         account = Account()
@@ -48,8 +48,13 @@ def account_form(request, id=None):
 
 
 def list_accounts(request):
-    all_accounts = Account.objects.all()
-    return render(request, 'list_accounts.html', {'accounts': all_accounts})
+    objects = Account.objects.filter(company=request.user.company)
+    return render(request, 'list_accounts.html', {'accounts': objects})
+
+
+def list_all_parties(request):
+    objects = Party.objects.filter(company=request.user.company)
+    return render(request, 'list_all_parties.html', {'objects': objects})
 
 
 def view_account(request, id):
@@ -94,16 +99,16 @@ def create_category(request):
 
 
 def update_category(request, id):
-    category = get_object_or_404(Category, id=id)
+    category = get_object_or_404(Category, id=id, company=request.user.company)
     if request.POST:
-        form = CategoryForm(data=request.POST, instance=category)
+        form = CategoryForm(data=request.POST, instance=category, company=request.user.company)
         if form.is_valid():
             category = form.save(commit=False)
             category.company = request.user.company
             category.save()
             return redirect('/categories/')
     else:
-        form = CategoryForm(instance=category)
+        form = CategoryForm(instance=category, company=request.user.company)
     if request.is_ajax():
         base_template = 'modal.html'
     else:
@@ -115,21 +120,23 @@ def update_category(request, id):
 
 
 def delete_category(request, id):
-    category = get_object_or_404(Category, id=id)
+    category = get_object_or_404(Category, id=id, company=request.user.company)
     category.delete()
     return redirect('/categories/')
 
 
 def delete_account(request, id):
-    object = get_object_or_404(Account, id=id)
+    object = get_object_or_404(Account, id=id, company=request.user.company)
     object.delete()
     return redirect('/ledger/')
 
 
 def party_form(request, id=None):
     if id:
+        scenario = 'Update'
         party = get_object_or_404(Party, id=id)
     else:
+        scenario = 'Create'
         party = Party()
     if request.POST:
         form = PartyForm(data=request.POST, instance=party)
@@ -145,5 +152,6 @@ def party_form(request, id=None):
         base_template = 'dashboard.html'
     return render(request, 'party_form.html', {
         'form': form,
+        'scenario': scenario,
         'base_template': base_template,
     })

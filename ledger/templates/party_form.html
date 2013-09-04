@@ -1,42 +1,49 @@
 {% extends base_template %}
 
-{% block title %} Create/Update Party {% endblock %}
+{% block title %}{{ scenario }} Party {% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "list_all_parties" %}">Parties</a></li>
+    <span class="divider"><i class="icon-angle-right"></i></span>
+    <li class="active">{{ scenario }} Party</li>
+{% endblock %}
 
 {% block content %}
-<div class="page-header position-relative">
-    <h1>
-        Party
-    </h1>
-</div>
-<form method="post">
-	<div class="row">
+    <div class="page-header position-relative">
+        <h1>
+            {{ scenario }} Party
+        </h1>
+    </div>
+    <form method="post">
+        <div class="row">
 
-		<div class="span4">
-			{% csrf_token %}
-			{{ form.name.label_tag }}
-	    {{ form.name }}
-	    {{ form.address.label_tag }}
-	    {{ form.address }}
-		</div>
+            <div class="span4">
+                {% csrf_token %}
+                {{ form.name.label_tag }}
+                {{ form.name }}
+                {{ form.address.label_tag }}
+                {{ form.address }}
+            </div>
 
-		<div class="span4">
-			{{ form.phone_no.label_tag }}
-	    {{ form.phone_no }}
-	    {{ form.email.label_tag }}
-	    {{ form.email }}
-	    {{ form.fax.label_tag }}
-	    {{ form.fax }}
-	    {{ form.debtor_level.label_tag }}
-	    {{ form.debtor_level }}
-		</div>
+            <div class="span4">
+                {{ form.phone_no.label_tag }}
+                {{ form.phone_no }}
+                {{ form.email.label_tag }}
+                {{ form.email }}
+                {{ form.fax.label_tag }}
+                {{ form.fax }}
+                {{ form.debtor_level.label_tag }}
+                {{ form.debtor_level }}
+            </div>
 
-	</div>
+        </div>
 
-	<div class="row">
-		<div class="span12">
-			<input type="submit" value="Submit" class="btn" />
-		</div>
-	</div>
-</form>
+        <div class="row">
+            <div class="span12">
+                <input type="submit" value="Submit" class="btn"/>
+            </div>
+        </div>
+    </form>
 
 {% endblock %}
