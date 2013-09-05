@@ -214,7 +214,7 @@ function DayJournal(data) {
 
     self.summary_transfer = new TableViewModel(key_to_options('summary_transfer'), SummaryTransferRow);
 
-    self.summary_inventory = new TableViewModel(key_to_options('summary_inventory'), SummaryEquivalentRow);
+    self.summary_inventory = new TableViewModel(key_to_options('summary_inventory'), InventoryRow);
 
     self.card_sales = new TableViewModel(key_to_options('card_sales'), CardSalesRow);
 
@@ -417,18 +417,18 @@ function SummaryTaxRow(row) {
 
 }
 
-function SummaryEquivalentRow(row) {
+function InventoryRow(row) {
     var self = this;
 
     self.account_id = ko.observable()
 
     self.opening = ko.observable();
 
-    self.inward = ko.observable(0).extend({ numeric: 2 });
-    self.outward = ko.observable(0).extend({ numeric: 2 });
+    self.purchase = ko.observable();
+    self.sales = ko.observable();
 
     self.closing = ko.computed(function () {
-        return rnum(parseFloat(self.opening()) + parseFloat(self.inward()) - parseFloat(self.outward()));
+        return rnum(parseFloat(self.opening()) + parseFloat(self.purchase()) - parseFloat(self.sales()));
     });
 
     self.actual = ko.observable();
