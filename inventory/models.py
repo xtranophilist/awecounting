@@ -27,6 +27,7 @@ class InventoryAccount(models.Model):
     company = models.ForeignKey(Company)
     current_dr = models.FloatField(null=True, blank=True)
     current_cr = models.FloatField(null=True, blank=True)
+    opening_balance = models.FloatField(default=0)
 
     def get_absolute_url(self):
         return '/inventory_account/' + str(self.id)
@@ -138,7 +139,7 @@ class Transaction(models.Model):
     cr_amount = models.FloatField(null=True, blank=True)
     current_dr = models.FloatField(null=True, blank=True)
     current_cr = models.FloatField(null=True, blank=True)
-    journal_entry = models.ForeignKey(JournalEntry, related_name='inventory_transactions')
+    journal_entry = models.ForeignKey(JournalEntry, related_name='transactions')
 
     def get_balance(self):
         return zero_for_none(self.current_dr) - zero_for_none(self.current_cr)
