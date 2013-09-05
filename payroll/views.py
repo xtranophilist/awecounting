@@ -1,6 +1,6 @@
 import json
 
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 
 from payroll.models import Entry, EntryRow
@@ -12,16 +12,23 @@ from ledger.models import delete_rows
 def entry(request, id=None):
     if id:
         entry = get_object_or_404(Entry, id=id)
+        scenario = 'Update'
     else:
         entry = Entry()
-        # form = InvoiceForm(data=request.POST, instance=invoice)
+        scenario = 'Create'
     data = EntrySerializer(entry).data
-    return render(request, 'entry.html', {'data': data})
+    return render(request, 'entry.html', {'data': data, 'scenario': scenario})
 
 
 def list_payroll_entries(request):
     objects = Entry.objects.filter(company=request.user.company)
     return render(request, 'list_all_entries.html', {'objects': objects})
+
+
+def delete_payroll_entry(request, id):
+    object = get_object_or_404(Entry, id=id, company=request.user.company)
+    object.delete()
+    return redirect('/payroll/entries/')
 
 
 def save_entry(request):
