@@ -606,9 +606,23 @@ function SummaryCashRow(row) {
 
 function SummaryLotto(root) {
     var self = this;
-    self.disp = 10;
-    self.reg = 5;
+    self.disp = function(){
+        var total = 0;
+        $.each(root.lotto_detail.rows(), function () {
+                total+= this.sales();
+        });
+        return total;
+    }
+    self.reg = function(){
+        var total = 0;
+        $.each(root.cash_sales.rows(), function () {
+            if (root.account_by_id(this.account_id()).name == 'Lotto Sales'){
+                total+= this.amount();
+            }
+        });
+        return total;
+    }
     self.diff = function () {
-        return self.disp - self.reg;
+        return round2(self.disp() - self.reg());
     };
 }
