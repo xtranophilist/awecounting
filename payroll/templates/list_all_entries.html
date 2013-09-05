@@ -28,13 +28,13 @@
 
     <table class="table table-bordered table-striped table-sortable">
         <thead>
-        <th>{% anchor voucher_no 'Voucher No.' %}</th>
+        <th>{% anchor entry_no 'Entry No.' %}</th>
         <th>{% anchor created 'Created On' %}</th>
         <th>{% anchor modified 'Modified On' %}</th>
         <th>Actions</th>
         </thead>
         <tbody>
-        {% for item in objects %}
+        {% for item in paginated_objects %}
             <tr>
                 <td>
                     {{ item.entry_no }}

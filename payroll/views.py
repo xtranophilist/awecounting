@@ -26,8 +26,9 @@ def save_entry(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
     values = {
-        'company': request.user.company
+        'company': request.user.company, 'entry_no': params.get('entry_no')
     }
+    print params
     if params.get('id'):
         entry = Entry.objects.get(id=params.get('id'))
     else:

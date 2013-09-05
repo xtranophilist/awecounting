@@ -14,3 +14,4 @@ class EntrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Entry
+        exclude = ['company']
