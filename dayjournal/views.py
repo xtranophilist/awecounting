@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, CardSales, \
     CreditExpense, CreditIncome, CreditPurchase, CreditSales, ChequePurchase, LottoDetail, \
-    CashEquivalentSales, SummaryInventory, SummaryTransfer, SummaryLotto
+    CashEquivalentSales, SummaryInventory, SummaryTransfer, SummaryLotto, InventoryFuel
 from ledger.models import Transaction, Account, set_transactions, delete_rows
 
 from inventory.models import InventoryAccount
@@ -403,10 +403,13 @@ def save_summary_transfer(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
-def save_summary_inventory(request):
+def save_summary_inventory(request, fuel=False):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
-    model = SummaryInventory
+    if fuel:
+        model = InventoryFuel
+    else:
+        model = SummaryInventory
     day_journal = get_journal(request)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_id', 'purchase', 'sales', 'actual'])
@@ -434,6 +437,10 @@ def save_summary_inventory(request):
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+def save_inventory_fuel(request):
+    return save_summary_inventory(request, fuel=True)
 
 
 # def lotto_detail(request, journal_date=None):
