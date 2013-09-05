@@ -8,13 +8,13 @@ from inventory.filters import InventoryAccountFilter, InventoryItemFilter
 
 
 def accounts_as_json(request):
-    accounts = InventoryAccount.filter(company=request.user.company)
+    accounts = InventoryAccount.objects.filter(company=request.user.company)
     items_data = InventoryAccountSerializer(accounts).data
     return HttpResponse(json.dumps(items_data), mimetype="application/json")
 
 
 def accounts_by_day_as_json(request, day):
-    accounts = InventoryAccount.filter(company=request.user.company)
+    accounts = InventoryAccount.objects.filter(company=request.user.company)
     items_data = InventoryAccountSerializer(accounts, day=day).data
     return HttpResponse(json.dumps(items_data), mimetype="application/json")
 

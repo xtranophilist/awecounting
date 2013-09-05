@@ -10,7 +10,7 @@ class ItemSerializer(serializers.ModelSerializer):
     purchase_tax_scheme = TaxSchemeSerializer()
     sales_account = AccountSerializer()
     sales_tax_scheme = TaxSchemeSerializer()
-    
+
     class Meta:
         model = Item
 
@@ -21,7 +21,7 @@ class InventoryAccountSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = InventoryAccount
-        fields = ['id', 'name', 'rate']
+        fields = ['id', 'name', 'rate', 'opening']
 
     def __init__(self, *args, **kwargs):
         day = kwargs.pop('day', None)
@@ -32,9 +32,7 @@ class InventoryAccountSerializer(serializers.ModelSerializer):
             self.day = date.today()
 
     def get_last_day_closing(self, obj):
-        transaction = obj.get_last_transaction_before(self.day)
-        if transaction:
-            return transaction.current_quantity
+        return obj.get_day_opening(self.day)
 
     def get_rate(self, obj):
         try:
