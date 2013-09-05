@@ -122,13 +122,19 @@ def update_category(request, id):
 def delete_category(request, id):
     category = get_object_or_404(Category, id=id, company=request.user.company)
     category.delete()
-    return redirect('/categories/')
+    return redirect('/ledger/categories/')
 
 
 def delete_account(request, id):
     object = get_object_or_404(Account, id=id, company=request.user.company)
     object.delete()
     return redirect('/ledger/')
+
+
+def delete_party(request, id):
+    object = get_object_or_404(Party, id=id, company=request.user.company)
+    object.delete()
+    return redirect('/ledger/parties/')
 
 
 def party_form(request, id=None):
