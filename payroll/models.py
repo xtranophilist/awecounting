@@ -4,6 +4,7 @@ from users.models import Company
 
 
 class Entry(models.Model):
+    entry_no = models.CharField(max_length=10)
     company = models.ForeignKey(Company)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
