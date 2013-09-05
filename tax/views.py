@@ -19,6 +19,12 @@ def schemes_as_json(request):
     return HttpResponse(json.dumps(items_data), mimetype="application/json")
 
 
+def delete_tax_scheme(request, id):
+    object = get_object_or_404(TaxScheme, id=id, company=request.user.company)
+    object.delete()
+    return redirect('/tax/schemes/')
+
+
 def tax_scheme_form(request, id=None):
     if id:
         object = get_object_or_404(TaxScheme, id=id)
