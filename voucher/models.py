@@ -65,6 +65,7 @@ class PurchaseParticular(models.Model):
 
 
 class JournalVoucher(models.Model):
+    voucher_no = models.CharField(max_length=10)
     date = models.DateField()
     company = models.ForeignKey(Company)
 
