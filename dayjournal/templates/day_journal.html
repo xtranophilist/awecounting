@@ -35,38 +35,38 @@
 
     <!-- Cash Tab -->
     <div class="tabbable">
-    <ul class="nav nav-tabs" id="sales_tab">
+    <ul class="nav nav-tabs" id="cash-tab">
         <li class="active">
-            <a data-toggle="tab" href="#cash_sales">
+            <a data-toggle="tab" href="#cash-sales">
                 Cash Sales
             </a>
         </li>
 
         <li>
-            <a data-toggle="tab" href="#cash_purchase">
+            <a data-toggle="tab" href="#cash-purchase">
                 Cash Purchase
             </a>
         </li>
 
         <li>
-            <a data-toggle="tab" href="#cash_payments">
+            <a data-toggle="tab" href="#cash-payment">
                 Cash Payments
             </a>
         </li>
         <li>
-            <a data-toggle="tab" href="#cash_receipt">
+            <a data-toggle="tab" href="#cash-receipt">
                 Cash Receipt
             </a>
         </li>
         <li>
-            <a data-toggle="tab" href="#remitt_and_transfer">
+            <a data-toggle="tab" href="#summary-transfer">
                 Transfers/Remittance
             </a>
         </li>
     </ul>
     <div class="tab-content">
 
-    <div id="cash_sales" class="tab-pane active">
+    <div id="cash-sales" class="tab-pane active">
         <div class="row-fluid" data-bind="with: cash_sales">
             <table class="table table-bordered table-striped table-acubor table-sortable">
                 <thead>
@@ -113,7 +113,7 @@
         </div>
     </div>
 
-    <div id="cash_purchase" class="tab-pane">
+    <div id="cash-purchase" class="tab-pane">
         <div class="row-fluid" data-bind="with: cash_purchase">
             <table class="table table-bordered table-striped table-acubor table-sortable">
                 <thead>
@@ -157,7 +157,7 @@
         </div>
     </div>
 
-    <div id="cash_payments" class="tab-pane">
+    <div id="cash-payment" class="tab-pane">
         <div class="row-fluid" data-bind="with: cash_payment">
             <table class="table table-bordered table-striped table-acubor table-sortable">
                 <thead>
@@ -202,7 +202,7 @@
         </div>
     </div>
 
-    <div id="cash_receipt" class="tab-pane">
+    <div id="cash-receipt" class="tab-pane">
         <div class="row-fluid" data-bind="with: cash_receipt">
             <table class="table table-bordered table-striped table-acubor table-sortable">
                 <thead>
@@ -246,7 +246,7 @@
         </div>
     </div>
 
-    <div id="remitt_and_transfer" class="tab-pane">
+    <div id="summary-transfer" class="tab-pane">
         <div class="row-fluid" data-bind="with: summary_transfer">
             <table class="table table-bordered table-striped table-acubor table-sortable">
                 <thead>
@@ -300,34 +300,34 @@
 
     <!-- Banks and Cards Tab -->
     <div class="tabbable">
-        <ul class="nav nav-tabs" id="purchase_tab">
+        <ul class="nav nav-tabs" id="bank-tab">
             <li class="active">
-                <a data-toggle="tab" href="#bank_tab">
+                <a data-toggle="tab" href="#summary-bank">
                     Bank
                 </a>
             </li>
 
             <li>
-                <a data-toggle="tab" href="#cheque_purchase">
+                <a data-toggle="tab" href="#cheque-purchase">
                     Cheque Purchase
                 </a>
             </li>
 
             <li>
-                <a data-toggle="tab" href="#card_sales">
+                <a data-toggle="tab" href="#card-sales">
                     Card Sales
                 </a>
             </li>
 
             <li>
-                <a data-toggle="tab" href="#card_eqv_sales">
+                <a data-toggle="tab" href="#cash-equivalent-sales">
                     Cash Equivalent Sales
                 </a>
             </li>
         </ul>
         <div class="tab-content">
 
-            <div id="bank_tab" class="tab-pane active">
+            <div id="summary-bank" class="tab-pane active">
                 <div class="row-fluid" data-bind="with: summary_bank">
                     <table class="table table-bordered table-striped table-acubor table-sortable">
                         <thead>
@@ -360,7 +360,7 @@
                 </div>
             </div>
 
-            <div id="cheque_purchase" class="tab-pane">
+            <div id="cheque-purchase" class="tab-pane">
                 <div class="row-fluid" data-bind="with: cheque_purchase">
                     <table class="table table-bordered table-striped table-acubor table-sortable">
                         <thead>
@@ -392,7 +392,7 @@
                 </div>
             </div>
 
-            <div id="card_sales" class="tab-pane">
+            <div id="card-sales" class="tab-pane">
                 <div class="row-fluid" data-bind="with: card_sales">
                     <table class="table table-bordered table-striped table-acubor table-sortable">
                         <thead>
@@ -424,7 +424,7 @@
                 </div>
             </div>
 
-            <div id="card_eqv_sales" class="tab-pane">
+            <div id="cash-equivalent-sales" class="tab-pane">
                 <div class="row-fluid" data-bind="with: cash_equivalent_sales">
                     <table class="table table-bordered table-striped table-acubor table-sortable">
                         <thead>
@@ -474,34 +474,34 @@
 
     <!-- Credit Tabs -->
     <div class="tabbable">
-    <ul class="nav nav-tabs" id="purchase_tab">
+    <ul class="nav nav-tabs" id="credit-tab">
         <li class="active">
-            <a data-toggle="tab" href="#credit_sales">
+            <a data-toggle="tab" href="#credit-sales">
                 Credit Sales
             </a>
         </li>
 
         <li>
-            <a data-toggle="tab" href="#credit_purchase">
+            <a data-toggle="tab" href="#credit-purchase">
                 Credit Purchase
             </a>
         </li>
 
         <li>
-            <a data-toggle="tab" href="#credit_expense">
+            <a data-toggle="tab" href="#credit-expense">
                 Credit Expense
             </a>
         </li>
 
         <li>
-            <a data-toggle="tab" href="#credit_income">
+            <a data-toggle="tab" href="#credit-income">
                 Credit Income
             </a>
         </li>
     </ul>
     <div class="tab-content">
 
-    <div id="credit_sales" class="tab-pane active">
+    <div id="credit-sales" class="tab-pane active">
         <div class="row-fluid" data-bind="with: credit_sales">
             <table class="table table-bordered table-striped table-acubor table-sortable">
                 <thead>
@@ -553,7 +553,7 @@
         </div>
     </div>
 
-    <div id="credit_purchase" class="tab-pane">
+    <div id="credit-purchase" class="tab-pane">
         <div class="row-fluid" data-bind="with: credit_purchase">
             <table class="table table-bordered table-striped table-acubor table-sortable">
                 <thead>
@@ -602,7 +602,7 @@
         </div>
     </div>
 
-    <div id="credit_expense" class="tab-pane">
+    <div id="credit-expense" class="tab-pane">
         <div class="row-fluid" data-bind="with: credit_expense">
             <table class="table table-bordered table-striped table-acubor table-sortable">
                 <thead>
@@ -651,7 +651,7 @@
         </div>
     </div>
 
-    <div id="credit_income" class="tab-pane">
+    <div id="credit-income" class="tab-pane">
         <div class="row-fluid" data-bind="with: credit_income">
             <table class="table table-bordered table-striped table-acubor table-sortable">
                 <thead>
@@ -703,6 +703,8 @@
     </div>
     </div>
     <!-- EOF Credit Tabs -->
+
+    
 
     <br>
 
