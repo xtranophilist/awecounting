@@ -216,6 +216,8 @@ function DayJournal(data) {
 
     self.summary_inventory = new TableViewModel(key_to_options('summary_inventory'), InventoryRow);
 
+    self.inventory_fuel = new TableViewModel(key_to_options('inventory_fuel'), InventoryRow);
+
     self.card_sales = new TableViewModel(key_to_options('card_sales'), CardSalesRow);
 
     self.cash_equivalent_sales = new TableViewModel(key_to_options('cash_equivalent_sales'), CashEquivalentSalesRow);
