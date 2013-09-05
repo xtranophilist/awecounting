@@ -464,18 +464,20 @@ function SummaryCashRow(row) {
 
 function SummaryLotto(root) {
     var self = this;
-    self.disp = function(){
+    self.disp = function () {
         var total = 0;
         $.each(root.lotto_detail.rows(), function () {
-                total+= this.sales();
+            total += this.sales();
         });
         return total;
     }
-    self.reg = function(){
+    self.reg = function () {
         var total = 0;
         $.each(root.cash_sales.rows(), function () {
-            if (root.account_by_id(this.account_id()).name == 'Lotto Sales'){
-                total+= this.amount();
+            if (typeof this.account_id() != 'undefined') {
+                if (root.account_by_id(this.account_id()).name == 'Lotto Sales') {
+                    total += this.amount();
+                }
             }
         });
         return total;
