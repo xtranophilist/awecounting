@@ -9,7 +9,7 @@ from tax.forms import TaxSchemeForm
 
 
 def list_tax_schemes(request):
-    tax_schemes = TaxScheme.objects.all()
+    tax_schemes = TaxScheme.objects.filter(company=request.user.company)
     return render(request, 'list_tax_schemes.html', {'objects': tax_schemes})
 
 
@@ -27,7 +27,7 @@ def delete_tax_scheme(request, id):
 
 def tax_scheme_form(request, id=None):
     if id:
-        object = get_object_or_404(TaxScheme, id=id)
+        object = get_object_or_404(TaxScheme, id=id, company=request.user.company)
         scenario = 'Update'
     else:
         object = TaxScheme(company=request.user.company)

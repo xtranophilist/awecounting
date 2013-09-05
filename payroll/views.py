@@ -11,7 +11,7 @@ from ledger.models import delete_rows
 
 def entry(request, id=None):
     if id:
-        entry = get_object_or_404(Entry, id=id)
+        entry = get_object_or_404(Entry, id=id, company=request.user.company)
         scenario = 'Update'
     else:
         entry = Entry()

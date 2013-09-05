@@ -35,7 +35,7 @@ def invoice(request, invoice_no=None):
         #TODO Add a flash message
         return redirect('/settings/company')
     if invoice_no:
-        invoice = get_object_or_404(Invoice, invoice_no=invoice_no)
+        invoice = get_object_or_404(Invoice, invoice_no=invoice_no, company=request.user.company)
     else:
         invoice = Invoice(date=date.today(), currency=company_setting.default_currency)
         try:
@@ -104,7 +104,7 @@ def purchase_voucher(request, id=None):
     except CompanySetting.DoesNotExist:
         return redirect('/settings/company')
     if id:
-        voucher = get_object_or_404(PurchaseVoucher, id=id)
+        voucher = get_object_or_404(PurchaseVoucher, id=id, company=request.user.company)
     else:
         voucher = PurchaseVoucher(date=date.today(), currency=company_setting.default_currency)
 
@@ -137,7 +137,7 @@ def purchase_voucher(request, id=None):
 
 def journal_voucher(request, id=None):
     if id:
-        voucher = get_object_or_404(JournalVoucher, id=id)
+        voucher = get_object_or_404(JournalVoucher, id=id, company=request.user.company)
     else:
         voucher = JournalVoucher()
     data = JournalVoucherSerializer(voucher).data

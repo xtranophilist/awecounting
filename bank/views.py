@@ -60,7 +60,7 @@ def list_cash_deposits(request):
 
 def bank_account_form(request, id=None):
     if id:
-        bank_account = get_object_or_404(BankAccount, id=id)
+        bank_account = get_object_or_404(BankAccount, id=id, company=request.user.company)
         scenario = 'Update'
     else:
         bank_account = BankAccount()
@@ -87,7 +87,7 @@ def bank_account_form(request, id=None):
 
 def cheque_deposit(request, id=None):
     if id:
-        receipt = get_object_or_404(ChequeDeposit, id=id)
+        receipt = get_object_or_404(ChequeDeposit, id=id, company=request.user.company)
         scenario = 'Update'
     else:
         receipt = ChequeDeposit(date=date.today())
@@ -122,7 +122,7 @@ def cheque_deposit(request, id=None):
 
 def cash_deposit(request, id=None):
     if id:
-        receipt = get_object_or_404(BankCashDeposit, id=id)
+        receipt = get_object_or_404(BankCashDeposit, id=id, company=request.user.company)
         scenario = 'Update'
     else:
         receipt = BankCashDeposit(date=date.today())
@@ -143,7 +143,7 @@ def cash_deposit(request, id=None):
 
 def cheque_payment(request, id=None):
     if id:
-        payment = get_object_or_404(ChequePayment, id=id)
+        payment = get_object_or_404(ChequePayment, id=id, company=request.user.company)
         scenario = 'Update'
     else:
         payment = ChequePayment(date=date.today())

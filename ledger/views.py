@@ -60,7 +60,7 @@ def list_all_parties(request):
 
 
 def view_account(request, id):
-    account = get_object_or_404(Account, id=id)
+    account = get_object_or_404(Account, id=id, company=request.user.company)
     # transactions = account.transactions
     base_template = 'dashboard.html'
     journal_entries = JournalEntry.objects.filter(transactions__account_id=account.id).order_by('id',
@@ -142,7 +142,7 @@ def delete_party(request, id):
 def party_form(request, id=None):
     if id:
         scenario = 'Update'
-        party = get_object_or_404(Party, id=id)
+        party = get_object_or_404(Party, id=id, company=request.user.company)
     else:
         scenario = 'Create'
         party = Party()
