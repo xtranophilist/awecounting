@@ -23,6 +23,7 @@ class Category(MPTTModel):
     class Meta:
         db_table = 'ledger_category'
         verbose_name_plural = u'Categories'
+        unique_together = (('company_id', 'name'),)
 
 
 class Account(models.Model):
@@ -36,6 +37,9 @@ class Account(models.Model):
     tax_rate = models.FloatField(blank=True, null=True)
     opening_dr = models.FloatField(default=0)
     opening_cr = models.FloatField(default=0)
+
+    class Meta:
+        unique_together = (('company_id', 'name'), ('company_id', 'code'),)
 
     def get_absolute_url(self):
         return '/ledger/' + str(self.id)
