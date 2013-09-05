@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-import datetime
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import models
 
 
 class Migration(SchemaMigration):
-
     def forwards(self, orm):
         # Adding model 'InventoryTransaction'
         db.create_table(u'inventory_inventorytransaction', (
@@ -44,7 +41,8 @@ class Migration(SchemaMigration):
     models = {
         u'core.tag': {
             'Meta': {'object_name': 'Tag', 'db_table': "'tag'"},
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '254', 'null': 'True', 'blank': 'True'}),
+            'description': (
+            'django.db.models.fields.CharField', [], {'max_length': '254', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
@@ -79,12 +77,16 @@ class Migration(SchemaMigration):
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '254'}),
-            'purchase_account': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'purchase_items'", 'to': u"orm['ledger.Account']"}),
+            'purchase_account': ('django.db.models.fields.related.ForeignKey', [],
+                                 {'related_name': "'purchase_items'", 'to': u"orm['ledger.Account']"}),
             'purchase_price': ('django.db.models.fields.FloatField', [], {}),
-            'purchase_tax_scheme': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'purchase_items'", 'to': u"orm['tax.TaxScheme']"}),
-            'sales_account': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'sales_items'", 'to': u"orm['ledger.Account']"}),
+            'purchase_tax_scheme': ('django.db.models.fields.related.ForeignKey', [],
+                                    {'related_name': "'purchase_items'", 'to': u"orm['tax.TaxScheme']"}),
+            'sales_account': ('django.db.models.fields.related.ForeignKey', [],
+                              {'related_name': "'sales_items'", 'to': u"orm['ledger.Account']"}),
             'sales_price': ('django.db.models.fields.FloatField', [], {}),
-            'sales_tax_scheme': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'sales_items'", 'to': u"orm['tax.TaxScheme']"})
+            'sales_tax_scheme': ('django.db.models.fields.related.ForeignKey', [],
+                                 {'related_name': "'sales_items'", 'to': u"orm['tax.TaxScheme']"})
         },
         u'ledger.account': {
             'Meta': {'object_name': 'Account'},
@@ -93,8 +95,11 @@ class Migration(SchemaMigration):
             'current_balance': ('django.db.models.fields.FloatField', [], {'default': '0'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': u"orm['ledger.Account']"}),
-            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'accounts'", 'blank': 'True', 'to': u"orm['core.Tag']"})
+            'parent': ('django.db.models.fields.related.ForeignKey', [],
+                       {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': u"orm['ledger.Account']"}),
+            'categories': ('django.db.models.fields.related.ManyToManyField', [],
+                           {'symmetrical': 'False', 'related_name': "'accounts'", 'blank': 'True',
+                            'to': u"orm['core.Tag']"})
         },
         u'tax.taxscheme': {
             'Meta': {'object_name': 'TaxScheme'},

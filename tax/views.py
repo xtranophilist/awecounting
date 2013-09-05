@@ -1,8 +1,10 @@
+import json
+
+from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404, redirect
+
 from tax.models import TaxScheme
 from tax.serializers import TaxSchemeSerializer
-from django.http import HttpResponse
-import json
-from django.shortcuts import render, get_object_or_404, redirect
 from tax.forms import TaxSchemeForm
 
 

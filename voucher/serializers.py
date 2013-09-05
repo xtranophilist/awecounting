@@ -22,7 +22,7 @@ class PurchaseParticularSerializer(serializers.ModelSerializer):
 class InvoiceSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField()
     particulars = InvoiceParticularSerializer()
-    
+
     class Meta:
         model = Invoice
         exclude = ['company']

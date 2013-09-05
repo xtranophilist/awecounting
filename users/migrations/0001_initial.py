@@ -2,11 +2,9 @@
 import datetime
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import models
 
 
 class Migration(SchemaMigration):
-
     def forwards(self, orm):
         # Adding model 'Company'
         db.create_table(u'company', (
@@ -50,8 +48,10 @@ class Migration(SchemaMigration):
         },
         u'users.user': {
             'Meta': {'object_name': 'User', 'db_table': "u'user'"},
-            'company': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['users.Company']", 'null': 'True'}),
-            'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '254', 'db_index': 'True'}),
+            'company': (
+            'django.db.models.fields.related.ForeignKey', [], {'to': u"orm['users.Company']", 'null': 'True'}),
+            'email': (
+            'django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '254', 'db_index': 'True'}),
             'full_name': ('django.db.models.fields.CharField', [], {'max_length': '245'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'identifier': ('django.db.models.fields.CharField', [], {'max_length': '245', 'null': 'True'}),

@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-import datetime
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import models
 
 
 class Migration(SchemaMigration):
-
     def forwards(self, orm):
         # Adding model 'DayJournal'
         db.create_table('day_journal', (
@@ -22,7 +19,8 @@ class Migration(SchemaMigration):
             ('sn', self.gf('django.db.models.fields.IntegerField')()),
             ('sales_ledger', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ledger.Account'])),
             ('amount', self.gf('django.db.models.fields.FloatField')()),
-            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='cash_sales', to=orm['dayjournal.DayJournal'])),
+            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='cash_sales',
+                                                                                  to=orm['dayjournal.DayJournal'])),
         ))
         db.send_create_signal(u'dayjournal', ['CashSales'])
 
@@ -32,7 +30,8 @@ class Migration(SchemaMigration):
             ('sn', self.gf('django.db.models.fields.IntegerField')()),
             ('purchase_ledger', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ledger.Account'])),
             ('amount', self.gf('django.db.models.fields.FloatField')()),
-            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='cash_purchase', to=orm['dayjournal.DayJournal'])),
+            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='cash_purchase',
+                                                                                  to=orm['dayjournal.DayJournal'])),
         ))
         db.send_create_signal(u'dayjournal', ['CashPurchase'])
 
@@ -42,7 +41,8 @@ class Migration(SchemaMigration):
             ('sn', self.gf('django.db.models.fields.IntegerField')()),
             ('received_from', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ledger.Account'])),
             ('amount', self.gf('django.db.models.fields.FloatField')()),
-            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='cash_receipt', to=orm['dayjournal.DayJournal'])),
+            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='cash_receipt',
+                                                                                  to=orm['dayjournal.DayJournal'])),
         ))
         db.send_create_signal(u'dayjournal', ['CashReceipt'])
 
@@ -52,7 +52,8 @@ class Migration(SchemaMigration):
             ('sn', self.gf('django.db.models.fields.IntegerField')()),
             ('payment_to', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ledger.Account'])),
             ('amount', self.gf('django.db.models.fields.FloatField')()),
-            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='cash_payment', to=orm['dayjournal.DayJournal'])),
+            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='cash_payment',
+                                                                                  to=orm['dayjournal.DayJournal'])),
         ))
         db.send_create_signal(u'dayjournal', ['CashPayment'])
 
@@ -60,10 +61,13 @@ class Migration(SchemaMigration):
         db.create_table(u'dayjournal_creditsales', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('sn', self.gf('django.db.models.fields.IntegerField')()),
-            ('sales_ledger', self.gf('django.db.models.fields.related.ForeignKey')(related_name='sales_ledger', to=orm['ledger.Account'])),
-            ('customer', self.gf('django.db.models.fields.related.ForeignKey')(related_name='customer', to=orm['ledger.Account'])),
+            ('sales_ledger', self.gf('django.db.models.fields.related.ForeignKey')(related_name='sales_ledger',
+                                                                                   to=orm['ledger.Account'])),
+            ('customer',
+             self.gf('django.db.models.fields.related.ForeignKey')(related_name='customer', to=orm['ledger.Account'])),
             ('amount', self.gf('django.db.models.fields.FloatField')()),
-            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='credit_sales', to=orm['dayjournal.DayJournal'])),
+            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='credit_sales',
+                                                                                  to=orm['dayjournal.DayJournal'])),
         ))
         db.send_create_signal(u'dayjournal', ['CreditSales'])
 
@@ -71,10 +75,13 @@ class Migration(SchemaMigration):
         db.create_table(u'dayjournal_creditpurchase', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('sn', self.gf('django.db.models.fields.IntegerField')()),
-            ('purchase_ledger', self.gf('django.db.models.fields.related.ForeignKey')(related_name='purchase_ledger', to=orm['ledger.Account'])),
-            ('supplier', self.gf('django.db.models.fields.related.ForeignKey')(related_name='supplier', to=orm['ledger.Account'])),
+            ('purchase_ledger', self.gf('django.db.models.fields.related.ForeignKey')(related_name='purchase_ledger',
+                                                                                      to=orm['ledger.Account'])),
+            ('supplier',
+             self.gf('django.db.models.fields.related.ForeignKey')(related_name='supplier', to=orm['ledger.Account'])),
             ('amount', self.gf('django.db.models.fields.FloatField')()),
-            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='credit_purchase', to=orm['dayjournal.DayJournal'])),
+            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='credit_purchase',
+                                                                                  to=orm['dayjournal.DayJournal'])),
         ))
         db.send_create_signal(u'dayjournal', ['CreditPurchase'])
 
@@ -82,10 +89,14 @@ class Migration(SchemaMigration):
         db.create_table(u'dayjournal_creditexpense', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('sn', self.gf('django.db.models.fields.IntegerField')()),
-            ('expense_head', self.gf('django.db.models.fields.related.ForeignKey')(related_name='expense_head', to=orm['ledger.Account'])),
-            ('expense_claimed_by', self.gf('django.db.models.fields.related.ForeignKey')(related_name='expense_claimed_by', to=orm['ledger.Account'])),
+            ('expense_head', self.gf('django.db.models.fields.related.ForeignKey')(related_name='expense_head',
+                                                                                   to=orm['ledger.Account'])),
+            ('expense_claimed_by',
+             self.gf('django.db.models.fields.related.ForeignKey')(related_name='expense_claimed_by',
+                                                                   to=orm['ledger.Account'])),
             ('amount', self.gf('django.db.models.fields.FloatField')()),
-            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='credit_expense', to=orm['dayjournal.DayJournal'])),
+            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='credit_expense',
+                                                                                  to=orm['dayjournal.DayJournal'])),
         ))
         db.send_create_signal(u'dayjournal', ['CreditExpense'])
 
@@ -93,10 +104,13 @@ class Migration(SchemaMigration):
         db.create_table(u'dayjournal_creditincome', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('sn', self.gf('django.db.models.fields.IntegerField')()),
-            ('income_head', self.gf('django.db.models.fields.related.ForeignKey')(related_name='income_head', to=orm['ledger.Account'])),
-            ('income_from', self.gf('django.db.models.fields.related.ForeignKey')(related_name='income_from', to=orm['ledger.Account'])),
+            ('income_head', self.gf('django.db.models.fields.related.ForeignKey')(related_name='income_head',
+                                                                                  to=orm['ledger.Account'])),
+            ('income_from', self.gf('django.db.models.fields.related.ForeignKey')(related_name='income_from',
+                                                                                  to=orm['ledger.Account'])),
             ('amount', self.gf('django.db.models.fields.FloatField')()),
-            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='credit_income', to=orm['dayjournal.DayJournal'])),
+            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='credit_income',
+                                                                                  to=orm['dayjournal.DayJournal'])),
         ))
         db.send_create_signal(u'dayjournal', ['CreditIncome'])
 
@@ -104,7 +118,8 @@ class Migration(SchemaMigration):
         db.create_table(u'dayjournal_summarycash', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('closing', self.gf('django.db.models.fields.FloatField')()),
-            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='summary_cash', to=orm['dayjournal.DayJournal'])),
+            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='summary_cash',
+                                                                                  to=orm['dayjournal.DayJournal'])),
         ))
         db.send_create_signal(u'dayjournal', ['SummaryCash'])
 
@@ -116,7 +131,8 @@ class Migration(SchemaMigration):
             ('inward', self.gf('django.db.models.fields.FloatField')()),
             ('outward', self.gf('django.db.models.fields.FloatField')()),
             ('closing', self.gf('django.db.models.fields.FloatField')()),
-            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='summary_equivalent', to=orm['dayjournal.DayJournal'])),
+            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='summary_equivalent',
+                                                                                  to=orm['dayjournal.DayJournal'])),
         ))
         db.send_create_signal(u'dayjournal', ['SummaryEquivalent'])
 
@@ -127,7 +143,8 @@ class Migration(SchemaMigration):
             ('transfer_type', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ledger.Account'])),
             ('inward', self.gf('django.db.models.fields.FloatField')()),
             ('outward', self.gf('django.db.models.fields.FloatField')()),
-            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='summary_transfer', to=orm['dayjournal.DayJournal'])),
+            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='summary_transfer',
+                                                                                  to=orm['dayjournal.DayJournal'])),
         ))
         db.send_create_signal(u'dayjournal', ['SummaryTransfer'])
 
@@ -140,7 +157,8 @@ class Migration(SchemaMigration):
             ('cash_deposit', self.gf('django.db.models.fields.FloatField')()),
             ('account_transfer_plus', self.gf('django.db.models.fields.FloatField')()),
             ('account_transfer_minus', self.gf('django.db.models.fields.FloatField')()),
-            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='summary_bank', to=orm['dayjournal.DayJournal'])),
+            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='summary_bank',
+                                                                                  to=orm['dayjournal.DayJournal'])),
         ))
         db.send_create_signal(u'dayjournal', ['SummaryBank'])
 
@@ -150,7 +168,8 @@ class Migration(SchemaMigration):
             ('sn', self.gf('django.db.models.fields.IntegerField')()),
             ('tax_scheme', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['ledger.Account'])),
             ('amount', self.gf('django.db.models.fields.FloatField')()),
-            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='summary_sales_tax', to=orm['dayjournal.DayJournal'])),
+            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='summary_sales_tax',
+                                                                                  to=orm['dayjournal.DayJournal'])),
         ))
         db.send_create_signal(u'dayjournal', ['SummarySalesTax'])
 
@@ -162,7 +181,8 @@ class Migration(SchemaMigration):
             ('purchase', self.gf('django.db.models.fields.FloatField')()),
             ('sales', self.gf('django.db.models.fields.FloatField')()),
             ('actual', self.gf('django.db.models.fields.FloatField')()),
-            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='summary_inventory', to=orm['dayjournal.DayJournal'])),
+            ('day_journal', self.gf('django.db.models.fields.related.ForeignKey')(related_name='summary_inventory',
+                                                                                  to=orm['dayjournal.DayJournal'])),
         ))
         db.send_create_signal(u'dayjournal', ['SummaryInventory'])
 
@@ -218,7 +238,8 @@ class Migration(SchemaMigration):
         u'dayjournal.cashpayment': {
             'Meta': {'object_name': 'CashPayment'},
             'amount': ('django.db.models.fields.FloatField', [], {}),
-            'day_journal': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'cash_payment'", 'to': u"orm['dayjournal.DayJournal']"}),
+            'day_journal': ('django.db.models.fields.related.ForeignKey', [],
+                            {'related_name': "'cash_payment'", 'to': u"orm['dayjournal.DayJournal']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'payment_to': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ledger.Account']"}),
             'sn': ('django.db.models.fields.IntegerField', [], {})
@@ -226,7 +247,8 @@ class Migration(SchemaMigration):
         u'dayjournal.cashpurchase': {
             'Meta': {'object_name': 'CashPurchase'},
             'amount': ('django.db.models.fields.FloatField', [], {}),
-            'day_journal': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'cash_purchase'", 'to': u"orm['dayjournal.DayJournal']"}),
+            'day_journal': ('django.db.models.fields.related.ForeignKey', [],
+                            {'related_name': "'cash_purchase'", 'to': u"orm['dayjournal.DayJournal']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'purchase_ledger': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ledger.Account']"}),
             'sn': ('django.db.models.fields.IntegerField', [], {})
@@ -234,7 +256,8 @@ class Migration(SchemaMigration):
         u'dayjournal.cashreceipt': {
             'Meta': {'object_name': 'CashReceipt'},
             'amount': ('django.db.models.fields.FloatField', [], {}),
-            'day_journal': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'cash_receipt'", 'to': u"orm['dayjournal.DayJournal']"}),
+            'day_journal': ('django.db.models.fields.related.ForeignKey', [],
+                            {'related_name': "'cash_receipt'", 'to': u"orm['dayjournal.DayJournal']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'received_from': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ledger.Account']"}),
             'sn': ('django.db.models.fields.IntegerField', [], {})
@@ -242,7 +265,8 @@ class Migration(SchemaMigration):
         u'dayjournal.cashsales': {
             'Meta': {'object_name': 'CashSales'},
             'amount': ('django.db.models.fields.FloatField', [], {}),
-            'day_journal': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'cash_sales'", 'to': u"orm['dayjournal.DayJournal']"}),
+            'day_journal': ('django.db.models.fields.related.ForeignKey', [],
+                            {'related_name': "'cash_sales'", 'to': u"orm['dayjournal.DayJournal']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'sales_ledger': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ledger.Account']"}),
             'sn': ('django.db.models.fields.IntegerField', [], {})
@@ -250,37 +274,49 @@ class Migration(SchemaMigration):
         u'dayjournal.creditexpense': {
             'Meta': {'object_name': 'CreditExpense'},
             'amount': ('django.db.models.fields.FloatField', [], {}),
-            'day_journal': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'credit_expense'", 'to': u"orm['dayjournal.DayJournal']"}),
-            'expense_claimed_by': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'expense_claimed_by'", 'to': u"orm['ledger.Account']"}),
-            'expense_head': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'expense_head'", 'to': u"orm['ledger.Account']"}),
+            'day_journal': ('django.db.models.fields.related.ForeignKey', [],
+                            {'related_name': "'credit_expense'", 'to': u"orm['dayjournal.DayJournal']"}),
+            'expense_claimed_by': ('django.db.models.fields.related.ForeignKey', [],
+                                   {'related_name': "'expense_claimed_by'", 'to': u"orm['ledger.Account']"}),
+            'expense_head': ('django.db.models.fields.related.ForeignKey', [],
+                             {'related_name': "'expense_head'", 'to': u"orm['ledger.Account']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'sn': ('django.db.models.fields.IntegerField', [], {})
         },
         u'dayjournal.creditincome': {
             'Meta': {'object_name': 'CreditIncome'},
             'amount': ('django.db.models.fields.FloatField', [], {}),
-            'day_journal': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'credit_income'", 'to': u"orm['dayjournal.DayJournal']"}),
+            'day_journal': ('django.db.models.fields.related.ForeignKey', [],
+                            {'related_name': "'credit_income'", 'to': u"orm['dayjournal.DayJournal']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'income_from': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'income_from'", 'to': u"orm['ledger.Account']"}),
-            'income_head': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'income_head'", 'to': u"orm['ledger.Account']"}),
+            'income_from': ('django.db.models.fields.related.ForeignKey', [],
+                            {'related_name': "'income_from'", 'to': u"orm['ledger.Account']"}),
+            'income_head': ('django.db.models.fields.related.ForeignKey', [],
+                            {'related_name': "'income_head'", 'to': u"orm['ledger.Account']"}),
             'sn': ('django.db.models.fields.IntegerField', [], {})
         },
         u'dayjournal.creditpurchase': {
             'Meta': {'object_name': 'CreditPurchase'},
             'amount': ('django.db.models.fields.FloatField', [], {}),
-            'day_journal': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'credit_purchase'", 'to': u"orm['dayjournal.DayJournal']"}),
+            'day_journal': ('django.db.models.fields.related.ForeignKey', [],
+                            {'related_name': "'credit_purchase'", 'to': u"orm['dayjournal.DayJournal']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'purchase_ledger': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'purchase_ledger'", 'to': u"orm['ledger.Account']"}),
+            'purchase_ledger': ('django.db.models.fields.related.ForeignKey', [],
+                                {'related_name': "'purchase_ledger'", 'to': u"orm['ledger.Account']"}),
             'sn': ('django.db.models.fields.IntegerField', [], {}),
-            'supplier': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'supplier'", 'to': u"orm['ledger.Account']"})
+            'supplier': ('django.db.models.fields.related.ForeignKey', [],
+                         {'related_name': "'supplier'", 'to': u"orm['ledger.Account']"})
         },
         u'dayjournal.creditsales': {
             'Meta': {'object_name': 'CreditSales'},
             'amount': ('django.db.models.fields.FloatField', [], {}),
-            'customer': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'customer'", 'to': u"orm['ledger.Account']"}),
-            'day_journal': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'credit_sales'", 'to': u"orm['dayjournal.DayJournal']"}),
+            'customer': ('django.db.models.fields.related.ForeignKey', [],
+                         {'related_name': "'customer'", 'to': u"orm['ledger.Account']"}),
+            'day_journal': ('django.db.models.fields.related.ForeignKey', [],
+                            {'related_name': "'credit_sales'", 'to': u"orm['dayjournal.DayJournal']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'sales_ledger': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'sales_ledger'", 'to': u"orm['ledger.Account']"}),
+            'sales_ledger': ('django.db.models.fields.related.ForeignKey', [],
+                             {'related_name': "'sales_ledger'", 'to': u"orm['ledger.Account']"}),
             'sn': ('django.db.models.fields.IntegerField', [], {})
         },
         u'dayjournal.dayjournal': {
@@ -296,20 +332,23 @@ class Migration(SchemaMigration):
             'bank_account': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ledger.Account']"}),
             'card_deposit': ('django.db.models.fields.FloatField', [], {}),
             'cash_deposit': ('django.db.models.fields.FloatField', [], {}),
-            'day_journal': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'summary_bank'", 'to': u"orm['dayjournal.DayJournal']"}),
+            'day_journal': ('django.db.models.fields.related.ForeignKey', [],
+                            {'related_name': "'summary_bank'", 'to': u"orm['dayjournal.DayJournal']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'sn': ('django.db.models.fields.IntegerField', [], {})
         },
         u'dayjournal.summarycash': {
             'Meta': {'object_name': 'SummaryCash'},
             'closing': ('django.db.models.fields.FloatField', [], {}),
-            'day_journal': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'summary_cash'", 'to': u"orm['dayjournal.DayJournal']"}),
+            'day_journal': ('django.db.models.fields.related.ForeignKey', [],
+                            {'related_name': "'summary_cash'", 'to': u"orm['dayjournal.DayJournal']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'})
         },
         u'dayjournal.summaryequivalent': {
             'Meta': {'object_name': 'SummaryEquivalent'},
             'closing': ('django.db.models.fields.FloatField', [], {}),
-            'day_journal': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'summary_equivalent'", 'to': u"orm['dayjournal.DayJournal']"}),
+            'day_journal': ('django.db.models.fields.related.ForeignKey', [],
+                            {'related_name': "'summary_equivalent'", 'to': u"orm['dayjournal.DayJournal']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'inward': ('django.db.models.fields.FloatField', [], {}),
             'outward': ('django.db.models.fields.FloatField', [], {}),
@@ -319,7 +358,8 @@ class Migration(SchemaMigration):
         u'dayjournal.summaryinventory': {
             'Meta': {'object_name': 'SummaryInventory'},
             'actual': ('django.db.models.fields.FloatField', [], {}),
-            'day_journal': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'summary_inventory'", 'to': u"orm['dayjournal.DayJournal']"}),
+            'day_journal': ('django.db.models.fields.related.ForeignKey', [],
+                            {'related_name': "'summary_inventory'", 'to': u"orm['dayjournal.DayJournal']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'particular': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ledger.Account']"}),
             'purchase': ('django.db.models.fields.FloatField', [], {}),
@@ -329,14 +369,16 @@ class Migration(SchemaMigration):
         u'dayjournal.summarysalestax': {
             'Meta': {'object_name': 'SummarySalesTax'},
             'amount': ('django.db.models.fields.FloatField', [], {}),
-            'day_journal': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'summary_sales_tax'", 'to': u"orm['dayjournal.DayJournal']"}),
+            'day_journal': ('django.db.models.fields.related.ForeignKey', [],
+                            {'related_name': "'summary_sales_tax'", 'to': u"orm['dayjournal.DayJournal']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'sn': ('django.db.models.fields.IntegerField', [], {}),
             'tax_scheme': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ledger.Account']"})
         },
         u'dayjournal.summarytransfer': {
             'Meta': {'object_name': 'SummaryTransfer'},
-            'day_journal': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'summary_transfer'", 'to': u"orm['dayjournal.DayJournal']"}),
+            'day_journal': ('django.db.models.fields.related.ForeignKey', [],
+                            {'related_name': "'summary_transfer'", 'to': u"orm['dayjournal.DayJournal']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'inward': ('django.db.models.fields.FloatField', [], {}),
             'outward': ('django.db.models.fields.FloatField', [], {}),

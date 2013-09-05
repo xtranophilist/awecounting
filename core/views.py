@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render
 from core.models import CompanySetting
 from core.forms import CompanySettingsForm
 

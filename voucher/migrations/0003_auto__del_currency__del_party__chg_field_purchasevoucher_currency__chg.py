@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-import datetime
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import models
 
 
 class Migration(SchemaMigration):
-
     def forwards(self, orm):
         # Deleting model 'Currency'
         db.delete_table(u'voucher_currency')
@@ -16,16 +13,20 @@ class Migration(SchemaMigration):
 
 
         # Changing field 'PurchaseVoucher.currency'
-        db.alter_column(u'voucher_purchasevoucher', 'currency_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Currency']))
+        db.alter_column(u'voucher_purchasevoucher', 'currency_id',
+                        self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Currency']))
 
         # Changing field 'PurchaseVoucher.party'
-        db.alter_column(u'voucher_purchasevoucher', 'party_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Party']))
+        db.alter_column(u'voucher_purchasevoucher', 'party_id',
+                        self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Party']))
 
         # Changing field 'SalesVoucher.currency'
-        db.alter_column(u'voucher_salesvoucher', 'currency_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Currency']))
+        db.alter_column(u'voucher_salesvoucher', 'currency_id',
+                        self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Currency']))
 
         # Changing field 'SalesVoucher.party'
-        db.alter_column(u'voucher_salesvoucher', 'party_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Party']))
+        db.alter_column(u'voucher_salesvoucher', 'party_id',
+                        self.gf('django.db.models.fields.related.ForeignKey')(to=orm['core.Party']))
 
     def backwards(self, orm):
         # Adding model 'Currency'
@@ -50,16 +51,20 @@ class Migration(SchemaMigration):
 
 
         # Changing field 'PurchaseVoucher.currency'
-        db.alter_column(u'voucher_purchasevoucher', 'currency_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voucher.Currency']))
+        db.alter_column(u'voucher_purchasevoucher', 'currency_id',
+                        self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voucher.Currency']))
 
         # Changing field 'PurchaseVoucher.party'
-        db.alter_column(u'voucher_purchasevoucher', 'party_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voucher.Party']))
+        db.alter_column(u'voucher_purchasevoucher', 'party_id',
+                        self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voucher.Party']))
 
         # Changing field 'SalesVoucher.currency'
-        db.alter_column(u'voucher_salesvoucher', 'currency_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voucher.Currency']))
+        db.alter_column(u'voucher_salesvoucher', 'currency_id',
+                        self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voucher.Currency']))
 
         # Changing field 'SalesVoucher.party'
-        db.alter_column(u'voucher_salesvoucher', 'party_id', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voucher.Party']))
+        db.alter_column(u'voucher_salesvoucher', 'party_id',
+                        self.gf('django.db.models.fields.related.ForeignKey')(to=orm['voucher.Party']))
 
     models = {
         u'core.currency': {
@@ -84,12 +89,16 @@ class Migration(SchemaMigration):
             'description': ('django.db.models.fields.TextField', [], {'null': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '254'}),
-            'purchase_account': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'purchase_items'", 'to': u"orm['ledger.Account']"}),
+            'purchase_account': ('django.db.models.fields.related.ForeignKey', [],
+                                 {'related_name': "'purchase_items'", 'to': u"orm['ledger.Account']"}),
             'purchase_price': ('django.db.models.fields.FloatField', [], {}),
-            'purchase_tax_scheme': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'purchase_items'", 'to': u"orm['tax.TaxScheme']"}),
-            'sales_account': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'sales_items'", 'to': u"orm['ledger.Account']"}),
+            'purchase_tax_scheme': ('django.db.models.fields.related.ForeignKey', [],
+                                    {'related_name': "'purchase_items'", 'to': u"orm['tax.TaxScheme']"}),
+            'sales_account': ('django.db.models.fields.related.ForeignKey', [],
+                              {'related_name': "'sales_items'", 'to': u"orm['ledger.Account']"}),
             'sales_price': ('django.db.models.fields.FloatField', [], {}),
-            'sales_tax_scheme': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'sales_items'", 'to': u"orm['tax.TaxScheme']"})
+            'sales_tax_scheme': ('django.db.models.fields.related.ForeignKey', [],
+                                 {'related_name': "'sales_items'", 'to': u"orm['tax.TaxScheme']"})
         },
         u'ledger.account': {
             'Meta': {'object_name': 'Account'},
@@ -111,7 +120,8 @@ class Migration(SchemaMigration):
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'item': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['inventory.Item']"}),
             'quantity': ('django.db.models.fields.FloatField', [], {'default': '1'}),
-            'sales_voucher': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'particulars'", 'to': u"orm['voucher.SalesVoucher']"}),
+            'sales_voucher': ('django.db.models.fields.related.ForeignKey', [],
+                              {'related_name': "'particulars'", 'to': u"orm['voucher.SalesVoucher']"}),
             'sn': ('django.db.models.fields.IntegerField', [], {}),
             'tax_scheme': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['tax.TaxScheme']"}),
             'unit_price': ('django.db.models.fields.FloatField', [], {})

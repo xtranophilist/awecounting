@@ -1,7 +1,5 @@
 import django_filters
 from inventory.models import InventoryAccount, Item, Category
-from acubor import filter_extra
-from ledger.models import Account
 from tax.models import TaxScheme
 
 

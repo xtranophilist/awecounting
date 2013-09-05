@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-import datetime
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import models
 
 
 class Migration(SchemaMigration):
-
     def forwards(self, orm):
         # Adding field 'PurchaseVoucher.attachment'
         db.add_column(u'voucher_purchasevoucher', 'attachment',
@@ -45,12 +42,16 @@ class Migration(SchemaMigration):
             'description': ('django.db.models.fields.TextField', [], {'null': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '254'}),
-            'purchase_account': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'purchase_items'", 'to': u"orm['ledger.Account']"}),
+            'purchase_account': ('django.db.models.fields.related.ForeignKey', [],
+                                 {'related_name': "'purchase_items'", 'to': u"orm['ledger.Account']"}),
             'purchase_price': ('django.db.models.fields.FloatField', [], {}),
-            'purchase_tax_scheme': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'purchase_items'", 'to': u"orm['tax.TaxScheme']"}),
-            'sales_account': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'sales_items'", 'to': u"orm['ledger.Account']"}),
+            'purchase_tax_scheme': ('django.db.models.fields.related.ForeignKey', [],
+                                    {'related_name': "'purchase_items'", 'to': u"orm['tax.TaxScheme']"}),
+            'sales_account': ('django.db.models.fields.related.ForeignKey', [],
+                              {'related_name': "'sales_items'", 'to': u"orm['ledger.Account']"}),
             'sales_price': ('django.db.models.fields.FloatField', [], {}),
-            'sales_tax_scheme': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'sales_items'", 'to': u"orm['tax.TaxScheme']"})
+            'sales_tax_scheme': ('django.db.models.fields.related.ForeignKey', [],
+                                 {'related_name': "'sales_items'", 'to': u"orm['tax.TaxScheme']"})
         },
         u'ledger.account': {
             'Meta': {'object_name': 'Account'},
@@ -91,7 +92,8 @@ class Migration(SchemaMigration):
             'description': ('django.db.models.fields.TextField', [], {}),
             'discount': ('django.db.models.fields.FloatField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
-            'invoice': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'particulars'", 'to': u"orm['voucher.Invoice']"}),
+            'invoice': ('django.db.models.fields.related.ForeignKey', [],
+                        {'related_name': "'particulars'", 'to': u"orm['voucher.Invoice']"}),
             'item': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['inventory.Item']"}),
             'quantity': ('django.db.models.fields.FloatField', [], {'default': '1'}),
             'sn': ('django.db.models.fields.IntegerField', [], {}),
@@ -100,7 +102,8 @@ class Migration(SchemaMigration):
         },
         u'voucher.purchasevoucher': {
             'Meta': {'object_name': 'PurchaseVoucher'},
-            'attachment': ('django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
+            'attachment': (
+            'django.db.models.fields.files.FileField', [], {'max_length': '100', 'null': 'True', 'blank': 'True'}),
             'company': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['users.Company']"}),
             'currency': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['core.Currency']"}),
             'date': ('django.db.models.fields.DateField', [], {}),

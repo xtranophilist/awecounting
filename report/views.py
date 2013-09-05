@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from ledger.models import Category
 from mptt.templatetags.mptt_tags import cache_tree_children
+
+from ledger.models import Category
 
 
 def recursive_node_to_dict(node):

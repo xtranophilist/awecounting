@@ -1,7 +1,8 @@
-from rest_framework import serializers
-from models import Account
-from core.serializers import CategorySerializer
 from datetime import date
+
+from rest_framework import serializers
+
+from models import Account
 
 
 class AccountSerializer(serializers.ModelSerializer):

@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from models import Item, InventoryAccount
 from serializers import ItemSerializer, InventoryAccountSerializer
 from forms import ItemForm
-from inventory.filters import InventoryAccountFilter, InventoryItemFilter
+from inventory.filters import InventoryItemFilter
 
 
 def accounts_as_json(request):

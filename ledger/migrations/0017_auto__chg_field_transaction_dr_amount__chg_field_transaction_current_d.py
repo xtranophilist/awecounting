@@ -1,14 +1,10 @@
 # -*- coding: utf-8 -*-
-import datetime
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import models
 
 
 class Migration(SchemaMigration):
-
     def forwards(self, orm):
-
         # Changing field 'Transaction.dr_amount'
         db.alter_column(u'ledger_transaction', 'dr_amount', self.gf('django.db.models.fields.FloatField')(null=True))
 
@@ -22,40 +18,45 @@ class Migration(SchemaMigration):
         db.alter_column(u'ledger_transaction', 'current_cr', self.gf('django.db.models.fields.FloatField')(null=True))
 
     def backwards(self, orm):
-
         # Changing field 'Transaction.dr_amount'
         db.alter_column(u'ledger_transaction', 'dr_amount', self.gf('django.db.models.fields.FloatField')(default=None))
 
         # Changing field 'Transaction.current_dr'
-        db.alter_column(u'ledger_transaction', 'current_dr', self.gf('django.db.models.fields.FloatField')(default=None))
+        db.alter_column(u'ledger_transaction', 'current_dr',
+                        self.gf('django.db.models.fields.FloatField')(default=None))
 
         # Changing field 'Transaction.cr_amount'
         db.alter_column(u'ledger_transaction', 'cr_amount', self.gf('django.db.models.fields.FloatField')(default=None))
 
         # Changing field 'Transaction.current_cr'
-        db.alter_column(u'ledger_transaction', 'current_cr', self.gf('django.db.models.fields.FloatField')(default=None))
+        db.alter_column(u'ledger_transaction', 'current_cr',
+                        self.gf('django.db.models.fields.FloatField')(default=None))
 
     models = {
         u'ledger.account': {
             'Meta': {'object_name': 'Account'},
-            'category': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'accounts'", 'blank': 'True', 'to': u"orm['ledger.Category']"}),
+            'category': ('django.db.models.fields.related.ForeignKey', [],
+                         {'related_name': "'accounts'", 'blank': 'True', 'to': u"orm['ledger.Category']"}),
             'code': ('django.db.models.fields.CharField', [], {'max_length': '10'}),
             'company': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['users.Company']"}),
             'current_balance': ('django.db.models.fields.FloatField', [], {'default': '0'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': u"orm['ledger.Account']"}),
+            'parent': ('django.db.models.fields.related.ForeignKey', [],
+                       {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': u"orm['ledger.Account']"}),
             'tax_rate': ('django.db.models.fields.FloatField', [], {'null': 'True', 'blank': 'True'})
         },
         u'ledger.category': {
             'Meta': {'object_name': 'Category'},
             'company': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['users.Company']"}),
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '254', 'null': 'True', 'blank': 'True'}),
+            'description': (
+            'django.db.models.fields.CharField', [], {'max_length': '254', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             u'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             u'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'parent': ('mptt.fields.TreeForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': u"orm['ledger.Category']"}),
+            'parent': ('mptt.fields.TreeForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True',
+                                                          'to': u"orm['ledger.Category']"}),
             u'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             u'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
         },
@@ -70,7 +71,8 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Party', 'db_table': "'party'"},
             'address': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'company': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['users.Company']"}),
-            'debtor_level': ('django.db.models.fields.IntegerField', [], {'default': '1', 'null': 'True', 'blank': 'True'}),
+            'debtor_level': (
+            'django.db.models.fields.IntegerField', [], {'default': '1', 'null': 'True', 'blank': 'True'}),
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '254', 'null': 'True', 'blank': 'True'}),
             'fax': ('django.db.models.fields.CharField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),

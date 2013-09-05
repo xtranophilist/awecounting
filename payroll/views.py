@@ -1,10 +1,12 @@
-from django.shortcuts import render, redirect, get_object_or_404
+import json
+
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+
 from payroll.models import Entry, EntryRow
 from payroll.serializers import EntrySerializer
-import json
 from acubor.lib import save_model, invalid
 from ledger.models import delete_rows
-from django.http import HttpResponse
 
 
 def entry(request, id=None):

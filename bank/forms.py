@@ -1,5 +1,6 @@
-from acubor.lib import KOModelForm, ExtFileField
 from django import forms
+
+from acubor.lib import KOModelForm, ExtFileField
 from models import BankAccount, ChequeDeposit, BankCashDeposit, ChequePayment
 from ledger.models import Account
 
@@ -65,7 +66,7 @@ class ChequePaymentForm(KOModelForm):
     bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank'), empty_label=None,
                                           widget=forms.Select(attrs={'class': 'select2'}))
     beneficiary = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
-                                        widget=forms.Select(attrs={'class': 'select2'}))
+                                         widget=forms.Select(attrs={'class': 'select2'}))
     date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
     attachment = ExtFileField(
         label='Add an attachment',

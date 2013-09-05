@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
-import datetime
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import models
 
 
 class Migration(SchemaMigration):
-
     def forwards(self, orm):
         # Adding field 'EntryRow.pay_heading'
         db.add_column(u'payroll_entryrow', 'pay_heading',
-                      self.gf('django.db.models.fields.related.ForeignKey')(default=1, related_name='row', to=orm['ledger.Account']),
+                      self.gf('django.db.models.fields.related.ForeignKey')(default=1, related_name='row',
+                                                                            to=orm['ledger.Account']),
                       keep_default=False)
 
 
@@ -22,7 +20,8 @@ class Migration(SchemaMigration):
     models = {
         u'core.tag': {
             'Meta': {'object_name': 'Tag', 'db_table': "'tag'"},
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '254', 'null': 'True', 'blank': 'True'}),
+            'description': (
+            'django.db.models.fields.CharField', [], {'max_length': '254', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
@@ -33,8 +32,11 @@ class Migration(SchemaMigration):
             'current_balance': ('django.db.models.fields.FloatField', [], {'default': '0'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': u"orm['ledger.Account']"}),
-            'categories': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'accounts'", 'blank': 'True', 'to': u"orm['core.Tag']"})
+            'parent': ('django.db.models.fields.related.ForeignKey', [],
+                       {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': u"orm['ledger.Account']"}),
+            'categories': ('django.db.models.fields.related.ManyToManyField', [],
+                           {'symmetrical': 'False', 'related_name': "'accounts'", 'blank': 'True',
+                            'to': u"orm['core.Tag']"})
         },
         u'payroll.entry': {
             'Meta': {'object_name': 'Entry'},
@@ -48,11 +50,13 @@ class Migration(SchemaMigration):
             'amount': ('django.db.models.fields.FloatField', [], {}),
             'created': ('django.db.models.fields.DateTimeField', [], {'auto_now_add': 'True', 'blank': 'True'}),
             'employee': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['ledger.Account']"}),
-            'entry': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'rows'", 'to': u"orm['payroll.Entry']"}),
+            'entry': ('django.db.models.fields.related.ForeignKey', [],
+                      {'related_name': "'rows'", 'to': u"orm['payroll.Entry']"}),
             'hours': ('django.db.models.fields.FloatField', [], {}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'modified': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
-            'pay_heading': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'row'", 'to': u"orm['ledger.Account']"}),
+            'pay_heading': ('django.db.models.fields.related.ForeignKey', [],
+                            {'related_name': "'row'", 'to': u"orm['ledger.Account']"}),
             'remarks': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'sn': ('django.db.models.fields.IntegerField', [], {}),
             'tax': ('django.db.models.fields.FloatField', [], {})

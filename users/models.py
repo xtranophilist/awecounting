@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
-from django.contrib.auth.models import Group
 # from django.contrib.auth.models import PermissionsMixin
 
 
@@ -85,12 +84,14 @@ class User(AbstractBaseUser):
 
     def get_company_settings(self):
         from core.models import CompanySetting
+
         return CompanySetting.objects.get(company=self.company)
 
     objects = UserManager()
 
     class Meta:
         db_table = u'user'
+
 
 def handle_new_user(sender, user, request, **kwargs):
     user.full_name = request.POST.get('full_name')
@@ -108,6 +109,8 @@ def handle_new_user(sender, user, request, **kwargs):
     # ownr.save()
     user.save()
 
+
 from registration.signals import user_registered
+
 user_registered.connect(handle_new_user)
 

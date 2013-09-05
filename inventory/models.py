@@ -1,14 +1,16 @@
-from django.db import models
-from tax.models import TaxScheme
-from ledger.models import Account
-from users.models import Company
 from datetime import date
-from acubor.lib import zero_for_none, none_for_zero
+from datetime import timedelta
+
+from django.db import models
 from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver
 from django.db.models import F
-from datetime import date, timedelta
+
+from tax.models import TaxScheme
+from ledger.models import Account
+from users.models import Company
+from acubor.lib import zero_for_none, none_for_zero
 
 
 class Category(models.Model):

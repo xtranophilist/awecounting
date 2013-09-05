@@ -1,7 +1,5 @@
 import django_filters
 from inventory.models import InventoryAccount, Item
-from acubor import filter_extra
-from ledger.models import Account
 
 
 class InventoryItemFilter(django_filters.FilterSet):

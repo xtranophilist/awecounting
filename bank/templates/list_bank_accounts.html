@@ -36,9 +36,9 @@
                 </td>
                 <td>{{ item.ac_no }}</td>
                 <td>{{ item.branch_name }}</td>
-            <td>
-                <a href="{% url 'update_bank_account' item.id %}">Edit</a>
-            </td>
+                <td>
+                    <a href="{% url 'update_bank_account' item.id %}">Edit</a>
+                </td>
             </tr>
         {% endfor %}
         </tbody>

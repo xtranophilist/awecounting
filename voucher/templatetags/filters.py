@@ -1,10 +1,12 @@
+import json
+from datetime import date, timedelta
+
 from django.core import serializers
 from django.db.models.query import QuerySet
 from django.template import Library
 from django.utils.safestring import mark_safe
 from django.db.models import Model
-import json
-from datetime import date, timedelta
+
 
 register = Library()
 

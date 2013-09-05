@@ -13,4 +13,4 @@ urlpatterns = patterns('',
                        url(r'^journal/$', views.journal_voucher, name='new_journal_voucher'),
                        url(r'^journal/(?P<id>[0-9]+)/$', views.journal_voucher, name='update_journal_voucher'),
                        url(r'^journal/save$', views.save_journal_voucher, name='save_journal_voucher'),
-                       )
+)

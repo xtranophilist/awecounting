@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
-import datetime
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import models
 
 
 class Migration(SchemaMigration):
-
     def forwards(self, orm):
         # Adding field 'CompanySetting.default_dayjournal'
         db.add_column(u'core_companysetting', 'default_dayjournal',
-                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dayjournal.DayJournal'], null=True, blank=True),
+                      self.gf('django.db.models.fields.related.ForeignKey')(to=orm['dayjournal.DayJournal'], null=True,
+                                                                            blank=True),
                       keep_default=False)
 
 
@@ -24,11 +22,14 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'CompanySetting'},
             'company': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['users.Company']"}),
             'default_currency': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['core.Currency']"}),
-            'default_dayjournal': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['dayjournal.DayJournal']", 'null': 'True', 'blank': 'True'}),
+            'default_dayjournal': ('django.db.models.fields.related.ForeignKey', [],
+                                   {'to': u"orm['dayjournal.DayJournal']", 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'invoice_digit_count': ('django.db.models.fields.IntegerField', [], {'default': '4'}),
-            'invoice_prefix': ('django.db.models.fields.CharField', [], {'default': "'INV-'", 'max_length': '5', 'null': 'True', 'blank': 'True'}),
-            'invoice_suffix': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '5', 'null': 'True', 'blank': 'True'})
+            'invoice_prefix': ('django.db.models.fields.CharField', [],
+                               {'default': "'INV-'", 'max_length': '5', 'null': 'True', 'blank': 'True'}),
+            'invoice_suffix': ('django.db.models.fields.CharField', [],
+                               {'default': "''", 'max_length': '5', 'null': 'True', 'blank': 'True'})
         },
         u'core.currency': {
             'Meta': {'object_name': 'Currency', 'db_table': "'currency'"},

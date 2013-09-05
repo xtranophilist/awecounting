@@ -1,16 +1,16 @@
-from django.shortcuts import render, get_object_or_404
+from datetime import date
+import json
+
+from django.shortcuts import render
+from django.http import HttpResponse
+
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, CardSales, \
     CreditExpense, CreditIncome, CreditPurchase, CreditSales, ChequePurchase, LottoDetail, \
     CashEquivalentSales, SummaryInventory, SummaryTransfer, InventoryFuel
 from ledger.models import Account, set_transactions, delete_rows
-
 from inventory.models import InventoryAccount
 from inventory.models import set_transactions as set_inventory_transactions
-
-from datetime import date
 from dayjournal.serializers import DayJournalSerializer
-from django.http import HttpResponse
-import json
 from acubor.lib import invalid, save_model, all_empty, add
 
 

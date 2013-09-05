@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-import datetime
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import models
 
 
 class Migration(SchemaMigration):
-
     def forwards(self, orm):
         # Deleting model 'InventoryAccount'
         db.delete_table(u'ledger_inventoryaccount')
@@ -31,18 +28,23 @@ class Migration(SchemaMigration):
             'current_balance': ('django.db.models.fields.FloatField', [], {'default': '0'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
-            'parent': ('django.db.models.fields.related.ForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': u"orm['ledger.Account']"})
+            'parent': ('django.db.models.fields.related.ForeignKey', [],
+                       {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': u"orm['ledger.Account']"})
         },
         u'ledger.tag': {
             'Meta': {'object_name': 'Tag'},
-            'accounts': ('django.db.models.fields.related.ManyToManyField', [], {'symmetrical': 'False', 'related_name': "'categories'", 'blank': 'True', 'to': u"orm['ledger.Account']"}),
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '254', 'null': 'True', 'blank': 'True'}),
+            'accounts': ('django.db.models.fields.related.ManyToManyField', [],
+                         {'symmetrical': 'False', 'related_name': "'categories'", 'blank': 'True',
+                          'to': u"orm['ledger.Account']"}),
+            'description': (
+            'django.db.models.fields.CharField', [], {'max_length': '254', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'})
         },
         u'ledger.transaction': {
             'Meta': {'object_name': 'Transaction'},
-            'account': ('django.db.models.fields.related.ForeignKey', [], {'related_name': "'transactions'", 'to': u"orm['ledger.Account']"}),
+            'account': ('django.db.models.fields.related.ForeignKey', [],
+                        {'related_name': "'transactions'", 'to': u"orm['ledger.Account']"}),
             'amount': ('django.db.models.fields.FloatField', [], {}),
             'current_balance': ('django.db.models.fields.FloatField', [], {}),
             'date': ('django.db.models.fields.DateField', [], {}),

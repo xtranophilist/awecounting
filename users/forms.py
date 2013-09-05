@@ -1,13 +1,12 @@
 from django import forms
 from registration.forms import RegistrationForm
-from registration.models import RegistrationProfile
 from django.utils.translation import ugettext_lazy as _
 from django.contrib.auth import get_user_model
 # from registration_email.forms import EmailRegistrationForm
 
 
 attrs_dict = {
-# 'class': 'required'
+    # 'class': 'required'
 }
 
 
@@ -30,7 +29,8 @@ class UserRegistrationForm(RegistrationForm):
             raise forms.ValidationError(_("A user with that username already exists."))
         else:
             return self.cleaned_data['username']
-    #
+
+        #
     def clean(self):
         """
         Verifiy that the values entered into the two password fields

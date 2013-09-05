@@ -1,4 +1,4 @@
-{%  extends "dashboard.html" %}
+{% extends "dashboard.html" %}
 
 {% block title %}Journal Voucher{% endblock %}
 
@@ -32,7 +32,8 @@
 
         <div class="pull-right">
             Date:
-            <input data-date-format="yyyy-mm-dd" type="text" name="date" data-bind="value: $root.date" class="date-picker"/>
+            <input data-date-format="yyyy-mm-dd" type="text" name="date" data-bind="value: $root.date"
+                   class="date-picker"/>
         </div>
 
 
@@ -76,7 +77,7 @@
         </table>
 
         <span>
-            <button class="button" data-bind="click: addRow"><i class="icon-plus-sign" ></i> Add New Row</button>
+            <button class="button" data-bind="click: addRow"><i class="icon-plus-sign"></i> Add New Row</button>
             <button class="button" data-bind="click: save"><i class="icon-save"></i> Save</button>
             <button class="button" data-bind="click: reset">Reset</button>
         </span>

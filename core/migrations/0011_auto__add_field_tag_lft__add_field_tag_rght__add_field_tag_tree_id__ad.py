@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-import datetime
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import models
 
 
 class Migration(SchemaMigration):
-
     def forwards(self, orm):
         # Adding field 'Tag.lft'
         db.add_column('tag', u'lft',
@@ -47,7 +44,8 @@ class Migration(SchemaMigration):
 
 
         # Changing field 'Tag.parent'
-        db.alter_column('tag', 'parent_id', self.gf('django.db.models.fields.related.ForeignKey')(null=True, to=orm['core.Tag']))
+        db.alter_column('tag', 'parent_id',
+                        self.gf('django.db.models.fields.related.ForeignKey')(null=True, to=orm['core.Tag']))
 
     models = {
         u'core.companysetting': {
@@ -56,8 +54,10 @@ class Migration(SchemaMigration):
             'default_currency': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['core.Currency']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'invoice_digit_count': ('django.db.models.fields.IntegerField', [], {'default': '4'}),
-            'invoice_prefix': ('django.db.models.fields.CharField', [], {'default': "'INV-'", 'max_length': '5', 'null': 'True', 'blank': 'True'}),
-            'invoice_suffix': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '5', 'null': 'True', 'blank': 'True'})
+            'invoice_prefix': ('django.db.models.fields.CharField', [],
+                               {'default': "'INV-'", 'max_length': '5', 'null': 'True', 'blank': 'True'}),
+            'invoice_suffix': ('django.db.models.fields.CharField', [],
+                               {'default': "''", 'max_length': '5', 'null': 'True', 'blank': 'True'})
         },
         u'core.currency': {
             'Meta': {'object_name': 'Currency', 'db_table': "'currency'"},
@@ -69,12 +69,14 @@ class Migration(SchemaMigration):
         u'core.tag': {
             'Meta': {'object_name': 'Tag', 'db_table': "'tag'"},
             'company': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['users.Company']"}),
-            'description': ('django.db.models.fields.CharField', [], {'max_length': '254', 'null': 'True', 'blank': 'True'}),
+            'description': (
+            'django.db.models.fields.CharField', [], {'max_length': '254', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             u'level': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             u'lft': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '50'}),
-            'parent': ('mptt.fields.TreeForeignKey', [], {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': u"orm['core.Tag']"}),
+            'parent': ('mptt.fields.TreeForeignKey', [],
+                       {'blank': 'True', 'related_name': "'children'", 'null': 'True', 'to': u"orm['core.Tag']"}),
             u'rght': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'}),
             u'tree_id': ('django.db.models.fields.PositiveIntegerField', [], {'db_index': 'True'})
         },

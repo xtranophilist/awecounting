@@ -1,17 +1,16 @@
 import json
+from datetime import date
 
 from django.shortcuts import render, redirect, get_object_or_404
-from datetime import date
+from django.http import HttpResponse
 
 from forms import InvoiceForm, PurchaseVoucherForm
 from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, PurchaseParticular, JournalVoucher, \
     JournalVoucherRow
 from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, \
     JournalVoucherSerializer
-from django.http import HttpResponse
-import json
 from acubor.lib import invalid, save_model
-from ledger.models import delete_rows, Party
+from ledger.models import delete_rows
 from voucher.filters import InvoiceFilter, PurchaseVoucherFilter
 
 
@@ -176,7 +175,6 @@ def save_journal_voucher(request):
         values = {'sn': index + 1, 'dr_account_id': row.get('dr_account_id'), 'dr_amount': row.get('dr_amount'),
                   'cr_account_id': row.get('cr_account_id'), 'cr_amount': row.get('cr_amount'),
                   'journal_voucher': voucher}
-        from django.db import transaction, IntegrityError
 
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:

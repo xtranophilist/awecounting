@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-import datetime
 from south.db import db
 from south.v2 import SchemaMigration
-from django.db import models
 
 
 class Migration(SchemaMigration):
-
     def forwards(self, orm):
         # Adding field 'Party.company'
         db.add_column('party', 'company',
@@ -26,8 +23,10 @@ class Migration(SchemaMigration):
             'default_currency': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['core.Currency']"}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'invoice_digit_count': ('django.db.models.fields.IntegerField', [], {'default': '4'}),
-            'invoice_prefix': ('django.db.models.fields.CharField', [], {'default': "'INV-'", 'max_length': '5', 'null': 'True', 'blank': 'True'}),
-            'invoice_suffix': ('django.db.models.fields.CharField', [], {'default': "''", 'max_length': '5', 'null': 'True', 'blank': 'True'})
+            'invoice_prefix': ('django.db.models.fields.CharField', [],
+                               {'default': "'INV-'", 'max_length': '5', 'null': 'True', 'blank': 'True'}),
+            'invoice_suffix': ('django.db.models.fields.CharField', [],
+                               {'default': "''", 'max_length': '5', 'null': 'True', 'blank': 'True'})
         },
         u'core.currency': {
             'Meta': {'object_name': 'Currency', 'db_table': "'currency'"},

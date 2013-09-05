@@ -1,12 +1,14 @@
-from acubor.lib import KOModelForm, ExtFileField
 from django import forms
+
+from acubor.lib import KOModelForm, ExtFileField
 from core.models import Currency
-from ledger.models import Party, Account
+from ledger.models import Party
 from voucher.models import Invoice, PurchaseVoucher
 
 
 class InvoiceForm(KOModelForm):
-    party = forms.ModelChoiceField(Party.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'select2'}))
+    party = forms.ModelChoiceField(Party.objects.all(), empty_label=None,
+                                   widget=forms.Select(attrs={'class': 'select2'}))
     currency = forms.ModelChoiceField(Currency.objects.all(), empty_label=None,
                                       widget=forms.Select(attrs={'class': 'select2'}))
 
@@ -21,7 +23,8 @@ class InvoiceForm(KOModelForm):
 
 
 class PurchaseVoucherForm(KOModelForm):
-    party = forms.ModelChoiceField(Party.objects.all(), empty_label=None, widget=forms.Select(attrs={'class': 'select2'}))
+    party = forms.ModelChoiceField(Party.objects.all(), empty_label=None,
+                                   widget=forms.Select(attrs={'class': 'select2'}))
     currency = forms.ModelChoiceField(Currency.objects.all(), empty_label=None,
                                       widget=forms.Select(attrs={'class': 'select2'}))
     attachment = ExtFileField(

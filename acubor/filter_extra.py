@@ -1,7 +1,8 @@
-from django import forms
-from django_filters import Filter
 import datetime
 import operator
+
+from django import forms
+from django_filters import Filter
 from django.db.models import Q
 from django_filters import CharFilter
 
