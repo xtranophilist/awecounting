@@ -17,7 +17,7 @@ class DayJournal(models.Model):
         return '/day/' + str(self.date)
 
     def __str__(self):
-        return str(self.date)
+        return self.company.name + '[' + str(self.date) + ']'
 
     class Meta:
         db_table = 'day_journal'

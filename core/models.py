@@ -1,5 +1,6 @@
 from django.db import models
 from users.models import Company
+from dayjournal.models import DayJournal
 
 
 class Currency(models.Model):
@@ -21,6 +22,7 @@ class CompanySetting(models.Model):
     invoice_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
     invoice_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in unique Invoice #')
     default_currency = models.ForeignKey(Currency)
+    default_dayjournal = models.ForeignKey(DayJournal, null=True, blank=True)
 
     def __unicode__(self):
         return self.company.name

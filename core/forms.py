@@ -7,6 +7,6 @@ class CompanySettingsForm(forms.ModelForm):
 
     class Meta:
         model = CompanySetting
-        exclude = ['company']
+        exclude = ['company', 'default_dayjournal']
 
 
