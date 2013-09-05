@@ -1,8 +1,7 @@
 function PayrollEntryModel(data){
     var self = this;
 
-    for (var k in data)
-        self[k]=data[k];
+
 
     $.ajax({
         url: '/ledger/accounts/json',
@@ -72,6 +71,8 @@ function PayrollEntryModel(data){
     }
 
     self.payroll_entry = new TableViewModel(key_to_options('payroll_entry'), PayrollEntryRow);
+
+    self.payroll_entry.entry_no = ko.observable(data.entry_no);
 
 }
 
