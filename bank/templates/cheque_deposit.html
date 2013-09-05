@@ -92,11 +92,14 @@
                         <span class="wid-pad pull-left" data-bind="text:  $index()+1"> </span>
                     </td>
                     <td data-bind="editableText: cheque_number"></td>
-                    <td class="with_ip"><input type="text" data-bind="value: cheque_date" class="date-picker" data-date-format="yyyy-mm-dd"/></td>
+                    <td class="with_ip"><input type="text" data-bind="value: cheque_date" class="date-picker"
+                                               data-date-format="yyyy-mm-dd"/></td>
                     <td data-bind="editableText: drawee_bank"></td>
                     <td data-bind="editableText: drawee_bank_address"></td>
                     <td data-bind="editableText: amount, numeric: true"></td>
-                    <td><button class="close"  data-bind="click: $parent.removeRow"><i class="icon-trash"></i></button></td>
+                    <td>
+                        <button class="close" data-bind="click: $parent.removeRow"><i class="icon-trash"></i></button>
+                    </td>
                 </tr>
                 <!-- /ko -->
                 <tr>
@@ -136,6 +139,9 @@
         <br/>
 
         <button type="submit" class="btn">Save</button>
+        {% if scenario = 'Update' %}
+            <a class="btn" href="{% url 'delete_cheque_deposit' form.instance.id %}">Delete!</a>
+        {% endif %}
 
     </form>
 

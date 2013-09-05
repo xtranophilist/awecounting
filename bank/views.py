@@ -16,6 +16,30 @@ def list_bank_accounts(request):
     return render(request, 'list_bank_accounts.html', {'items': items})
 
 
+def delete_bank_account(request, id):
+    object = get_object_or_404(BankAccount, id=id, company=request.user.company)
+    object.delete()
+    return redirect('/bank/accounts/')
+
+
+def delete_cheque_deposit(request, id):
+    object = get_object_or_404(ChequeDeposit, id=id, company=request.user.company)
+    object.delete()
+    return redirect('/bank/cheque-deposits/')
+
+
+def delete_cash_deposit(request, id):
+    object = get_object_or_404(BankCashDeposit, id=id, company=request.user.company)
+    object.delete()
+    return redirect('/bank/cash-deposits/')
+
+
+def delete_cheque_payment(request, id):
+    object = get_object_or_404(ChequePayment, id=id, company=request.user.company)
+    object.delete()
+    return redirect('/bank/cheque-payments/')
+
+
 def list_cheque_deposits(request):
     items = ChequeDeposit.objects.filter(company=request.user.company)
     filtered_items = ChequeDepositFilter(request.GET, queryset=items, company=request.user.company)

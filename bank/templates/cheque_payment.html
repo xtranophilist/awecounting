@@ -86,6 +86,9 @@
         <br/>
 
         <button type="submit" class="btn">Save</button>
+        {% if scenario = 'Update' %}
+            <a class="btn" href="{% url 'delete_cheque_payment' form.instance.id %}">Delete!</a>
+        {% endif %}
 
     </form>
 

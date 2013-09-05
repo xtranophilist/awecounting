@@ -21,6 +21,9 @@
         <div class="row">
             <div class="span12">
                 <input type="submit" value="Submit" class="btn"/>
+                {% if scenario = 'Update' %}
+                    <a class="btn" href="{% url 'delete_bank_account' form.instance.id %}">Delete!</a>
+                {% endif %}
             </div>
         </div>
     </form>
