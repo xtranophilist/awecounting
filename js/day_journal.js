@@ -100,6 +100,15 @@ function DayJournal(data) {
         return filtered_accounts;
     };
 
+    self.inventory_accounts_by_category = function (category) {
+        var filtered_accounts = [];
+        for (var i in self.inventory_accounts) {
+                if (self.inventory_accounts[i].category == category)
+                    filtered_accounts.push(self.inventory_accounts[i]);
+        }
+        return filtered_accounts;
+    };
+
     self.account_by_id = function (id) {
         var account = $.grep(self.accounts, function (i) {
             return i.id == id;
