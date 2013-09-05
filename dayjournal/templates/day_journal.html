@@ -25,7 +25,7 @@
 
 {% block content %}
 
-    <!-- {{ day_journal }} -->
+    {{ day_journal }}
 
     <div class="page-header position-relative">
         <h1>
@@ -820,8 +820,8 @@
                                 data-bind="options: $root.inventory_accounts, optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: account_id, select2: {placeholderOption: 'first'}, event: {change: $root.inventory_account_changed}"></select>
                     </td>
                     <td data-bind="text: opening()"></td>
-                    <td data-bind="editableText: inward, numeric: true"></td>
-                    <td data-bind="editableText: outward, numeric: true"></td>
+                    <td data-bind="editableText: purchase, numeric: true"></td>
+                    <td data-bind="editableText: sales, numeric: true"></td>
                     <td data-bind="text: closing()"></td>
                     <td data-bind="editableText: actual, numeric: true"></td>
                     <td data-bind="text: difference()"></td>
