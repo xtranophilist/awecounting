@@ -22,9 +22,11 @@ def all_day_journals(request):
 def day_journal(request, journal_date=None):
     if not journal_date:
         journal_date = date.today()
-    day_journal, created = DayJournal.objects.get_or_create(date=journal_date, defaults={
-        'company': request.user.company, 'sales_tax': 0, 'cheque_deposit': 0, 'cash_deposit': 0,
-        'cash_withdrawal': 0, 'cash_actual': 0})
+    try:
+        day_journal = DayJournal.objects.get(date=journal_date)
+    except DayJournal.DoesNotExist:
+        day_journal = DayJournal(date=journal_date, company=request.user.company, sales_tax=0, cheque_deposit=0,
+                                 cash_deposit=0, cash_withdrawal=0, cash_actual=0)
     day_journal_data = DayJournalSerializer(day_journal).data
     base_template = 'dashboard.html'
     return render(request, 'day_journal.html', {
