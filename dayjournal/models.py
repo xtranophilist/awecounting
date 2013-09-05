@@ -38,7 +38,6 @@ class CashPurchase(models.Model):
     purchase_ledger = models.ForeignKey(Account)
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_purchase')
-    # transactions = models.ManyToManyField(Transaction)
 
     def get_absolute_url(self):
         return '/day/' + str(self.day_journal.date) + '#cash-purchase'
@@ -49,7 +48,6 @@ class CashReceipt(models.Model):
     received_from = models.ForeignKey(Account)
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_receipt')
-    # transactions = models.ManyToManyField(Transaction)
 
 
 class CashPayment(models.Model):
@@ -57,7 +55,6 @@ class CashPayment(models.Model):
     payment_to = models.ForeignKey(Account)
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_payment')
-    # transactions = models.ManyToManyField(Transaction)
 
     def get_absolute_url(self):
         return '/day/' + str(self.day_journal.date) + '#cash-payment'
@@ -69,7 +66,6 @@ class CreditSales(models.Model):
     customer = models.ForeignKey(Account, related_name='customer')
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='credit_sales')
-    # transactions = models.ManyToManyField(Transaction)
 
 
 class CreditPurchase(models.Model):
@@ -78,7 +74,6 @@ class CreditPurchase(models.Model):
     supplier = models.ForeignKey(Account, related_name='supplier')
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='credit_purchase')
-    # transactions = models.ManyToManyField(Transaction)
 
 
 class CreditExpense(models.Model):
@@ -87,7 +82,6 @@ class CreditExpense(models.Model):
     expense_claimed_by = models.ForeignKey(Account, related_name='expense_claimed_by')
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='credit_expense')
-    # transactions = models.ManyToManyField(Transaction)
 
 
 class CreditIncome(models.Model):
@@ -96,21 +90,6 @@ class CreditIncome(models.Model):
     income_from = models.ForeignKey(Account, related_name='income_from')
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='credit_income')
-    # transactions = models.ManyToManyField(Transaction)
-
-
-# class SummaryCash(models.Model):
-#     actual = models.FloatField()
-#     day_journal = models.ForeignKey(DayJournal, related_name='summary_cash')
-
-
-# class SummaryEquivalent(models.Model):
-#     sn = models.IntegerField()
-#     particular = models.ForeignKey(Account)
-#     inward = models.FloatField()
-#     outward = models.FloatField()
-#     actual = models.FloatField()
-#     day_journal = models.ForeignKey(DayJournal, related_name='summary_equivalent')
 
 
 class SummaryTransfer(models.Model):
@@ -120,58 +99,12 @@ class SummaryTransfer(models.Model):
     cheque = models.FloatField(blank=True, null=True)
     card = models.FloatField(blank=True, null=True)
     day_journal = models.ForeignKey(DayJournal, related_name='summary_transfer')
-    # transactions = models.ManyToManyField(Transaction)
-
-
-# class SummaryBank(models.Model):
-#     sn = models.IntegerField()
-#     bank_account = models.ForeignKey(Account)
-#     cheque_deposit = models.FloatField()
-#     cash_deposit = models.FloatField()
-#     day_journal = models.ForeignKey(DayJournal, related_name='summary_bank')
-# transactions = models.ManyToManyField(Transaction)
-
-
-# class SummarySalesTax(models.Model):
-#     sn = models.IntegerField()
-#     tax_scheme = models.ForeignKey(Account)
-#     amount = models.FloatField()
-#     day_journal = models.ForeignKey(DayJournal, related_name='summary_sales_tax')
-
-
-# class SummaryInventory(models.Model):
-#     sn = models.IntegerField()
-#     particular = models.ForeignKey(Account)
-#     purchase = models.FloatField()
-#     sales = models.FloatField()
-#     actual = models.FloatField()
-#     day_journal = models.ForeignKey(DayJournal, related_name='summary_inventory')
-
-
-# class SummaryLotto(models.Model):
-#     sn = models.IntegerField()
-#     particular = models.ForeignKey(Account)
-#     disp = models.FloatField()
-#     reg = models.FloatField()
-#     day_journal = models.ForeignKey(DayJournal, related_name='summary_lotto')
-#     # transactions = models.ManyToManyField(Transaction)
-
-
-# class SummaryUtility(models.Model):
-#     amount = models.FloatField()
-#     day_journal = models.ForeignKey(DayJournal, related_name='summary_utility')
-
-
-# class LottoDetail(models.Model):
-#     company = models.ForeignKey(Company)
-#     date = models.DateField()
 
 
 class CardSales(models.Model):
     amount = models.FloatField()
     commission_out = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='card_sales')
-    # transactions = models.ManyToManyField(Transaction)
 
     def get_absolute_url(self):
         return '/day/' + str(self.day_journal.date) + '#cash-payment'
@@ -182,7 +115,6 @@ class CashEquivalentSales(models.Model):
     account = models.ForeignKey(Account)
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_equivalent_sales')
-    # transactions = models.ManyToManyField(Transaction)
 
     def get_absolute_url(self):
         return '/day/' + str(self.day_journal.date) + '#cash-payment'
@@ -192,7 +124,6 @@ class ChequePurchase(models.Model):
     amount = models.FloatField()
     commission_in = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cheque_purchase')
-    # transactions = models.ManyToManyField(Transaction)
 
     def get_absolute_url(self):
         return '/day/' + str(self.day_journal.date) + '#cash-payment'
@@ -201,12 +132,10 @@ class ChequePurchase(models.Model):
 class SummaryInventory(models.Model):
     sn = models.IntegerField()
     particular = models.ForeignKey(InventoryAccount)
-    # opening = models.IntegerField()
     purchase = models.IntegerField()
     sales = models.IntegerField()
     actual = models.IntegerField()
     day_journal = models.ForeignKey(DayJournal, related_name='summary_inventory')
-    # transactions = models.ManyToManyField(Transaction)
 
     def get_absolute_url(self):
         return '/day/' + str(self.day_journal.date) + '#summary-inventory'
@@ -215,26 +144,13 @@ class SummaryInventory(models.Model):
 class InventoryFuel(models.Model):
     sn = models.IntegerField()
     particular = models.ForeignKey(InventoryAccount)
-    # opening = models.IntegerField()
     purchase = models.IntegerField()
     sales = models.IntegerField()
     actual = models.IntegerField()
     day_journal = models.ForeignKey(DayJournal, related_name='inventory_fuel')
-    # transactions = models.ManyToManyField(Transaction)
 
     def get_absolute_url(self):
         return '/day/' + str(self.day_journal.date) + '#inventory-fuel'
-
-
-# class LottoDetailRow(models.Model):
-#     sn = models.IntegerField()
-#     rate = models.FloatField()
-#     pack_quantity = models.IntegerField(default=1)
-#     day_open = models.IntegerField()
-#     sold_quantity = models.IntegerField()
-#     actual_quantity = models.IntegerField()
-#     day_journal = models.ForeignKey(DayJournal, related_name='lotto_details')
-#     # transactions = models.ManyToManyField(Transaction)
 
 
 class LottoDetail(models.Model):
