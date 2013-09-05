@@ -25,8 +25,6 @@
 
 {% block content %}
 
-    {{ day_journal }}
-
     <div class="page-header position-relative">
         <h1>
             Day Journal for {{ day_journal.date }}
@@ -889,62 +887,113 @@
     </div>
     <!-- EOF Inventory Tabs -->
 
-    <br>
+    <!-- Summary Tabs -->
+    <div class="tabbable">
+        <ul class="nav nav-tabs" id="summary-tab">
+            <li class="active">
+                <a data-toggle="tab" href="#summary-cash">
+                    Summary Cash
+                </a>
+            </li>
 
-    <div class="row-fluid collapse-group" data-bind="with: summary_sales_tax">
-        <div class="collapsible-head"><h2 data-bind="css: status">Summary: Sales Tax</h2>
-            <span data-bind="text: message()"></span>
-          <span class="collapse-show-on-expand pull-right">
-            <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
-            <button class="btn btn-small" data-bind="click: reset">Reset</button>
-          </span>
-        </div>
+            <li>
+                <a data-toggle="tab" href="#summary-sales-tax">
+                    Summary Sales Tax
+                </a>
+            </li>
 
-        <div class="collapse">
-            <table class="table table-bordered table-striped table-acubor table-sortable">
-                <thead>
-                <tr>
-                    <th class="span2">Register</th>
-                    <th class="span2">Accounts</th>
-                    <th class="span2">Difference</th>
-                </tr>
-                </thead>
+            <li>
+                <a data-toggle="tab" href="#summary-lotto">
+                    Summary Lotto
+                </a>
+            </li>
 
-                <tbody id="summary-sales-tax">
-                <!-- ko foreach: rows -->
-                <tr data-bind="flash: true">
-                    <td data-bind="editableText: register"></td>
-                    <td data-bind="text: accounts($root)"></td>
-                    <td data-bind="text: difference($root)"></td>
-                </tr>
-                <!-- /ko -->
-                </tbody>
-            </table>
+        </ul>
+        <div class="tab-content">
+
+            <div id="summary-cash" class="tab-pane active">
+                <div class="row-fluid" data-bind="with: summary_cash">
+                    <table class="table table-bordered table-striped table-acubor table-sortable">
+                        <thead>
+                        <tr>
+                            <th class="span2">Opening</th>
+                            <th class="span2">Inward</th>
+                            <th class="span2">Outward</th>
+                            <th class="span2">Closing</th>
+                            <th class="span2">Actual</th>
+                            <th class="span2">Difference</th>
+                        </tr>
+                        </thead>
+                        <tbody id="summary-cash">
+                        <tr>
+                            <td data-bind="text: rows()[0].opening($root)"></td>
+                            <td data-bind="text: rows()[0].inward($root)"></td>
+                            <td data-bind="text: rows()[0].outward($root)"></td>
+                            <td data-bind="text: rows()[0].closing($root)"></td>
+                            <td data-bind="editableText: rows()[0].actual"></td>
+                            <td data-bind="text: rows()[0].difference($root)"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div data-bind="css: status()" class="pull-left"><span data-bind="text: message()"></span></div>
+                    <div class="pull-right">
+                        <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="summary-sales-tax" class="tab-pane">
+                <div class="row-fluid" data-bind="with: summary_sales_tax">
+                    <table class="table table-bordered table-striped table-acubor table-sortable">
+                        <thead>
+                        <tr>
+                            <th class="span2">Register</th>
+                            <th class="span2">Accounts</th>
+                            <th class="span2">Difference</th>
+                        </tr>
+                        </thead>
+                        <tbody id="summary-sales-tax">
+                        <!-- ko foreach: rows -->
+                        <tr data-bind="flash: true">
+                            <td data-bind="editableText: register"></td>
+                            <td data-bind="text: accounts($root)"></td>
+                            <td data-bind="text: difference($root)"></td>
+                        </tr>
+                        <!-- /ko -->
+                        </tbody>
+                    </table>
+                    <div data-bind="css: status()" class="pull-left"><span data-bind="text: message()"></span></div>
+                    <div class="pull-right">
+                        <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="summary-lotto" class="tab-pane">
+                <div class="row-fluid">
+                    <table class="table table-bordered table-striped table-acubor table-sortable">
+                        <thead>
+                        <tr>
+                            <th>Disp.</th>
+                            <th>Reg.</th>
+                            <th>Diff</th>
+                        </tr>
+                        </thead>
+                        <tbody data-bind="with: summary_lotto">
+                        <tr>
+                            <td data-bind="text: disp"></td>
+                            <td data-bind="text: reg"></td>
+                            <td data-bind="text: diff()"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
         </div>
     </div>
-    <br>
-    <div class="row-fluid">
-            <table class="table table-bordered table-striped table-acubor table-sortable">
-                <thead>
-                <tr>
-                    <th>Disp.</th>
-                    <th>Reg.</th>
-                    <th>Diff</th>
-                </tr>
-                </thead>
-                <tbody data-bind="with: summary_lotto">
-                <tr>
-                    <td data-bind="text: disp"></td>
-                    <td data-bind="text: reg"></td>
-                    <td data-bind="text: diff()"></td>
-                </tr>
-                </tbody>
-            </table>
-    </div>
-    <br>
-
-
-
+    <!-- EO Summary Tabs -->
 
     {#        <div class="row-fluid collapse-group" data-bind="with: summary_equivalent">#}
     {#            <div class="collapsible-head"><h2 data-bind="css: status">Summary: Cash & Cash Equivalent</h2>#}
@@ -1008,40 +1057,7 @@
     {#            </div>#}
     {#        </div>#}
 
-    <div class="row-fluid collapse-group" data-bind="with: summary_cash">
-        <div class="collapsible-head"><h2 data-bind="css: status">Summary: Cash</h2>
-            <span data-bind="text: message()"></span>
-                    <span class="collapse-show-on-expand pull-right">
-                    <button class="button" data-bind="click: save"><i class="icon-save"></i> Save</button>
-                    </span>
-        </div>
 
-        <div class="collapse">
-            <table class="table table-bordered table-striped table-acubor table-sortable">
-                <thead>
-                <tr>
-                    <th class="span2">Opening</th>
-                    <th class="span2">Inward</th>
-                    <th class="span2">Outward</th>
-                    <th class="span2">Closing</th>
-                    <th class="span2">Actual</th>
-                    <th class="span2">Difference</th>
-                </tr>
-                </thead>
-                <tbody id="summary-cash">
-                <tr>
-                    <td data-bind="text: rows()[0].opening($root)"></td>
-                    <td data-bind="text: rows()[0].inward($root)"></td>
-                    <td data-bind="text: rows()[0].outward($root)"></td>
-                    <td data-bind="text: rows()[0].closing($root)"></td>
-                    <td data-bind="editableText: rows()[0].actual"></td>
-                    <td data-bind="text: rows()[0].difference($root)"></td>
-                </tr>
-
-                </tbody>
-            </table>
-        </div>
-    </div>
 
 
 
