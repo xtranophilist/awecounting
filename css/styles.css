@@ -368,28 +368,31 @@ table .select2-container .select2-choice {
     border: 0;
 }
 
-.hidden{
+.hidden {
     display: none;
 }
 
-.flip-container input{
+.flip-container input {
     width: 9em;
 }
 
-.flip-container button{
+.flip-container button {
     margin-top: -1em;
 }
-#day-journal-selection-button{
+
+#day-journal-selection-button {
     margin-top: -10px;
 }
-a.inline{
+
+a.inline {
     display: inline !important;
 }
-input[type='file']{
+
+input[type='file'] {
     line-height: 1em;
 }
-table .date-picker
-{
+
+table .date-picker {
     margin-bottom: 0px;
     margin-left: 6px;
 }
