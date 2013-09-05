@@ -210,7 +210,22 @@ class SummaryInventory(models.Model):
     # transactions = models.ManyToManyField(Transaction)
 
     def get_absolute_url(self):
-        return '/day/' + str(self.day_journal.date) + '#cash-payment'
+        return '/day/' + str(self.day_journal.date) + '#summary-inventory'
+
+
+class InventoryFuel(models.Model):
+    sn = models.IntegerField()
+    particular = models.ForeignKey(InventoryAccount)
+    # opening = models.IntegerField()
+    purchase = models.IntegerField()
+    sales = models.IntegerField()
+    actual = models.IntegerField()
+    day_journal = models.ForeignKey(DayJournal, related_name='inventory_fuel')
+    # transactions = models.ManyToManyField(Transaction)
+
+    def get_absolute_url(self):
+        return '/day/' + str(self.day_journal.date) + '#inventory-fuel'
+
 
 
 # class LottoDetailRow(models.Model):
