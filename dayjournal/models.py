@@ -28,7 +28,6 @@ class CashSales(models.Model):
     sales_ledger = models.ForeignKey(Account)
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_sales')
-    # transactions = models.ManyToManyField(Transaction)
 
     def get_absolute_url(self):
         return '/day/' + str(self.day_journal.date) + '#cash-sales'

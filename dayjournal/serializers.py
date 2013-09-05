@@ -72,12 +72,6 @@ class CreditIncomeSerializer(serializers.ModelSerializer):
         exclude = ['day_journal', 'income_head', 'income_from']
 
 
-# class SummaryLottoSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = SummaryLotto
-#         exclude = ['day_journal']
-
-
 class SummaryTransferSerializer(serializers.ModelSerializer):
     class Meta:
         model = SummaryTransfer
@@ -133,7 +127,6 @@ class DayJournalSerializer(serializers.ModelSerializer):
     credit_purchase = CreditPurchaseSerializer()
     credit_expense = CreditExpenseSerializer()
     credit_income = CreditIncomeSerializer()
-    # summary_lotto = SummaryLottoSerializer()
     summary_transfer = SummaryTransferSerializer()
     summary_inventory = SummaryInventorySerializer()
     card_sales = CardSalesSerializer()
