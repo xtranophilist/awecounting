@@ -14,7 +14,7 @@ from acubor.lib import invalid, save_model, all_empty, add
 def all_day_journals(request):
     objects = DayJournal.objects.filter(company=request.user.company)
     # filtered_items = ChequeDepositFilter(request.GET, queryset=items, company=request.user.company)
-    return render(request, 'list_cheque_deposits.html', {'objects': objects})
+    return render(request, 'all_day_journals.html', {'objects': objects})
 
 
 def day_journal(request, journal_date=None):

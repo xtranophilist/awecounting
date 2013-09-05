@@ -8,7 +8,9 @@
 {% endblock %}
 
 
-
+{% block head_end %}
+    <script type="text/javascript" src="http://localhost/acubor_static/js/dashboard.js"></script>
+{% endblock %}
 
 {% block content %}
 
@@ -18,11 +20,23 @@
         </h1>
     </div>
 
-    {% for journal in day_journals %}
+    <input type="text" id="day-journal-date" class="date-picker" data-date-format="yyyy-mm-dd"
+           placeholder="Pick a date..."/>
+    <button id="day-journal-selection-button" class="btn btn-mini">Go</button>
 
-        {{ journal }}
 
-    {% endfor %}
+    {% load pagination_tags %}
+    {% autopaginate objects 303 as paginated_objects %}
+
+    <ul>
+        {% for journal in paginated_objects %}
+            <li>
+                <a href="/day/{{ journal.date|date:"Y-m-d" }}">{{ journal.date }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    {% paginate %}
 
 
 {% endblock %}
