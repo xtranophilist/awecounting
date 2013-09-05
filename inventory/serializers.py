@@ -18,10 +18,11 @@ class ItemSerializer(serializers.ModelSerializer):
 class InventoryAccountSerializer(serializers.ModelSerializer):
     opening = serializers.SerializerMethodField('get_last_day_closing')
     rate = serializers.SerializerMethodField('get_rate')
+    category = serializers.Field(source='item.category.name')
 
     class Meta:
         model = InventoryAccount
-        fields = ['id', 'name', 'rate', 'opening']
+        fields = ['id', 'name', 'category', 'rate', 'opening']
 
     def __init__(self, *args, **kwargs):
         day = kwargs.pop('day', None)
