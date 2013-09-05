@@ -103,8 +103,8 @@ function DayJournal(data) {
     self.inventory_accounts_by_category = function (category) {
         var filtered_accounts = [];
         for (var i in self.inventory_accounts) {
-                if (self.inventory_accounts[i].category == category)
-                    filtered_accounts.push(self.inventory_accounts[i]);
+            if (self.inventory_accounts[i].category == category)
+                filtered_accounts.push(self.inventory_accounts[i]);
         }
         return filtered_accounts;
     };
@@ -214,7 +214,7 @@ function DayJournal(data) {
 
     self.credit_expense = new TableViewModel(key_to_options('credit_expense'), CreditRow);
 
-    self.summary_lotto = new TableViewModel(key_to_options('summary_lotto'), SummaryLottoRow);
+//    self.summary_lotto = new TableViewModel(key_to_options('summary_lotto'), SummaryLottoRow);
 
     self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), SummaryTaxRow);
     self.summary_sales_tax.rows()[0].register(self.sales_tax);
@@ -245,6 +245,7 @@ function DayJournal(data) {
 
     self.lotto_detail = new TableViewModel(key_to_options('lotto_detail'), LottoDetailRow);
 
+    self.summary_lotto = new SummaryLotto(self);
 
 }
 
@@ -321,22 +322,22 @@ function LottoDetailRow(row) {
     }
 }
 
-function SummaryLottoRow(row) {
-    var self = this;
-
-    self.particular = ko.observable();
-    self.disp = ko.observable();
-    self.reg = ko.observable();
-
-    self.diff = function () {
-        return rnum(parseFloat(self.disp()) - parseFloat(self.reg()));
-    };
-
-    for (var k in row) {
-        if (row[k] != null)
-            self[k] = ko.observable(row[k]);
-    }
-}
+//function SummaryLottoRow(row) {
+//    var self = this;
+//
+//    self.particular = ko.observable();
+//    self.disp = ko.observable();
+//    self.reg = ko.observable();
+//
+//    self.diff = function () {
+//        return rnum(parseFloat(self.disp()) - parseFloat(self.reg()));
+//    };
+//
+//    for (var k in row) {
+//        if (row[k] != null)
+//            self[k] = ko.observable(row[k]);
+//    }
+//}
 
 function CashRow(row) {
     var self = this;
@@ -601,4 +602,13 @@ function SummaryCashRow(row) {
         if (row[k] != null)
             self[k] = ko.observable(row[k]);
     }
+}
+
+function SummaryLotto(root) {
+    var self = this;
+    self.disp = 10;
+    self.reg = 5;
+    self.diff = function () {
+        return self.disp - self.reg;
+    };
 }
