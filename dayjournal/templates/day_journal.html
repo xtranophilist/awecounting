@@ -869,7 +869,7 @@
                     <td data-bind="text: $index()+1"></td>
                     <td class="with_ip">
                         <select class="span12"
-                                data-bind="options: $root.inventory_accounts, optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: account_id, select2: {placeholderOption: 'first'}, event: {change: $root.inventory_account_changed}"></select>
+                                data-bind="options: $root.inventory_accounts_by_category('Fuel'), optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: account_id, select2: {placeholderOption: 'first'}, event: {change: $root.inventory_account_changed}"></select>
                     </td>
                     <td data-bind="text: opening()"></td>
                     <td data-bind="editableText: purchase, numeric: true"></td>
