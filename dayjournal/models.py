@@ -130,7 +130,7 @@ class SummaryTransfer(models.Model):
 #     cheque_deposit = models.FloatField()
 #     cash_deposit = models.FloatField()
 #     day_journal = models.ForeignKey(DayJournal, related_name='summary_bank')
-    # transactions = models.ManyToManyField(Transaction)
+# transactions = models.ManyToManyField(Transaction)
 
 
 # class SummarySalesTax(models.Model):
@@ -149,13 +149,13 @@ class SummaryTransfer(models.Model):
 #     day_journal = models.ForeignKey(DayJournal, related_name='summary_inventory')
 
 
-class SummaryLotto(models.Model):
-    sn = models.IntegerField()
-    particular = models.ForeignKey(Account)
-    disp = models.FloatField()
-    reg = models.FloatField()
-    day_journal = models.ForeignKey(DayJournal, related_name='summary_lotto')
-    # transactions = models.ManyToManyField(Transaction)
+# class SummaryLotto(models.Model):
+#     sn = models.IntegerField()
+#     particular = models.ForeignKey(Account)
+#     disp = models.FloatField()
+#     reg = models.FloatField()
+#     day_journal = models.ForeignKey(DayJournal, related_name='summary_lotto')
+#     # transactions = models.ManyToManyField(Transaction)
 
 
 # class SummaryUtility(models.Model):
@@ -225,7 +225,6 @@ class InventoryFuel(models.Model):
 
     def get_absolute_url(self):
         return '/day/' + str(self.day_journal.date) + '#inventory-fuel'
-
 
 
 # class LottoDetailRow(models.Model):

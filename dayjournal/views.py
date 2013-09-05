@@ -1,8 +1,8 @@
 from django.shortcuts import render, get_object_or_404
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, CardSales, \
     CreditExpense, CreditIncome, CreditPurchase, CreditSales, ChequePurchase, LottoDetail, \
-    CashEquivalentSales, SummaryInventory, SummaryTransfer, SummaryLotto, InventoryFuel
-from ledger.models import Transaction, Account, set_transactions, delete_rows
+    CashEquivalentSales, SummaryInventory, SummaryTransfer, InventoryFuel
+from ledger.models import Account, set_transactions, delete_rows
 
 from inventory.models import InventoryAccount
 from inventory.models import set_transactions as set_inventory_transactions
@@ -335,25 +335,25 @@ def save_summary_sales_tax(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
-def save_summary_lotto(request):
-    params = json.loads(request.body)
-    dct = {'invalid_attributes': {}, 'saved': {}}
-    model = SummaryLotto
-    day_journal = get_journal(request)
-    for index, row in enumerate(params.get('rows')):
-        invalid_attrs = invalid(row, ['particular', 'disp', 'reg'])
-        if invalid_attrs:
-            dct['invalid_attributes'][index] = invalid_attrs
-            continue
-        values = {'sn': index + 1, 'particular_id': row.get('particular'),
-                  'disp': row.get('disp'),
-                  'reg': row.get('reg'), 'day_journal': day_journal}
-        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-        if not created:
-            submodel = save_model(submodel, values)
-        dct['saved'][index] = submodel.id
-    delete_rows(params.get('deleted_rows'), model)
-    return HttpResponse(json.dumps(dct), mimetype="application/json")
+# def save_summary_lotto(request):
+#     params = json.loads(request.body)
+#     dct = {'invalid_attributes': {}, 'saved': {}}
+#     model = SummaryLotto
+#     day_journal = get_journal(request)
+#     for index, row in enumerate(params.get('rows')):
+#         invalid_attrs = invalid(row, ['particular', 'disp', 'reg'])
+#         if invalid_attrs:
+#             dct['invalid_attributes'][index] = invalid_attrs
+#             continue
+#         values = {'sn': index + 1, 'particular_id': row.get('particular'),
+#                   'disp': row.get('disp'),
+#                   'reg': row.get('reg'), 'day_journal': day_journal}
+#         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+#         if not created:
+#             submodel = save_model(submodel, values)
+#         dct['saved'][index] = submodel.id
+#     delete_rows(params.get('deleted_rows'), model)
+#     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
 def save_summary_transfer(request):
