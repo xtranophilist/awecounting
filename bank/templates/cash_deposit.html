@@ -4,7 +4,9 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li class="active"><a href="{% url "new_cheque_deposit" %}">Bank Cash Deposit</a></li>
+    <li><a href="{% url "list_bank_accounts" %}">Banking</a></li>
+    <span class="divider"><i class="icon-angle-right"></i></span>
+    <li class="active"><a href="{% url "new_cash_deposit" %}">Cash Deposit</a></li>
 {% endblock %}
 
 {% block head_end %}
