@@ -46,6 +46,12 @@ def item_form(request, id=None):
     })
 
 
+def delete_inventory_item(request, id):
+    object = get_object_or_404(Item, id=id, company=request.user.company)
+    object.delete()
+    return redirect('/inventory/items/')
+
+
 def items_as_json(request):
     items = Item.objects.filter(company=request.user.company)
     items_data = ItemSerializer(items).data
