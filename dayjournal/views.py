@@ -415,8 +415,20 @@ def save_summary_inventory(request):
             continue
         values = {'sn': index + 1, 'purchase': row.get('purchase'), 'particular_id': row.get('account_id'),
                   'sales': row.get('sales'), 'actual': row.get('actual'), 'day_journal': day_journal}
+
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        account = InventoryAccount.objects.get(id=row.get('account_id'))
         print row.get('account_id')
+        diff = float(row.get('purchase')) - float(row.get('sales'))
+        if diff < 0:
+            set_inventory_transactions(submodel, day_journal.date,
+                                       ['cr', account, diff],
+            )
+        else:
+            set_inventory_transactions(submodel, day_journal.date,
+                                       ['dr', account, diff],
+            )
+
         if not created:
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
