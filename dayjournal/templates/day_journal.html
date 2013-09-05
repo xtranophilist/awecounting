@@ -923,49 +923,23 @@
         </div>
     </div>
     <br>
-    <div class="row-fluid collapse-group" data-bind="with: summary_lotto">
-        <div class="collapsible-head"><h2 data-bind="css: status">Summary: Lotto/Lottery</h2>
-            <span data-bind="text: message()"></span>
-                        <span class="collapse-show-on-expand pull-right">
-                                <button class="btn btn-small" data-bind="click: addRow">
-                                    <i class="icon-plus-sign"></i> Add New Row
-                                </button>
-                            <button class="btn btn-small" data-bind="click: save">Save</button>
-                            <button class="btn btn-small" data-bind="click: reset">Reset</button>
-                            </span>
-        </div>
-        <div class="collapse">
+    <div class="row-fluid">
             <table class="table table-bordered table-striped table-acubor table-sortable">
                 <thead>
                 <tr>
-                    <th>SN</th>
-                    <th>Particular</th>
                     <th>Disp.</th>
                     <th>Reg.</th>
                     <th>Diff</th>
-                    <th></th>
                 </tr>
                 </thead>
-
-                <tbody id="summary-lotto">
-                <!-- ko foreach: rows -->
-                <tr data-bind="flash: true">
-                    <td data-bind="text: $index()+1">1</td>
-                    <td class="with_ip">
-                        <select class="span12"
-                                data-bind="options: $root.accounts_by_category(['Lotto', 'Lottery'], true), optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: particular, select2: {placeholderOption: 'first'}, event: {change: $root.lotto_changed}"></select>
-                    </td>
-                    <td data-bind="editableText: disp"></td>
-                    <td data-bind="editableText: reg"></td>
+                <tbody data-bind="with: summary_lotto">
+                <tr>
+                    <td data-bind="text: disp"></td>
+                    <td data-bind="text: reg"></td>
                     <td data-bind="text: diff()"></td>
-                    <td>
-                        <button class="close" data-bind="click: $parent.removeRow"><i class="icon-trash"></i></button>
-                    </td>
                 </tr>
-                <!-- /ko -->
                 </tbody>
             </table>
-        </div>
     </div>
     <br>
 
