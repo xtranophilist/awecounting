@@ -34,7 +34,8 @@ class Account(models.Model):
     parent = models.ForeignKey('self', blank=True, null=True, related_name='children')
     category = models.ForeignKey(Category, related_name='accounts', blank=True)
     tax_rate = models.FloatField(blank=True, null=True)
-    opening_balance = models.FloatField(default=0)
+    opening_dr = models.FloatField(default=0)
+    opening_cr = models.FloatField(default=0)
 
     def get_absolute_url(self):
         return '/ledger/' + str(self.id)
@@ -69,10 +70,13 @@ class Account(models.Model):
         return self.current_cr
 
     def get_day_opening(self, before_date=None):
-        if self.name == 'Cash':
-            print self.get_day_opening_dr(before_date)
-            print self.get_day_opening_cr(before_date)
-        return zero_for_none(self.get_day_opening_dr(before_date)) - zero_for_none(self.get_day_opening_cr(before_date))
+        if not before_date:
+            before_date = date.today()
+        transactions = Transaction.objects.filter(account=self, journal_entry__date__lt=before_date).order_by(
+            '-journal_entry__id', '-journal_entry__date')[:1]
+        if len(transactions) > 0:
+            return zero_for_none(transactions[0].current_dr) - zero_for_none(transactions[0].current_dr)
+        return self.opening_dr - self.opening_cr
 
     # day_opening_dr = property(get_day_opening_dr)
     # day_opening_cr = property(get_day_opening_cr)
