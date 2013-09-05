@@ -21,12 +21,6 @@ def all_invoices(request):
     return render(request, 'list_invoice.html', {'objects': filtered_items})
 
 
-def list_journal_vouchers(request):
-    items = JournalVoucher.objects.filter(company=request.user.company)
-    # filtered_items = JournalVoucherFilter(request.GET, queryset=items, company=request.user.company)
-    return render(request, 'list_invoice.html', {'objects': items})
-
-
 def all_purchase_vouchers(request):
     items = PurchaseVoucher.objects.filter(company=request.user.company)
     filtered_items = PurchaseVoucherFilter(request.GET, queryset=items, company=request.user.company)
@@ -155,6 +149,11 @@ def empty_to_None(dict, list_of_attr):
     return dict
 
 
+def list_journal_vouchers(request):
+    objects = JournalVoucher.objects.filter(company=request.user.company)
+    return render(request, 'list_journal_vouchers.html', {'objects': objects})
+
+
 def save_journal_voucher(request):
     params = json.loads(request.body)
     dct = {'rows': {}}
@@ -162,7 +161,8 @@ def save_journal_voucher(request):
     del [params['accounts']]
     del [params['journal_voucher']['_initial_rows']]
 
-    voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'), 'company': request.user.company}
+    voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'),
+                      'company': request.user.company}
     if params.get('id'):
         voucher = JournalVoucher.objects.get(id=params.get('id'))
     else:
