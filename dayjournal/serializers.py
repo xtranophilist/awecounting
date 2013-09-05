@@ -140,6 +140,7 @@ class DayJournalSerializer(serializers.ModelSerializer):
     cash_equivalent_sales = CashEquivalentSalesSerializer()
     cheque_purchase = ChequePurchaseSerializer()
     lotto_detail = LottoDetailSerializer()
+    inventory_fuel = InventoryFuelSerializer()
 
     class Meta:
         model = DayJournal
