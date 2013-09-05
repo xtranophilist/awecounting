@@ -23,7 +23,7 @@ class Category(MPTTModel):
     class Meta:
         db_table = 'ledger_category'
         verbose_name_plural = u'Categories'
-        unique_together = (('company_id', 'name'),)
+        unique_together = (('company', 'name'),)
 
 
 class Account(models.Model):
@@ -39,7 +39,7 @@ class Account(models.Model):
     opening_cr = models.FloatField(default=0)
 
     class Meta:
-        unique_together = (('company_id', 'name'), ('company_id', 'code'),)
+        unique_together = (('company', 'name'), ('company', 'code'),)
 
     def get_absolute_url(self):
         return '/ledger/' + str(self.id)
