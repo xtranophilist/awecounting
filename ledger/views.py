@@ -82,14 +82,14 @@ def list_categories(request):
 def create_category(request):
     category = Category()
     if request.POST:
-        form = CategoryForm(data=request.POST)
+        form = CategoryForm(data=request.POST, company=request.user.company)
         if form.is_valid():
             category = form.save(commit=False)
             category.company = request.user.company
             category.save()
-            return redirect('/categories/')
+            return redirect('/ledger/categories/')
     else:
-        form = CategoryForm(instance=category)
+        form = CategoryForm(instance=category, company=request.user.company)
     if request.is_ajax():
         base_template = 'modal.html'
     else:
@@ -108,7 +108,7 @@ def update_category(request, id):
             category = form.save(commit=False)
             category.company = request.user.company
             category.save()
-            return redirect('/categories/')
+            return redirect('/ledger/categories/')
     else:
         form = CategoryForm(instance=category, company=request.user.company)
     if request.is_ajax():
