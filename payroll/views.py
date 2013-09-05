@@ -17,6 +17,11 @@ def entry(request, id=None):
     return render(request, 'entry.html', {'data': data})
 
 
+def list_payroll_entries(request):
+    objects = Entry.objects.filter(company=request.user.company)
+    return render(request, 'list_all_entries.html', {'objects': objects})
+
+
 def save_entry(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
