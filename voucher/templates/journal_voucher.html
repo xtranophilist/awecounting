@@ -22,13 +22,13 @@
 
 {% block content %}
 
-    {{ data }}
-
     <div data-bind="with: journal_voucher">
         <div><h2 data-bind="css: status()">Journal Voucher</h2>
             <span data-bind="text: message()"></span>
 
         </div>
+
+        Voucher No.: <input type="text" name="voucher_no" data-bind="value: $root.voucher_no"/>
 
         <div class="pull-right">
             Date:

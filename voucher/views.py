@@ -162,7 +162,7 @@ def save_journal_voucher(request):
     del [params['accounts']]
     del [params['journal_voucher']['_initial_rows']]
 
-    voucher_values = {'date': params.get('date'), 'company': request.user.company}
+    voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'), 'company': request.user.company}
     if params.get('id'):
         voucher = JournalVoucher.objects.get(id=params.get('id'))
     else:
@@ -172,7 +172,7 @@ def save_journal_voucher(request):
     model = JournalVoucherRow
     for index, row in enumerate(params.get('journal_voucher').get('rows')):
         # print row.get('dr_account_id')
-        empty_to_None(row, ['dr_amount'], 'cr_amount')
+        empty_to_None(row, ['dr_amount', 'cr_amount'])
         values = {'sn': index + 1, 'dr_account_id': row.get('dr_account_id'), 'dr_amount': row.get('dr_amount'),
                   'cr_account_id': row.get('cr_account_id'), 'cr_amount': row.get('cr_amount'),
                   'journal_voucher': voucher}
