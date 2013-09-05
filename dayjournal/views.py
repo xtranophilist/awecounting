@@ -4,6 +4,9 @@ from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, 
     CashEquivalentSales, SummaryInventory, SummaryTransfer, SummaryLotto
 from ledger.models import Transaction, Account, set_transactions, delete_rows
 
+from inventory.models import InventoryAccount
+from inventory.models import set_transactions as set_inventory_transactions
+
 from datetime import date
 from dayjournal.serializers import DayJournalSerializer
 from django.http import HttpResponse
@@ -406,13 +409,14 @@ def save_summary_inventory(request):
     model = SummaryInventory
     day_journal = get_journal(request)
     for index, row in enumerate(params.get('rows')):
-        invalid_attrs = invalid(row, ['account_id', 'inward', 'outward', 'actual'])
+        invalid_attrs = invalid(row, ['account_id', 'purchase', 'sales', 'actual'])
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
-        values = {'sn': index + 1, 'purchase': row.get('inward'), 'particular_id': row.get('account_id'),
-                  'sales': row.get('outward'), 'actual': row.get('actual'), 'day_journal': day_journal}
+        values = {'sn': index + 1, 'purchase': row.get('purchase'), 'particular_id': row.get('account_id'),
+                  'sales': row.get('sales'), 'actual': row.get('actual'), 'day_journal': day_journal}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        print row.get('account_id')
         if not created:
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
