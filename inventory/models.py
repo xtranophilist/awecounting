@@ -25,6 +25,8 @@ class InventoryAccount(models.Model):
     code = models.CharField(max_length=10)
     name = models.CharField(max_length=100)
     company = models.ForeignKey(Company)
+    current_dr = models.FloatField(null=True, blank=True)
+    current_cr = models.FloatField(null=True, blank=True)
 
     def get_absolute_url(self):
         return '/inventory_account/' + str(self.id)
