@@ -75,7 +75,7 @@ class Account(models.Model):
         transactions = Transaction.objects.filter(account=self, journal_entry__date__lt=before_date).order_by(
             '-journal_entry__id', '-journal_entry__date')[:1]
         if len(transactions) > 0:
-            return zero_for_none(transactions[0].current_dr) - zero_for_none(transactions[0].current_dr)
+            return zero_for_none(transactions[0].current_dr) - zero_for_none(transactions[0].current_cr)
         return self.opening_dr - self.opening_cr
 
     # day_opening_dr = property(get_day_opening_dr)
