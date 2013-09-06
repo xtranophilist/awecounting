@@ -10,8 +10,10 @@ from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, Purchase
 from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, \
     JournalVoucherSerializer
 from acubor.lib import invalid, save_model
-from ledger.models import delete_rows
+from ledger.models import delete_rows, Account, set_transactions
 from voucher.filters import InvoiceFilter, PurchaseVoucherFilter
+from tax.models import TaxScheme
+from inventory.models import Item
 
 
 def all_invoices(request):
@@ -82,13 +84,37 @@ def save_invoice(request):
     #     else:
     #         dct['error_message'] = 'Error in form data!'
     model = InvoiceParticular
+    cash_account = Account.objects.get(name='Cash', company=request.user.company)
+    sales_tax_account = Account.objects.get(name='Sales Tax', company=request.user.company)
     for index, row in enumerate(params.get('particulars').get('rows')):
         if invalid(row, ['item_id', 'unit_price', 'quantity']):
             continue
+        if row.get('discount') == '':
+            row['discount'] = 0
         values = {'sn': index + 1, 'item_id': row.get('item_id'), 'description': row.get('description'),
                   'unit_price': row.get('unit_price'), 'quantity': row.get('quantity'), 'discount': row.get('discount'),
                   'tax_scheme_id': row.get('tax_scheme'), 'invoice': invoice}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        #sales-cr;tax-cr;cash-dr
+        #TODO reduce db query by sending tax rate from client
+        tax_percent = TaxScheme.objects.get(id=row.get('tax_scheme')).percent
+        wo_discount = float(row.get('quantity')) * float(row.get('unit_price'))
+        amt = wo_discount - ((float(row.get('discount')) * wo_discount) / 100)
+        if params.get('tax') == 'inclusive':
+            tax_amount = amt * (tax_percent / (100 + tax_percent))
+            net_amount = amt
+        elif params.get('tax') == 'exclusive':
+            tax_amount = amt * (tax_percent / 100)
+            net_amount = amt - tax_amount
+        elif params.get('tax') == 'no':
+            tax_amount = 0
+            net_amount = amt
+        sales_account = Item.objects.get(id=row.get('item_id')).sales_account
+        set_transactions(submodel, params.get('date'),
+                         ['dr', cash_account, amt],
+                         ['cr', sales_account, net_amount],
+                         ['cr', sales_tax_account, tax_amount],
+        )
         if not created:
             submodel = save_model(submodel, values)
         dct['rows'][index] = submodel.id
