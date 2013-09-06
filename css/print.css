@@ -1,23 +1,22 @@
-.drag_handle, .select2-arrow, .btn, button, .navbar, #sidebar, #breadcrumbs{
-    display:none !important;
+.drag_handle, .select2-arrow, .btn, button, .navbar, #sidebar, #breadcrumbs {
+    display: none !important;
 }
 
-#page-contnet{
+#page-contnet {
     padding: 0;
 }
 
-#main-content{
+#main-content {
     margin-left: 0;
 }
 
-#ace-settings-container{
+#ace-settings-container {
     display: none;
 }
 
-td .select2-container .select2-choice{
+td .select2-container .select2-choice {
     border: none;
 }
-
 
 /*General print styles*/
 
@@ -56,3 +55,11 @@ body, article {
     margin: 2cm;
 }
 
+.no-print {
+    display: none;
+}
+
+.do-print {
+    display: inline-block !important;
+    opacity: 1;
+}
