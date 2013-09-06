@@ -5,7 +5,7 @@ from users.models import Company
 
 class BankAccount(models.Model):
     bank_name = models.CharField(max_length=254)
-    ac_no = models.IntegerField()
+    ac_no = models.CharField(max_length=50)
     branch_name = models.CharField(max_length=254, blank=True, null=True)
     account = models.OneToOneField(Account)
     company = models.ForeignKey(Company)
