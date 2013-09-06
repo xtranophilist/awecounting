@@ -116,7 +116,7 @@ function InvoiceViewModel(data) {
         } else if (self.tax() == 'exclusive') {
             self.particulars.rows().forEach(function (i) {
                 var tax_percent = self.tax_scheme_by_id(i.tax_scheme()).percent;
-                var tax_amount = i.amount() * (tax_percent / (100));
+                var tax_amount = i.amount() * (tax_percent / 100);
                 sum += tax_amount;
             });
         }
