@@ -364,7 +364,11 @@
         </ul>
         <!--.breadcrumb-->
 
-        <a href="javascript:window.print();" class="pull-right"><i class="icon-print"></i> Print</a>
+        <div class="pull-right">
+            {% block controls %}
+                <a href="javascript:window.print();"><i class="icon-print"></i> Print</a>
+            {% endblock %}
+        </div>
 
     </div>
 
