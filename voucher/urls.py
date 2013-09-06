@@ -3,7 +3,7 @@ import views
 
 urlpatterns = patterns('',
                        url(r'^invoices/$', views.all_invoices, name='all_invoices'),
-                       url(r'^invoice/new$', views.invoice, name='new_invoice'),
+                       url(r'^invoice/new/$', views.invoice, name='new_invoice'),
                        url(r'^invoice/(?P<invoice_no>[0-9]+)/$', views.invoice, name='view_invoice'),
                        url(r'^invoice/save/$', views.save_invoice, name='save_invoice'),
                        url(r'^purchases/$', views.all_purchase_vouchers, name='all_purchase_vouchers'),
@@ -12,5 +12,5 @@ urlpatterns = patterns('',
                        url(r'^journals/$', views.list_journal_vouchers, name='list_journal_vouchers'),
                        url(r'^journal/$', views.journal_voucher, name='new_journal_voucher'),
                        url(r'^journal/(?P<id>[0-9]+)/$', views.journal_voucher, name='update_journal_voucher'),
-                       url(r'^journal/save$', views.save_journal_voucher, name='save_journal_voucher'),
+                       url(r'^journal/save/$', views.save_journal_voucher, name='save_journal_voucher'),
 )

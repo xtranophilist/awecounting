@@ -74,7 +74,7 @@
             </div>
             <div class="span3">
                 {{ form.tax.label_tag }}
-                {{ form.tax }}
+                <select data-bind="options: tax_options, optionsText: 'name', optionsValue: 'id', value: tax"></select>
             </div>
             <div class="span3">
                 {{ form.currency.label_tag }}
@@ -103,38 +103,53 @@
                 </tr>
                 </thead>
 
-                <tbody data-bind="foreach: rows" id="particulars-body">
+                <tbody>
+                <!-- ko foreach:rows -->
+                <div id="particulars-body">
+                    <tr>
+                        <td>
+                            <div class="drag_handle"><i class="icon-ellipsis-vertical"></i>
+                            </div>
+                            <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
+                        </td>
+                        <td>
+                            <select class="span12 item-selector"
+                                    data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, optionsCaption: 'Choose an item...', select2: {},  event: {change: $root.itemChanged}"></select>
+                        </td>
+                        <td data-bind="editableText: description">
+                        </td>
+                        <td data-bind="editableText: unit_price, numeric: true">
+                        </td>
+                        <td data-bind="editableText: quantity, numeric: true">
+                        </td>
+                        <td data-bind="editableText: discount, numeric: true">
+                        </td>
+                        <td>
+                            <select class="span12 item-selector"
+                                    data-bind="options: $root.tax_schemes, optionsText: 'descriptor', optionsValue: 'id', value: tax_scheme, select2: {}"></select>
+                        </td>
+                        <td data-bind="text: amount()">
+                        </td>
+                        <td>
+                            <button class="close" data-bind="click: $parent.removeRow">&times;</button>
+                        </td>
+                    </tr>
+                    <!-- /ko -->
+                </div>
                 <tr>
-                    <td>
-                        <div class="drag_handle"><i class="icon-ellipsis-vertical"></i>
-                        </div>
-                        <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
-                    </td>
-                    <td>
-                        <select class="span12 item-selector"
-                                data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, optionsCaption: 'Choose an item...', select2: {},  event: {change: $root.itemChanged}"></select>
-                    </td>
-                    <td data-bind="editableText: description">
-                    </td>
-                    <td data-bind="editableText: unit_price, numeric: true">
-                    </td>
-                    <td data-bind="editableText: quantity, numeric: true">
-                    </td>
-                    <td data-bind="editableText: discount, numeric: true">
-                    </td>
-                    <td>
-                        <select class="span12 item-selector"
-                                data-bind="options: $root.tax_schemes, optionsText: 'descriptor', optionsValue: 'id', value: tax_scheme, select2: {}"></select>
-                    </td>
-                    <td data-bind="text: amount()">
-                    </td>
-                    <td>
-                        <button class="close" data-bind="click: $parent.removeRow">&times;</button>
-                    </td>
+                    <td colspan="7"><b class="pull-right">SUB-TOTAL</b></td>
+                    <td colspan="2" data-bind="text: $parent.sub_total()"></td>
+                </tr>
+                <tr>
+                    <td colspan="7"><b class="pull-right">TAX AMOUNT</b></td>
+                    <td colspan="2" data-bind="text: $parent.tax_amount()"></td>
+                </tr>
+                <tr>
+                    <td colspan="7"><b class="pull-right">GRAND TOTAL</b></td>
+                    <td colspan="2" data-bind="text: $parent.sub_total()"></td>
                 </tr>
                 </tbody>
             </table>
-            <div class="pull-right"><b>Grand Total: </b> <span data-bind="text: $parent.grand_total()"></span></div>
             <button class="btn" data-bind="click: addRow">
                 <i class="icon-plus-sign"></i> Add New Row
             </button>
@@ -149,22 +164,6 @@
             <h3 id="myModalLabel">Edit Introduction</h3>
         </div>
 
-        {#        <div class="modal-body">#}
-        {##}
-        {#            <form id="InfoText" method="POST">#}
-        {##}
-        {#                <input type="hidden" name="InfoText" value="1">#}
-        {##}
-        {#                <table>#}
-        {#                    <tbody><tr><td>Title</td><td><input type="text" name="title" id="title" style="width:300px"><span class="hide help-inline">This is required</span></td></tr>#}
-        {#                    <tr><td>Introduction</td><td><textarea name="contact" style="width:300px;height:100px"></textarea></td></tr>#}
-        {#                    </tbody></table>#}
-        {#            </form>#}
-        {#        </div>#}
-        <div class="modal-footer">
-            <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-            <button class="btn btn-primary" data-dismiss="modal" id="InfoTextSubmit">Save changes</button>
-        </div>
     </div>
 
 {% endblock %}
