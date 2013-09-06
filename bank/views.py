@@ -71,7 +71,7 @@ def bank_account_form(request, id=None):
             item = form.save(commit=False)
             item.company = request.user.company
             item.save()
-            redirect('/bank/accounts/')
+            return redirect('/bank/accounts/')
     else:
         form = BankAccountForm(instance=bank_account)
     if request.is_ajax():
@@ -103,6 +103,7 @@ def cheque_deposit(request, id=None):
         if id or form.is_valid():
             particulars = json.loads(request.POST['particulars'])
             model = ChequeDepositRow
+            print request.POST
             for index, row in enumerate(particulars.get('rows')):
                 if invalid(row, ['amount']):
                     continue
@@ -135,7 +136,7 @@ def cash_deposit(request, id=None):
             if 'attachment' in request.FILES:
                 receipt.attachment = request.FILES['attachment']
             receipt.save()
-            redirect('/bank/cash-deposits/')
+            return redirect('/bank/cash-deposits/')
     else:
         form = BankCashDepositForm(instance=receipt, company=request.user.company)
     return render(request, 'cash_deposit.html', {'form': form, 'scenario': scenario})
@@ -156,7 +157,7 @@ def cheque_payment(request, id=None):
             if 'attachment' in request.FILES:
                 payment.attachment = request.FILES['attachment']
             payment.save()
-            redirect('/bank/cheque-payments/')
+            return redirect('/bank/cheque-payments/')
     else:
         form = ChequePaymentForm(instance=payment, company=request.user.company)
     return render(request, 'cheque_payment.html', {'form': form, 'scenario': scenario})
