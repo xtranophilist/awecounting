@@ -60,9 +60,6 @@ MEDIA_URL = 'http://localhost/acubor_static/media/'
 # Example: "/var/www/example.com/static/"
 STATIC_ROOT = SITE_ROOT + '/static_files/'
 
-# URL prefix for static files.
-# Example: "http://example.com/static/", "http://static.example.com/"
-STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/admin_media/'
 
 # Additional locations of static files
