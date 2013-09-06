@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'debug_toolbar',
     'pagination',
     'django_sorting',
+    'gunicorn',
     # 'sorter',
     'rest_framework',
     'django.contrib.admin',
