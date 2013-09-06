@@ -32,7 +32,7 @@ def item_form(request, id=None):
             item = form.save(commit=False)
             item.company = request.user.company
             item.save()
-            redirect('/inventory/items/')
+            return redirect('/inventory/items/')
     else:
         form = ItemForm(instance=item, company=request.user.company)
     if request.is_ajax():
