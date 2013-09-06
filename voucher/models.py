@@ -63,6 +63,10 @@ class PurchaseParticular(models.Model):
     tax_scheme = models.ForeignKey(TaxScheme, verbose_name=u'Tax Rate', blank=True, null=True)
     purchase_voucher = models.ForeignKey(PurchaseVoucher, related_name='particulars')
 
+
+    def get_absolute_url(self):
+        return '/voucher/purchase/' + str(self.purchase_voucher.id) + '/'
+
     class Meta:
         db_table = 'purchase_particular'
 

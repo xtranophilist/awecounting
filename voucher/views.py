@@ -142,9 +142,11 @@ def purchase_voucher(request, id=None):
                 voucher.attachment = request.FILES['attachment']
             voucher.company = request.user.company
             voucher.save()
+
         if id or form.is_valid():
             particulars = json.loads(request.POST['particulars'])
             model = PurchaseParticular
+            cash_account = Account.objects.get(name='Cash', company=request.user.company)
             for index, row in enumerate(particulars.get('rows')):
                 if invalid(row, ['item_id', 'unit_price', 'quantity']):
                     continue
@@ -152,10 +154,17 @@ def purchase_voucher(request, id=None):
                           'unit_price': row.get('unit_price'), 'quantity': row.get('quantity'),
                           'discount': row.get('discount'), 'purchase_voucher': voucher}
                 submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+                wo_discount = float(row.get('quantity')) * float(row.get('unit_price'))
+                amt = wo_discount - ((float(row.get('discount')) * wo_discount) / 100)
+                purchase_account = Item.objects.get(id=row.get('item_id')).purchase_account
+                set_transactions(submodel, request.POST['date'],
+                                 ['dr', cash_account, amt],
+                                 ['cr', purchase_account, amt],
+                )
                 if not created:
                     submodel = save_model(submodel, values)
             delete_rows(particulars.get('deleted_rows'), model)
-            redirect('/voucher/purchases')
+            return redirect('/voucher/purchases/')
     form = PurchaseVoucherForm(instance=voucher, company=request.user.company)
     purchase_voucher_data = PurchaseVoucherSerializer(voucher).data
     return render(request, 'purchase_voucher.html', {'form': form, 'data': purchase_voucher_data})
@@ -196,7 +205,6 @@ def save_journal_voucher(request):
     dct['id'] = voucher.id
     model = JournalVoucherRow
     for index, row in enumerate(params.get('journal_voucher').get('rows')):
-        # print row.get('dr_account_id')
         empty_to_None(row, ['dr_amount', 'cr_amount'])
         values = {'sn': index + 1, 'dr_account_id': row.get('dr_account_id'), 'dr_amount': row.get('dr_amount'),
                   'cr_account_id': row.get('cr_account_id'), 'cr_amount': row.get('cr_amount'),
