@@ -30,14 +30,8 @@
 
 {% block content %}
 
-    <div class="page-header position-relative">
-        <h1>
-            Day Journal for {{ day_journal.date }}
-        </h1>
-    </div>
-
     <!-- Modal -->
-    <div id="print-preview" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="modal-label"
+    <div id="print-preview" class="modal hide fade do-print" tabindex="-1" role="dialog" aria-labelledby="modal-label"
          aria-hidden="true">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
@@ -50,6 +44,13 @@
             <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
             <a href="javascript:window.print();" class="btn btn-primary">Print</a>
         </div>
+    </div>
+
+    <div class="no-print">
+    <div class="page-header position-relative">
+        <h1>
+            Day Journal for {{ day_journal.date }}
+        </h1>
     </div>
 
     <!-- Cash Tab -->
@@ -1015,5 +1016,7 @@
         </div>
     </div>
     <!-- EO Summary Tabs -->
+    </div>
+
 
 {% endblock %}
