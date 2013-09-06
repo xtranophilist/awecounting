@@ -1,4 +1,4 @@
-from datetime import date, timedelta
+import datetime
 
 from django.db import models
 from mptt.models import MPTTModel, TreeForeignKey
@@ -57,7 +57,7 @@ class Account(models.Model):
 
     def get_day_opening_dr(self, before_date=None):
         if not before_date:
-            before_date = date.today()
+            before_date = datetime.date.today()
         transactions = Transaction.objects.filter(account=self, journal_entry__date__lt=before_date).order_by(
             '-journal_entry__id', '-journal_entry__date')[:1]
         if len(transactions) > 0:
@@ -66,7 +66,7 @@ class Account(models.Model):
 
     def get_day_opening_cr(self, before_date=None):
         if not before_date:
-            before_date = date.today()
+            before_date = datetime.date.today()
         transactions = Transaction.objects.filter(account=self, journal_entry__date__lt=before_date).order_by(
             '-journal_entry__id', '-journal_entry__date')[:1]
         if len(transactions) > 0:
@@ -75,7 +75,7 @@ class Account(models.Model):
 
     def get_day_opening(self, before_date=None):
         if not before_date:
-            before_date = date.today()
+            before_date = datetime.date.today()
         transactions = Transaction.objects.filter(account=self, journal_entry__date__lt=before_date).order_by(
             '-journal_entry__id', '-journal_entry__date')[:1]
         if len(transactions) > 0:
@@ -258,8 +258,8 @@ def alter(account, date, dr_difference, cr_difference):
 
 
 def set_transactions(submodel, date, *args):
-    # [transaction.delete() for transaction in submodel.transactions.all()]
-    # args = [arg for arg in args if arg is not None]
+    if isinstance(date, unicode):
+        date = datetime.datetime.strptime(date, '%Y-%m-%d')
     journal_entry, created = JournalEntry.objects.get_or_create(
         content_type=ContentType.objects.get_for_model(submodel), model_id=submodel.id,
         defaults={
@@ -284,10 +284,10 @@ def set_transactions(submodel, date, *args):
                     zero_for_none(transaction.account.current_cr) + transaction.cr_amount)
                 alter(arg[1], date, 0, float(arg[2]))
             transaction.current_dr = none_for_zero(
-                zero_for_none(transaction.account.get_dr_amount(date + timedelta(days=1)))
+                zero_for_none(transaction.account.get_dr_amount(date + datetime.timedelta(days=1)))
                 + zero_for_none(transaction.dr_amount))
             transaction.current_cr = none_for_zero(
-                zero_for_none(transaction.account.get_cr_amount(date + timedelta(days=1)))
+                zero_for_none(transaction.account.get_cr_amount(date + datetime.timedelta(days=1)))
                 + zero_for_none(transaction.cr_amount))
         else:
             transaction = matches[0]
