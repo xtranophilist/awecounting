@@ -33,6 +33,9 @@ class InvoiceParticular(models.Model):
     tax_scheme = models.ForeignKey(TaxScheme, verbose_name=u'Tax Rate', blank=True, null=True)
     invoice = models.ForeignKey(Invoice, related_name='particulars')
 
+    def get_absolute_url(self):
+        return '/voucher/invoice/' + self.invoice.invoice_no + '/'
+
     class Meta:
         db_table = 'invoice_particular'
 

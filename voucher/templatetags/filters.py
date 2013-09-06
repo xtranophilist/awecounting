@@ -72,7 +72,10 @@ def subtract(value, arg):
 @register.filter
 def url_for_content(value):
     #TODO DB Optimisation
-    obj = value.content_type.get_object_for_this_type(id=value.model_id)
+    try:
+        obj = value.content_type.get_object_for_this_type(id=value.model_id)
+    except:
+        return None
     return obj.get_absolute_url()
 
 
