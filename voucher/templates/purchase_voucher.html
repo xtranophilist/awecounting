@@ -8,10 +8,10 @@
 {% endblock %}
 
 {% block head_end %}
-    <script src="http://localhost/acubor_static/js/vendors/knockout.js"></script>
-    <script src="http://localhost/acubor_static/js/ko_lib.js"></script>
-    <script src="http://localhost/acubor_static/js/base.js"></script>
-    <script src="http://localhost/acubor_static/js/invoice.js"></script>
+    <script src="{{ STATIC_URL }}js/vendors/knockout.js"></script>
+    <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
+    <script src="{{ STATIC_URL }}js/base.js"></script>
+    <script src="{{ STATIC_URL }}js/invoice.js"></script>
     <script>
         $(document).ready(function () {
             {% load filters %}

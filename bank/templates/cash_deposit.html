@@ -10,7 +10,7 @@
 {% endblock %}
 
 {% block head_end %}
-    <script src="http://localhost/acubor_static/js/base.js"></script>
+    <script src="{{ STATIC_URL }}js/base.js"></script>
     <script>
         $(document).ready(function () {
             $('.date-picker').datepicker();

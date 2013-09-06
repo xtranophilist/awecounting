@@ -8,13 +8,13 @@
 {% block title %}Trial Balance{% endblock %}
 
 {% block head_end %}
-    <script src="http://localhost/acubor_static/js/vendors/knockout.js"></script>
-    <script src="http://localhost/acubor_static/js/ko_lib.js"></script>
-    <script src="http://localhost/acubor_static/js/base.js"></script>
-    <script src="http://localhost/acubor_static/js/trial_balance.js"></script>
-    <link href="http://localhost/acubor_static/css/vendors/jquery.treetable.css" rel="stylesheet" type="text/css"/>
-    {#    <link href="http://localhost/acubor_static/css/vendors/jquery.treetable.theme.default.css" rel="stylesheet"#}
-    <script src="http://localhost/acubor_static/js/vendors/jquery.treetable.js"></script>
+    <script src="{{ STATIC_URL }}js/vendors/knockout.js"></script>
+    <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
+    <script src="{{ STATIC_URL }}js/base.js"></script>
+    <script src="{{ STATIC_URL }}js/trial_balance.js"></script>
+    <link href="{{ STATIC_URL }}css/vendors/jquery.treetable.css" rel="stylesheet" type="text/css"/>
+    {#    <link href="{{ STATIC_URL }}css/vendors/jquery.treetable.theme.default.css" rel="stylesheet"#}
+    <script src="{{ STATIC_URL }}js/vendors/jquery.treetable.js"></script>
     <script>
         $(document).ready(function () {
             {% load filters %}
