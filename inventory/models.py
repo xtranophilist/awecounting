@@ -34,6 +34,17 @@ class InventoryAccount(models.Model):
     def get_absolute_url(self):
         return '/inventory_account/' + str(self.id)
 
+    def get_category(self):
+        try:
+            item = self.item
+        except:
+            return None
+        try:
+            category = self.item.category
+        except:
+            return None
+        return category
+
     # def get_day_opening_dr(self, before_date=None):
     #     if not before_date:
     #         before_date = date.today()

@@ -20,7 +20,7 @@ class ItemSerializer(serializers.ModelSerializer):
 class InventoryAccountSerializer(serializers.ModelSerializer):
     opening = serializers.SerializerMethodField('get_last_day_closing')
     rate = serializers.SerializerMethodField('get_rate')
-    category = serializers.Field(source='item.category.name')
+    category = serializers.Field(source='get_category')
 
     class Meta:
         model = InventoryAccount
