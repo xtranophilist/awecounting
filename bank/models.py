@@ -56,6 +56,9 @@ class BankCashDeposit(models.Model):
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)
 
+    def get_absolute_url(self):
+        return '/bank/cash-deposit/' + str(self.id)
+
 
 class ChequePayment(models.Model):
     cheque_number = models.CharField(max_length=50)
