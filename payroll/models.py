@@ -9,6 +9,9 @@ class Entry(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
 
+    def get_absolute_url(self):
+        return '/payroll/' + str(self.id)
+
 
 class EntryRow(models.Model):
     sn = models.IntegerField()
@@ -21,3 +24,6 @@ class EntryRow(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(auto_now=True)
     entry = models.ForeignKey(Entry, related_name='rows')
+
+    def get_absolute_url(self):
+        return self.entry.get_absolute_url()
