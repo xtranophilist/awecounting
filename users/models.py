@@ -93,6 +93,102 @@ class User(AbstractBaseUser):
         db_table = u'user'
 
 
+def create_default(user):
+    from ledger.models import Account, Category
+    company = user.company
+
+    equity = Category(name='Equity', company=company).save()
+    Account(name='Paid in Capital', category=equity, code='1-0001', company=company).save()
+    Account(name='Retained Earnings', category=equity, code='1-0002', company=company).save()
+    Account(name='Profit and Loss Account', category=equity, code='1-0003', company=company).save()
+
+    assets = Category(name='Assets', company=company).save()
+    bank_account = Category(name='Bank Account', parent=assets, company=company).save()
+    Account(name='Bank Account', category=bank_account, code='2-0001', company=company).save()
+    Account(name='Card Account', category=bank_account, code='2-0002', company=company).save()
+    Account(name='Cheque Account', category=bank_account, code='2-0003', company=company).save()
+    cash_account = Category(name='Cash Account', parent=assets, company=company).save()
+    Account(name='Cash Account', category=cash_account, code='2-0004', company=company).save()
+    Account(name='ATM Account', category=bank_account, code='2-0005', company=company).save()
+    cash_equivalent_account = Category(name='Cash Equivalent Account', parent=assets, company=company).save()
+    Account(name='Food Stamps Account', category=cash_equivalent_account, code='2-0006', company=company).save()
+    Account(name='Coupons Account', category=cash_equivalent_account, code='2-0007', company=company).save()
+    Account(name='Merchandise', category=assets, code='2-0008', company=company).save()
+    Category(name='Account Receivables', parent=assets, company=company).save()
+    Category(name='Other Receivables', parent=assets, company=company).save()
+    Category(name='Deferred Assets', parent=assets, company=company).save()
+    Category(name='Fixed Assets', parent=assets, company=company).save()
+    Category(name='Loads and Advances Given', parent=assets, company=company).save()
+    Category(name='Deposits Made', parent=assets, company=company).save()
+
+    liabilities = Category(name='Liabilities', company=company).save()
+    Category(name='Account Payables', parent=liabilities, company=company).save()
+    other_payables = Category(name='Other Payables', parent=liabilities, company=company).save()
+    Account(name='Utility Bills Account', category=other_payables, code='3-0002', company=company).save()
+    Account(name='Utility Bills Account', category=liabilities, code='3-0002', company=company).save()
+    Category(name='Provisions', parent=liabilities, company=company).save()
+    secured_loans = Category(name='Secured Loans', parent=liabilities, company=company).save()
+    Account(name='Bank OD', category=secured_loans, code='3-0005', company=company).save()
+    Account(name='Bank Loans', category=secured_loans, code='3-0006', company=company).save()
+    Category(name='Unsecured Loans', parent=liabilities, company=company).save()
+    Category(name='Deposits Taken', parent=liabilities, company=company).save()
+    Category(name='Loans & Advances Taken', parent=liabilities, company=company).save()
+    duties_and_taxes = Category(name='Duties & Taxes', parent=liabilities, company=company).save()
+    Account(name='Sales Tax', category=duties_and_taxes, code='3-0010', company=company).save()
+    Account(name='Payroll Tax', category=duties_and_taxes, code='3-0011', company=company).save()
+    Account(name='Income Tax', category=duties_and_taxes, code='3-0012', company=company).save()
+
+    income = Category(name='Income', company=company).save()
+    sales = Category(name='Sales', parent=income, company=company).save()
+    Account(name='Fuel Sales', category=sales, code='4-0001', company=company).save()
+    Account(name='Cigarette/Tobacco Sales', category=sales, code='4-0002', company=company).save()
+    Account(name='Soda Sales', category=sales, code='4-0003', company=company).save()
+    Account(name='Water Sales', category=sales, code='4-0004', company=company).save()
+    Account(name='Newspaper Sales', category=sales, code='4-0005', company=company).save()
+    Account(name='Non Tax Sales', category=sales, code='4-0006', company=company).save()
+    Account(name='Telephone PP Card Sales', category=sales, code='4-0007', company=company).save()
+    Account(name='Sales', category=sales, code='4-0008', company=company).save()
+    Account(name='Lotto Sales', category=sales, code='4-0009', company=company).save()
+    Account(name='Lottery Sales', category=sales, code='4-0010', company=company).save()
+    Account(name='Moneygram Sales', category=sales, code='4-0011', company=company).save()
+    Category(name='Direct Income', parent=income, company=company).save()
+    indirect_income = Category(name='Indirect Income', parent=income, company=company).save()
+    Account(name='Commission In', category=indirect_income, code='6-0001', company=company).save()
+
+    expenses = Category(name='Expense', company=company).save()
+    purchase = Category(name='Purchase', parent=expenses, company=company).save()
+    Account(name='Fuel Purchase', category=purchase, code='11-0001', company=company).save()
+    Account(name='Cigarette/Tobacco Purchase', category=purchase, code='11-0002', company=company).save()
+    Account(name='Soda Purchase', category=purchase, code='11-0003', company=company).save()
+    Account(name='Water Purchase', category=purchase, code='11-0004', company=company).save()
+    Account(name='Newspaper Purchase', category=purchase, code='11-0005', company=company).save()
+    Account(name='Non Tax Purchase', category=purchase, code='11-0006', company=company).save()
+    Account(name='Telephone PP Card Purchase', category=purchase, code='11-0007', company=company).save()
+    Account(name='Purchase', category=purchase, code='11-0008', company=company).save()
+    Account(name='Lotto Purchase', category=purchase, code='11-0009', company=company).save()
+    Account(name='Lottery Purchase', category=purchase, code='11-0010', company=company).save()
+    Account(name='Moneygram Purchase', category=purchase, code='11-0011', company=company).save()
+
+
+    Category(name='Direct Expenses', parent=expenses, company=company).save()
+
+    indirect_expenses = Category(name='Indirect Expenses', parent=expenses, company=company).save()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 def handle_new_user(sender, user, request, **kwargs):
     user.full_name = request.POST.get('full_name')
     company = Company()
@@ -109,6 +205,7 @@ def handle_new_user(sender, user, request, **kwargs):
     # ownr.user_set.add(user)
     # ownr.save()
     user.save()
+    create_default(user)
 
 
 from registration.signals import user_registered
