@@ -26,7 +26,7 @@
                     var uri = build_attachment_url($this.data("type"), $this.data('id'));
                     $.post(uri.url, uri.params)
                     .done(function(res) {
-                      if(res.code == 200){
+                      if(res.success){
                         $this.fadeOut();
                       }else{
                         alert("There has been error while processing your request. Please try again!");
@@ -36,7 +36,7 @@
             });
 
             function build_attachment_url(type, id){
-                return {url: "/day/delete_attachment", params: {type: type, id: id}};
+                return {url: "/day/delete_attachment/", params: {type: type, id: id}};
             }
 
             $('.add_file').click(function(){
