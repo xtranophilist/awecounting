@@ -20,18 +20,15 @@
     <form method="post">
         {% csrf_token %}
 
-
         {{ form.as_p }}
 
         <div class="row">
             <div class="span12">
                 <input type="submit" value="Submit" class="btn"/>
+                {% if scenario == 'Update' %}
+                    <a href="{% url 'delete_account' form.instance.id %}" class="btn"/>Delete</a>
+                {% endif %}
             </div>
-
-            {% if scenario == 'Update' %}
-                <a href="{% url 'delete_account' form.instance.id %}" class="btn"/>Delete</a>
-            {% endif %}
-
         </div>
     </form>
 {% endblock %}
