@@ -101,6 +101,7 @@ def handle_new_user(sender, user, request, **kwargs):
     company.type_of_business = request.POST.get('type_of_business')
     company.save()
     user.company = company
+    user.is_active = True
     # TODO: Add to group 'Owner'
     # import pdb
     # pdb.set_trace()
