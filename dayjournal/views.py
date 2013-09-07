@@ -51,8 +51,8 @@ def get_journal(request):
                                                                                                 'cash_deposit': 0,
                                                                                                 'cash_withdrawal': 0,
                                                                                                 'cash_actual': 0})
-    if created:
-        journal.save()
+    # if created:
+    #     journal.save()
     return journal
 
 
@@ -493,7 +493,6 @@ def save_summary_bank(request):
     cash_account = Account.objects.get(name='Cash', company=request.user.company)
     bank_account = Account.objects.get(name='Bank', company=request.user.company)
     invalid_attrs = invalid(params.get('rows')[0], ['deposit', 'withdrawal'])
-    print params.get('rows')
     if invalid_attrs:
         dct['invalid_attributes'][0] = invalid_attrs
     else:
@@ -548,4 +547,14 @@ def save_attachments(request):
         model = OtherAttachment
     elif request.POST['type'] == 'bank':
         model = BankAttachment
+    captions = request.POST.getlist('captions')
+    attachments = request.FILES.getlist('attachments')
+    day_journal, created = DayJournal.objects.get_or_create(date=request.POST['day'],
+                                                            company=request.user.company, defaults={'sales_tax': 0,
+                                                                                                    'cheque_deposit': 0,
+                                                                                                    'cash_deposit': 0,
+                                                                                                    'cash_withdrawal': 0,
+                                                                                                    'cash_actual': 0})
+    for i, attachment in enumerate(attachments):
+        model(attachment=attachment, description=captions[i], day_journal=day_journal).save()
     return HttpResponse(json.dumps({'success': True}), mimetype="application/json")
