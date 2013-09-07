@@ -1,8 +1,13 @@
 from datetime import date
 import json
+
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponse
+from django.middleware.csrf import get_token
+from django.shortcuts import render_to_response
+from django.template import RequestContext
+from ajaxuploader.views import AjaxFileUploader
 
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, CardSales, \
     CreditExpense, CreditIncome, CreditPurchase, CreditSales, ChequePurchase, LottoDetail, \
@@ -12,6 +17,15 @@ from inventory.models import InventoryAccount
 from inventory.models import set_transactions as set_inventory_transactions
 from dayjournal.serializers import DayJournalSerializer
 from acubor.lib import invalid, save_model, all_empty, add
+
+
+def start(request):
+    csrf_token = get_token(request)
+    return render_to_response('import.html',
+                              {'csrf_token': csrf_token}, context_instance=RequestContext(request))
+
+
+import_uploader = AjaxFileUploader()
 
 
 @login_required
