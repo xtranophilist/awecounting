@@ -22,30 +22,6 @@
                 $(this).addClass('hide').removeClass('show');
             });
         });
-        $(function () {
-            var uploader = new qq.FileUploader({
-                action: "{% url 'my_ajax_upload' %}",
-                element: $('#file-uploader')[0],
-                multiple: true,
-                onComplete: function (id, fileName, responseJSON) {
-                    if (responseJSON.success) {
-                        alert("success!");
-                    } else {
-                        alert("upload failed!");
-                    }
-                },
-                onAllComplete: function (uploads) {
-                    // uploads is an array of maps
-                    // the maps look like this: {file: FileObject, response: JSONServerResponse}
-                    alert("All complete!");
-                },
-                params: {
-                    'csrf_token': '{{ csrf_token }}',
-                    'csrf_name': 'csrfmiddlewaretoken',
-                    'csrf_xname': 'X-CSRFToken'
-                }
-            });
-        });
     </script>
 {% endblock %}
 
@@ -55,12 +31,6 @@
 {% endblock %}
 
 {% block content %}
-
-    <div id="file-uploader">
-        <noscript>
-            <p>Please enable JavaScript to use file uploader.</p>
-        </noscript>
-    </div>
 
     <!-- Modal -->
     <div id="print-preview" class="modal hide fade do-print" tabindex="-1" role="dialog" aria-labelledby="modal-label"

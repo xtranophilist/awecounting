@@ -23,7 +23,5 @@ urlpatterns = patterns('',
                            name='save_cash_equivalent_sales'),
                        url(r'^save/cheque_purchase/$', views.save_cheque_purchase, name='save_cheque_purchase'),
                        url(r'^save/lotto_detail/$', views.save_lotto_detail, name='save_lotto_detail'),
-                       url(r'start$', views.start, name="start"),
-                       url(r'ajax-upload$', views.import_uploader, name="my_ajax_upload"),
 )
 
