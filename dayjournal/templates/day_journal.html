@@ -1016,6 +1016,43 @@
         </div>
     </div>
     <!-- EO Summary Tabs -->
+
+    <!-- Attachment Tabs -->
+    <div class="tabbable" id="attachment_tabbable">
+        <ul class="nav nav-tabs" id="attachment-tab">
+            <li class="active">
+                <a data-toggle="tab" href="#sales_attach">Sales Attachments</a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#purchase_attach">Purchase Attachments</a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#bank_attach">Bank Attachments</a>
+            </li>
+            <li>
+                <a data-toggle="tab" href="#other_attach">Other Attachments</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div id="sales_attach" class="tab-pane active">
+                <form>
+                    <div>
+                        <img src="{{ STATIC_URL }}/images/acubor_screen.png" class="thumbnail">
+                    </div>
+                    <label><b>Add File: </b><input type="file" /> </label>
+                    <p><a href="">Add Another File</a></p>
+                    <p><input type="submit" value="Save" class="btn" /></p>
+                </form>
+            </div>
+            <div id="purchase_attach" class="tab-pane">
+            </div>
+            <div id="bank_attach" class="tab-pane">
+            </div>
+            <div id="other_attach" class="tab-pane">
+            </div>
+        </div>
+    </div>
+    <!-- EO Attachment Tabs -->
     </div>
 
 
