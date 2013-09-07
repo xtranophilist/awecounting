@@ -40,29 +40,6 @@
                     <li><a href="#contact">Contact Us</a></li>
                     <li><a href="#contact">Get A Demo</a></li>
                 </ul>
-                {% if user.is_authenticated %}
-                    <ul class="pull-right nav">
-                        <li><a href="/user/{{ user.email }}">{{ user.email }}</a></li>
-                        <li><a href="/user/logout">Logout</a></li>
-                    </ul>
-                {% else %}
-                    <form method="post" action="{% url 'django.contrib.auth.views.login' %}"
-                          class="navbar-form header-login pull-right">
-                        {% csrf_token %}
-                        {% if state %}
-                            {{ state }}
-                        {% endif %}
-                        {% if next %}
-                            <input type="hidden" name="next" value="{{ next }}"/>
-                        {% endif %}
-                        <input type="text" class="span2" name="username" value="{{ username }}" required
-                               placeholder="Email"/>
-                        <input type="password" class="span2" name="password" value="" required placeholder="Password"/>
-
-                        <input type="submit" value="Log In" class="btn"/>
-                        <br/>
-                    </form>
-                {% endif %}
             </div>
             <!--/.nav-collapse -->
         </div>
