@@ -44,7 +44,7 @@
                 var _parent = $(this).parent('p');
                 var clone = _parent.siblings('.attach_file_field:last').clone();
                 clone.find('input').val("");
-                    _parent.before(clone);
+                _parent.before(clone);
             });
 
             $('.attachment-form').submit(function (e) {
@@ -1159,11 +1159,10 @@
             <div id="bank_attach" class="tab-pane">
                 <form class="attachment-form" data-type="bank">
                     {% for attachment in bank_attachments %}
-                        <div class="btn-group">
-                            <a class="btn btn-info" target="_blank"
+                        <div class="span3">
+                            <a target="_blank"
                                href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
-                            <button class="btn btn-danger delete-attachment" data-type="bank"
-                                    data-id="{{ attachment.id }}">
+                            <button class="close delete-attachment" data-type="bank" data-id="{{ attachment.id }}">
                                 <span class="icon-trash"></span>
                             </button>
                         </div>
@@ -1189,11 +1188,10 @@
             <div id="other_attach" class="tab-pane">
                 <form class="attachment-form" data-type="other">
                     {% for attachment in other_attachments %}
-                        <div class="btn-group">
-                            <a class="btn btn-info" target="_blank"
+                        <div class="span3">
+                            <a target="_blank"
                                href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
-                            <button class="btn btn-danger delete-attachment" data-type="other"
-                                    data-id="{{ attachment.id }}">
+                            <button class="close delete-attachment" data-type="other" data-id="{{ attachment.id }}">
                                 <span class="icon-trash"></span>
                             </button>
                         </div>
