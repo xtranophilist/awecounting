@@ -1,6 +1,6 @@
 from datetime import date
 import json
-
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.http import HttpResponse
 
@@ -14,11 +14,13 @@ from dayjournal.serializers import DayJournalSerializer
 from acubor.lib import invalid, save_model, all_empty, add
 
 
+@login_required
 def all_day_journals(request):
     objects = DayJournal.objects.filter(company=request.user.company)
     return render(request, 'all_day_journals.html', {'objects': objects})
 
 
+@login_required
 def day_journal(request, journal_date=None):
     if not journal_date:
         journal_date = date.today()
@@ -35,6 +37,7 @@ def day_journal(request, journal_date=None):
     })
 
 
+@login_required
 def get_journal(request):
     journal, created = DayJournal.objects.get_or_create(date=json.loads(request.body).get('day_journal_date'),
                                                         company=request.user.company, defaults={'sales_tax': 0,
@@ -47,6 +50,7 @@ def get_journal(request):
     return journal
 
 
+@login_required
 def save_cash_sales(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
@@ -80,6 +84,7 @@ def save_cash_sales(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
+@login_required
 def save_cash_purchase(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
@@ -106,6 +111,7 @@ def save_cash_purchase(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
+@login_required
 def save_cash_payment(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
@@ -132,6 +138,7 @@ def save_cash_payment(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
+@login_required
 def save_cash_receipt(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
@@ -158,6 +165,7 @@ def save_cash_receipt(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
+@login_required
 def save_credit_sales(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
@@ -183,6 +191,7 @@ def save_credit_sales(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
+@login_required
 def save_credit_purchase(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
@@ -209,6 +218,7 @@ def save_credit_purchase(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
+@login_required
 def save_credit_income(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
@@ -235,6 +245,7 @@ def save_credit_income(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
+@login_required
 def save_credit_expense(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
@@ -261,6 +272,7 @@ def save_credit_expense(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
+@login_required
 def save_summary_sales_tax(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
@@ -280,6 +292,7 @@ def save_summary_sales_tax(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
+@login_required
 def save_summary_transfer(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
@@ -313,6 +326,7 @@ def save_summary_transfer(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
+@login_required
 def save_summary_inventory(request, fuel=False):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
@@ -349,10 +363,12 @@ def save_summary_inventory(request, fuel=False):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
+@login_required
 def save_inventory_fuel(request):
     return save_summary_inventory(request, fuel=True)
 
 
+@login_required
 def save_lotto_detail(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
@@ -374,6 +390,7 @@ def save_lotto_detail(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
+@login_required
 def save_card_sales(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
@@ -404,6 +421,7 @@ def save_card_sales(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
+@login_required
 def save_cash_equivalent_sales(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
@@ -430,6 +448,7 @@ def save_cash_equivalent_sales(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
+@login_required
 def save_cheque_purchase(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
@@ -459,6 +478,7 @@ def save_cheque_purchase(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
+@login_required
 def save_summary_bank(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}

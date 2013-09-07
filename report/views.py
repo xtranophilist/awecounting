@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from mptt.templatetags.mptt_tags import cache_tree_children
+from django.contrib.auth.decorators import login_required
 
 from ledger.models import Category
 
@@ -29,6 +30,7 @@ def to_dict(model):
     return dicts
 
 
+@login_required
 def trial_balance(request):
     categories = Category.objects.filter(company=request.user.company)
 

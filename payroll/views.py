@@ -2,6 +2,7 @@ import json
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 from payroll.models import Entry, EntryRow
 from payroll.serializers import EntrySerializer
@@ -9,6 +10,7 @@ from acubor.lib import save_model, invalid
 from ledger.models import delete_rows
 
 
+@login_required
 def entry(request, id=None):
     if id:
         entry = get_object_or_404(Entry, id=id, company=request.user.company)
@@ -20,17 +22,20 @@ def entry(request, id=None):
     return render(request, 'entry.html', {'data': data, 'scenario': scenario})
 
 
+@login_required
 def list_payroll_entries(request):
     objects = Entry.objects.filter(company=request.user.company)
     return render(request, 'list_all_entries.html', {'objects': objects})
 
 
+@login_required
 def delete_payroll_entry(request, id):
     object = get_object_or_404(Entry, id=id, company=request.user.company)
     object.delete()
     return redirect('/payroll/entries/')
 
 
+@login_required
 def save_entry(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}

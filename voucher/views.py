@@ -14,20 +14,21 @@ from ledger.models import delete_rows, Account, set_transactions
 from voucher.filters import InvoiceFilter, PurchaseVoucherFilter
 from tax.models import TaxScheme
 from inventory.models import Item
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def all_invoices(request):
     items = Invoice.objects.filter(company=request.user.company)
     filtered_items = InvoiceFilter(request.GET, queryset=items, company=request.user.company)
     return render(request, 'list_invoice.html', {'objects': filtered_items})
 
-
+@login_required
 def all_purchase_vouchers(request):
     items = PurchaseVoucher.objects.filter(company=request.user.company)
     filtered_items = PurchaseVoucherFilter(request.GET, queryset=items, company=request.user.company)
     return render(request, 'all_purchase_vouchers.html', {'objects': filtered_items})
 
-
+@login_required
 def invoice(request, invoice_no=None):
     from core.models import CompanySetting
 
@@ -61,7 +62,7 @@ def invoice(request, invoice_no=None):
     }
     return render(request, 'invoice.html', {'form': form, 'data': invoice_data})
 
-
+@login_required
 def save_invoice(request):
     params = json.loads(request.body)
     dct = {'rows': {}}
@@ -121,7 +122,7 @@ def save_invoice(request):
     delete_rows(params.get('particulars').get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
-
+@login_required
 def purchase_voucher(request, id=None):
     from core.models import CompanySetting
 
@@ -169,7 +170,7 @@ def purchase_voucher(request, id=None):
     purchase_voucher_data = PurchaseVoucherSerializer(voucher).data
     return render(request, 'purchase_voucher.html', {'form': form, 'data': purchase_voucher_data})
 
-
+@login_required
 def journal_voucher(request, id=None):
     if id:
         voucher = get_object_or_404(JournalVoucher, id=id, company=request.user.company)
@@ -182,12 +183,12 @@ def journal_voucher(request, id=None):
 def empty_to_None(dict, list_of_attr):
     return dict
 
-
+@login_required
 def list_journal_vouchers(request):
     objects = JournalVoucher.objects.filter(company=request.user.company)
     return render(request, 'list_journal_vouchers.html', {'objects': objects})
 
-
+@login_required
 def save_journal_voucher(request):
     params = json.loads(request.body)
     dct = {'rows': {}}

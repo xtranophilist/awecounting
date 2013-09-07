@@ -6,25 +6,26 @@ from django.shortcuts import render, get_object_or_404, redirect
 from tax.models import TaxScheme
 from tax.serializers import TaxSchemeSerializer
 from tax.forms import TaxSchemeForm
+from django.contrib.auth.decorators import login_required
 
-
+@login_required
 def list_tax_schemes(request):
     tax_schemes = TaxScheme.objects.filter(company=request.user.company)
     return render(request, 'list_tax_schemes.html', {'objects': tax_schemes})
 
-
+@login_required
 def schemes_as_json(request):
     schemes = TaxScheme.objects.filter(company=request.user.company)
     items_data = TaxSchemeSerializer(schemes).data
     return HttpResponse(json.dumps(items_data), mimetype="application/json")
 
-
+@login_required
 def delete_tax_scheme(request, id):
     object = get_object_or_404(TaxScheme, id=id, company=request.user.company)
     object.delete()
     return redirect('/tax/schemes/')
 
-
+@login_required
 def tax_scheme_form(request, id=None):
     if id:
         object = get_object_or_404(TaxScheme, id=id, company=request.user.company)

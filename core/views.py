@@ -1,8 +1,11 @@
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+
 from core.models import CompanySetting
 from core.forms import CompanySettingsForm
 
 
+@login_required
 def company_settings(request):
     try:
         company_setting = CompanySetting.objects.get(company=request.user.company)

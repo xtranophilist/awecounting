@@ -2,18 +2,21 @@ import json
 
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
 
 from ledger.models import Account, JournalEntry, Category, Party
 from ledger.serializers import AccountSerializer
 from forms import AccountForm, CategoryForm, PartyForm
 
 
+@login_required
 def accounts_as_json(request):
     accounts = Account.objects.filter(company=request.user.company)
     items_data = AccountSerializer(accounts).data
     return HttpResponse(json.dumps(items_data), mimetype="application/json")
 
 
+@login_required
 def accounts_by_day_as_json(request, day):
     accounts = Account.objects.filter(company=request.user.company)
     items_data = AccountSerializer(accounts, day=day).data
@@ -21,6 +24,7 @@ def accounts_by_day_as_json(request, day):
     return HttpResponse(json.dumps(items_data), mimetype="application/json")
 
 
+@login_required
 def account_form(request, id=None):
     if id:
         account = get_object_or_404(Account, id=id, company=request.user.company)
@@ -49,16 +53,19 @@ def account_form(request, id=None):
     })
 
 
+@login_required
 def list_accounts(request):
     objects = Account.objects.filter(company=request.user.company)
     return render(request, 'list_accounts.html', {'accounts': objects})
 
 
+@login_required
 def list_all_parties(request):
     objects = Party.objects.filter(company=request.user.company)
     return render(request, 'list_all_parties.html', {'objects': objects})
 
 
+@login_required
 def view_account(request, id):
     account = get_object_or_404(Account, id=id, company=request.user.company)
     # transactions = account.transactions
@@ -74,11 +81,13 @@ def view_account(request, id):
     })
 
 
+@login_required
 def list_categories(request):
     categories = Category.objects.filter(company=request.user.company)
     return render(request, 'list_categories.html', {'categories': categories})
 
 
+@login_required
 def create_category(request):
     category = Category()
     if request.POST:
@@ -100,6 +109,7 @@ def create_category(request):
     })
 
 
+@login_required
 def update_category(request, id):
     category = get_object_or_404(Category, id=id, company=request.user.company)
     if request.POST:
@@ -121,24 +131,28 @@ def update_category(request, id):
     })
 
 
+@login_required
 def delete_category(request, id):
     category = get_object_or_404(Category, id=id, company=request.user.company)
     category.delete()
     return redirect('/ledger/categories/')
 
 
+@login_required
 def delete_account(request, id):
     object = get_object_or_404(Account, id=id, company=request.user.company)
     object.delete()
     return redirect('/ledger/')
 
 
+@login_required
 def delete_party(request, id):
     object = get_object_or_404(Party, id=id, company=request.user.company)
     object.delete()
     return redirect('/ledger/parties/')
 
 
+@login_required
 def party_form(request, id=None):
     if id:
         scenario = 'Update'

@@ -1,6 +1,6 @@
 from datetime import date
 import json
-
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 
 from bank.models import BankAccount, ChequeDeposit, ChequeDepositRow, BankCashDeposit, ChequePayment
@@ -11,53 +11,62 @@ from bank.serializers import ChequeDepositSerializer
 from bank.filters import ChequeDepositFilter, CashDepositFilter, ChequePaymentFilter
 
 
+@login_required
 def list_bank_accounts(request):
     items = BankAccount.objects.filter(company=request.user.company)
     return render(request, 'list_bank_accounts.html', {'items': items})
 
 
+@login_required
 def delete_bank_account(request, id):
     object = get_object_or_404(BankAccount, id=id, company=request.user.company)
     object.delete()
     return redirect('/bank/accounts/')
 
 
+@login_required
 def delete_cheque_deposit(request, id):
     object = get_object_or_404(ChequeDeposit, id=id, company=request.user.company)
     object.delete()
     return redirect('/bank/cheque-deposits/')
 
 
+@login_required
 def delete_cash_deposit(request, id):
     object = get_object_or_404(BankCashDeposit, id=id, company=request.user.company)
     object.delete()
     return redirect('/bank/cash-deposits/')
 
 
+@login_required
 def delete_cheque_payment(request, id):
     object = get_object_or_404(ChequePayment, id=id, company=request.user.company)
     object.delete()
     return redirect('/bank/cheque-payments/')
 
 
+@login_required
 def list_cheque_deposits(request):
     items = ChequeDeposit.objects.filter(company=request.user.company)
     filtered_items = ChequeDepositFilter(request.GET, queryset=items, company=request.user.company)
     return render(request, 'list_cheque_deposits.html', {'objects': filtered_items})
 
 
+@login_required
 def list_cheque_payments(request):
     items = ChequePayment.objects.filter(company=request.user.company)
     filtered_items = ChequePaymentFilter(request.GET, queryset=items, company=request.user.company)
     return render(request, 'list_cheque_payments.html', {'objects': filtered_items})
 
 
+@login_required
 def list_cash_deposits(request):
     items = BankCashDeposit.objects.filter(company=request.user.company)
     filtered_items = CashDepositFilter(request.GET, queryset=items, company=request.user.company)
     return render(request, 'list_cash_deposits.html', {'objects': filtered_items})
 
 
+@login_required
 def bank_account_form(request, id=None):
     if id:
         bank_account = get_object_or_404(BankAccount, id=id, company=request.user.company)
@@ -85,6 +94,7 @@ def bank_account_form(request, id=None):
     })
 
 
+@login_required
 def cheque_deposit(request, id=None):
     if id:
         receipt = get_object_or_404(ChequeDeposit, id=id, company=request.user.company)
@@ -121,6 +131,7 @@ def cheque_deposit(request, id=None):
     return render(request, 'cheque_deposit.html', {'form': form, 'data': receipt_data, 'scenario': scenario})
 
 
+@login_required
 def cash_deposit(request, id=None):
     if id:
         receipt = get_object_or_404(BankCashDeposit, id=id, company=request.user.company)
@@ -142,6 +153,7 @@ def cash_deposit(request, id=None):
     return render(request, 'cash_deposit.html', {'form': form, 'scenario': scenario})
 
 
+@login_required
 def cheque_payment(request, id=None):
     if id:
         payment = get_object_or_404(ChequePayment, id=id, company=request.user.company)
