@@ -2,12 +2,13 @@ from datetime import date
 import json
 
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 
 from dayjournal.models import DayJournal, CashPayment, CashSales, CashPurchase, CashReceipt, CardSales, \
     CreditExpense, CreditIncome, CreditPurchase, CreditSales, ChequePurchase, LottoDetail, \
-    CashEquivalentSales, SummaryInventory, SummaryTransfer, InventoryFuel
+    CashEquivalentSales, SummaryInventory, SummaryTransfer, InventoryFuel, SalesAttachment, PurchaseAttachment, \
+    BankAttachment, OtherAttachment
 from ledger.models import Account, set_transactions, delete_rows
 from inventory.models import InventoryAccount
 from inventory.models import set_transactions as set_inventory_transactions
@@ -522,3 +523,16 @@ def save_summary_bank(request):
         dct['saved'][1] = 1
     day_journal.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+@login_required
+def delete_attachment(request):
+    if request.POST['type'] == 'sales':
+        get_object_or_404(SalesAttachment, day_journal__company=request.user.company, id=request.POST['id']).delete()
+    elif request.POST['type'] == 'purchase':
+        get_object_or_404(PurchaseAttachment, day_journal__company=request.user.company, id=request.POST['id']).delete()
+    elif request.POST['type'] == 'other':
+        get_object_or_404(OtherAttachment, day_journal__company=request.user.company, id=request.POST['id']).delete()
+    elif request.POST['type'] == 'bank':
+        get_object_or_404(BankAttachment, day_journal__company=request.user.company, id=request.POST['id']).delete()
+    return HttpResponse(json.dumps({'success': True}), mimetype="application/json")
