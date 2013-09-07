@@ -396,4 +396,9 @@ table .date-picker {
     margin-bottom: 0px;
     margin-left: 6px;
 }
-
+.useroff .btn{
+    padding: 2px 8px;
+}
+.useroff .outer-container .container{
+    min-height: 300px;
+}
