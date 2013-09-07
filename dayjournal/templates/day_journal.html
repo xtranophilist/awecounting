@@ -18,6 +18,63 @@
             if (window.location.hash != "") {
                 $('a[href="' + window.location.hash + '"]').click();
             }
+            $('.delete-attachment').click(function(e){
+                e.preventDefault();
+                var $this =  $(this);
+                if(confirm("Are you sure you want to delete this attachment?"))
+                {
+                    var uri = build_attachment_url($this.data("type"), $this.data('id'));
+                    $.post(uri.url, uri.params)
+                    .done(function(res) {
+                      if(res.code == 200){
+                        $this.fadeOut();
+                      }else{
+                        alert("There has been error while processing your request. Please try again!");
+                      }
+                    });
+                }else{ return false; }
+            });
+
+            function build_attachment_url(type, id){
+                return {url: "/day/delete_attachment", params: {type: type, id: id}};
+            }
+
+            $('.add_file').click(function(){
+                var _parent = $(this).parent('p');
+                _parent.prepend(_parent.siblings('.attach_file_field').clone());
+            });
+
+            $('.attachment-form').submit(function(e){
+                e.preventDefault();
+                if ( window.FormData ) {  
+                    var file_ips = $(this).find('input[type="file"]');
+                    var text_ips = $(this).find('.caption');
+                    var formdata = new FormData();
+                    $.each(text_ips, function(){
+                        formdata.append("caption[]", this.value); 
+                    });
+                    $.each(file_ips, function(){
+                        formdata.append("attachment[]", this.files[0]); 
+                    });
+                    formdata.append("type",$(this).data("type"));
+                    $.ajax({  
+                        url: "/day/save_attachments",  
+                        type: "POST",  
+                        data: formdata,  
+                        processData: false,  
+                        contentType: false,  
+                        success: function (res) {  
+                            console.log(res) 
+                        }  
+                    });  
+                    
+                }else{
+                    alert("Your browser is too old. Please upgrade to modern browsers like Chrome or Firefox.")
+                } 
+            });
+
+            
+
             ko.applyBindings(new DayJournal({{ day_journal|jsonify }}));
         });
     </script>
@@ -1035,40 +1092,112 @@
         </ul>
         <div class="tab-content">
             <div id="sales_attach" class="tab-pane active">
-                {% for attachment in sales_attachments %}
-                    <a target="_blank"
-                       href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
-                    <a class="delete-attachment" href="#" data-type="sales" data-id="{{ attachment.id }}">x</a>
+                <form class="attachment-form" data-type="sales">
+                    {% for attachment in sales_attachments %}
+                    <div class="btn-group">
+                        <a class="btn btn-info" target="_blank" href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
+                        <button  class="btn btn-danger delete-attachment" data-type="sales" data-id="{{ attachment.id }}">
+                            <span class="icon-trash"></span>
+                        </button>
+                    </div>
+                    {% endfor %}
+                    <br>
+                    <div class="attach_file_field">
+                        <label>
+                            <b>Add File: </b>
+                            <input type="file" name="files[]" required/>
+                        </label>
+                        <label>
+                            <b>Caption: </b>
+                            <input type="text" name="caption[]" required class="caption">
+                        </label>
+                    </div>
 
-                {% endfor %}
-                <form>
-                    <label><b>Add File: </b><input type="file"/> </label>
-
-                    <p><a href="">Add Another File</a></p>
+                    <p><a href="javascript:" class="add_file">Add Another File</a></p>
 
                     <p><input type="submit" value="Save" class="btn"/></p>
                 </form>
             </div>
             <div id="purchase_attach" class="tab-pane">
-                {% for attachment in purchase_attachments %}
-                    <a target="_blank"
-                       href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
-                    <a class="delete-attachment" href="#" data-type="purchase" data-id="{{ attachment.id }}">x</a>
-                {% endfor %}
+                <form class="attachment-form" data-type="purchase">
+                    {% for attachment in purchase_attachments %}
+                        <div class="btn-group">
+                            <a class="btn btn-info" target="_blank" href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
+                            <button  class="btn btn-danger delete-attachment" data-type="purchase" data-id="{{ attachment.id }}">
+                                <span class="icon-trash"></span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                    <br>
+                    <div class="attach_file_field">
+                        <label>
+                            <b>Add File: </b>
+                            <input type="file" name="files[]" required/>
+                        </label>
+                        <label>
+                            <b>Caption: </b>
+                            <input type="text" name="caption[]" required class="caption">
+                        </label>
+                    </div>
+
+                    <p><a href="javascript:" class="add_file">Add Another File</a></p>
+
+                    <p><input type="submit" value="Save" class="btn"/></p>
+                </form>
             </div>
             <div id="bank_attach" class="tab-pane">
-                {% for attachment in bank_attachments %}
-                    <a target="_blank"
-                       href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
-                    <a class="delete-attachment" href="#" data-type="bank" data-id="{{ attachment.id }}">x</a>
-                {% endfor %}
+                <form class="attachment-form" data-type="bank">
+                    {% for attachment in bank_attachments %}
+                        <div class="btn-group">
+                            <a class="btn btn-info" target="_blank" href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
+                            <button  class="btn btn-danger delete-attachment" data-type="bank" data-id="{{ attachment.id }}">
+                                <span class="icon-trash"></span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                    <br>
+                    <div class="attach_file_field">
+                        <label>
+                            <b>Add File: </b>
+                            <input type="file" name="files[]" required/>
+                        </label>
+                        <label>
+                            <b>Caption: </b>
+                            <input type="text" name="caption[]" required class="caption">
+                        </label>
+                    </div>
+
+                    <p><a href="javascript:" class="add_file">Add Another File</a></p>
+
+                    <p><input type="submit" value="Save" class="btn"/></p>
+                </form>
             </div>
             <div id="other_attach" class="tab-pane">
-                {% for attachment in other_attachments %}
-                    <a target="_blank"
-                       href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
-                    <a class="delete-attachment" href="#" data-type="others" data-id="{{ attachment.id }}">x</a>
-                {% endfor %}
+                <form class="attachment-form" data-type="others">
+                    {% for attachment in other_attachments %}
+                        <div class="btn-group">
+                            <a class="btn btn-info" target="_blank" href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
+                            <button  class="btn btn-danger delete-attachment" data-type="others" data-id="{{ attachment.id }}">
+                                <span class="icon-trash"></span>
+                            </button>
+                        </div>
+                    {% endfor %}
+                    <br>
+                    <div class="attach_file_field">
+                        <label>
+                            <b>Add File: </b>
+                            <input type="file" name="files[]" required/>
+                        </label>
+                        <label>
+                            <b>Caption: </b>
+                            <input type="text" name="caption[]" required class="caption">
+                        </label>
+                    </div>
+
+                    <p><a href="javascript:" class="add_file">Add Another File</a></p>
+
+                    <p><input type="submit" value="Save" class="btn"/></p>
+                </form>
             </div>
         </div>
     </div>
