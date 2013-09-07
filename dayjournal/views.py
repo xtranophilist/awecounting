@@ -536,3 +536,16 @@ def delete_attachment(request):
     elif request.POST['type'] == 'bank':
         get_object_or_404(BankAttachment, day_journal__company=request.user.company, id=request.POST['id']).delete()
     return HttpResponse(json.dumps({'success': True}), mimetype="application/json")
+
+
+@login_required
+def save_attachments(request):
+    if request.POST['type'] == 'sales':
+        model = SalesAttachment
+    elif request.POST['type'] == 'purchase':
+        model = PurchaseAttachment
+    elif request.POST['type'] == 'other':
+        model = OtherAttachment
+    elif request.POST['type'] == 'bank':
+        model = BankAttachment
+    return HttpResponse(json.dumps({'success': True}), mimetype="application/json")
