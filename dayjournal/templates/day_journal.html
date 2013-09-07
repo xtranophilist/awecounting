@@ -48,15 +48,16 @@
                 e.preventDefault();
                 if ( window.FormData ) {  
                     var file_ips = $(this).find('input[type="file"]');
-                    var text_ips = $(this).find('.caption');
+                    var text_ips = $(this).find('.captions');
                     var formdata = new FormData();
                     $.each(text_ips, function(){
-                        formdata.append("caption[]", this.value); 
+                        formdata.append("captions", this.value); 
                     });
                     $.each(file_ips, function(){
-                        formdata.append("attachment[]", this.files[0]); 
+                        formdata.append("attachments", this.files[0]); 
                     });
                     formdata.append("type",$(this).data("type"));
+                    formdata.append("day",$('#attachment_tabbable').data("journal-day"));
                     $.ajax({  
                         url: "/day/save_attachments",  
                         type: "POST",  
@@ -65,6 +66,9 @@
                         contentType: false,  
                         success: function (res) {  
                             console.log(res) 
+                        },
+                        error: function(){
+                            alert("There has been error while processing your request. Please try again!");
                         }  
                     });  
                     
@@ -1075,7 +1079,7 @@
     <!-- EO Summary Tabs -->
 
     <!-- Attachment Tabs -->
-    <div class="tabbable" id="attachment_tabbable">
+    <div class="tabbable" id="attachment_tabbable" data-journal-day="2013-04-21">
         <ul class="nav nav-tabs" id="attachment-tab">
             <li class="active">
                 <a data-toggle="tab" href="#sales_attach">Sales Attachments</a>
@@ -1093,15 +1097,17 @@
         <div class="tab-content">
             <div id="sales_attach" class="tab-pane active">
                 <form class="attachment-form" data-type="sales">
+                    <div class="row-fluid">
                     {% for attachment in sales_attachments %}
-                    <div class="btn-group">
-                        <a class="btn btn-info" target="_blank" href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
-                        <button  class="btn btn-danger delete-attachment" data-type="sales" data-id="{{ attachment.id }}">
+                    <div class="span3">
+                        <a target="_blank" href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
+                        <button  class="close delete-attachment" data-type="sales" data-id="{{ attachment.id }}">
                             <span class="icon-trash"></span>
                         </button>
                     </div>
                     {% endfor %}
-                    <br>
+                    </div>
+                    <hr>
                     <div class="attach_file_field">
                         <label>
                             <b>Add File: </b>
@@ -1112,18 +1118,15 @@
                             <input type="text" name="caption[]" required class="caption">
                         </label>
                     </div>
-
-                    <p><a href="javascript:" class="add_file">Add Another File</a></p>
-
-                    <p><input type="submit" value="Save" class="btn"/></p>
+                    <p><input type="button" class="btn add_file" value="Add Another File" /> <input type="submit" value="Save" class="btn"/></p>
                 </form>
             </div>
             <div id="purchase_attach" class="tab-pane">
                 <form class="attachment-form" data-type="purchase">
                     {% for attachment in purchase_attachments %}
-                        <div class="btn-group">
-                            <a class="btn btn-info" target="_blank" href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
-                            <button  class="btn btn-danger delete-attachment" data-type="purchase" data-id="{{ attachment.id }}">
+                        <div class="span3">
+                            <a target="_blank" href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
+                            <button  class="close delete-attachment" data-type="purchase" data-id="{{ attachment.id }}">
                                 <span class="icon-trash"></span>
                             </button>
                         </div>
@@ -1140,9 +1143,8 @@
                         </label>
                     </div>
 
-                    <p><a href="javascript:" class="add_file">Add Another File</a></p>
+                    <p><input type="button" class="btn add_file" value="Add Another File" /> <input type="submit" value="Save" class="btn"/></p>
 
-                    <p><input type="submit" value="Save" class="btn"/></p>
                 </form>
             </div>
             <div id="bank_attach" class="tab-pane">
@@ -1167,9 +1169,7 @@
                         </label>
                     </div>
 
-                    <p><a href="javascript:" class="add_file">Add Another File</a></p>
-
-                    <p><input type="submit" value="Save" class="btn"/></p>
+                    <p><input type="button" class="btn add_file" value="Add Another File" /> <input type="submit" value="Save" class="btn"/></p>
                 </form>
             </div>
             <div id="other_attach" class="tab-pane">
@@ -1186,17 +1186,15 @@
                     <div class="attach_file_field">
                         <label>
                             <b>Add File: </b>
-                            <input type="file" name="files[]" required/>
+                            <input type="file" name="attachments" required/>
                         </label>
                         <label>
                             <b>Caption: </b>
-                            <input type="text" name="caption[]" required class="caption">
+                            <input type="text" name="captions" required class="captions">
                         </label>
                     </div>
 
-                    <p><a href="javascript:" class="add_file">Add Another File</a></p>
-
-                    <p><input type="submit" value="Save" class="btn"/></p>
+                    <p><input type="button" class="btn add_file" value="Add Another File" /> <input type="submit" value="Save" class="btn"/></p>
                 </form>
             </div>
         </div>
