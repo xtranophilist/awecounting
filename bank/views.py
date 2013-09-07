@@ -9,7 +9,7 @@ from acubor.lib import invalid, save_model
 from ledger.models import delete_rows
 from bank.serializers import ChequeDepositSerializer
 from bank.filters import ChequeDepositFilter, CashDepositFilter, ChequePaymentFilter
-
+from ledger.models import set_transactions, Account
 
 @login_required
 def list_bank_accounts(request):
@@ -113,7 +113,10 @@ def cheque_deposit(request, id=None):
         if id or form.is_valid():
             particulars = json.loads(request.POST['particulars'])
             model = ChequeDepositRow
-            print request.POST
+            bank_account = Account.objects.get(id=request.POST.get('bank_account'))
+            benefactor = Account.objects.get(id=request.POST.get('benefactor'))
+            print bank_account
+            print benefactor
             for index, row in enumerate(particulars.get('rows')):
                 if invalid(row, ['amount']):
                     continue
@@ -122,10 +125,15 @@ def cheque_deposit(request, id=None):
                           'drawee_bank': row.get('drawee_bank'), 'drawee_bank_address': row.get('drawee_bank_address'),
                           'amount': row.get('amount'), 'cheque_deposit': receipt}
                 submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+                bank_account = Account.objects.get(id=request.POST.get('bank_account'))
+                set_transactions(submodel, request.POST.get('date'),
+                                 ['dr', bank_account, row.get('amount')],
+                                 ['cr', benefactor, row.get('amount')],
+                )
                 if not created:
                     submodel = save_model(submodel, values)
             delete_rows(particulars.get('deleted_rows'), model)
-
+            # return redirect('/bank/cheque-deposits/')
     form = ChequeDepositForm(instance=receipt, company=request.user.company)
     receipt_data = ChequeDepositSerializer(receipt).data
     return render(request, 'cheque_deposit.html', {'form': form, 'data': receipt_data, 'scenario': scenario})
