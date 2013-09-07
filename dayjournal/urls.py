@@ -23,5 +23,6 @@ urlpatterns = patterns('',
                            name='save_cash_equivalent_sales'),
                        url(r'^save/cheque_purchase/$', views.save_cheque_purchase, name='save_cheque_purchase'),
                        url(r'^save/lotto_detail/$', views.save_lotto_detail, name='save_lotto_detail'),
+                       url(r'^delete_attachment/$', views.delete_attachment, name='delete_attachment'),
 )
 
