@@ -161,3 +161,27 @@ class LottoDetail(models.Model):
     day_close = models.IntegerField()
     addition = models.IntegerField()
     day_journal = models.ForeignKey(DayJournal, related_name='lotto_detail')
+
+
+class SalesAttachment(models.Model):
+    attachment = models.FileField(upload_to='day_sales_attachments/%Y/%m/%d')
+    description = models.CharField(max_length=254)
+    day_journal = models.ForeignKey(DayJournal, related_name='sales_attachments')
+
+
+class PurchaseAttachment(models.Model):
+    attachment = models.FileField(upload_to='day_purchase_attachments/%Y/%m/%d')
+    description = models.CharField(max_length=254)
+    day_journal = models.ForeignKey(DayJournal, related_name='purchase_attachments')
+
+
+class BankAttachment(models.Model):
+    attachment = models.FileField(upload_to='day_bank_attachments/%Y/%m/%d')
+    description = models.CharField(max_length=254)
+    day_journal = models.ForeignKey(DayJournal, related_name='bank_attachments')
+
+
+class OtherAttachment(models.Model):
+    attachment = models.FileField(upload_to='day_other_attachments/%Y/%m/%d')
+    description = models.CharField(max_length=254)
+    day_journal = models.ForeignKey(DayJournal, related_name='other_attachments')

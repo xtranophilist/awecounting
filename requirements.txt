@@ -1,4 +1,3 @@
-ajaxuploader
 django
 gunicorn
 psycopg2
