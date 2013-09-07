@@ -42,7 +42,9 @@
 
             $('.add_file').click(function () {
                 var _parent = $(this).parent('p');
-                _parent.prepend(_parent.siblings('.attach_file_field').clone());
+                var clone = _parent.siblings('.attach_file_field:last').clone();
+                clone.find('input').val("");
+                    _parent.before(clone);
             });
 
             $('.attachment-form').submit(function (e) {
