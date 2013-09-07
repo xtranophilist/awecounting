@@ -30,6 +30,9 @@ class ChequeDeposit(models.Model):
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)
 
+    def get_absolute_url(self):
+        return '/bank/cheque-deposit/' + str(self.id)
+
 
 class ChequeDepositRow(models.Model):
     sn = models.IntegerField()
@@ -39,6 +42,9 @@ class ChequeDepositRow(models.Model):
     drawee_bank_address = models.CharField(max_length=254, blank=True, null=True)
     amount = models.FloatField()
     cheque_deposit = models.ForeignKey(ChequeDeposit, related_name='rows')
+
+    def get_absolute_url(self):
+        return self.cheque_deposit.get_absolute_url()
 
 
 class BankCashDeposit(models.Model):
@@ -50,6 +56,9 @@ class BankCashDeposit(models.Model):
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)
 
+    def get_absolute_url(self):
+        return '/bank/cash-deposit/' + str(self.id)
+
 
 class ChequePayment(models.Model):
     cheque_number = models.CharField(max_length=50)
@@ -60,3 +69,6 @@ class ChequePayment(models.Model):
     attachment = models.FileField(upload_to='cheque_payments/%Y/%m/%d', blank=True, null=True)
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)
+
+    def get_absolute_url(self):
+        return '/bank/cheque-payment/' + str(self.id)

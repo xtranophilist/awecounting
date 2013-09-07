@@ -12,13 +12,14 @@
     <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
     <script src="{{ STATIC_URL }}js/base.js"></script>
     <script src="{{ STATIC_URL }}js/day_journal.js"></script>
+    <script src="{{ STATIC_URL }}ajaxuploader/js/fileuploader.js"></script>
+    <link href="{{ STATIC_URL }}ajaxuploader/css/fileuploader.css" media="screen" rel="stylesheet" type="text/css"/>
     <script type="text/javascript">
         $(document).ready(function () {
             {% load filters %}
             if(window.location.hash!=""){ $('a[href="' + window.location.hash + '"]').click(); }
             ko.applyBindings(new DayJournal({{ day_journal|jsonify }}));
         });
-
     </script>
 {% endblock %}
 

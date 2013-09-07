@@ -9,6 +9,7 @@ from acubor.lib import invalid, save_model
 from ledger.models import delete_rows
 from bank.serializers import ChequeDepositSerializer
 from bank.filters import ChequeDepositFilter, CashDepositFilter, ChequePaymentFilter
+from ledger.models import set_transactions, Account
 
 
 @login_required
@@ -113,7 +114,8 @@ def cheque_deposit(request, id=None):
         if id or form.is_valid():
             particulars = json.loads(request.POST['particulars'])
             model = ChequeDepositRow
-            print request.POST
+            bank_account = Account.objects.get(id=request.POST.get('bank_account'))
+            benefactor = Account.objects.get(id=request.POST.get('benefactor'))
             for index, row in enumerate(particulars.get('rows')):
                 if invalid(row, ['amount']):
                     continue
@@ -122,10 +124,14 @@ def cheque_deposit(request, id=None):
                           'drawee_bank': row.get('drawee_bank'), 'drawee_bank_address': row.get('drawee_bank_address'),
                           'amount': row.get('amount'), 'cheque_deposit': receipt}
                 submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+                set_transactions(submodel, request.POST.get('date'),
+                                 ['dr', bank_account, row.get('amount')],
+                                 ['cr', benefactor, row.get('amount')],
+                )
                 if not created:
                     submodel = save_model(submodel, values)
             delete_rows(particulars.get('deleted_rows'), model)
-
+            return redirect('/bank/cheque-deposits/')
     form = ChequeDepositForm(instance=receipt, company=request.user.company)
     receipt_data = ChequeDepositSerializer(receipt).data
     return render(request, 'cheque_deposit.html', {'form': form, 'data': receipt_data, 'scenario': scenario})
@@ -141,13 +147,20 @@ def cash_deposit(request, id=None):
         scenario = 'New'
     if request.POST:
         form = BankCashDepositForm(request.POST, request.FILES, instance=receipt, company=request.user.company)
+
         if form.is_valid():
             receipt = form.save(commit=False)
             receipt.company = request.user.company
             if 'attachment' in request.FILES:
                 receipt.attachment = request.FILES['attachment']
             receipt.save()
-            return redirect('/bank/cash-deposits/')
+            bank_account = Account.objects.get(id=request.POST.get('bank_account'))
+            benefactor = Account.objects.get(id=request.POST.get('benefactor'))
+            set_transactions(receipt, request.POST.get('date'),
+                             ['dr', bank_account, request.POST.get('amount')],
+                             ['cr', benefactor, request.POST.get('amount')],
+            )
+            # return redirect('/bank/cash-deposits/')
     else:
         form = BankCashDepositForm(instance=receipt, company=request.user.company)
     return render(request, 'cash_deposit.html', {'form': form, 'scenario': scenario})
@@ -166,9 +179,16 @@ def cheque_payment(request, id=None):
         if form.is_valid():
             payment = form.save(commit=False)
             payment.company = request.user.company
+            print request.POST
             if 'attachment' in request.FILES:
                 payment.attachment = request.FILES['attachment']
             payment.save()
+            bank_account = Account.objects.get(id=request.POST.get('bank_account'))
+            beneficiary = Account.objects.get(id=request.POST.get('beneficiary'))
+            set_transactions(payment, request.POST.get('date'),
+                             ['dr', bank_account, request.POST.get('amount')],
+                             ['cr', beneficiary, request.POST.get('amount')],
+            )
             return redirect('/bank/cheque-payments/')
     else:
         form = ChequePaymentForm(instance=payment, company=request.user.company)

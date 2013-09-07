@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from payroll.models import Entry, EntryRow
 from payroll.serializers import EntrySerializer
 from acubor.lib import save_model, invalid
-from ledger.models import delete_rows
+from ledger.models import delete_rows, set_transactions, Account
 
 
 @login_required
@@ -52,13 +52,24 @@ def save_entry(request):
         entry = save_model(entry, values)
         dct['id'] = entry.id
     model = EntryRow
+    payroll_tax_account = Account.objects.get(name='Payroll Tax', company=request.user.company)
     for index, row in enumerate(params.get('rows')):
-        if invalid(row, ['pay_heading', 'account_id', 'amount', 'tax']):
+        if invalid(row, ['pay_heading', 'account_id', 'amount']):
             continue
+        if row.get('tax') == '':
+            row['tax'] = 0
         values = {'sn': index + 1, 'employee_id': row.get('account_id'), 'pay_heading_id': row.get('pay_heading'),
                   'tax': row.get('tax'), 'remarks': row.get('remarks'), 'hours': row.get('hours'),
                   'amount': row.get('amount'), 'entry': entry}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        net_amount = float(row.get('amount')) - float(row.get('tax'))
+        set_transactions(submodel, submodel.created,
+                         ['dr', Account.objects.get(id=row.get('pay_heading'), company=request.user.company),
+                          row.get('amount')],
+                         ['cr', Account.objects.get(id=row.get('account_id'), company=request.user.company),
+                          net_amount],
+                         ['cr', payroll_tax_account, row.get('tax')],
+        )
         if not created:
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
