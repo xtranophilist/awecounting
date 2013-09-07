@@ -428,3 +428,12 @@ input[type="radio"], input[type="checkbox"]{
     background: #f5f5f5;
     border-color: #E5E5E5; 
 }
+#attachment_tabbable form{
+    padding: 10px;
+    background: #f5f5f5;
+    border: 1px solid #ccc;
+    line-height: 2em;
+}
+#attachment_tabbable form input[type="file"]{
+    margin: 8px 5px 0px;
+}
