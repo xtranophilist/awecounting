@@ -35,6 +35,10 @@ def day_journal(request, journal_date=None):
     return render(request, 'day_journal.html', {
         'day_journal': day_journal_data,
         'base_template': base_template,
+        'sales_attachments': day_journal.sales_attachments.all(),
+        'purchase_attachments': day_journal.purchase_attachments.all(),
+        'bank_attachments': day_journal.bank_attachments.all(),
+        'other_attachments': day_journal.other_attachments.all(),
     })
 
 

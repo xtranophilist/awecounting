@@ -12,12 +12,12 @@
     <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
     <script src="{{ STATIC_URL }}js/base.js"></script>
     <script src="{{ STATIC_URL }}js/day_journal.js"></script>
-    <script src="{{ STATIC_URL }}ajaxuploader/js/fileuploader.js"></script>
-    <link href="{{ STATIC_URL }}ajaxuploader/css/fileuploader.css" media="screen" rel="stylesheet" type="text/css"/>
     <script type="text/javascript">
         $(document).ready(function () {
             {% load filters %}
-            if(window.location.hash!=""){ $('a[href="' + window.location.hash + '"]').click(); }
+            if (window.location.hash != "") {
+                $('a[href="' + window.location.hash + '"]').click();
+            }
             ko.applyBindings(new DayJournal({{ day_journal|jsonify }}));
         });
     </script>
@@ -1035,20 +1035,40 @@
         </ul>
         <div class="tab-content">
             <div id="sales_attach" class="tab-pane active">
+                {% for attachment in sales_attachments %}
+                    <a target="_blank"
+                       href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
+                    <a class="delete-attachment" href="#" data-type="sales" data-id="{{ attachment.id }}">x</a>
+
+                {% endfor %}
                 <form>
-                    <div>
-                        <img src="{{ STATIC_URL }}/images/acubor_screen.png" class="thumbnail">
-                    </div>
-                    <label><b>Add File: </b><input type="file" /> </label>
+                    <label><b>Add File: </b><input type="file"/> </label>
+
                     <p><a href="">Add Another File</a></p>
-                    <p><input type="submit" value="Save" class="btn" /></p>
+
+                    <p><input type="submit" value="Save" class="btn"/></p>
                 </form>
             </div>
             <div id="purchase_attach" class="tab-pane">
+                {% for attachment in purchase_attachments %}
+                    <a target="_blank"
+                       href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
+                    <a class="delete-attachment" href="#" data-type="purchase" data-id="{{ attachment.id }}">x</a>
+                {% endfor %}
             </div>
             <div id="bank_attach" class="tab-pane">
+                {% for attachment in bank_attachments %}
+                    <a target="_blank"
+                       href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
+                    <a class="delete-attachment" href="#" data-type="bank" data-id="{{ attachment.id }}">x</a>
+                {% endfor %}
             </div>
             <div id="other_attach" class="tab-pane">
+                {% for attachment in other_attachments %}
+                    <a target="_blank"
+                       href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
+                    <a class="delete-attachment" href="#" data-type="others" data-id="{{ attachment.id }}">x</a>
+                {% endfor %}
             </div>
         </div>
     </div>
