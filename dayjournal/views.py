@@ -555,6 +555,9 @@ def save_attachments(request):
                                                                                                     'cash_deposit': 0,
                                                                                                     'cash_withdrawal': 0,
                                                                                                     'cash_actual': 0})
+    lst = []
     for i, attachment in enumerate(attachments):
-        model(attachment=attachment, description=captions[i], day_journal=day_journal).save()
-    return HttpResponse(json.dumps({'success': True}), mimetype="application/json")
+        attached = model(attachment=attachment, description=captions[i], day_journal=day_journal)
+        attached.save()
+        lst.append({'name': attachment.name, 'caption': captions[i], 'id': attached.id, 'link': attached.attachment.url})
+    return HttpResponse(json.dumps(lst), mimetype="application/json")

@@ -1187,12 +1187,12 @@
                 </form>
             </div>
             <div id="other_attach" class="tab-pane">
-                <form class="attachment-form" data-type="others">
+                <form class="attachment-form" data-type="other">
                     {% for attachment in other_attachments %}
                         <div class="btn-group">
                             <a class="btn btn-info" target="_blank"
                                href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
-                            <button class="btn btn-danger delete-attachment" data-type="others"
+                            <button class="btn btn-danger delete-attachment" data-type="other"
                                     data-id="{{ attachment.id }}">
                                 <span class="icon-trash"></span>
                             </button>
