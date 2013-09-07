@@ -69,3 +69,6 @@ class ChequePayment(models.Model):
     attachment = models.FileField(upload_to='cheque_payments/%Y/%m/%d', blank=True, null=True)
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)
+
+    def get_absolute_url(self):
+        return '/bank/cheque-payment/' + str(self.id)

@@ -11,6 +11,7 @@ from bank.serializers import ChequeDepositSerializer
 from bank.filters import ChequeDepositFilter, CashDepositFilter, ChequePaymentFilter
 from ledger.models import set_transactions, Account
 
+
 @login_required
 def list_bank_accounts(request):
     items = BankAccount.objects.filter(company=request.user.company)
@@ -156,9 +157,9 @@ def cash_deposit(request, id=None):
             bank_account = Account.objects.get(id=request.POST.get('bank_account'))
             benefactor = Account.objects.get(id=request.POST.get('benefactor'))
             set_transactions(receipt, request.POST.get('date'),
-                                 ['dr', bank_account, request.POST.get('amount')],
-                                 ['cr', benefactor, request.POST.get('amount')],
-                )
+                             ['dr', bank_account, request.POST.get('amount')],
+                             ['cr', benefactor, request.POST.get('amount')],
+            )
             # return redirect('/bank/cash-deposits/')
     else:
         form = BankCashDepositForm(instance=receipt, company=request.user.company)
@@ -178,9 +179,16 @@ def cheque_payment(request, id=None):
         if form.is_valid():
             payment = form.save(commit=False)
             payment.company = request.user.company
+            print request.POST
             if 'attachment' in request.FILES:
                 payment.attachment = request.FILES['attachment']
             payment.save()
+            bank_account = Account.objects.get(id=request.POST.get('bank_account'))
+            beneficiary = Account.objects.get(id=request.POST.get('beneficiary'))
+            set_transactions(payment, request.POST.get('date'),
+                             ['dr', bank_account, request.POST.get('amount')],
+                             ['cr', beneficiary, request.POST.get('amount')],
+            )
             return redirect('/bank/cheque-payments/')
     else:
         form = ChequePaymentForm(instance=payment, company=request.user.company)
