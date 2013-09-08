@@ -4,6 +4,8 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
+    <li class="active"><a href="{% url "all_invoices" %}">Invoices</a></li>
+    <span class="divider"><i class="icon-angle-right"></i></span>
     <li class="active"><a href="{% url "new_invoice" %}">New Invoice</a></li>
 {% endblock %}
 
@@ -21,8 +23,6 @@
 {% endblock %}
 
 {% block content %}
-
-    {{ data|jsonify }}
 
     <div class="page-header position-relative">
         <h1>

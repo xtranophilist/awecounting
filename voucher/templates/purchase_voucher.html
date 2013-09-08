@@ -4,6 +4,8 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
+    <li class="active"><a href="{% url "all_purchase_vouchers" %}">All Purchase Vouchers</a></li>
+    <span class="divider"><i class="icon-angle-right"></i></span>
     <li class="active"><a href="{% url "new_purchase_voucher" %}">New Purchase Voucher</a></li>
 {% endblock %}
 
