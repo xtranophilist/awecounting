@@ -1,4 +1,5 @@
 from django import forms
+from mptt.forms import TreeNodeChoiceField
 
 from acubor.lib import KOModelForm
 from models import Item, Category
@@ -7,6 +8,8 @@ from tax.models import TaxScheme
 
 
 class ItemForm(KOModelForm):
+    category = TreeNodeChoiceField(queryset=Category.objects.all(), required=False)
+
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
         super(ItemForm, self).__init__(*args, **kwargs)

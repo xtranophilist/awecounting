@@ -19,6 +19,7 @@
     {{ form.non_field_errors }}
     {{ form.errors }}
     <form method="post">
+        {% csrf_token %}
         {#        <div class="row">#}
         {#            <div class="span3">#}
         {#                {% csrf_token %}#}
