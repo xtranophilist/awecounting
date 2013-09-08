@@ -85,7 +85,7 @@ def save_invoice(request):
     #     else:
     #         dct['error_message'] = 'Error in form data!'
     model = InvoiceParticular
-    cash_account = Account.objects.get(name='Cash', company=request.user.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
     sales_tax_account = Account.objects.get(name='Sales Tax', company=request.user.company)
     for index, row in enumerate(params.get('particulars').get('rows')):
         if invalid(row, ['item_id', 'unit_price', 'quantity']):
@@ -147,7 +147,7 @@ def purchase_voucher(request, id=None):
         if id or form.is_valid():
             particulars = json.loads(request.POST['particulars'])
             model = PurchaseParticular
-            cash_account = Account.objects.get(name='Cash', company=request.user.company)
+            cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
             for index, row in enumerate(particulars.get('rows')):
                 if invalid(row, ['item_id', 'unit_price', 'quantity']):
                     continue

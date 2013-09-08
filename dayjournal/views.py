@@ -62,7 +62,7 @@ def save_cash_sales(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashSales
     day_journal = get_journal(request)
-    cash_account = Account.objects.get(name='Cash', company=request.user.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
     sales_tax_account = Account.objects.get(name='Sales Tax', company=request.user.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_id', 'amount'])
@@ -96,7 +96,7 @@ def save_cash_purchase(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashPurchase
     day_journal = get_journal(request)
-    cash_account = Account.objects.get(name='Cash', company=request.user.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_id', 'amount'])
         if invalid_attrs:
@@ -123,7 +123,7 @@ def save_cash_payment(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashPayment
     day_journal = get_journal(request)
-    cash_account = Account.objects.get(name='Cash', company=request.user.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_id', 'amount'])
         if invalid_attrs:
@@ -150,7 +150,7 @@ def save_cash_receipt(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashReceipt
     day_journal = get_journal(request)
-    cash_account = Account.objects.get(name='Cash', company=request.user.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_id', 'amount'])
         if invalid_attrs:
@@ -304,9 +304,9 @@ def save_summary_transfer(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = SummaryTransfer
     day_journal = get_journal(request)
-    cash_account = Account.objects.get(name='Cash', company=request.user.company)
-    card_account = Account.objects.get(name='Card', company=request.user.company)
-    cheque_account = Account.objects.get(name='Cheque', company=request.user.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
+    card_account = Account.objects.get(name='Card Account', company=request.user.company)
+    cheque_account = Account.objects.get(name='Cheque Account', company=request.user.company)
     for index, row in enumerate(params.get('rows')):
         if all_empty(row, ['cash', 'cheque', 'card']):
             continue
@@ -402,8 +402,8 @@ def save_card_sales(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CardSales
     day_journal = get_journal(request)
-    card_account = Account.objects.get(name='Card', company=request.user.company)
-    cash_account = Account.objects.get(name='Cash', company=request.user.company)
+    card_account = Account.objects.get(name='Card Account', company=request.user.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
     commission_out_account = Account.objects.get(name='Commission Out', company=request.user.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['amount', 'commission_out'])
@@ -433,7 +433,7 @@ def save_cash_equivalent_sales(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashEquivalentSales
     day_journal = get_journal(request)
-    cash_account = Account.objects.get(name='Cash', company=request.user.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
     for index, row in enumerate(params.get('rows')):
         print row
         invalid_attrs = invalid(row, ['amount', 'account'])
@@ -460,8 +460,8 @@ def save_cheque_purchase(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = ChequePurchase
     day_journal = get_journal(request)
-    cheque_account = Account.objects.get(name='Cheque', company=request.user.company)
-    cash_account = Account.objects.get(name='Cash', company=request.user.company)
+    cheque_account = Account.objects.get(name='Cheque Account', company=request.user.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
     commission_in_account = Account.objects.get(name='Commission In', company=request.user.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['amount', 'commission_in'])
@@ -489,9 +489,9 @@ def save_summary_bank(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
     day_journal = get_journal(request)
-    cheque_account = Account.objects.get(name='Cheque', company=request.user.company)
-    cash_account = Account.objects.get(name='Cash', company=request.user.company)
-    bank_account = Account.objects.get(name='Bank', company=request.user.company)
+    cheque_account = Account.objects.get(name='Cheque Account', company=request.user.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
+    bank_account = Account.objects.get(name='Bank Account', company=request.user.company)
     invalid_attrs = invalid(params.get('rows')[0], ['deposit', 'withdrawal'])
     if invalid_attrs:
         dct['invalid_attributes'][0] = invalid_attrs
