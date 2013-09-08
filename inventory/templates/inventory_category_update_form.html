@@ -1,0 +1,33 @@
+{% extends base_template %}
+
+{% block title %} Update Inventory Category {% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "list_inventory_category" %}">Inventory Categories</a></li>
+    <span class="divider"><i class="icon-angle-right"></i></span>
+    <li class="active">Update Inventory Category</li>
+{% endblock %}
+
+{% block content %}
+    <div class="page-header position-relative">
+        <h1>
+            Inventory Update Category
+        </h1>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <div class="row">
+
+            <input type="submit" value="Submit" class="btn"/>
+            <a class="btn" href="{% url 'delete_inventory_category' form.instance.id %}">Delete this category!</a>
+
+        </div>
+
+
+    </form>
+
+{% endblock %}

@@ -1,3 +1,5 @@
+from django import forms
+
 from acubor.lib import KOModelForm
 from models import Item, Category
 from ledger.models import Account
@@ -17,3 +19,26 @@ class ItemForm(KOModelForm):
     class Meta:
         model = Item
         exclude = ['company', 'account']
+
+
+class CategoryForm(KOModelForm):
+    def __init__(self, *args, **kwargs):
+        self.company = kwargs.pop('company', None)
+        super(CategoryForm, self).__init__(*args, **kwargs)
+        self.fields['parent'].queryset = Category.objects.filter(company=self.company)
+
+    class Meta:
+        model = Category
+        exclude = ['company']
+
+    def clean(self):
+        """ This is the form's clean method, not a particular field's clean method """
+        cleaned_data = self.cleaned_data
+
+        name = cleaned_data.get('name')
+
+        if Category.objects.filter(name=name, company=self.company).count() > 0:
+            raise forms.ValidationError("Category name already exists.")
+
+        # Always return the full collection of cleaned data.
+        return cleaned_data

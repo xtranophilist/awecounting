@@ -1,0 +1,30 @@
+{% extends base_template %}
+
+{% block title %} Create Inventory Category {% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "list_inventory_category" %}">Inventory Categories</a></li>
+    <span class="divider"><i class="icon-angle-right"></i></span>
+    <li class="active">Create Inventory Category</li>
+{% endblock %}
+
+{% block content %}
+    <div class="page-header position-relative">
+        <h1>
+            Create Inventory Category
+        </h1>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <div class="row">
+            <div class="span12">
+                <input type="submit" value="Submit" class="btn"/>
+            </div>
+        </div>
+    </form>
+
+{% endblock %}

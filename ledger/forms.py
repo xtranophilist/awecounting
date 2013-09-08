@@ -56,10 +56,6 @@ class CategoryForm(KOModelForm):
 
         name = cleaned_data.get('name')
 
-        print 111
-
-        print Category.objects.filter(name=name, company=self.company)
-
         if Category.objects.filter(name=name, company=self.company).count() > 0:
             raise forms.ValidationError("Category name already exists.")
 

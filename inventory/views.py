@@ -4,9 +4,9 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
-from models import Item, InventoryAccount
+from models import Item, InventoryAccount, Category
 from serializers import ItemSerializer, InventoryAccountSerializer
-from forms import ItemForm
+from forms import ItemForm, CategoryForm
 from inventory.filters import InventoryItemFilter
 
 
@@ -71,3 +71,60 @@ def list_all_items(request):
     objects = Item.objects.filter(company=request.user.company)
     filtered_items = InventoryItemFilter(request.GET, queryset=objects, company=request.user.company)
     return render(request, 'list_all_items.html', {'objects': filtered_items})
+
+
+@login_required
+def list_categories(request):
+    categories = Category.objects.filter(company=request.user.company)
+    return render(request, 'list_inventory_categories.html', {'categories': categories})
+
+
+@login_required
+def create_category(request):
+    category = Category()
+    if request.POST:
+        form = CategoryForm(data=request.POST, company=request.user.company)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.company = request.user.company
+            category.save()
+            return redirect('/inventory/categories/')
+    else:
+        form = CategoryForm(instance=category, company=request.user.company)
+    if request.is_ajax():
+        base_template = 'modal.html'
+    else:
+        base_template = 'dashboard.html'
+    return render(request, 'inventory_category_create_form.html', {
+        'form': form,
+        'base_template': base_template,
+    })
+
+
+@login_required
+def update_category(request, id):
+    category = get_object_or_404(Category, id=id, company=request.user.company)
+    if request.POST:
+        form = CategoryForm(data=request.POST, instance=category, company=request.user.company)
+        if form.is_valid():
+            category = form.save(commit=False)
+            category.company = request.user.company
+            category.save()
+            return redirect('/inventory/categories/')
+    else:
+        form = CategoryForm(instance=category, company=request.user.company)
+    if request.is_ajax():
+        base_template = 'modal.html'
+    else:
+        base_template = 'dashboard.html'
+    return render(request, 'inventory_category_update_form.html', {
+        'form': form,
+        'base_template': base_template
+    })
+
+
+@login_required
+def delete_category(request, id):
+    category = get_object_or_404(Category, id=id, company=request.user.company)
+    category.delete()
+    return redirect('/inventory/categories/')
