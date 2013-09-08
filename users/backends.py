@@ -5,8 +5,11 @@ from django.core.validators import email_re
 class BasicBackend:
     def get_user(self, user_id):
         try:
-            return get_user_model().objects.get(pk=user_id)
-        except get_user_model.DoesNotExist:
+            try:
+                return get_user_model().objects.get(pk=user_id)
+            except get_user_model.DoesNotExist:
+                return None
+        except AttributeError:
             return None
 
 
