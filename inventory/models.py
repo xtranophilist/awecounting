@@ -122,7 +122,7 @@ class Item(models.Model):
     sales_account = models.ForeignKey(Account, related_name='sales_items')
     sales_tax_scheme = models.ForeignKey(TaxScheme, verbose_name=u'Tax Rate', related_name='sales_items')
     company = models.ForeignKey(Company)
-    category = models.ForeignKey(Category)
+    category = models.ForeignKey(Category, null=True, blank=True)
     account = models.OneToOneField(InventoryAccount, related_name='item')
 
     def save(self, *args, **kwargs):
