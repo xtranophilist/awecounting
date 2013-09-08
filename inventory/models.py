@@ -12,15 +12,21 @@ from ledger.models import Account
 from users.models import Company
 from acubor.lib import zero_for_none, none_for_zero
 
+from mptt.models import MPTTModel, TreeForeignKey
 
-class Category(models.Model):
-    code = models.CharField(max_length=10, blank=True, null=True)
-    name = models.CharField(max_length=254)
-    description = models.TextField(blank=True, null=True)
+
+class Category(MPTTModel):
+    name = models.CharField(max_length=50)
+    description = models.CharField(max_length=254, null=True, blank=True)
+    parent = TreeForeignKey('self', blank=True, null=True, related_name='children')
     company = models.ForeignKey(Company, related_name='inventory_categories')
 
     def __unicode__(self):
-        return '[' + str(self.code) + '] ' + str(self.name)
+        return self.name
+
+    class Meta:
+        verbose_name_plural = u' Inventory Categories'
+        unique_together = (('company', 'name'),)
 
 
 class InventoryAccount(models.Model):
