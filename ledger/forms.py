@@ -6,7 +6,7 @@ from models import Account, Category, Party
 
 
 class AccountForm(KOModelForm):
-    category = TreeNodeChoiceField(queryset=Category.objects.all(), required=False)
+    category = TreeNodeChoiceField(queryset=Category.objects.all())
 
     def __init__(self, *args, **kwargs):
         self.company = kwargs.pop('company', None)
@@ -24,11 +24,19 @@ class AccountForm(KOModelForm):
         name = cleaned_data.get('name')
         code = cleaned_data.get('code')
 
-        if Account.objects.filter(name=name, company=self.company).count() > 0:
-            raise forms.ValidationError("Account name already exists.")
+        try:
+            object = Account.objects.get(name=name, company=self.company)
+            if not object.id == self.instance.id:
+                raise forms.ValidationError("Account name already exists.")
+        except Account.DoesNotExist:
+            pass
 
-        if Account.objects.filter(code=code, company=self.company).count() > 0:
-            raise forms.ValidationError("Account code already exists.")
+        try:
+            object = Account.objects.get(code=code, company=self.company)
+            if not object.id == self.instance.id:
+                raise forms.ValidationError("Account name already exists.")
+        except Account.DoesNotExist:
+            pass
 
         # Always return the full collection of cleaned data.
         return cleaned_data
