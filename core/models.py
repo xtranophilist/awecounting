@@ -6,7 +6,7 @@ from dayjournal.models import DayJournal
 class Currency(models.Model):
     code = models.CharField(max_length=3)
     name = models.CharField(max_length=100)
-    latest_usd_rate = models.FloatField()
+    latest_usd_rate = models.FloatField(blank=True, null=True)
 
     class Meta:
         verbose_name_plural = u'Currencies'
