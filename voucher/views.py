@@ -181,6 +181,9 @@ def journal_voucher(request, id=None):
 
 
 def empty_to_None(dict, list_of_attr):
+    for attr in list_of_attr:
+        if dict.get(attr) == '':
+            dict[attr] = None
     return dict
 
 @login_required
@@ -210,7 +213,7 @@ def save_journal_voucher(request):
         values = {'sn': index + 1, 'dr_account_id': row.get('dr_account_id'), 'dr_amount': row.get('dr_amount'),
                   'cr_account_id': row.get('cr_account_id'), 'cr_amount': row.get('cr_amount'),
                   'journal_voucher': voucher}
-
+        print values
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
