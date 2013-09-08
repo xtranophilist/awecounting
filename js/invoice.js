@@ -109,9 +109,11 @@ function InvoiceViewModel(data) {
         var sum = 0;
         if (self.tax() == 'inclusive') {
             self.particulars.rows().forEach(function (i) {
-                var tax_percent = self.tax_scheme_by_id(i.tax_scheme()).percent;
-                var tax_amount = i.amount() * (tax_percent / (100 + tax_percent));
-                sum += tax_amount;
+                if (typeof i.tax_scheme() != 'undefined') {
+                    var tax_percent = self.tax_scheme_by_id(i.tax_scheme()).percent;
+                    var tax_amount = i.amount() * (tax_percent / (100 + tax_percent));
+                    sum += tax_amount;
+                }
             });
         } else if (self.tax() == 'exclusive') {
             self.particulars.rows().forEach(function (i) {
