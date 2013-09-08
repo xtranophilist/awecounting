@@ -187,7 +187,19 @@ def create_default(user):
 
     indirect_expenses = Category(name='Indirect Expenses', parent=expenses, company=company)
     indirect_expenses.save()
-    
+    Account(name='Payroll Expenses', category=indirect_expenses, code='13-0001', company=company).save()
+    Account(name='Rent Expenses', category=indirect_expenses, code='13-0002', company=company).save()
+    Account(name='Commission Out', category=indirect_expenses, code='13-0003', company=company).save()
+    Account(name='Bank Charges Expenses', category=indirect_expenses, code='13-0004', company=company).save()
+    Account(name='Bank Interest Expenses', category=indirect_expenses, code='13-0005', company=company).save()
+    Account(name='Electricity Expenses', category=indirect_expenses, code='13-0006', company=company).save()
+    Account(name='City/Municipal Expenses', category=indirect_expenses, code='13-0007', company=company).save()
+    Account(name='Travelling and Conveyance Expenses', category=indirect_expenses, code='13-0008', company=company).save()
+    Account(name='Lunch and Refreshment Expenses', category=indirect_expenses, code='13-0009', company=company).save()
+    Account(name='Cleaning Expenses', category=indirect_expenses, code='13-0010', company=company).save()
+    Account(name='Discounting Expenses', category=indirect_expenses, code='13-0011', company=company).save()
+    Account(name='Repairs and Maintenance Expenses', category=indirect_expenses, code='13-0012', company=company).save()
+
 
 def handle_new_user(sender, user, request, **kwargs):
     user.full_name = request.POST.get('full_name')
