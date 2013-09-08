@@ -3,6 +3,7 @@ from datetime import date
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 from forms import InvoiceForm, PurchaseVoucherForm
 from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, PurchaseParticular, JournalVoucher, \
@@ -14,7 +15,7 @@ from ledger.models import delete_rows, Account, set_transactions
 from voucher.filters import InvoiceFilter, PurchaseVoucherFilter
 from tax.models import TaxScheme
 from inventory.models import Item
-from django.contrib.auth.decorators import login_required
+
 
 @login_required
 def all_invoices(request):
@@ -22,11 +23,13 @@ def all_invoices(request):
     filtered_items = InvoiceFilter(request.GET, queryset=items, company=request.user.company)
     return render(request, 'list_invoice.html', {'objects': filtered_items})
 
+
 @login_required
 def all_purchase_vouchers(request):
     items = PurchaseVoucher.objects.filter(company=request.user.company)
     filtered_items = PurchaseVoucherFilter(request.GET, queryset=items, company=request.user.company)
     return render(request, 'all_purchase_vouchers.html', {'objects': filtered_items})
+
 
 @login_required
 def invoice(request, invoice_no=None):
@@ -61,6 +64,7 @@ def invoice(request, invoice_no=None):
         'invoice_suffix': company_setting.invoice_suffix,
     }
     return render(request, 'invoice.html', {'form': form, 'data': invoice_data})
+
 
 @login_required
 def save_invoice(request):
@@ -122,6 +126,7 @@ def save_invoice(request):
     delete_rows(params.get('particulars').get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
+
 @login_required
 def purchase_voucher(request, id=None):
     from core.models import CompanySetting
@@ -170,6 +175,7 @@ def purchase_voucher(request, id=None):
     purchase_voucher_data = PurchaseVoucherSerializer(voucher).data
     return render(request, 'purchase_voucher.html', {'form': form, 'data': purchase_voucher_data})
 
+
 @login_required
 def journal_voucher(request, id=None):
     if id:
@@ -186,18 +192,17 @@ def empty_to_None(dict, list_of_attr):
             dict[attr] = None
     return dict
 
+
 @login_required
 def list_journal_vouchers(request):
     objects = JournalVoucher.objects.filter(company=request.user.company)
     return render(request, 'list_journal_vouchers.html', {'objects': objects})
 
+
 @login_required
 def save_journal_voucher(request):
     params = json.loads(request.body)
     dct = {'rows': {}}
-
-    del [params['accounts']]
-    del [params['journal_voucher']['_initial_rows']]
 
     voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'),
                       'company': request.user.company}
@@ -213,8 +218,16 @@ def save_journal_voucher(request):
         values = {'sn': index + 1, 'dr_account_id': row.get('dr_account_id'), 'dr_amount': row.get('dr_amount'),
                   'cr_account_id': row.get('cr_account_id'), 'cr_amount': row.get('cr_amount'),
                   'journal_voucher': voucher}
-        print values
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if row.get('dr_account_id'):
+            print 'dr'
+            set_transactions(submodel, params.get('date'),
+                             ['dr', Account.objects.get(id=row.get('dr_account_id')), row.get('dr_amount')],
+            )
+        if row.get('cr_account_id'):
+            set_transactions(submodel, params.get('date'),
+                             ['cr', Account.objects.get(id=row.get('cr_account_id')), row.get('cr_amount')],
+            )
         if not created:
             submodel = save_model(submodel, values)
         dct['rows'][index] = submodel.id
