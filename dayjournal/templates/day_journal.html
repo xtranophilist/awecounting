@@ -18,7 +18,7 @@
             if (window.location.hash != "") {
                 $('a[href="' + window.location.hash + '"]').click();
             }
-            $('.delete-attachment').click(function (e) {
+            $(document).on("click",".delete-attachment",function (e) {
                 e.preventDefault();
                 var $this = $(this);
                 if (confirm("Are you sure you want to delete this attachment?")) {
@@ -26,7 +26,7 @@
                     $.post(uri.url, uri.params)
                             .done(function (res) {
                                 if (res.success) {
-                                    $this.fadeOut();
+                                    $this.parent('.span3').fadeOut(300, function(){ $(this).remove(); });
                                 } else {
                                     alert("There has been error while processing your request. Please try again!");
                                 }
@@ -59,7 +59,9 @@
                     $.each(file_ips, function () {
                         formdata.append("attachments", this.files[0]);
                     });
-                    formdata.append("type", $(this).data("type"));
+                    var $this = $(this);
+                    var type=$this.data("type");
+                    formdata.append("type", type);
                     formdata.append("day", $('#attachment_tabbable').data("journal-day"));
                     $.ajax({
                         url: "/day/save_attachments/",
@@ -68,7 +70,12 @@
                         processData: false,
                         contentType: false,
                         success: function (res) {
-                            console.log(res)
+                            var str = "";
+                            $.each(res, function(){
+                                str += '<div class="span3"> <a target="_blank" href="'+this.link+'">'+this.caption+'</a><button class="close delete-attachment" data-type="'+type+'" data-id="'+this.id+'"><span class="icon-trash"></span></button></div>';
+                            });
+                            $this.find('.row-fluid').append(str);
+                            $this.find('.attach_file_field').find("input").val("").end().not(':first').remove();
                         },
                         error: function () {
                             alert("There has been error while processing your request. Please try again!");
@@ -1117,7 +1124,7 @@
                             <input type="file" name="attachments" required class="attachments"/>
                         </label>
                         <label>
-                            <b>Caption: </b>
+                            <b>Description: </b>
                             <input type="text" name="captions" required class="captions">
                         </label>
                     </div>
@@ -1128,15 +1135,17 @@
             </div>
             <div id="purchase_attach" class="tab-pane">
                 <form class="attachment-form" data-type="purchase">
-                    {% for attachment in purchase_attachments %}
-                        <div class="span3">
-                            <a target="_blank"
-                               href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
-                            <button class="close delete-attachment" data-type="purchase" data-id="{{ attachment.id }}">
-                                <span class="icon-trash"></span>
-                            </button>
-                        </div>
-                    {% endfor %}
+                    <div class="row-fluid">
+                        {% for attachment in purchase_attachments %}
+                            <div class="span3">
+                                <a target="_blank"
+                                   href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
+                                <button class="close delete-attachment" data-type="purchase" data-id="{{ attachment.id }}">
+                                    <span class="icon-trash"></span>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    </div>
                     <br>
 
                     <div class="attach_file_field">
@@ -1145,7 +1154,7 @@
                             <input type="file" name="attachments" required class="attachments"/>
                         </label>
                         <label>
-                            <b>Caption: </b>
+                            <b>Description: </b>
                             <input type="text" name="captions" required class="captions">
                         </label>
                     </div>
@@ -1158,6 +1167,7 @@
             </div>
             <div id="bank_attach" class="tab-pane">
                 <form class="attachment-form" data-type="bank">
+                    <div class="row-fluid">
                     {% for attachment in bank_attachments %}
                         <div class="span3">
                             <a target="_blank"
@@ -1167,6 +1177,7 @@
                             </button>
                         </div>
                     {% endfor %}
+                    </div>
                     <br>
 
                     <div class="attach_file_field">
@@ -1175,7 +1186,7 @@
                             <input type="file" name="attachments" required class="attachments"/>
                         </label>
                         <label>
-                            <b>Caption: </b>
+                            <b>Description: </b>
                             <input type="text" name="captions" required class="captions">
                         </label>
                     </div>
@@ -1187,6 +1198,7 @@
             </div>
             <div id="other_attach" class="tab-pane">
                 <form class="attachment-form" data-type="other">
+                    <div class="row-fluid">
                     {% for attachment in other_attachments %}
                         <div class="span3">
                             <a target="_blank"
@@ -1196,6 +1208,7 @@
                             </button>
                         </div>
                     {% endfor %}
+                    </div>
                     <br>
 
                     <div class="attach_file_field">
@@ -1204,7 +1217,7 @@
                             <input type="file" name="attachments" required class="attachments"/>
                         </label>
                         <label>
-                            <b>Caption: </b>
+                            <b>Description: </b>
                             <input type="text" name="captions" required class="captions">
                         </label>
                     </div>
