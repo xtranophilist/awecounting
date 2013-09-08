@@ -2,12 +2,12 @@ from django import forms
 
 from acubor.lib import KOModelForm, ExtFileField
 from core.models import Currency
-from ledger.models import Party
+from ledger.models import Account
 from voucher.models import Invoice, PurchaseVoucher
 
 
 class InvoiceForm(KOModelForm):
-    party = forms.ModelChoiceField(Party.objects.all(), empty_label=None,
+    party = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
                                    widget=forms.Select(attrs={'class': 'select2'}))
     currency = forms.ModelChoiceField(Currency.objects.all(), empty_label=None,
                                       widget=forms.Select(attrs={'class': 'select2'}))
@@ -15,7 +15,7 @@ class InvoiceForm(KOModelForm):
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
         super(InvoiceForm, self).__init__(*args, **kwargs)
-        self.fields['party'].queryset = Party.objects.filter(company=company)
+        self.fields['party'].queryset = Account.objects.filter(company=company)
 
     class Meta:
         model = Invoice
@@ -23,7 +23,7 @@ class InvoiceForm(KOModelForm):
 
 
 class PurchaseVoucherForm(KOModelForm):
-    party = forms.ModelChoiceField(Party.objects.all(), empty_label=None,
+    party = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
                                    widget=forms.Select(attrs={'class': 'select2'}))
     currency = forms.ModelChoiceField(Currency.objects.all(), empty_label=None,
                                       widget=forms.Select(attrs={'class': 'select2'}))
@@ -37,7 +37,7 @@ class PurchaseVoucherForm(KOModelForm):
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
         super(PurchaseVoucherForm, self).__init__(*args, **kwargs)
-        self.fields['party'].queryset = Party.objects.filter(company=company)
+        self.fields['party'].queryset = Account.objects.filter(company=company)
 
     class Meta:
         model = PurchaseVoucher
