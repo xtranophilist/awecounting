@@ -21,7 +21,7 @@ class CompanySetting(models.Model):
     invoice_prefix = models.CharField(max_length=5, default='INV-', blank=True, null=True)
     invoice_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
     invoice_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in unique Invoice #')
-    default_currency = models.ForeignKey(Currency)
+    default_currency = models.ForeignKey(Currency, default=144)
     default_dayjournal = models.ForeignKey(DayJournal, null=True, blank=True)
 
     def __unicode__(self):
