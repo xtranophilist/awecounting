@@ -104,7 +104,8 @@ def create_default(user):
     Account(name='Retained Earnings', category=equity, code='1-0002', company=company).save()
     Account(name='Profit and Loss Account', category=equity, code='1-0003', company=company).save()
 
-    assets = Category(name='Assets', company=company).save()
+    assets = Category(name='Assets', company=company)
+    assets.save()
     bank_account = Category(name='Bank Account', parent=assets, company=company)
     bank_account.save()
     Account(name='Bank Account', category=bank_account, code='2-0001', company=company).save()
@@ -132,7 +133,6 @@ def create_default(user):
     other_payables = Category(name='Other Payables', parent=liabilities, company=company)
     other_payables.save()
     Account(name='Utility Bills Account', category=other_payables, code='3-0002', company=company).save()
-    Account(name='Utility Bills Account', category=liabilities, code='3-0002', company=company).save()
     Category(name='Provisions', parent=liabilities, company=company).save()
     secured_loans = Category(name='Secured Loans', parent=liabilities, company=company)
     secured_loans.save()
@@ -167,7 +167,7 @@ def create_default(user):
     indirect_income.save()
     Account(name='Commission In', category=indirect_income, code='6-0001', company=company).save()
 
-    expenses = Category(name='Expense', company=company)
+    expenses = Category(name='Expenses', company=company)
     expenses.save()
     purchase = Category(name='Purchase', parent=expenses, company=company)
     purchase.save()
