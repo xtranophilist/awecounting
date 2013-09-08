@@ -22,8 +22,8 @@ def recursive_node_to_dict(node):
     return result
 
 
-def to_dict(model):
-    root_nodes = cache_tree_children(model.objects.all())
+def to_dict(model, company):
+    root_nodes = cache_tree_children(model.objects.filter(company=company))
     dicts = []
     for n in root_nodes:
         dicts.append(recursive_node_to_dict(n))
@@ -35,7 +35,7 @@ def trial_balance(request):
     categories = Category.objects.filter(company=request.user.company)
 
     dict = {
-        'categories': to_dict(Category)
+        'categories': to_dict(Category, request.user.company)
     }
     # print request.get
     return render(request, 'trial_balance.html', {
