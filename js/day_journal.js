@@ -393,7 +393,7 @@ function SummaryCashRow(row) {
 
     self.opening = function (root) {
         var cash_account = root.accounts.filter(function (element, index, array) {
-            if (element.name == 'Cash')
+            if (element.name == 'Cash Account')
                 return element;
         })[0];
         return round2(cash_account.opening);
