@@ -178,7 +178,7 @@ function JournalVoucher(data){
         }
         $.ajax({
             type: "POST",
-            url: '/voucher/journal/save',
+            url: '/voucher/journal/save/',
             data: ko.toJSON(self),
             success: function(msg){
                 self.journal_voucher.message('Saved!');
