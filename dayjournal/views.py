@@ -27,7 +27,7 @@ def day_journal(request, journal_date=None):
     if not journal_date:
         journal_date = date.today()
     try:
-        day_journal = DayJournal.objects.get(date=journal_date)
+        day_journal = DayJournal.objects.get(date=journal_date, company=request.user.company)
     except DayJournal.DoesNotExist:
         day_journal = DayJournal(date=journal_date, company=request.user.company, sales_tax=0, cheque_deposit=0,
                                  cash_deposit=0, cash_withdrawal=0, cash_actual=0)
