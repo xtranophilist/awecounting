@@ -493,30 +493,51 @@ def save_summary_bank(request):
     cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
     bank_account = Account.objects.get(name='Bank Account', company=request.user.company)
     invalid_attrs = invalid(params.get('rows')[0], ['deposit', 'withdrawal'])
+    bank_amount = 0
+    cash_amount = 0
+    cheque_amount = 0
     if invalid_attrs:
         dct['invalid_attributes'][0] = invalid_attrs
     else:
         day_journal.cash_deposit = params.get('rows')[0].get('deposit')
         day_journal.cash_withdrawal = params.get('rows')[0].get('withdrawal')
-        set_transactions(day_journal, day_journal.date,
-                         ['dr', bank_account, params.get('rows')[0].get('deposit')],
-                         ['cr', cash_account, params.get('rows')[0].get('deposit')],
-        )
-        set_transactions(day_journal, day_journal.date,
-                         ['cr', bank_account, params.get('rows')[0].get('withdrawal')],
-                         ['dr', cash_account, params.get('rows')[0].get('withdrawal')],
-        )
+        bank_amount += float(params.get('rows')[0].get('deposit'))
+        cash_amount -= float(params.get('rows')[0].get('deposit'))
+        bank_amount -= float(params.get('rows')[0].get('withdrawal'))
+        cash_amount += float(params.get('rows')[0].get('withdrawal'))
+        # set_transactions(day_journal, day_journal.date,
+        #                  ['dr', bank_account, params.get('rows')[0].get('deposit')],
+        #                  ['cr', cash_account, params.get('rows')[0].get('deposit')],
+        # )
+        # set_transactions(day_journal, day_journal.date,
+        #                  ['cr', bank_account, params.get('rows')[0].get('withdrawal')],
+        #                  ['dr', cash_account, params.get('rows')[0].get('withdrawal')],
+        # )
         dct['saved'][0] = 0
     invalid_attrs = invalid(params.get('rows')[1], ['deposit'])
     if invalid_attrs:
         dct['invalid_attributes'][1] = invalid_attrs
     else:
         day_journal.cheque_deposit = params.get('rows')[1].get('deposit')
-        set_transactions(day_journal, day_journal.date,
-                         ['dr', bank_account, params.get('rows')[1].get('deposit')],
-                         ['cr', cheque_account, params.get('rows')[0].get('deposit')],
-        )
+        # set_transactions(day_journal, day_journal.date,
+        #                  ['dr', bank_account, params.get('rows')[1].get('deposit')],
+        #                  ['cr', cheque_account, params.get('rows')[1].get('deposit')],
+        # )
+        bank_amount += float(params.get('rows')[1].get('deposit'))
+        cheque_amount -= float(params.get('rows')[0].get('deposit'))
         dct['saved'][1] = 1
+        if cash_amount < 0:
+            set_transactions(day_journal, day_journal.date, ['cr', cash_account, (-1 * cash_amount)])
+        else:
+            set_transactions(day_journal, day_journal.date, ['dr', cash_account, cash_amount])
+        if bank_amount < 0:
+            set_transactions(day_journal, day_journal.date, ['cr', bank_account, (-1 * bank_amount)])
+        else:
+            set_transactions(day_journal, day_journal.date, ['dr', bank_account, bank_amount])
+        if cheque_amount < 0:
+            set_transactions(day_journal, day_journal.date, ['cr', cheque_account, (-1 * cheque_amount)])
+        else:
+            set_transactions(day_journal, day_journal.date, ['dr', cheque_account, cheque_amount])
     day_journal.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
