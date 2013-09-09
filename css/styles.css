@@ -290,23 +290,45 @@ tr.highlighted td {
 }
 
 .flip-container {
-    background: #BBBBBB;
     width: 200px;
     height: 200px;
     display: inline-block;
     position: relative;
     overflow: hidden;
-    border: 4px solid #999;
+    border: 4px solid #B3C2CF;
     margin-right: 20px;
     margin-bottom: 20px;
     float: left;
 }
 
-.flip-container .icon-container {
-    text-align: center;
-    padding-top: 25px;
+.dashboard-icon{
+    background-image: url(/acubor_static/images/dashboard-iconset.png);
+    height: 160px;
 }
-
+.journal{
+    background-position: 0px 0px;
+}
+.transaction{
+    background-position: -200px 0px;
+}
+.bank{
+    background-position: -400px 0px;
+}
+.account{
+    background-position: -600px 0px;
+}
+.inventory{
+    background-position: -800px 0px;
+}
+.payroll{
+    background-position: 0px 160px;
+}
+.report{
+    background-position: -200px 160px;
+}
+.setting{
+    background-position: -400px 160px;
+}
 .flip-body {
     width: 200px;
     height: 200px;
@@ -329,7 +351,7 @@ tr.highlighted td {
 }
 
 .flip-body h2 {
-    background: #444343;
+    background: #185179;
     color: #ECECEC;
     margin: 0px;
     font-weight: normal;
@@ -435,5 +457,13 @@ input[type="radio"], input[type="checkbox"]{
     line-height: 2em;
 }
 #attachment_tabbable form input[type="file"]{
-    margin: 8px 5px 0px;
+    margin: 0px;
+}
+#attachment_tabbable .span3{
+    background: #E7E7E7;
+    padding: 4px 6px 2px;
+}
+#attachment_tabbable form label{
+    display: inline-block;
+    max-width: 320px;
 }

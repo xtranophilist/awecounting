@@ -10,8 +10,7 @@ body{ font-family: 'Open Sans', helvetica, arial;}
 }
 .navbar-inverse .navbar-inner{
     padding: 0px;
-    background: #163B55;
-    border-color: #036;
+    background: #185179;
     min-height: 40px
 }
 .navbar-inverse a.brand{ color: #fff; font-weight: bold;}
