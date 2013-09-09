@@ -93,6 +93,7 @@ def yesterday():
     yesterday = today - timedelta(days=1)
     return yesterday
 
+
 @register.filter
 def day_journal_id(obj):
     #TODO DB Optimisation
@@ -104,3 +105,10 @@ def day_journal_id(obj):
         return source.day_journal.id
     except:
         return source.id
+
+
+@register.filter
+def refine_voucher_type(the_type):
+    if the_type[-4:] == ' row':
+        the_type = the_type[:-3]
+    return the_type.title()
