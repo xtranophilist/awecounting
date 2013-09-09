@@ -45,14 +45,6 @@ def user_to_json(user):
 def get_item(dictionary, key):
     return dictionary.get(key)
 
-
-@register.filter
-def remove_account(transactions, account):
-    return [transaction for transaction in transactions if
-            transaction.account.id is not account.id and (
-                transaction.dr_amount or transaction.cr_amount)]
-
-
 @register.filter
 def if_not_none(obj):
     if obj is None:
@@ -67,24 +59,6 @@ def subtract(value, arg):
     if arg is None:
         arg = 0
     return value - arg
-
-
-@register.filter
-def url_for_content(obj):
-    #TODO DB Optimisation
-    try:
-        source = obj.content_type.get_object_for_this_type(id=obj.model_id)
-    except:
-        return None
-    return source.get_absolute_url()
-
-
-@register.filter
-def dr_or_cr(val):
-    if val < 0:
-        return str(val * -1) + ' (Cr)'
-    else:
-        return str(val) + ' (Dr)'
 
 
 @register.simple_tag
@@ -112,3 +86,28 @@ def refine_voucher_type(the_type):
     if the_type[-4:] == ' row':
         the_type = the_type[:-3]
     return the_type.title()
+
+@register.filter
+def url_for_content(obj):
+    #TODO DB Optimisation
+    try:
+        source = obj.content_type.get_object_for_this_type(id=obj.model_id)
+    except:
+        return None
+    return source.get_absolute_url()
+
+
+@register.filter
+def dr_or_cr(val):
+    if val < 0:
+        return str(val * -1) + ' (Cr)'
+    else:
+        return str(val) + ' (Dr)'
+
+
+
+@register.filter
+def remove_account(transactions, account):
+    return [transaction for transaction in transactions if
+            transaction.account.id is not account.id and (
+                transaction.dr_amount or transaction.cr_amount)]
