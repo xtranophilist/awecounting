@@ -45,6 +45,7 @@ def user_to_json(user):
 def get_item(dictionary, key):
     return dictionary.get(key)
 
+
 @register.filter
 def if_not_none(obj):
     if obj is None:
@@ -87,6 +88,7 @@ def refine_voucher_type(the_type):
         the_type = the_type[:-3]
     return the_type.title()
 
+
 @register.filter
 def url_for_content(obj):
     #TODO DB Optimisation
@@ -105,9 +107,20 @@ def dr_or_cr(val):
         return str(val) + ' (Dr)'
 
 
-
 @register.filter
 def remove_account(transactions, account):
     return [transaction for transaction in transactions if
             transaction.account.id is not account.id and (
                 transaction.dr_amount or transaction.cr_amount)]
+
+
+@register.filter
+def get_particulars(entry, account):
+    lst = []
+    source = entry.content_type.get_object_for_this_type(id=entry.model_id)
+    for row in source.journal_voucher.rows.all():
+        if row.dr_account is not None and not row.dr_account == account:
+            lst.append('<a href="' + '/ledger/' + str(row.dr_account.id) + '/ ">' + str(row.dr_account) + '</a>')
+        if row.cr_account is not None and not account == row.cr_account:
+            lst.append('<a href="' + '/ledger/' + str(row.cr_account.id) + '/ ">' + str(row.cr_account) + '</a>')
+    return ', '.join(lst)
