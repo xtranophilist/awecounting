@@ -46,9 +46,9 @@
     <table class="table table-bordered table-striped table-sortable">
         <thead>
         <th>Date</th>
-        <th>Source</th>
-        <th>Voucher ID</th>
         <th>Particulars</th>
+        <th>Voucher Type</th>
+        <th>Voucher No.</th>
         <th>Dr</th>
         <th>Cr</th>
         <th>Balance</th>
@@ -58,6 +58,11 @@
             <tr id="row-{{ entry.id }}">
                 <td>
                     {{ entry.date }}
+                </td>
+                <td>
+                    {% for transaction in entry.transactions.all|remove_account:account %}{% if not forloop.first %},
+                    {% endif %}
+                        <a href="{{ transaction.account.get_absolute_url }}/#{{ entry.id }}">{{ transaction.account.name }}</a>{% endfor %}
                 </td>
                 <td>
                     {% if entry.content_type.app_label == 'dayjournal' %}
@@ -71,11 +76,7 @@
                         {{ entry.model_id }}
                     </a>
                 </td>
-                <td>
-                    {% for transaction in entry.transactions.all|remove_account:account %}{% if not forloop.first %},
-                    {% endif %}
-                        <a href="{{ transaction.account.get_absolute_url }}/#{{ entry.id }}">{{ transaction.account.name }}</a>{% endfor %}
-                </td>
+
                 {% for transaction in entry.transactions.all %}
                     {% if transaction.account.id == account.id %}
                         <td>
