@@ -498,15 +498,13 @@ def save_summary_bank(request):
     else:
         day_journal.cash_deposit = params.get('rows')[0].get('deposit')
         day_journal.cash_withdrawal = params.get('rows')[0].get('withdrawal')
-        [transaction.delete() for transaction in day_journal.cash_deposit_transactions.all()]
-        day_journal.cash_deposit_transactions.add(
-            ['dr', bank_account, params.get('rows')[0].get('deposit')],
-            ['cr', cash_account, params.get('rows')[0].get('deposit')],
+        set_transactions(day_journal, day_journal.date,
+                         ['dr', bank_account, params.get('rows')[0].get('deposit')],
+                         ['cr', cash_account, params.get('rows')[0].get('deposit')],
         )
-        [transaction.delete() for transaction in day_journal.cash_withdrawal_transactions.all()]
-        day_journal.cash_withdrawal_transactions.add(
-            ['cr', bank_account, params.get('rows')[0].get('withdrawal')],
-            ['dr', cash_account, params.get('rows')[0].get('withdrawal')],
+        set_transactions(day_journal, day_journal.date,
+                         ['cr', bank_account, params.get('rows')[0].get('withdrawal')],
+                         ['dr', cash_account, params.get('rows')[0].get('withdrawal')],
         )
         dct['saved'][0] = 0
     invalid_attrs = invalid(params.get('rows')[1], ['deposit'])
@@ -514,10 +512,9 @@ def save_summary_bank(request):
         dct['invalid_attributes'][1] = invalid_attrs
     else:
         day_journal.cheque_deposit = params.get('rows')[1].get('deposit')
-        [transaction.delete() for transaction in day_journal.cheque_deposit_transactions.all()]
-        day_journal.cheque_deposit_transactions.add(
-            ['dr', bank_account, params.get('rows')[1].get('deposit')],
-            ['cr', cheque_account, params.get('rows')[0].get('deposit')],
+        set_transactions(day_journal, day_journal.date,
+                         ['dr', bank_account, params.get('rows')[1].get('deposit')],
+                         ['cr', cheque_account, params.get('rows')[0].get('deposit')],
         )
         dct['saved'][1] = 1
     day_journal.save()
@@ -559,5 +556,6 @@ def save_attachments(request):
     for i, attachment in enumerate(attachments):
         attached = model(attachment=attachment, description=captions[i], day_journal=day_journal)
         attached.save()
-        lst.append({'name': attachment.name, 'caption': captions[i], 'id': attached.id, 'link': attached.attachment.url})
+        lst.append(
+            {'name': attachment.name, 'caption': captions[i], 'id': attached.id, 'link': attached.attachment.url})
     return HttpResponse(json.dumps(lst), mimetype="application/json")
