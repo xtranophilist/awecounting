@@ -120,7 +120,9 @@ def get_particulars(entry, account):
     source = entry.content_type.get_object_for_this_type(id=entry.model_id)
     for row in source.journal_voucher.rows.all():
         if row.dr_account is not None and not row.dr_account == account:
-            lst.append('<a href="' + '/ledger/' + str(row.dr_account.id) + '/ ">' + str(row.dr_account) + '</a>')
+            lst.append('<a href="' + '/ledger/' + str(row.dr_account.id) + '/#' + str(entry.id) + '">' + str(
+                row.dr_account) + '</a>')
         if row.cr_account is not None and not account == row.cr_account:
-            lst.append('<a href="' + '/ledger/' + str(row.cr_account.id) + '/ ">' + str(row.cr_account) + '</a>')
+            lst.append('<a href="' + '/ledger/' + str(row.cr_account.id) + '/#' + str(entry.id) + '">' + str(
+                row.cr_account) + '</a>')
     return ', '.join(lst)
