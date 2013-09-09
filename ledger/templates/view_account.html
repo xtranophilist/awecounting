@@ -68,12 +68,16 @@
                     {% if entry.content_type.app_label == 'dayjournal' %}
                         Day Journal
                     {% else %}
-                        {{ entry.content_type }}
+                        {{ entry.content_type.name|refine_voucher_type }}
                     {% endif %}
                 </td>
                 <td>
                     <a href="{{ entry|url_for_content }}">
-                        {{ entry.model_id }}
+                        {% if entry.content_type.app_label == 'dayjournal' %}
+                            {{ entry|day_journal_id }}
+                        {% else %}
+                            {{ entry.model_id }}
+                        {% endif %}
                     </a>
                 </td>
 
