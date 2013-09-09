@@ -171,8 +171,6 @@ class Transaction(models.Model):
 
 
 def alter(account, date, dr_difference, cr_difference):
-    print 'altering for' + str(account)
-    print dr_difference
     Transaction.objects.filter(journal_entry__date__gt=date, account=account).update(
         current_dr=none_for_zero(zero_for_none(F('current_dr')) + zero_for_none(dr_difference)),
         current_cr=none_for_zero(zero_for_none(F('current_cr')) + zero_for_none(cr_difference)))
