@@ -302,7 +302,7 @@ tr.highlighted td {
 }
 
 .dashboard-icon{
-    background-image: url(/acubor_static/images/dashboard-iconset.png);
+    background-image: url(../images/dashboard-iconset.png);
     height: 160px;
 }
 .journal{
