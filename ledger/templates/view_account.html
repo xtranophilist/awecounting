@@ -23,7 +23,7 @@
         });
     </script>
 {% endblock %}
-
+{% load filters %}
 {% block content %}
 
     <div class="page-header position-relative">
@@ -35,14 +35,13 @@
     Code: {{ account.code }} <br/>
     Dr Amount: {{ account.current_dr }} <br/>
     Cr Amount: {{ account.current_cr }} <br/>
-    Category: {{ account.category }}<br/>
+    Closing Balance : {{ account.get_balance|dr_or_cr }} <br/>
+    Category: {{ account.category }} <br/>
     <a href="{% url "update_account" account.id %}">
         Edit Account Details
     </a>
 
     <h2>Transactions:</h2>
-
-    {% load filters %}
 
     <table class="table table-bordered table-striped table-sortable">
         <thead>

@@ -55,6 +55,9 @@ class Account(models.Model):
     #         return transactions[0]
     #
 
+    def get_balance(self):
+        return self.current_dr - self.current_cr
+
     def get_day_opening_dr(self, before_date=None):
         if not before_date:
             before_date = datetime.date.today()
