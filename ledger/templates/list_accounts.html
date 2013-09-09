@@ -6,6 +6,7 @@
     {{ block.super }}
     <li class="active"><a href="{% url "list_account" %}">Accounts</a></li>
 {% endblock %}
+{% load sorting_tags %}
 
 {% block content %}
 
@@ -17,15 +18,16 @@
 
     <table class="table table-bordered table-striped table-sortable">
         <thead>
-        <th>Code</th>
-        <th>Name</th>
-        <th>Category</th>
-        <th>Dr</th>
-        <th>Cr</th>
+        <th>{% anchor code 'Code' %}</th>
+        <th>{% anchor name 'Name' %}</th>
+        <th>{% anchor category 'Category' %}</th>
+        <th>{% anchor current_dr 'Dr' %}</th>
+        <th>{% anchor current_cr 'Cr' %}</th>
         <th>Actions</th>
         </thead>
         <tbody>
-        {% for account in accounts %}
+        {% autosort accounts as sorted_accounts %}
+        {% for account in sorted_accounts %}
             <tr>
                 <td>
                     <a href="{% url "view_account" account.id %}">
