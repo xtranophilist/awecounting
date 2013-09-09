@@ -205,7 +205,7 @@ def save_journal_voucher(request):
     dct = {'rows': {}}
 
     voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'),
-                      'company': request.user.company}
+                      'narration': params.get('narration'), 'company': request.user.company}
     if params.get('id'):
         voucher = JournalVoucher.objects.get(id=params.get('id'))
     else:
