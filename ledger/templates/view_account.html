@@ -73,7 +73,11 @@
                 </td>
                 <td>
                     <a href="{{ entry|url_for_content }}">
-                        {{ entry.model_id }}
+                        {% if entry.content_type.app_label == 'dayjournal' %}
+                            {{ entry|day_journal_id }}
+                        {% else %}
+                            {{ entry.model_id }}
+                        {% endif %}
                     </a>
                 </td>
 

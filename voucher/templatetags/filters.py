@@ -70,13 +70,13 @@ def subtract(value, arg):
 
 
 @register.filter
-def url_for_content(value):
+def url_for_content(obj):
     #TODO DB Optimisation
     try:
-        obj = value.content_type.get_object_for_this_type(id=value.model_id)
+        source = obj.content_type.get_object_for_this_type(id=obj.model_id)
     except:
         return None
-    return obj.get_absolute_url()
+    return source.get_absolute_url()
 
 
 @register.filter
@@ -93,4 +93,14 @@ def yesterday():
     yesterday = today - timedelta(days=1)
     return yesterday
 
-
+@register.filter
+def day_journal_id(obj):
+    #TODO DB Optimisation
+    try:
+        source = obj.content_type.get_object_for_this_type(id=obj.model_id)
+    except:
+        return None
+    try:
+        return source.day_journal.id
+    except:
+        return source.id
