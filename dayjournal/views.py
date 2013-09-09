@@ -524,7 +524,7 @@ def save_summary_bank(request):
         #                  ['cr', cheque_account, params.get('rows')[1].get('deposit')],
         # )
         bank_amount += float(params.get('rows')[1].get('deposit'))
-        cheque_amount -= float(params.get('rows')[0].get('deposit'))
+        cheque_amount -= float(params.get('rows')[1].get('deposit'))
         dct['saved'][1] = 1
         if cash_amount < 0:
             set_transactions(day_journal, day_journal.date, ['cr', cash_account, (-1 * cash_amount)])
