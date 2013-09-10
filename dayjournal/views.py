@@ -78,11 +78,19 @@ def save_cash_sales(request):
         net_amount = float(row.get('amount')) - tax_amount
 
         #sales-cr;tax-cr;cash-dr
-        set_transactions(submodel, day_journal.date,
-                         ['dr', cash_account, row.get('amount')],
-                         ['cr', Account.objects.get(id=row.get('account_id')), net_amount],
-                         ['cr', sales_tax_account, tax_amount],
-        )
+
+        if tax_amount == 0:
+            set_transactions(submodel, day_journal.date,
+                             ['dr', cash_account, row.get('amount')],
+                             ['cr', Account.objects.get(id=row.get('account_id')), net_amount],
+                             # ['cr', sales_tax_account, tax_amount],
+            )
+        else:
+            set_transactions(submodel, day_journal.date,
+                             ['dr', cash_account, row.get('amount')],
+                             ['cr', Account.objects.get(id=row.get('account_id')), net_amount],
+                             ['cr', sales_tax_account, tax_amount],
+            )
         if not created:
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
