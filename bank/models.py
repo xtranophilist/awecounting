@@ -15,7 +15,7 @@ class BankAccount(models.Model):
             account = Account(code=self.ac_no[10:], name=self.bank_name + ' Account (' + str(self.ac_no) + ' )')
             account.company = self.company
             # account
-            account.add_category('Bank')
+            account.add_category('Bank Account')
             account.save()
             self.account = account
         super(BankAccount, self).save(*args, **kwargs)
