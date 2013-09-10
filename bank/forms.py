@@ -12,7 +12,7 @@ class BankAccountForm(KOModelForm):
 
 
 class ChequeDepositForm(KOModelForm):
-    bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank'), empty_label=None,
+    bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
                                           widget=forms.Select(attrs={'class': 'select2'}), label='Beneficiary Account')
     benefactor = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
                                         widget=forms.Select(attrs={'class': 'select2'}), label='Benefactor (Given By)')
@@ -29,7 +29,7 @@ class ChequeDepositForm(KOModelForm):
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
         super(ChequeDepositForm, self).__init__(*args, **kwargs)
-        self.fields['bank_account'].queryset = Account.objects.filter(company=company, category__name='Bank')
+        self.fields['bank_account'].queryset = Account.objects.filter(company=company, category__name='Bank Account')
         self.fields['benefactor'].queryset = Account.objects.filter(company=company)
 
     class Meta:
@@ -39,7 +39,7 @@ class ChequeDepositForm(KOModelForm):
 
 class BankCashDepositForm(KOModelForm):
     date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
-    bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank'), empty_label=None,
+    bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
                                           widget=forms.Select(attrs={'class': 'select2'}), label='Beneficiary Account')
     benefactor = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
                                         widget=forms.Select(attrs={'class': 'select2'}))
@@ -54,7 +54,7 @@ class BankCashDepositForm(KOModelForm):
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
         super(BankCashDepositForm, self).__init__(*args, **kwargs)
-        self.fields['bank_account'].queryset = Account.objects.filter(company=company, category__name='Bank')
+        self.fields['bank_account'].queryset = Account.objects.filter(company=company, category__name='Bank Account')
         self.fields['benefactor'].queryset = Account.objects.filter(company=company)
 
     class Meta:
@@ -63,7 +63,7 @@ class BankCashDepositForm(KOModelForm):
 
 
 class ChequePaymentForm(KOModelForm):
-    bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank'), empty_label=None,
+    bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
                                           widget=forms.Select(attrs={'class': 'select2'}))
     beneficiary = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
                                          widget=forms.Select(attrs={'class': 'select2'}))
@@ -78,7 +78,7 @@ class ChequePaymentForm(KOModelForm):
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
         super(ChequePaymentForm, self).__init__(*args, **kwargs)
-        self.fields['bank_account'].queryset = Account.objects.filter(company=company, category__name='Bank')
+        self.fields['bank_account'].queryset = Account.objects.filter(company=company, category__name='Bank Account')
         self.fields['beneficiary'].queryset = Account.objects.filter(company=company)
 
     class Meta:
