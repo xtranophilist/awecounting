@@ -60,6 +60,7 @@
                 {% if scenario = 'Update' %}
                     <a class="btn" href="{% url 'delete_inventory_item' form.instance.id %}">Delete!</a>
                 {% endif %}
+                <a class="btn" target="_blank" href="{% url 'create_inventory_category' %}">New Inventory Category</a>
             </div>
         </div>
     </form>

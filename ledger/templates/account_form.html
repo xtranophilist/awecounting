@@ -28,7 +28,11 @@
                 {% if scenario == 'Update' %}
                     <a href="{% url 'delete_account' form.instance.id %}" class="btn"/>Delete</a>
                 {% endif %}
+                <a class="btn" target="_blank" href="{% url 'create_category' %}">Create New Category</a>
             </div>
+
         </div>
+
+
     </form>
 {% endblock %}
