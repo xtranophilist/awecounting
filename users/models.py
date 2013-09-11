@@ -200,6 +200,10 @@ def create_default(user):
     Account(name='Discounting Expenses', category=indirect_expenses, code='13-0011', company=company).save()
     Account(name='Repairs and Maintenance Expenses', category=indirect_expenses, code='13-0012', company=company).save()
 
+    opening_balance_difference = Category(name='Opening Balance Difference', company=company)
+    opening_balance_difference.save()
+    Account(name='Opening Balance Difference', category=opening_balance_difference, company=company, code='20-0001').save()
+
 
 def handle_new_user(sender, user, request, **kwargs):
     user.full_name = request.POST.get('full_name')
