@@ -103,6 +103,10 @@ class CreditIncome(models.Model):
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='credit_income')
 
+    def get_absolute_url(self):
+        return '/day/' + str(self.day_journal.date) + '#credit-income'
+
+
 
 class SummaryTransfer(models.Model):
     sn = models.IntegerField()
