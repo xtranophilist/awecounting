@@ -333,8 +333,11 @@ def delete_rows(rows, model):
     for row in rows:
         if row.get('id'):
             instance = model.objects.get(id=row.get('id'))
-            JournalEntry.objects.get(content_type=ContentType.objects.get_for_model(model),
-                                     model_id=instance.id).delete()
+            try:
+                JournalEntry.objects.get(content_type=ContentType.objects.get_for_model(model),
+                                         model_id=instance.id).delete()
+            except:
+                pass
             instance.delete()
 
 
