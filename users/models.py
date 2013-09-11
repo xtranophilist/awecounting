@@ -202,7 +202,7 @@ def create_default(user):
 
     opening_balance_difference = Category(name='Opening Balance Difference', company=company)
     opening_balance_difference.save()
-    Account(name='Opening Balance Difference', category=opening_balance_difference, company=company, code='20-0001').save()
+    Account(name='Opening Balance Difference', category=opening_balance_difference, company=company, code='0-0001').save()
 
 
 def handle_new_user(sender, user, request, **kwargs):
