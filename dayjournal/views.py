@@ -184,6 +184,7 @@ def save_credit_sales(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CreditSales
+    sales_tax_account = Account.objects.get(name='Sales Tax', company=request.user.company)
     day_journal = get_journal(request)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_cr_id', 'account_dr_id', 'amount'])
@@ -197,10 +198,27 @@ def save_credit_sales(request):
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
         #sales-cr;customer-dr
-        set_transactions(submodel, day_journal.date,
-                         ['dr', Account.objects.get(id=row.get('account_dr_id')), row.get('amount')],
-                         ['cr', Account.objects.get(id=row.get('account_cr_id')), row.get('amount')],
-        )
+        if row.get('tax_rate') is None:
+            row['tax_rate'] = 0
+        tax_amount = float(row.get('tax_rate')) / 100 * float(row.get('amount'))
+        net_amount = float(row.get('amount')) - tax_amount
+
+        # set_transactions(submodel, day_journal.date,
+        #                  ['dr', Account.objects.get(id=row.get('account_dr_id')), row.get('amount')],
+        #                  ['cr', Account.objects.get(id=row.get('account_cr_id')), row.get('amount')],
+        # )
+        if tax_amount == 0:
+            set_transactions(submodel, day_journal.date,
+                             ['dr', Account.objects.get(id=row.get('account_dr_id')), net_amount],
+                             ['cr', Account.objects.get(id=row.get('account_cr_id')), net_amount],
+                             # ['cr', sales_tax_account, tax_amount],
+            )
+        else:
+            set_transactions(submodel, day_journal.date,
+                             ['dr', Account.objects.get(id=row.get('account_dr_id')), net_amount],
+                             ['cr', Account.objects.get(id=row.get('account_cr_id')), net_amount],
+                             ['cr', sales_tax_account, tax_amount],
+            )
     delete_rows(params.get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
@@ -291,7 +309,6 @@ def save_summary_sales_tax(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
     for index, row in enumerate(params.get('rows')):
-        print row
         invalid_attrs = invalid(row, ['register'])
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
@@ -359,7 +376,6 @@ def save_summary_inventory(request, fuel=False):
 
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         account = InventoryAccount.objects.get(id=row.get('account_id'))
-        print row.get('account_id')
         diff = float(row.get('purchase')) - float(row.get('sales'))
         if diff < 0:
             set_inventory_transactions(submodel, day_journal.date,
@@ -443,7 +459,6 @@ def save_cash_equivalent_sales(request):
     day_journal = get_journal(request)
     cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
     for index, row in enumerate(params.get('rows')):
-        print row
         invalid_attrs = invalid(row, ['amount', 'account'])
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
