@@ -13,9 +13,9 @@ class AccountForm(KOModelForm):
         self.scenario = kwargs.pop('scenario', None)
         super(AccountForm, self).__init__(*args, **kwargs)
         self.fields['category'].queryset = Category.objects.filter(company=self.company)
-        if self.scenario == 'Create':
-            del self.fields['current_dr']
-            del self.fields['current_cr']
+        # if self.scenario == 'Create':
+        del self.fields['current_dr']
+        del self.fields['current_cr']
 
     class Meta:
         model = Account
