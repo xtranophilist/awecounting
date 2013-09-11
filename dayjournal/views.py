@@ -202,7 +202,6 @@ def save_credit_sales(request):
             row['tax_rate'] = 0
         tax_amount = float(row.get('tax_rate')) / 100 * float(row.get('amount'))
         net_amount = float(row.get('amount')) - tax_amount
-
         # set_transactions(submodel, day_journal.date,
         #                  ['dr', Account.objects.get(id=row.get('account_dr_id')), row.get('amount')],
         #                  ['cr', Account.objects.get(id=row.get('account_cr_id')), row.get('amount')],
@@ -321,6 +320,28 @@ def save_summary_sales_tax(request):
         except:
             pass
     return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+@login_required
+def save_summary_cash(request):
+    params = json.loads(request.body)
+    day_journal = get_journal(request)
+    day_journal.cash_actual = params.get('rows')[0].get('actual')
+    day_journal.save()
+    # dct = {'invalid_attributes': {}, 'saved': {}}
+    # for index, row in enumerate(params.get('rows')):
+    #     invalid_attrs = invalid(row, ['register'])
+    #     if invalid_attrs:
+    #         dct['invalid_attributes'][index] = invalid_attrs
+    #         continue
+    #     day_journal = get_journal(request)
+    #     try:
+    #         day_journal.sales_tax = row.get('register')
+    #         day_journal.save()
+    #         dct['saved'][0] = day_journal.id
+    #     except:
+    #         pass
+    return HttpResponse(json.dumps({'saved': {'0': 1}}), mimetype="application/json")
 
 
 @login_required
