@@ -1,5 +1,5 @@
 /*
-Version: 3.4.1 Timestamp: Thu Jun 27 18:02:10 PDT 2013
+Version: 3.4.2 Timestamp: Mon Aug 12 15:04:12 PDT 2013
 */
 .select2-container {
     margin: 0;
@@ -115,25 +115,18 @@ Version: 3.4.1 Timestamp: Thu Jun 27 18:02:10 PDT 2013
     cursor: pointer;
 }
 
-.select2-drop-undermask {
-    border: 0;
-    margin: 0;
-    padding: 0;
-    position: absolute;
-    left: 0;
-    top: 0;
-    z-index: 9998;
-    background-color: transparent;
-    filter: alpha(opacity=0);
-}
-
 .select2-drop-mask {
     border: 0;
     margin: 0;
     padding: 0;
-    position: absolute;
+    position: fixed;
     left: 0;
     top: 0;
+    min-height: 100%;
+    min-width: 100%;
+    height: auto;
+    width: auto;
+    opacity: 0;
     z-index: 9998;
     /* styles required for IE to work */
     background-color: #fff;
@@ -278,7 +271,6 @@ Version: 3.4.1 Timestamp: Thu Jun 27 18:02:10 PDT 2013
 .select2-container-active .select2-choices {
     border: 1px solid #5897fb;
     outline: none;
-
     -webkit-box-shadow: 0 0 5px rgba(0,0,0,.3);
        -moz-box-shadow: 0 0 5px rgba(0,0,0,.3);
             box-shadow: 0 0 5px rgba(0,0,0,.3);
