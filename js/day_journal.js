@@ -467,6 +467,7 @@ function SummaryLotto(root) {
     self.disp = function () {
         var total = 0;
         $.each(root.lotto_detail.rows(), function () {
+            console.log(this.sales());
             total += this.sales();
         });
         return total;
