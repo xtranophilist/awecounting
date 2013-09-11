@@ -21,8 +21,6 @@
         <th>{% anchor code 'Code' %}</th>
         <th>{% anchor name 'Name' %}</th>
         <th>{% anchor category 'Category' %}</th>
-        <th>{% anchor current_dr 'Dr' %}</th>
-        <th>{% anchor current_cr 'Cr' %}</th>
         <th>Actions</th>
         </thead>
         <tbody>
@@ -42,8 +40,6 @@
                 <td>
                     {{ account.category }}
                 </td>
-                <td>{{ account.current_dr }}</td>
-                <td>{{ account.current_cr }}</td>
                 <td>
                     <a href="{% url "update_account" account.id %}">
                         Edit
