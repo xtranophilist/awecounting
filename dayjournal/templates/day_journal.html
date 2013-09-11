@@ -18,7 +18,7 @@
             if (window.location.hash != "") {
                 $('a[href="' + window.location.hash + '"]').click();
             }
-            $(document).on("click",".delete-attachment",function (e) {
+            $(document).on("click", ".delete-attachment", function (e) {
                 e.preventDefault();
                 var $this = $(this);
                 if (confirm("Are you sure you want to delete this attachment?")) {
@@ -26,7 +26,9 @@
                     $.post(uri.url, uri.params)
                             .done(function (res) {
                                 if (res.success) {
-                                    $this.parent('.span3').fadeOut(300, function(){ $(this).remove(); });
+                                    $this.parent('.span3').fadeOut(300, function () {
+                                        $(this).remove();
+                                    });
                                 } else {
                                     alert("There has been error while processing your request. Please try again!");
                                 }
@@ -60,7 +62,7 @@
                         formdata.append("attachments", this.files[0]);
                     });
                     var $this = $(this);
-                    var type=$this.data("type");
+                    var type = $this.data("type");
                     formdata.append("type", type);
                     formdata.append("day", $('#attachment_tabbable').data("journal-day"));
                     $.ajax({
@@ -71,8 +73,8 @@
                         contentType: false,
                         success: function (res) {
                             var str = "";
-                            $.each(res, function(){
-                                str += '<div class="span3"> <a target="_blank" href="'+this.link+'">'+this.caption+'</a><button class="close delete-attachment" data-type="'+type+'" data-id="'+this.id+'"><span class="icon-trash"></span></button></div>';
+                            $.each(res, function () {
+                                str += '<div class="span3"> <a target="_blank" href="' + this.link + '">' + this.caption + '</a><button class="close delete-attachment" data-type="' + type + '" data-id="' + this.id + '"><span class="icon-trash"></span></button></div>';
                             });
                             $this.find('.row-fluid').append(str);
                             $this.find('.attach_file_field').find("input").val("").end().not(':first').remove();
@@ -177,7 +179,7 @@
                     </td>
                     <td class="with_ip">
                         <select class="span12"
-                                data-bind="options: $root.accounts_by_category(['Sales', 'Lotto', 'Lottery'], true), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {}, event: {change: $root.account_changed}"></select>
+                                data-bind="options: $root.accounts_by_category(['Sales', 'Lotto', 'Lottery'], true), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.account_changed}"></select>
                     </td>
                     <td data-bind="editableText: amount, numeric: true"></td>
                     <td data-bind="text: tax()"></td>
@@ -222,7 +224,7 @@
                     </td>
                     <td class="with_ip">
                         <select class="span12"
-                                data-bind="options: $root.accounts_by_category('Purchase'), optionsText: 'name', optionsValue: 'id', value: account_id, select2: {}"></select>
+                                data-bind="options: $root.accounts_by_category('Purchase'), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td>
@@ -267,7 +269,7 @@
                     </td>
                     <td class="with_ip">
                         <select class="span12"
-                                data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: account_id, select2: {}"></select>
+                                data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td>
@@ -311,7 +313,7 @@
                     </td>
                     <td class="with_ip">
                         <select class="span12"
-                                data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: account_id, select2: {}"></select>
+                                data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td>
@@ -355,7 +357,7 @@
                     <td data-bind="text: $index()+1"></td>
                     <td class="with_ip">
                         <select class="span12"
-                                data-bind="options: $root.accounts_by_category('Transfers/Remittances'), optionsText: 'name', optionsValue: 'id', value: transfer_type, select2: {placeholderOption: 'first'}"></select>
+                                data-bind="options: $root.accounts_by_category('Transfers/Remittances'), optionsText: 'name', optionsValue: 'id', value: transfer_type, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
                     </td>
                     <td data-bind="editableText: cash"></td>
                     <td data-bind="editableText: cheque"></td>
@@ -532,7 +534,7 @@
                             <td data-bind="text: $index()+1"></td>
                             <td class="with_ip">
                                 <select class="span12"
-                                        data-bind="options: $root.accounts_by_category('Cash Equivalent Account'), optionsText: 'name', optionsValue: 'id', value: account, select2: {placeholderOption: 'first'}"></select>
+                                        data-bind="options: $root.accounts_by_category('Cash Equivalent Account'), optionsText: 'name', optionsValue: 'id', value: account, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
                             </td>
                             <td data-bind="editableText: amount"></td>
                             <td>
@@ -613,11 +615,11 @@
                     </td>
                     <td class="with_ip">
                         <select class="span12"
-                                data-bind="options: $root.accounts_by_category('Sales'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}, event: {change: $root.account_cr_changed}"></select>
+                                data-bind="options: $root.accounts_by_category('Sales'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.account_cr_changed}"></select>
                     </td>
                     <td class="with_ip">
                         <select class="span12"
-                                data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
+                                data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: account_dr_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td data-bind="text: tax()"></td>
@@ -663,11 +665,11 @@
                     </td>
                     <td class="with_ip">
                         <select class="span12"
-                                data-bind="options: $root.accounts_by_category('Purchase'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
+                                data-bind="options: $root.accounts_by_category('Purchase'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
                     </td>
                     <td class="with_ip">
                         <select class="span12"
-                                data-bind="options: $root.accounts_by_category('Account Payables'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}"></select>
+                                data-bind="options: $root.accounts_by_category('Account Payables'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td>
@@ -713,11 +715,11 @@
                     </td>
                     <td class="with_ip">
                         <select class="span12"
-                                data-bind="options: $root.accounts_by_category('Expenses'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
+                                data-bind="options: $root.accounts_by_category('Expenses'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
                     </td>
                     <td class="with_ip">
                         <select class="span12"
-                                data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}"></select>
+                                data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: account_cr_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td>
@@ -762,11 +764,11 @@
                     </td>
                     <td>
                         <select class="span12"
-                                data-bind="options: $root.accounts_by_category('Income'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, select2: {}"></select>
+                                data-bind="options: $root.accounts_by_category('Income'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
                     </td>
                     <td>
                         <select class="span12"
-                                data-bind="options: $root.accounts_by_category('Assets', 'Equity', 'Liabilities'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, select2: {}"></select>
+                                data-bind="options: $root.accounts_by_category('Assets', 'Equity', 'Liabilities'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td>
@@ -842,7 +844,7 @@
                             <td data-bind="text: $index()+1"></td>
                             <td class="with_ip">
                                 <select class="span12"
-                                        data-bind="options: $root.inventory_accounts_by_category('Fuel'), optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: account_id, select2: {placeholderOption: 'first'}, event: {change: $root.inventory_account_changed}"></select>
+                                        data-bind="options: $root.inventory_accounts_by_category('Fuel'), optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.inventory_account_changed}"></select>
                             </td>
                             <td data-bind="text: opening()"></td>
                             <td data-bind="editableText: purchase, numeric: true"></td>
@@ -896,7 +898,7 @@
                             <td data-bind="text: $index()+1"></td>
                             <td class="with_ip">
                                 <select class="span12"
-                                        data-bind="options: $root.inventory_accounts, optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: account_id, select2: {placeholderOption: 'first'}, event: {change: $root.inventory_account_changed}"></select>
+                                        data-bind="options: $root.inventory_accounts, optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.inventory_account_changed}"></select>
                             </td>
                             <td data-bind="text: opening()"></td>
                             <td data-bind="editableText: purchase, numeric: true"></td>
@@ -1140,7 +1142,8 @@
                             <div class="span3">
                                 <a target="_blank"
                                    href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
-                                <button class="close delete-attachment" data-type="purchase" data-id="{{ attachment.id }}">
+                                <button class="close delete-attachment" data-type="purchase"
+                                        data-id="{{ attachment.id }}">
                                     <span class="icon-trash"></span>
                                 </button>
                             </div>
@@ -1168,15 +1171,15 @@
             <div id="bank_attach" class="tab-pane">
                 <form class="attachment-form" data-type="bank">
                     <div class="row-fluid">
-                    {% for attachment in bank_attachments %}
-                        <div class="span3">
-                            <a target="_blank"
-                               href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
-                            <button class="close delete-attachment" data-type="bank" data-id="{{ attachment.id }}">
-                                <span class="icon-trash"></span>
-                            </button>
-                        </div>
-                    {% endfor %}
+                        {% for attachment in bank_attachments %}
+                            <div class="span3">
+                                <a target="_blank"
+                                   href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
+                                <button class="close delete-attachment" data-type="bank" data-id="{{ attachment.id }}">
+                                    <span class="icon-trash"></span>
+                                </button>
+                            </div>
+                        {% endfor %}
                     </div>
                     <br>
 
@@ -1199,15 +1202,15 @@
             <div id="other_attach" class="tab-pane">
                 <form class="attachment-form" data-type="other">
                     <div class="row-fluid">
-                    {% for attachment in other_attachments %}
-                        <div class="span3">
-                            <a target="_blank"
-                               href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
-                            <button class="close delete-attachment" data-type="other" data-id="{{ attachment.id }}">
-                                <span class="icon-trash"></span>
-                            </button>
-                        </div>
-                    {% endfor %}
+                        {% for attachment in other_attachments %}
+                            <div class="span3">
+                                <a target="_blank"
+                                   href="{{ MEDIA_URL }}{{ attachment.attachment }}">{{ attachment.description }}</a>
+                                <button class="close delete-attachment" data-type="other" data-id="{{ attachment.id }}">
+                                    <span class="icon-trash"></span>
+                                </button>
+                            </div>
+                        {% endfor %}
                     </div>
                     <br>
 
