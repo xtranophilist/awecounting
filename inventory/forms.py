@@ -21,7 +21,7 @@ class ItemForm(KOModelForm):
 
     class Meta:
         model = Item
-        exclude = ['company', 'account']
+        exclude = ['company', 'account', 'sales_price', 'purchase_price']
 
 
 class CategoryForm(KOModelForm):

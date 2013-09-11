@@ -47,8 +47,8 @@
         <th>{% anchor code 'Code' %}</th>
         <th>{% anchor name 'Name' %}</th>
         <th>{% anchor category 'Category' %}</th>
-        <th>{% anchor purchase_price 'Purchase Price' %}</th>
-        <th>{% anchor sales_price 'Sales Price' %}</th>
+{#        <th>{% anchor purchase_price 'Purchase Price' %}</th>#}
+{#        <th>{% anchor sales_price 'Sales Price' %}</th>#}
         <th>{% anchor sales_tax_scheme 'Sales Tax Scheme' %}</th>
         <th>Actions</th>
         </thead>
@@ -60,8 +60,8 @@
                 </td>
                 <td>{{ item.name }}</td>
                 <td>{{ item.category }}</td>
-                <td>{{ item.purchase_price }}</td>
-                <td>{{ item.sales_price }}</td>
+{#                <td>{{ item.purchase_price }}</td>#}
+{#                <td>{{ item.sales_price }}</td>#}
                 <td>{{ item.sales_tax_scheme }}</td>
                 <td>
                     <a href="{% url 'update_inventory_item' item.id %}">Edit</a>
