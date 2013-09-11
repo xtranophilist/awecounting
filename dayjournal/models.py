@@ -49,6 +49,9 @@ class CashReceipt(models.Model):
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='cash_receipt')
 
+    def get_absolute_url(self):
+        return '/day/' + str(self.day_journal.date) + '#cash-receipt'
+
 
 class CashPayment(models.Model):
     sn = models.IntegerField()
@@ -67,6 +70,9 @@ class CreditSales(models.Model):
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='credit_sales')
 
+    def get_absolute_url(self):
+        return '/day/' + str(self.day_journal.date) + '#credit-sales'
+
 
 class CreditPurchase(models.Model):
     sn = models.IntegerField()
@@ -75,6 +81,9 @@ class CreditPurchase(models.Model):
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='credit_purchase')
 
+    def get_absolute_url(self):
+        return '/day/' + str(self.day_journal.date) + '#credit-purchase'
+
 
 class CreditExpense(models.Model):
     sn = models.IntegerField()
@@ -82,6 +91,9 @@ class CreditExpense(models.Model):
     expense_claimed_by = models.ForeignKey(Account, related_name='expense_claimed_by')
     amount = models.FloatField()
     day_journal = models.ForeignKey(DayJournal, related_name='credit_expense')
+
+    def get_absolute_url(self):
+        return '/day/' + str(self.day_journal.date) + '#credit-expense'
 
 
 class CreditIncome(models.Model):
@@ -100,6 +112,9 @@ class SummaryTransfer(models.Model):
     card = models.FloatField(blank=True, null=True)
     day_journal = models.ForeignKey(DayJournal, related_name='summary_transfer')
 
+    def get_absolute_url(self):
+        return '/day/' + str(self.day_journal.date) + '#summary-transfer'
+
 
 class CardSales(models.Model):
     amount = models.FloatField()
@@ -107,7 +122,7 @@ class CardSales(models.Model):
     day_journal = models.ForeignKey(DayJournal, related_name='card_sales')
 
     def get_absolute_url(self):
-        return '/day/' + str(self.day_journal.date) + '#cash-payment'
+        return '/day/' + str(self.day_journal.date) + '#card-sales'
 
 
 class CashEquivalentSales(models.Model):
@@ -117,7 +132,7 @@ class CashEquivalentSales(models.Model):
     day_journal = models.ForeignKey(DayJournal, related_name='cash_equivalent_sales')
 
     def get_absolute_url(self):
-        return '/day/' + str(self.day_journal.date) + '#cash-payment'
+        return '/day/' + str(self.day_journal.date) + '#cash-equivalent-sales'
 
 
 class ChequePurchase(models.Model):
@@ -126,7 +141,7 @@ class ChequePurchase(models.Model):
     day_journal = models.ForeignKey(DayJournal, related_name='cheque_purchase')
 
     def get_absolute_url(self):
-        return '/day/' + str(self.day_journal.date) + '#cash-payment'
+        return '/day/' + str(self.day_journal.date) + '#cheque-purchase'
 
 
 class SummaryInventory(models.Model):
@@ -161,6 +176,9 @@ class LottoDetail(models.Model):
     day_close = models.IntegerField()
     addition = models.IntegerField()
     day_journal = models.ForeignKey(DayJournal, related_name='lotto_detail')
+
+    def get_absolute_url(self):
+        return '/day/' + str(self.day_journal.date) + '#lotto-detail'
 
 
 class SalesAttachment(models.Model):
