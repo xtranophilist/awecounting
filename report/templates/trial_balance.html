@@ -58,18 +58,17 @@
     {#    {{ dict }}#}
 
 
-{#    <form method="get" action="" class="center">#}
-{#        <input type="text" name="from" class="date-picker" data-date-format="yyyy-mm-dd" placeholder="From"/> -#}
-{#        <input type="text" name="to" class="date-picker" data-date-format="yyyy-mm-dd" placeholder="To"/>#}
-{#        <input type="submit" value="Go!" class="btn hidden">#}
-{#    </form>#}
+    {#    <form method="get" action="" class="center">#}
+    {#        <input type="text" name="from" class="date-picker" data-date-format="yyyy-mm-dd" placeholder="From"/> -#}
+    {#        <input type="text" name="to" class="date-picker" data-date-format="yyyy-mm-dd" placeholder="To"/>#}
+    {#        <input type="submit" value="Go!" class="btn hidden">#}
+    {#    </form>#}
 
 
     <div class="controls">
-        <a onclick="$('.tree-table').treetable('expandAll'); return false;">Expand all</a> |
-        <a data-bind="click: expandRoot">Expand Base Accounts</a> |
+        <a onclick="$('.tree-table').treetable('expandAll'); return false;">Expand all</a>
+        <a data-bind="click: expandRoot">Expand Base Accounts</a>
         <a onclick="$('.tree-table').treetable('collapseAll'); return false;">Collapse all</a>
-
     </div>
 
     <table class="table table-bordered table-striped table-acubor table-sortable tree-table">
@@ -93,5 +92,13 @@
         </tr>
         </tbody>
     </table>
+    <div class="controls">
+        <a data-bind="toggle: option_show_zero_balance_ledger, visible: !option_show_zero_balance_ledger()">Show Zero
+            Balance Ledgers</a>
+        <a data-bind="toggle: option_show_zero_balance_ledger, visible: option_show_zero_balance_ledger()">Hide Zero
+            Balance Ledgers</a>
+        <a data-bind="toggle: option_net_view, visible: !option_net_view()">Net View</a>
+        <a data-bind="toggle: option_net_view, visible: option_net_view()">Transaction View</a>
+    </div>
 
 {% endblock %}
