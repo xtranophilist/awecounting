@@ -30,6 +30,11 @@ class AccountForm(KOModelForm):
 
         name = cleaned_data.get('name')
         code = cleaned_data.get('code')
+        opening_dr = cleaned_data.get('opening_dr')
+        opening_cr = cleaned_data.get('opening_cr')
+
+        if not opening_dr == 0 and not opening_cr == 0:
+            raise forms.ValidationError("You can't enter both Opening Dr and Cr amounts.")
 
         try:
             object = Account.objects.get(name=name, company=self.company)
@@ -41,7 +46,7 @@ class AccountForm(KOModelForm):
         try:
             object = Account.objects.get(code=code, company=self.company)
             if not object.id == self.instance.id:
-                raise forms.ValidationError("Account name already exists.")
+                raise forms.ValidationError("Account code already exists.")
         except Account.DoesNotExist:
             pass
 
