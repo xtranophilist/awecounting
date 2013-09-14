@@ -500,7 +500,7 @@
                         <tr>
                             <td data-bind="editableText: amount"></td>
                             <td data-bind="editableText: commission_out"></td>
-                            <td data-bind="text: net()"></td>
+                            <td data-bind="text: net().toFixed(2)"></td>
                         </tr>
                         <!-- /ko -->
                         </tbody>
@@ -1051,7 +1051,7 @@
                         <tr data-bind="flash: true">
                             <td data-bind="editableText: register"></td>
                             <td data-bind="text: accounts($root)"></td>
-                            <td data-bind="text: difference($root)"></td>
+                            <td data-bind="text: difference($root).toFixed(2)"></td>
                         </tr>
                         <!-- /ko -->
                         </tbody>
