@@ -16,6 +16,9 @@ class AccountForm(KOModelForm):
         # if self.scenario == 'Create':
         del self.fields['current_dr']
         del self.fields['current_cr']
+        if self.scenario == 'Update':
+            del self.fields['opening_dr']
+            del self.fields['opening_cr']
 
     class Meta:
         model = Account
