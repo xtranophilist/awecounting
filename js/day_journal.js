@@ -200,7 +200,11 @@ function LottoDetailRow(row) {
     self.day_close = ko.observable();
     self.addition = ko.observable(0);
     self.sales = function () {
-        return round2(((self.pack_count() * self.addition()) + (self.day_close() - self.day_open())) * self.rate());
+        var day_close = self.day_close();
+        if (day_close == 0) {
+            day_close = self.pack_count();
+        }
+        return round2(((self.pack_count() * self.addition()) + (day_close - self.day_open())) * self.rate());
     }
 
     for (var k in row) {
