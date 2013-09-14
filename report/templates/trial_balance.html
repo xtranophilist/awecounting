@@ -30,15 +30,19 @@
         <tr data-bind="attr: {'data-tt-id': id, 'data-tt-parent-id': parent_id}, css: cls">
             <td data-bind="text: name"></td>
             <td data-bind="text: code"></td>
-            <td data-bind="text: dr()||''"></td>
-            <td data-bind="text: cr()||''"></td>
+            <td data-bind="text: dr()||'', visible: !$root.option_net_view()"></td>
+            <td data-bind="text: cr()||'', visible: !$root.option_net_view()"></td>
+            <td data-bind="text: net_dr()||'', visible: $root.option_net_view"></td>
+            <td data-bind="text: net_cr()||'', visible: $root.option_net_view"></td>
         </tr>
         <!-- ko foreach: accounts -->
         <tr data-bind="attr: {'data-tt-id': id, 'data-tt-parent-id': parent_id}, css: cls">
             <td><a data-bind="text: name, attr: {href:'/ledger/'+id }"></a></td>
             <td data-bind="text: code"></td>
-            <td data-bind="text: dr()||''"></td>
-            <td data-bind="text: cr()||''"></td>
+            <td data-bind="text: dr()||'', visible: !$root.option_net_view()"></td>
+            <td data-bind="text: cr()||'', visible: !$root.option_net_view()"></td>
+            <td data-bind="text: net_dr()||'', visible: $root.option_net_view"></td>
+            <td data-bind="text: net_cr()||'', visible: $root.option_net_view"></td>
         </tr>
         <!-- /ko -->
 
@@ -76,8 +80,10 @@
         <tr>
             <th class="span4">Particulars</th>
             <th class="span3">Code</th>
-            <th class="span2">Dr</th>
-            <th class="span2">Cr</th>
+            <th class="span2" data-bind="visible: !$root.option_net_view()">Total Dr</th>
+            <th class="span2" data-bind="visible: !$root.option_net_view()">Total Cr</th>
+            <th class="span2" data-bind="visible: $root.option_net_view()">Net Dr</th>
+            <th class="span2" data-bind="visible: $root.option_net_view()">Net Cr</th>
         </tr>
         </thead>
 
