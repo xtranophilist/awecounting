@@ -99,10 +99,7 @@
         </tbody>
     </table>
     <div class="controls">
-        <a data-bind="toggle: option_show_zero_balance_ledger, visible: !option_show_zero_balance_ledger()">Show Zero
-            Balance Ledgers</a>
-        <a data-bind="toggle: option_show_zero_balance_ledger, visible: option_show_zero_balance_ledger()">Hide Zero
-            Balance Ledgers</a>
+{#        <a data-bind="click: $root.toggleEmpty()">Show Zero Balance Ledgers</a>#}
         <a data-bind="toggle: option_net_view, visible: !option_net_view()">Net View</a>
         <a data-bind="toggle: option_net_view, visible: option_net_view()">Transaction View</a>
     </div>
