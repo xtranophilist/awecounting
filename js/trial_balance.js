@@ -13,6 +13,10 @@ function TrialBalance(data) {
         return new CategoryViewModel(item);
     }));
 
+    self.option_show_zero_balance_ledger = ko.observable(false);
+
+    self.option_net_view = ko.observable(true);
+
     self.expandRoot = function () {
         $('.tree-table').treetable('collapseAll');
         for (var k in self.root_nodes) {
@@ -41,7 +45,6 @@ function TrialBalance(data) {
     self.balanced = function () {
         return self.cr_total() == self.dr_total();
     };
-
 
 }
 
