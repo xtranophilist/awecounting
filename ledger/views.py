@@ -1,10 +1,11 @@
 import json
+from datetime import date
 
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 
-from ledger.models import Account, JournalEntry, Category, Party
+from ledger.models import Account, JournalEntry, Category, Party, set_transactions
 from ledger.serializers import AccountSerializer
 from forms import AccountForm, CategoryForm, PartyForm
 
@@ -26,6 +27,7 @@ def accounts_by_day_as_json(request, day):
 
 @login_required
 def account_form(request, id=None):
+    obd = Account.objects.get(name='Opening Balance Difference', company=request.user.company)
     if id:
         account = get_object_or_404(Account, id=id, company=request.user.company)
         scenario = 'Update'
@@ -35,10 +37,25 @@ def account_form(request, id=None):
     if request.POST:
         form = AccountForm(data=request.POST, instance=account, company=request.user.company, scenario=scenario)
         if form.is_valid():
+
+            opening_dr = form.cleaned_data.get('opening_dr')
+            opening_cr = form.cleaned_data.get('opening_cr')
             item = form.save(commit=False)
             item.company = request.user.company
             item.save()
             form.save_m2m()
+            if scenario == 'Create':
+                if not opening_dr == 0:
+                    set_transactions(item, date.today(),
+                                     ['dr', item, form.cleaned_data['opening_dr']])
+                    set_transactions(item, date.today(),
+                                     ['cr', obd, form.cleaned_data['opening_dr']])
+                if not opening_cr == 0:
+                    set_transactions(item, date.today(),
+                                     ['cr', item, form.cleaned_data['opening_cr']])
+                    set_transactions(item, date.today(),
+                                     ['dr', obd, form.cleaned_data['opening_cr']])
+
             return redirect('/ledger/')
     else:
         form = AccountForm(instance=account, company=request.user.company, scenario=scenario)
