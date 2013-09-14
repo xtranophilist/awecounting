@@ -159,7 +159,7 @@ def create_default(user):
     Account(name='Non Tax Sales', category=sales, code='4-0006', company=company).save()
     Account(name='Telephone PP Card Sales', category=sales, code='4-0007', company=company).save()
     Account(name='Sales', category=sales, code='4-0008', company=company).save()
-    Account(name='Lotto Sales', category=sales, code='4-0009', company=company).save()
+    Account(name='Scratch Off Sales', category=sales, code='4-0009', company=company).save()
     Account(name='Lottery Sales', category=sales, code='4-0010', company=company).save()
     Account(name='Moneygram Sales', category=sales, code='4-0011', company=company).save()
     Category(name='Direct Income', parent=income, company=company).save()
@@ -179,7 +179,7 @@ def create_default(user):
     Account(name='Non Tax Purchase', category=purchase, code='11-0006', company=company).save()
     Account(name='Telephone PP Card Purchase', category=purchase, code='11-0007', company=company).save()
     Account(name='Purchase', category=purchase, code='11-0008', company=company).save()
-    Account(name='Lotto Purchase', category=purchase, code='11-0009', company=company).save()
+    Account(name='Scratch Off Purchase', category=purchase, code='11-0009', company=company).save()
     Account(name='Lottery Purchase', category=purchase, code='11-0010', company=company).save()
     Account(name='Moneygram Purchase', category=purchase, code='11-0011', company=company).save()
 
