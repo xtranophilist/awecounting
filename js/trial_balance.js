@@ -92,6 +92,18 @@ function CategoryViewModel(data, parent_id) {
         return rnum(round2(total));
     }
 
+    self.net_dr = function () {
+        if (self.dr() >= self.cr())
+            return self.dr() - self.cr();
+        return null;
+    }
+
+    self.net_cr = function () {
+        if (self.cr() > self.dr())
+            return self.cr() - self.dr();
+        return null;
+    }
+
 }
 
 function AccountViewModel(data, parent_id) {
@@ -105,4 +117,15 @@ function AccountViewModel(data, parent_id) {
     self.cr = ko.observable(data.cr);
     self.dr = ko.observable(data.dr);
 
+    self.net_dr = function () {
+        if (self.dr() >= self.cr())
+            return self.dr() - self.cr();
+        return null;
+    }
+
+    self.net_cr = function () {
+        if (self.cr() > self.dr())
+            return self.cr() - self.dr();
+        return null;
+    }
 }
