@@ -46,6 +46,10 @@ function TrialBalance(data) {
         return self.cr_total() == self.dr_total();
     };
 
+    self.toggleEmpty = function(){
+        $('.empty').css('display','table-row !important');
+    }
+
 }
 
 function CategoryViewModel(data, parent_id) {
@@ -56,7 +60,6 @@ function CategoryViewModel(data, parent_id) {
     self.name = data.name;
     self.code = '';
     self.parent_id = parent_id;
-    self.cls = 'category';
 
     self.accounts = ko.observableArray(ko.utils.arrayMap(data.accounts, function (item) {
         return new AccountViewModel(item, self.id);
@@ -104,6 +107,12 @@ function CategoryViewModel(data, parent_id) {
         return null;
     }
 
+//    if ((self.cr() == null || self.cr() == 0 ) && (self.dr() == null || self.dr() == 0 )) {
+//        self.cls = 'category hidden';
+//    } else {
+      self.cls = 'category';
+//    }
+
 }
 
 function AccountViewModel(data, parent_id) {
@@ -113,7 +122,7 @@ function AccountViewModel(data, parent_id) {
     self.name = data.name;
     self.current_balance = data.current_balance;
     self.parent_id = parent_id;
-    self.cls = 'account';
+
     self.cr = ko.observable(data.cr);
     self.dr = ko.observable(data.dr);
 
@@ -127,5 +136,16 @@ function AccountViewModel(data, parent_id) {
         if (self.cr() > self.dr())
             return self.cr() - self.dr();
         return null;
+    }
+
+    self.isVisible = function () {
+        return false;
+    }
+
+
+    if ((self.cr() == null || self.cr() == 0 ) && (self.dr() == null || self.dr() == 0 )) {
+        self.cls = 'account empty';
+    } else {
+        self.cls = 'account';
     }
 }

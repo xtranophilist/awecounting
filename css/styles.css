@@ -403,7 +403,7 @@ table .select2-container .select2-choice {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
 }
 
 .flip-container input {
@@ -499,4 +499,12 @@ input[type="radio"], input[type="checkbox"] {
 
 .controls a {
     border-right: 1px solid thick;
+}
+
+.controls a:last-child{
+    border-right: none;
+}
+
+.empty{
+    display: none !important;
 }
