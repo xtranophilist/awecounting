@@ -179,7 +179,7 @@
                     </td>
                     <td class="with_ip">
                         <select class="span12"
-                                data-bind="options: $root.accounts_by_category(['Sales', 'Lotto', 'Lottery'], true), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.account_changed}"></select>
+                                data-bind="options: $root.accounts_by_category('Sales'), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.account_changed}"></select>
                     </td>
                     <td data-bind="editableText: amount, numeric: true"></td>
                     <td data-bind="text: tax()"></td>
@@ -813,7 +813,7 @@
 
             <li>
                 <a data-toggle="tab" href="#lotto-detail">
-                    Lotto
+                    Scratch Off
                 </a>
             </li>
 
@@ -998,7 +998,7 @@
 
             <li>
                 <a data-toggle="tab" href="#summary-lotto">
-                    Summary Lotto
+                    Summary Scratch Off
                 </a>
             </li>
 
