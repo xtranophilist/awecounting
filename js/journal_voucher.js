@@ -59,22 +59,22 @@ function JournalVoucher(data){
     self.journal_voucher = new TableViewModel(key_to_options('journal_voucher'), JournalVoucherRow);
 
     self.journal_voucher.cr_total = function(){
-        var total = 0;
+        var total = 0.0;
         $.each(self.journal_voucher.rows(), function(){
-            if (isAN(this.cr_amount())){
+            if (!isNaN(this.cr_amount())){
                 total += this.cr_amount();
             }
         });
-        return total;
+        return total.toFixed(2);
     }
 
     self.journal_voucher.dr_total = function(){
-        var total = 0;
+        var total = 0.0;
         $.each(self.journal_voucher.rows(), function(){
-            if (isAN(this.dr_amount()))
+            if (!isNaN(this.dr_amount()))
                 total += this.dr_amount();
         });
-        return total;
+        return total.toFixed(2);
     }
 
     self.journal_voucher.cr_equals_dr = function(){
