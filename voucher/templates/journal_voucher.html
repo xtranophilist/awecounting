@@ -72,8 +72,8 @@
             <!-- /ko -->
             <tr data-bind="css: total_row_class()">
                 <td colspan="3"><b>TOTAL</b></td>
-                <td data-bind="text: dr_total()"></td>
-                <td data-bind="text: cr_total()"></td>
+                <td data-bind="text: dr_total().toFixed(2)"></td>
+                <td data-bind="text: cr_total().toFixed(2)"></td>
             </tr>
             </tbody>
         </table>
