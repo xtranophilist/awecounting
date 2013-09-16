@@ -71,7 +71,7 @@ function JournalVoucher(data){
     self.journal_voucher.dr_total = function(){
         var total = 0.0;
         $.each(self.journal_voucher.rows(), function(){
-            if (!(isAN(this.dr_amount())))
+            if (!(isNaN(this.dr_amount())))
                 total += this.dr_amount();
         });
         return total;
