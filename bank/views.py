@@ -160,7 +160,7 @@ def cash_deposit(request, id=None):
                              ['dr', bank_account, request.POST.get('amount')],
                              ['cr', benefactor, request.POST.get('amount')],
             )
-            # return redirect('/bank/cash-deposits/')
+            return redirect('/bank/cash-deposits/')
     else:
         form = BankCashDepositForm(instance=receipt, company=request.user.company)
     return render(request, 'cash_deposit.html', {'form': form, 'scenario': scenario})
