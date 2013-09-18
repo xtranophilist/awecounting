@@ -29,7 +29,7 @@ class ElectronicFundTransferInRowSerializer(serializers.ModelSerializer):
 
 
 class ElectronicFundTransferInSerializer(serializers.ModelSerializer):
-    rows = ChequeDepositRowSerializer()
+    rows = ElectronicFundTransferInRowSerializer()
 
     class Meta:
         model = ElectronicFundTransferIn
