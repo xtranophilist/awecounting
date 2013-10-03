@@ -58,7 +58,7 @@ class User(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     identifier = models.CharField(max_length=245, null=True)
     company = models.ForeignKey(Company, null=True)
-    groups = models.ManyToManyField(Group, related_name='users')
+    #groups = models.ManyToManyField(Group, related_name='users')
 
     # USERNAME_FIELD = 'username'
     USERNAME_FIELD = 'username'
@@ -197,7 +197,8 @@ def create_default(user):
     Account(name='Bank Interest Expenses', category=indirect_expenses, code='13-0005', company=company).save()
     Account(name='Electricity Expenses', category=indirect_expenses, code='13-0006', company=company).save()
     Account(name='City/Municipal Expenses', category=indirect_expenses, code='13-0007', company=company).save()
-    Account(name='Travelling and Conveyance Expenses', category=indirect_expenses, code='13-0008', company=company).save()
+    Account(name='Travelling and Conveyance Expenses', category=indirect_expenses, code='13-0008',
+            company=company).save()
     Account(name='Lunch and Refreshment Expenses', category=indirect_expenses, code='13-0009', company=company).save()
     Account(name='Cleaning Expenses', category=indirect_expenses, code='13-0010', company=company).save()
     Account(name='Discounting Expenses', category=indirect_expenses, code='13-0011', company=company).save()
@@ -205,7 +206,8 @@ def create_default(user):
 
     opening_balance_difference = Category(name='Opening Balance Difference', company=company)
     opening_balance_difference.save()
-    Account(name='Opening Balance Difference', category=opening_balance_difference, company=company, code='0-0001').save()
+    Account(name='Opening Balance Difference', category=opening_balance_difference, company=company,
+            code='0-0001').save()
 
 
 def handle_new_user(sender, user, request, **kwargs):
@@ -217,6 +219,9 @@ def handle_new_user(sender, user, request, **kwargs):
     company.save()
     user.company = company
     user.is_active = True
+    user.groups.add(Group.objects.get(name='Owner'))
+    #import pdb
+    #pdb.set_trace()
     # TODO: Add to group 'Owner'
     # import pdb
     # pdb.set_trace()
@@ -225,6 +230,12 @@ def handle_new_user(sender, user, request, **kwargs):
     # ownr.save()
     user.save()
     create_default(user)
+
+
+class Role(models.Model):
+    user = models.ForeignKey(User, related_name='roles')
+    group = models.ForeignKey(Group, related_name='roles')
+    company = models.ForeignKey(Company, related_name='roles')
 
 
 from registration.signals import user_registered
