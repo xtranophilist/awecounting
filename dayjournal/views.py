@@ -18,7 +18,7 @@ from acubor.lib import invalid, save_model, all_empty, add
 
 @login_required
 def all_day_journals(request):
-    objects = DayJournal.objects.filter(company=request.user.company)
+    objects = DayJournal.objects.filter(company=request.company)
     return render(request, 'all_day_journals.html', {'objects': objects})
 
 
@@ -27,9 +27,9 @@ def day_journal(request, journal_date=None):
     if not journal_date:
         journal_date = date.today()
     try:
-        day_journal = DayJournal.objects.get(date=journal_date, company=request.user.company)
+        day_journal = DayJournal.objects.get(date=journal_date, company=request.company)
     except DayJournal.DoesNotExist:
-        day_journal = DayJournal(date=journal_date, company=request.user.company, sales_tax=0, cheque_deposit=0,
+        day_journal = DayJournal(date=journal_date, company=request.company, sales_tax=0, cheque_deposit=0,
                                  cash_deposit=0, cash_withdrawal=0, cash_actual=0)
     day_journal_data = DayJournalSerializer(day_journal).data
     base_template = 'dashboard.html'
@@ -46,7 +46,7 @@ def day_journal(request, journal_date=None):
 @login_required
 def get_journal(request):
     journal, created = DayJournal.objects.get_or_create(date=json.loads(request.body).get('day_journal_date'),
-                                                        company=request.user.company, defaults={'sales_tax': 0,
+                                                        company=request.company, defaults={'sales_tax': 0,
                                                                                                 'cheque_deposit': 0,
                                                                                                 'cash_deposit': 0,
                                                                                                 'cash_withdrawal': 0,
@@ -62,8 +62,8 @@ def save_cash_sales(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashSales
     day_journal = get_journal(request)
-    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
-    sales_tax_account = Account.objects.get(name='Sales Tax', company=request.user.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.company)
+    sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_id', 'amount'])
         if invalid_attrs:
@@ -104,7 +104,7 @@ def save_cash_purchase(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashPurchase
     day_journal = get_journal(request)
-    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_id', 'amount'])
         if invalid_attrs:
@@ -131,7 +131,7 @@ def save_cash_payment(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashPayment
     day_journal = get_journal(request)
-    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_id', 'amount'])
         if invalid_attrs:
@@ -158,7 +158,7 @@ def save_cash_receipt(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashReceipt
     day_journal = get_journal(request)
-    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_id', 'amount'])
         if invalid_attrs:
@@ -184,7 +184,7 @@ def save_credit_sales(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CreditSales
-    sales_tax_account = Account.objects.get(name='Sales Tax', company=request.user.company)
+    sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
     day_journal = get_journal(request)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_cr_id', 'account_dr_id', 'amount'])
@@ -350,9 +350,9 @@ def save_summary_transfer(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = SummaryTransfer
     day_journal = get_journal(request)
-    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
-    card_account = Account.objects.get(name='Card Account', company=request.user.company)
-    cheque_account = Account.objects.get(name='Cheque Account', company=request.user.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.company)
+    card_account = Account.objects.get(name='Card Account', company=request.company)
+    cheque_account = Account.objects.get(name='Cheque Account', company=request.company)
     for index, row in enumerate(params.get('rows')):
         if all_empty(row, ['cash', 'cheque', 'card']):
             continue
@@ -447,9 +447,9 @@ def save_card_sales(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CardSales
     day_journal = get_journal(request)
-    card_account = Account.objects.get(name='Card Account', company=request.user.company)
-    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
-    commission_out_account = Account.objects.get(name='Commission Out', company=request.user.company)
+    card_account = Account.objects.get(name='Card Account', company=request.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.company)
+    commission_out_account = Account.objects.get(name='Commission Out', company=request.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['amount', 'commission_out'])
         if invalid_attrs:
@@ -478,7 +478,7 @@ def save_cash_equivalent_sales(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashEquivalentSales
     day_journal = get_journal(request)
-    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['amount', 'account'])
         if invalid_attrs:
@@ -504,9 +504,9 @@ def save_cheque_purchase(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = ChequePurchase
     day_journal = get_journal(request)
-    cheque_account = Account.objects.get(name='Cheque Account', company=request.user.company)
-    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
-    commission_in_account = Account.objects.get(name='Commission In', company=request.user.company)
+    cheque_account = Account.objects.get(name='Cheque Account', company=request.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.company)
+    commission_in_account = Account.objects.get(name='Commission In', company=request.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['amount', 'commission_in'])
         if invalid_attrs:
@@ -533,9 +533,9 @@ def save_summary_bank(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
     day_journal = get_journal(request)
-    cheque_account = Account.objects.get(name='Cheque Account', company=request.user.company)
-    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
-    bank_account = Account.objects.get(name='Bank Account', company=request.user.company)
+    cheque_account = Account.objects.get(name='Cheque Account', company=request.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.company)
+    bank_account = Account.objects.get(name='Bank Account', company=request.company)
     invalid_attrs = invalid(params.get('rows')[0], ['deposit', 'withdrawal'])
     bank_amount = 0
     cash_amount = 0
@@ -589,13 +589,13 @@ def save_summary_bank(request):
 @login_required
 def delete_attachment(request):
     if request.POST['type'] == 'sales':
-        get_object_or_404(SalesAttachment, day_journal__company=request.user.company, id=request.POST['id']).delete()
+        get_object_or_404(SalesAttachment, day_journal__company=request.company, id=request.POST['id']).delete()
     elif request.POST['type'] == 'purchase':
-        get_object_or_404(PurchaseAttachment, day_journal__company=request.user.company, id=request.POST['id']).delete()
+        get_object_or_404(PurchaseAttachment, day_journal__company=request.company, id=request.POST['id']).delete()
     elif request.POST['type'] == 'other':
-        get_object_or_404(OtherAttachment, day_journal__company=request.user.company, id=request.POST['id']).delete()
+        get_object_or_404(OtherAttachment, day_journal__company=request.company, id=request.POST['id']).delete()
     elif request.POST['type'] == 'bank':
-        get_object_or_404(BankAttachment, day_journal__company=request.user.company, id=request.POST['id']).delete()
+        get_object_or_404(BankAttachment, day_journal__company=request.company, id=request.POST['id']).delete()
     return HttpResponse(json.dumps({'success': True}), mimetype="application/json")
 
 
@@ -612,7 +612,7 @@ def save_attachments(request):
     captions = request.POST.getlist('captions')
     attachments = request.FILES.getlist('attachments')
     day_journal, created = DayJournal.objects.get_or_create(date=request.POST['day'],
-                                                            company=request.user.company, defaults={'sales_tax': 0,
+                                                            company=request.company, defaults={'sales_tax': 0,
                                                                                                     'cheque_deposit': 0,
                                                                                                     'cash_deposit': 0,
                                                                                                     'cash_withdrawal': 0,

@@ -8,10 +8,10 @@ from core.forms import CompanySettingsForm
 @login_required
 def company_settings(request):
     try:
-        company_setting = CompanySetting.objects.get(company=request.user.company)
+        company_setting = CompanySetting.objects.get(company=request.company)
     except CompanySetting.DoesNotExist:
         try:
-            company_setting = CompanySetting(company=request.user.company)
+            company_setting = CompanySetting(company=request.company)
         except ValueError:
             raise Exception("User doesn't have a company!")
     if request.POST:

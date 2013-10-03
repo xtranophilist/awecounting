@@ -32,10 +32,10 @@ def to_dict(model, company):
 
 @login_required
 def trial_balance(request):
-    categories = Category.objects.filter(company=request.user.company)
+    categories = Category.objects.filter(company=request.company)
 
     dict = {
-        'categories': to_dict(Category, request.user.company)
+        'categories': to_dict(Category, request.company)
     }
     # print request.get
     return render(request, 'trial_balance.html', {

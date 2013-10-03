@@ -12,14 +12,14 @@ from forms import AccountForm, CategoryForm, PartyForm
 
 @login_required
 def accounts_as_json(request):
-    accounts = Account.objects.filter(company=request.user.company)
+    accounts = Account.objects.filter(company=request.company)
     items_data = AccountSerializer(accounts).data
     return HttpResponse(json.dumps(items_data), mimetype="application/json")
 
 
 @login_required
 def accounts_by_day_as_json(request, day):
-    accounts = Account.objects.filter(company=request.user.company)
+    accounts = Account.objects.filter(company=request.company)
     items_data = AccountSerializer(accounts, day=day).data
     # items_data = AccountSerializer(accounts).data
     return HttpResponse(json.dumps(items_data), mimetype="application/json")
@@ -27,21 +27,21 @@ def accounts_by_day_as_json(request, day):
 
 @login_required
 def account_form(request, id=None):
-    obd = Account.objects.get(name='Opening Balance Difference', company=request.user.company)
+    obd = Account.objects.get(name='Opening Balance Difference', company=request.company)
     if id:
-        account = get_object_or_404(Account, id=id, company=request.user.company)
+        account = get_object_or_404(Account, id=id, company=request.company)
         scenario = 'Update'
     else:
         account = Account()
         scenario = 'Create'
     if request.POST:
-        form = AccountForm(data=request.POST, instance=account, company=request.user.company, scenario=scenario)
+        form = AccountForm(data=request.POST, instance=account, company=request.company, scenario=scenario)
         if form.is_valid():
 
             opening_dr = form.cleaned_data.get('opening_dr')
             opening_cr = form.cleaned_data.get('opening_cr')
             item = form.save(commit=False)
-            item.company = request.user.company
+            item.company = request.company
             item.save()
             form.save_m2m()
             if scenario == 'Create' or scenario == 'Update':
@@ -58,7 +58,7 @@ def account_form(request, id=None):
 
             return redirect('/ledger/')
     else:
-        form = AccountForm(instance=account, company=request.user.company, scenario=scenario)
+        form = AccountForm(instance=account, company=request.company, scenario=scenario)
     if request.is_ajax():
         base_template = 'modal.html'
     else:
@@ -72,19 +72,19 @@ def account_form(request, id=None):
 
 @login_required
 def list_accounts(request):
-    objects = Account.objects.filter(company=request.user.company)
+    objects = Account.objects.filter(company=request.company)
     return render(request, 'list_accounts.html', {'accounts': objects})
 
 
 @login_required
 def list_all_parties(request):
-    objects = Party.objects.filter(company=request.user.company)
+    objects = Party.objects.filter(company=request.company)
     return render(request, 'list_all_parties.html', {'objects': objects})
 
 
 @login_required
 def view_account(request, id):
-    account = get_object_or_404(Account, id=id, company=request.user.company)
+    account = get_object_or_404(Account, id=id, company=request.company)
     # transactions = account.transactions
     base_template = 'dashboard.html'
     journal_entries = JournalEntry.objects.filter(transactions__account_id=account.id).order_by('id',
@@ -100,7 +100,7 @@ def view_account(request, id):
 
 @login_required
 def list_categories(request):
-    categories = Category.objects.filter(company=request.user.company)
+    categories = Category.objects.filter(company=request.company)
     return render(request, 'list_categories.html', {'categories': categories})
 
 
@@ -108,14 +108,14 @@ def list_categories(request):
 def create_category(request):
     category = Category()
     if request.POST:
-        form = CategoryForm(data=request.POST, company=request.user.company)
+        form = CategoryForm(data=request.POST, company=request.company)
         if form.is_valid():
             category = form.save(commit=False)
-            category.company = request.user.company
+            category.company = request.company
             category.save()
             return redirect('/ledger/categories/')
     else:
-        form = CategoryForm(instance=category, company=request.user.company)
+        form = CategoryForm(instance=category, company=request.company)
     if request.is_ajax():
         base_template = 'modal.html'
     else:
@@ -128,16 +128,16 @@ def create_category(request):
 
 @login_required
 def update_category(request, id):
-    category = get_object_or_404(Category, id=id, company=request.user.company)
+    category = get_object_or_404(Category, id=id, company=request.company)
     if request.POST:
-        form = CategoryForm(data=request.POST, instance=category, company=request.user.company)
+        form = CategoryForm(data=request.POST, instance=category, company=request.company)
         if form.is_valid():
             category = form.save(commit=False)
-            category.company = request.user.company
+            category.company = request.company
             category.save()
             return redirect('/ledger/categories/')
     else:
-        form = CategoryForm(instance=category, company=request.user.company)
+        form = CategoryForm(instance=category, company=request.company)
     if request.is_ajax():
         base_template = 'modal.html'
     else:
@@ -150,21 +150,21 @@ def update_category(request, id):
 
 @login_required
 def delete_category(request, id):
-    category = get_object_or_404(Category, id=id, company=request.user.company)
+    category = get_object_or_404(Category, id=id, company=request.company)
     category.delete()
     return redirect('/ledger/categories/')
 
 
 @login_required
 def delete_account(request, id):
-    object = get_object_or_404(Account, id=id, company=request.user.company)
+    object = get_object_or_404(Account, id=id, company=request.company)
     object.delete()
     return redirect('/ledger/')
 
 
 @login_required
 def delete_party(request, id):
-    object = get_object_or_404(Party, id=id, company=request.user.company)
+    object = get_object_or_404(Party, id=id, company=request.company)
     object.delete()
     return redirect('/ledger/parties/')
 
@@ -173,7 +173,7 @@ def delete_party(request, id):
 def party_form(request, id=None):
     if id:
         scenario = 'Update'
-        party = get_object_or_404(Party, id=id, company=request.user.company)
+        party = get_object_or_404(Party, id=id, company=request.company)
     else:
         scenario = 'Create'
         party = Party()
@@ -181,7 +181,7 @@ def party_form(request, id=None):
         form = PartyForm(data=request.POST, instance=party)
         if form.is_valid():
             party = form.save(commit=False)
-            party.company = request.user.company
+            party.company = request.company
             party.save()
             redirect('/ledger/parties')
     else:

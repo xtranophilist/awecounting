@@ -19,15 +19,15 @@ from inventory.models import Item
 
 @login_required
 def all_invoices(request):
-    items = Invoice.objects.filter(company=request.user.company)
-    filtered_items = InvoiceFilter(request.GET, queryset=items, company=request.user.company)
+    items = Invoice.objects.filter(company=request.company)
+    filtered_items = InvoiceFilter(request.GET, queryset=items, company=request.company)
     return render(request, 'list_invoice.html', {'objects': filtered_items})
 
 
 @login_required
 def all_purchase_vouchers(request):
-    items = PurchaseVoucher.objects.filter(company=request.user.company)
-    filtered_items = PurchaseVoucherFilter(request.GET, queryset=items, company=request.user.company)
+    items = PurchaseVoucher.objects.filter(company=request.company)
+    filtered_items = PurchaseVoucherFilter(request.GET, queryset=items, company=request.company)
     return render(request, 'all_purchase_vouchers.html', {'objects': filtered_items})
 
 
@@ -36,12 +36,12 @@ def invoice(request, invoice_no=None):
     from core.models import CompanySetting
 
     try:
-        company_setting = CompanySetting.objects.get(company=request.user.company)
+        company_setting = CompanySetting.objects.get(company=request.company)
     except CompanySetting.DoesNotExist:
         #TODO Add a flash message
         return redirect('/settings/company')
     if invoice_no:
-        invoice = get_object_or_404(Invoice, invoice_no=invoice_no, company=request.user.company)
+        invoice = get_object_or_404(Invoice, invoice_no=invoice_no, company=request.company)
     else:
         invoice = Invoice(date=date.today(), currency=company_setting.default_currency)
         try:
@@ -57,7 +57,7 @@ def invoice(request, invoice_no=None):
         except:
             invoice.invoice_no = ''
 
-    form = InvoiceForm(data=request.POST, instance=invoice, company=request.user.company)
+    form = InvoiceForm(data=request.POST, instance=invoice, company=request.company)
     invoice_data = InvoiceSerializer(invoice).data
     invoice_data['read_only'] = {
         'invoice_prefix': company_setting.invoice_prefix,
@@ -73,7 +73,7 @@ def save_invoice(request):
     invoice_values = {'party_id': params.get('party'), 'invoice_no': params.get('invoice_no'),
                       'reference': params.get('reference'), 'date': params.get('date'),
                       'due_date': params.get('due_date'), 'tax': params.get('tax'),
-                      'currency_id': params.get('currency'), 'company': request.user.company}
+                      'currency_id': params.get('currency'), 'company': request.company}
     # try:
     if params.get('id'):
         invoice = Invoice.objects.get(id=params.get('id'))
@@ -89,8 +89,8 @@ def save_invoice(request):
     #     else:
     #         dct['error_message'] = 'Error in form data!'
     model = InvoiceParticular
-    cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
-    sales_tax_account = Account.objects.get(name='Sales Tax', company=request.user.company)
+    cash_account = Account.objects.get(name='Cash Account', company=request.company)
+    sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
     for index, row in enumerate(params.get('particulars').get('rows')):
         if invalid(row, ['item_id', 'unit_price', 'quantity']):
             continue
@@ -132,27 +132,27 @@ def purchase_voucher(request, id=None):
     from core.models import CompanySetting
 
     try:
-        company_setting = CompanySetting.objects.get(company=request.user.company)
+        company_setting = CompanySetting.objects.get(company=request.company)
     except CompanySetting.DoesNotExist:
         return redirect('/settings/company')
     if id:
-        voucher = get_object_or_404(PurchaseVoucher, id=id, company=request.user.company)
+        voucher = get_object_or_404(PurchaseVoucher, id=id, company=request.company)
     else:
         voucher = PurchaseVoucher(date=date.today(), currency=company_setting.default_currency)
 
     if request.POST:
-        form = PurchaseVoucherForm(request.POST, request.FILES, instance=voucher, company=request.user.company)
+        form = PurchaseVoucherForm(request.POST, request.FILES, instance=voucher, company=request.company)
         if form.is_valid():
             voucher = form.save(commit=False)
             if 'attachment' in request.FILES:
                 voucher.attachment = request.FILES['attachment']
-            voucher.company = request.user.company
+            voucher.company = request.company
             voucher.save()
 
         if id or form.is_valid():
             particulars = json.loads(request.POST['particulars'])
             model = PurchaseParticular
-            cash_account = Account.objects.get(name='Cash Account', company=request.user.company)
+            cash_account = Account.objects.get(name='Cash Account', company=request.company)
             for index, row in enumerate(particulars.get('rows')):
                 if invalid(row, ['item_id', 'unit_price', 'quantity']):
                     continue
@@ -171,7 +171,7 @@ def purchase_voucher(request, id=None):
                     submodel = save_model(submodel, values)
             delete_rows(particulars.get('deleted_rows'), model)
             return redirect('/voucher/purchases/')
-    form = PurchaseVoucherForm(instance=voucher, company=request.user.company)
+    form = PurchaseVoucherForm(instance=voucher, company=request.company)
     purchase_voucher_data = PurchaseVoucherSerializer(voucher).data
     return render(request, 'purchase_voucher.html', {'form': form, 'data': purchase_voucher_data})
 
@@ -179,7 +179,7 @@ def purchase_voucher(request, id=None):
 @login_required
 def journal_voucher(request, id=None):
     if id:
-        voucher = get_object_or_404(JournalVoucher, id=id, company=request.user.company)
+        voucher = get_object_or_404(JournalVoucher, id=id, company=request.company)
     else:
         voucher = JournalVoucher()
     data = JournalVoucherSerializer(voucher).data
@@ -195,7 +195,7 @@ def empty_to_None(dict, list_of_attr):
 
 @login_required
 def list_journal_vouchers(request):
-    objects = JournalVoucher.objects.filter(company=request.user.company)
+    objects = JournalVoucher.objects.filter(company=request.company)
     return render(request, 'list_journal_vouchers.html', {'objects': objects})
 
 
@@ -205,7 +205,7 @@ def save_journal_voucher(request):
     dct = {'rows': {}}
 
     voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'),
-                      'narration': params.get('narration'), 'company': request.user.company}
+                      'narration': params.get('narration'), 'company': request.company}
     if params.get('id'):
         voucher = JournalVoucher.objects.get(id=params.get('id'))
     else:
@@ -251,7 +251,7 @@ def save_journal_voucher(request):
 #     del [params['accounts']]
 #     del [params['journal_voucher']['_initial_rows']]
 #
-#     voucher_values = {'date': params.get('date'), 'company': request.user.company}
+#     voucher_values = {'date': params.get('date'), 'company': request.company}
 #     if params.get('id'):
 #         voucher = JournalVoucher.objects.get(id=params.get('id'))
 #     else:

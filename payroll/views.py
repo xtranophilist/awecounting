@@ -13,7 +13,7 @@ from ledger.models import delete_rows, set_transactions, Account
 @login_required
 def entry(request, id=None):
     if id:
-        entry = get_object_or_404(Entry, id=id, company=request.user.company)
+        entry = get_object_or_404(Entry, id=id, company=request.company)
         scenario = 'Update'
     else:
         entry = Entry()
@@ -24,13 +24,13 @@ def entry(request, id=None):
 
 @login_required
 def list_payroll_entries(request):
-    objects = Entry.objects.filter(company=request.user.company)
+    objects = Entry.objects.filter(company=request.company)
     return render(request, 'list_all_entries.html', {'objects': objects})
 
 
 @login_required
 def delete_payroll_entry(request, id):
-    object = get_object_or_404(Entry, id=id, company=request.user.company)
+    object = get_object_or_404(Entry, id=id, company=request.company)
     object.delete()
     return redirect('/payroll/entries/')
 
@@ -40,7 +40,7 @@ def save_entry(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
     values = {
-        'company': request.user.company, 'entry_no': params.get('entry_no')
+        'company': request.company, 'entry_no': params.get('entry_no')
     }
     print params
     if params.get('id'):
@@ -52,7 +52,7 @@ def save_entry(request):
         entry = save_model(entry, values)
         dct['id'] = entry.id
     model = EntryRow
-    payroll_tax_account = Account.objects.get(name='Payroll Tax', company=request.user.company)
+    payroll_tax_account = Account.objects.get(name='Payroll Tax', company=request.company)
     for index, row in enumerate(params.get('rows')):
         if invalid(row, ['pay_heading', 'account_id', 'amount']):
             continue
@@ -64,9 +64,9 @@ def save_entry(request):
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         net_amount = float(row.get('amount')) - float(row.get('tax'))
         set_transactions(submodel, submodel.created,
-                         ['dr', Account.objects.get(id=row.get('pay_heading'), company=request.user.company),
+                         ['dr', Account.objects.get(id=row.get('pay_heading'), company=request.company),
                           row.get('amount')],
-                         ['cr', Account.objects.get(id=row.get('account_id'), company=request.user.company),
+                         ['cr', Account.objects.get(id=row.get('account_id'), company=request.company),
                           net_amount],
                          ['cr', payroll_tax_account, row.get('tax')],
         )
