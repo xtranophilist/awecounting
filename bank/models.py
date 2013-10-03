@@ -72,3 +72,45 @@ class ChequePayment(models.Model):
 
     def get_absolute_url(self):
         return '/bank/cheque-payment/' + str(self.id)
+
+
+class ElectronicFundTransferOut(models.Model):
+    transaction_number = models.CharField(max_length=50)
+    date = models.DateField()
+    beneficiary = models.ForeignKey(Account)
+    bank_account = models.ForeignKey(Account, related_name='electronic_fund_transfer_out')
+    amount = models.FloatField()
+    attachment = models.FileField(upload_to='electronic_fund_transfer_out/%Y/%m/%d', blank=True, null=True)
+    narration = models.TextField(null=True, blank=True)
+    company = models.ForeignKey(Company)
+
+    def get_absolute_url(self):
+        return '/bank/electronic-fund-transfer-out/' + str(self.id)
+
+
+class ElectronicFundTransferIn(models.Model):
+    date = models.DateField()
+    bank_account = models.ForeignKey(Account, related_name='electronic_fund_transfer_in')
+    clearing_date = models.DateField(null=True, blank=True)
+    benefactor = models.ForeignKey(Account)
+    attachment = models.FileField(upload_to='electronic_fund_transfer_in/%Y/%m/%d', blank=True, null=True)
+    narration = models.TextField(null=True, blank=True)
+    company = models.ForeignKey(Company)
+
+    def get_absolute_url(self):
+        return '/bank/electronic-fund-transfer-in/' + str(self.id)
+
+
+class ElectronicFundTransferInRow(models.Model):
+    sn = models.IntegerField()
+    transaction_number = models.CharField(max_length=50, blank=True, null=True)
+    transaction_date = models.DateField(blank=True, null=True)
+    drawee_bank = models.CharField(max_length=254, blank=True, null=True)
+    drawee_bank_address = models.CharField(max_length=254, blank=True, null=True)
+    amount = models.FloatField()
+    electronic_fund_transfer_in = models.ForeignKey(ElectronicFundTransferIn, related_name='rows')
+
+    def get_absolute_url(self):
+        return self.electronic_fund_transfer_in.get_absolute_url()
+
+

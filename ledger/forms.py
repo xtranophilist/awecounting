@@ -2,6 +2,7 @@ from django import forms
 from mptt.forms import TreeNodeChoiceField
 
 from acubor.lib import KOModelForm
+from acubor.lib import zero_for_none
 from models import Account, Category, Party
 
 
@@ -16,9 +17,9 @@ class AccountForm(KOModelForm):
         # if self.scenario == 'Create':
         del self.fields['current_dr']
         del self.fields['current_cr']
-        if self.scenario == 'Update':
-            del self.fields['opening_dr']
-            del self.fields['opening_cr']
+        #if self.scenario == 'Update':
+        #    del self.fields['opening_dr']
+        #    del self.fields['opening_cr']
 
     class Meta:
         model = Account
@@ -33,7 +34,7 @@ class AccountForm(KOModelForm):
         opening_dr = cleaned_data.get('opening_dr')
         opening_cr = cleaned_data.get('opening_cr')
 
-        if not opening_dr == 0 and not opening_cr == 0:
+        if not zero_for_none(opening_dr) == 0 and not zero_for_none(opening_cr) == 0:
             raise forms.ValidationError("You can't enter both Opening Dr and Cr amounts.")
 
         try:

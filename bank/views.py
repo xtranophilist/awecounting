@@ -3,12 +3,12 @@ import json
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, get_object_or_404, redirect
 
-from bank.models import BankAccount, ChequeDeposit, ChequeDepositRow, BankCashDeposit, ChequePayment
-from bank.forms import BankAccountForm, ChequeDepositForm, BankCashDepositForm, ChequePaymentForm
+from bank.models import BankAccount, ChequeDeposit, ChequeDepositRow, BankCashDeposit, ChequePayment, ElectronicFundTransferIn, ElectronicFundTransferInRow, ElectronicFundTransferOut
+from bank.forms import BankAccountForm, ChequeDepositForm, BankCashDepositForm, ChequePaymentForm, ElectronicFundTransferInForm, ElectronicFundTransferOutForm
 from acubor.lib import invalid, save_model
 from ledger.models import delete_rows
-from bank.serializers import ChequeDepositSerializer
-from bank.filters import ChequeDepositFilter, CashDepositFilter, ChequePaymentFilter
+from bank.serializers import ChequeDepositSerializer, ElectronicFundTransferInRowSerializer, ElectronicFundTransferInSerializer, ElectronicFundTransferOutSerializer
+from bank.filters import ChequeDepositFilter, CashDepositFilter, ChequePaymentFilter, ElectronicFundTransferInFilter, ElectronicFundTransferOutFilter
 from ledger.models import set_transactions, Account
 
 
@@ -31,6 +31,11 @@ def delete_cheque_deposit(request, id):
     object.delete()
     return redirect('/bank/cheque-deposits/')
 
+@login_required
+def delete_electronic_fund_transfer_in(request, id):
+    object = get_object_or_404(ElectronicFundTransferIn, id=id, company=request.user.company)
+    object.delete()
+    return redirect('/bank/electronic-fund-transfers-in/')
 
 @login_required
 def delete_cash_deposit(request, id):
@@ -45,6 +50,12 @@ def delete_cheque_payment(request, id):
     object.delete()
     return redirect('/bank/cheque-payments/')
 
+@login_required
+def delete_electronic_fund_transfer_out(request, id):
+    object = get_object_or_404(ElectronicFundTransferOut, id=id, company=request.user.company)
+    object.delete()
+    return redirect('/bank/electronic-fund-transfers-out/')
+
 
 @login_required
 def list_cheque_deposits(request):
@@ -58,6 +69,19 @@ def list_cheque_payments(request):
     items = ChequePayment.objects.filter(company=request.user.company)
     filtered_items = ChequePaymentFilter(request.GET, queryset=items, company=request.user.company)
     return render(request, 'list_cheque_payments.html', {'objects': filtered_items})
+
+@login_required
+def list_electronic_fund_transfers_in(request):
+    items = ElectronicFundTransferIn.objects.filter(company=request.user.company)
+    filtered_items = ElectronicFundTransferInFilter(request.GET, queryset=items, company=request.user.company)
+    return render(request, 'list_electronic_fund_transfers_in.html', {'objects': filtered_items})
+
+
+@login_required
+def list_electronic_fund_transfers_out(request):
+    items = ElectronicFundTransferOut.objects.filter(company=request.user.company)
+    filtered_items = ElectronicFundTransferOutFilter(request.GET, queryset=items, company=request.user.company)
+    return render(request, 'list_electronic_fund_transfers_out.html', {'objects': filtered_items})
 
 
 @login_required
@@ -136,6 +160,47 @@ def cheque_deposit(request, id=None):
     receipt_data = ChequeDepositSerializer(receipt).data
     return render(request, 'cheque_deposit.html', {'form': form, 'data': receipt_data, 'scenario': scenario})
 
+@login_required
+def electronic_fund_transfer_in(request, id=None):
+    if id:
+        receipt = get_object_or_404(ElectronicFundTransferIn, id=id, company=request.user.company)
+        scenario = 'Update'
+    else:
+        receipt = ElectronicFundTransferIn(date=date.today())
+        scenario = 'New'
+    if request.POST:
+        form = ElectronicFundTransferInForm(request.POST, request.FILES, instance=receipt, company=request.user.company)
+        if form.is_valid():
+            receipt = form.save(commit=False)
+            receipt.company = request.user.company
+            if 'attachment' in request.FILES:
+                receipt.attachment = request.FILES['attachment']
+            receipt.save()
+        if id or form.is_valid():
+            particulars = json.loads(request.POST['particulars'])
+            model = ElectronicFundTransferInRow
+            bank_account = Account.objects.get(id=request.POST.get('bank_account'))
+            benefactor = Account.objects.get(id=request.POST.get('benefactor'))
+            for index, row in enumerate(particulars.get('rows')):
+                if invalid(row, ['amount']):
+                    continue
+                values = {'sn': index + 1, 'transaction_number': row.get('transaction_number'),
+                          'transaction_date': row.get('transaction_date'),
+                          'drawee_bank': row.get('drawee_bank'), 'drawee_bank_address': row.get('drawee_bank_address'),
+                          'amount': row.get('amount'), 'electronic_fund_transfer_in': receipt}
+                submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+                set_transactions(submodel, request.POST.get('date'),
+                                 ['dr', bank_account, row.get('amount')],
+                                 ['cr', benefactor, row.get('amount')],
+                )
+                if not created:
+                    submodel = save_model(submodel, values)
+            delete_rows(particulars.get('deleted_rows'), model)
+            return redirect('/bank/electronic-fund-transfers-in/')
+    form = ElectronicFundTransferInForm(instance=receipt, company=request.user.company)
+    receipt_data = ElectronicFundTransferInSerializer(receipt).data
+    return render(request, 'electronic_fund_transfer_in.html', {'form': form, 'data': receipt_data, 'scenario': scenario})
+
 
 @login_required
 def cash_deposit(request, id=None):
@@ -193,3 +258,32 @@ def cheque_payment(request, id=None):
     else:
         form = ChequePaymentForm(instance=payment, company=request.user.company)
     return render(request, 'cheque_payment.html', {'form': form, 'scenario': scenario})
+
+
+@login_required
+def electronic_fund_transfer_out(request, id=None):
+    if id:
+        payment = get_object_or_404(ElectronicFundTransferOut, id=id, company=request.user.company)
+        scenario = 'Update'
+    else:
+        payment = ElectronicFundTransferOut(date=date.today())
+        scenario = 'New'
+    if request.POST:
+        form = ElectronicFundTransferOutForm(request.POST, request.FILES, instance=payment, company=request.user.company)
+        if form.is_valid():
+            payment = form.save(commit=False)
+            payment.company = request.user.company
+            print request.POST
+            if 'attachment' in request.FILES:
+                payment.attachment = request.FILES['attachment']
+            payment.save()
+            bank_account = Account.objects.get(id=request.POST.get('bank_account'))
+            beneficiary = Account.objects.get(id=request.POST.get('beneficiary'))
+            set_transactions(payment, request.POST.get('date'),
+                             ['dr', bank_account, request.POST.get('amount')],
+                             ['cr', beneficiary, request.POST.get('amount')],
+            )
+            return redirect('/bank/electronic-fund-transfers-out/')
+    else:
+        form = ElectronicFundTransferOutForm(instance=payment, company=request.user.company)
+    return render(request, 'electronic_fund_transfer_out.html', {'form': form, 'scenario': scenario})

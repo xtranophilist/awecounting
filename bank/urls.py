@@ -27,5 +27,17 @@ urlpatterns = patterns('',
                        url(r'^cheque-payment/delete/(?P<id>[0-9]+)$', views.delete_cheque_payment,
                            name='delete_cheque_payment'),
 
+                       url(r'^electronic-fund-transfers-out/$', views.list_electronic_fund_transfers_out, name='list_electronic_fund_transfers_out'),
+                       url(r'^electronic-fund-transfer-out/$', views.electronic_fund_transfer_out, name='new_electronic_fund_transfer_out'),
+                       url(r'^electronic-fund-transfer-out/(?P<id>[0-9]+)$', views.electronic_fund_transfer_out, name='update_electronic_fund_transfer_out'),
+                       url(r'^electronic-fund-transfer-out/delete/(?P<id>[0-9]+)$', views.delete_electronic_fund_transfer_out,
+                           name='delete_electronic_fund_transfer_out'),
+
+                       url(r'^electronic-fund-transfers-in/$', views.list_electronic_fund_transfers_in, name='list_electronic_fund_transfers_in'),
+                       url(r'^electronic-fund-transfer-in/$', views.electronic_fund_transfer_in, name='new_electronic_fund_transfer_in'),
+                       url(r'^electronic-fund-transfer-in/(?P<id>[0-9]+)$', views.electronic_fund_transfer_in, name='update_electronic_fund_transfer_in'),
+                       url(r'^electronic-fund-transfer-in/delete/(?P<id>[0-9]+)$', views.delete_electronic_fund_transfer_in,
+                           name='delete_electronic_fund_transfer_in'),
+
 )
 

@@ -44,7 +44,7 @@ def account_form(request, id=None):
             item.company = request.user.company
             item.save()
             form.save_m2m()
-            if scenario == 'Create':
+            if scenario == 'Create' or scenario == 'Update':
                 if not opening_dr == 0:
                     set_transactions(item, date.today(),
                                      ['dr', item, form.cleaned_data['opening_dr']])
