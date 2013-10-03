@@ -95,10 +95,8 @@ class User(AbstractBaseUser):
         db_table = u'user'
 
 
-def create_default(user):
+def create_default(company):
     from ledger.models import Account, Category
-
-    company = user.company
 
     equity = Category(name='Equity', company=company)
     equity.save()
@@ -210,6 +208,12 @@ def create_default(user):
             code='0-0001').save()
 
 
+class Role(models.Model):
+    user = models.ForeignKey(User, related_name='roles')
+    group = models.ForeignKey(Group, related_name='roles')
+    company = models.ForeignKey(Company, related_name='roles')
+
+
 def handle_new_user(sender, user, request, **kwargs):
     user.full_name = request.POST.get('full_name')
     company = Company()
@@ -219,23 +223,10 @@ def handle_new_user(sender, user, request, **kwargs):
     company.save()
     user.company = company
     user.is_active = True
-    user.groups.add(Group.objects.get(name='Owner'))
-    #import pdb
-    #pdb.set_trace()
-    # TODO: Add to group 'Owner'
-    # import pdb
-    # pdb.set_trace()
-    # ownr, created = Group.objects.get_or_create(name='Owner')
-    # ownr.user_set.add(user)
-    # ownr.save()
     user.save()
-    create_default(user)
-
-
-class Role(models.Model):
-    user = models.ForeignKey(User, related_name='roles')
-    group = models.ForeignKey(Group, related_name='roles')
-    company = models.ForeignKey(Company, related_name='roles')
+    role = Role(user=user, group=Group.objects.get(name='Owner'), company=company)
+    role.save()
+    create_default(company)
 
 
 from registration.signals import user_registered
