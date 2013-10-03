@@ -35,6 +35,7 @@ urlpatterns = patterns('',
                        (r'^report/', include('report.urls')),
 
                        url(r'^settings/company/$', core_views.company_settings, name='company_settings'),
+                       url(r'^settings/user/$', users_views.user_setting, name='user_settings'),
 
                        url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
                        url(r'^', include(router.urls)),

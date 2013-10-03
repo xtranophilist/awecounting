@@ -49,3 +49,10 @@ class UserList(generics.ListCreateAPIView):
 
 #def role_management(request):
     #roles = Role.objects.get(company=)
+
+def user_setting(request):
+    if request.POST:
+        request.user.full_name = request.POST['full_name']
+        request.user.email = request.POST['email']
+        request.user.save()
+    return render(request, 'user_setting.html')
