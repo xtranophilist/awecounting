@@ -36,6 +36,7 @@ urlpatterns = patterns('',
 
                        url(r'^settings/company/$', core_views.company_settings, name='company_settings'),
                        url(r'^settings/user/$', users_views.user_setting, name='user_settings'),
+                       url(r'^settings/roles/$', users_views.roles, name='roles'),
 
                        url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
                        url(r'^', include(router.urls)),

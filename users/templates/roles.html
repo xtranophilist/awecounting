@@ -1,0 +1,36 @@
+{% extends "dashboard.html" %}
+
+{% block title %}Company Roles{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li class="active"><a href="{% url "roles" %}">Company Roles</a></li>
+{% endblock %}
+
+
+
+{% block content %}
+
+    <div class="page-header position-relative">
+        <h1>
+            Company Roles
+        </h1>
+    </div>
+
+
+    <table class="table-bordered">
+        <thead>
+        <th>User</th>
+        <th>Role</th>
+        </thead>
+        <tbody>
+        {% for role in request.company.roles.all %}
+            <tr>
+                <td>{{ role.user }}</td>
+                <td>{{ role.group }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

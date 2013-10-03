@@ -64,3 +64,6 @@ def set_company(request, id):
     company = Company.objects.get(id=id)
     request.session['company'] = company.id
     return redirect(request.META.get('HTTP_REFERER', None))
+
+def roles(request):
+    return render (request, 'roles.html')
