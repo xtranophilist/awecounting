@@ -57,7 +57,7 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
     identifier = models.CharField(max_length=245, null=True)
-    company = models.ForeignKey(Company, null=True)
+    #company = models.ForeignKey(Company, null=True)
     #groups = models.ManyToManyField(Group, related_name='users')
 
     # USERNAME_FIELD = 'username'

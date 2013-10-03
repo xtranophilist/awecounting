@@ -45,3 +45,7 @@ class UserViewSet(viewsets.ModelViewSet):
 class UserList(generics.ListCreateAPIView):
     model = get_user_model()
     serializer_class = UserSerializer
+
+
+#def role_management(request):
+    #roles = Role.objects.get(company=)
