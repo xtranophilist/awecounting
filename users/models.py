@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 # from django.contrib.auth.models import PermissionsMixin
+from django.contrib.auth.models import Group
 
 
 class UserManager(BaseUserManager):
@@ -57,6 +58,7 @@ class User(AbstractBaseUser):
     is_admin = models.BooleanField(default=False)
     identifier = models.CharField(max_length=245, null=True)
     company = models.ForeignKey(Company, null=True)
+    groups = models.ManyToManyField(Group, related_name='users')
 
     # USERNAME_FIELD = 'username'
     USERNAME_FIELD = 'username'
