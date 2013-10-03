@@ -7,7 +7,7 @@ from rest_framework import generics
 
 from users.forms import UserRegistrationForm
 from users.serializers import UserSerializer
-from users.models import Role
+from users.models import Company
 
 
 def index(request):
@@ -49,7 +49,8 @@ class UserList(generics.ListCreateAPIView):
 
 
 #def role_management(request):
-    #roles = Role.objects.get(company=)
+#roles = Role.objects.get(company=)
+
 
 def user_setting(request):
     if request.POST:
@@ -57,3 +58,9 @@ def user_setting(request):
         request.user.email = request.POST['email']
         request.user.save()
     return render(request, 'user_setting.html')
+
+
+def set_company(request, id):
+    company = Company.objects.get(id=id)
+    request.session['company'] = company.id
+    return redirect(request.META.get('HTTP_REFERER', None))

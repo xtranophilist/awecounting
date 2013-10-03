@@ -52,7 +52,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="brand" href="#">Acubor Accounting App for {{ user.company.name }}</a>
+                <a class="brand" href="#">Acubor Accounting App for {{ request.company.name }}</a>
 
                 <div class="nav-collapse collapse">
                     <ul class="nav">
@@ -79,7 +79,15 @@
                                 <li><a href="">Settings</a>
                                 </li>
                                 <li><a href="/user/logout">Logout</a>
+
                                 </li>
+                                {% for role in request.roles %}
+                                    {% if role.company.id != request.company.id %}
+                                    <li>
+                                    <a href="/user/set-company/{{ role.company.id }}">Use as {{ role.company }}</a>
+                                    </li>
+                                    {% endif %}
+                                {% endfor %}
                             </ul>
                         </li>
                     </ul>
