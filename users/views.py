@@ -7,6 +7,7 @@ from rest_framework import generics
 
 from users.forms import UserRegistrationForm
 from users.serializers import UserSerializer
+from users.models import Role
 
 
 def index(request):

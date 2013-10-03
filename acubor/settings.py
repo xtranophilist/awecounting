@@ -90,6 +90,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'pagination.middleware.PaginationMiddleware',
     'django_sorting.middleware.SortingMiddleware',
+    'users.middleware.CompanyMiddleware',
     # 'debug_toolbar.middleware.DebugToolbarMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
@@ -180,3 +181,5 @@ AUTHENTICATION_BACKENDS = (
     'users.backends.EmailOrUsernameBackend',
     'django.contrib.auth.backends.ModelBackend'
 )
+
+SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
