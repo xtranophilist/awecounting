@@ -21,13 +21,20 @@
     <table class="table-bordered">
         <thead>
         <th>User</th>
+        <th>E-mail</th>
         <th>Role</th>
+        <th></th>
         </thead>
         <tbody>
-        {% for role in request.company.roles.all %}
+        {% for role in roles %}
             <tr>
                 <td>{{ role.user }}</td>
+                <td>{{ role.user.email }}</td>
                 <td>{{ role.group }}</td>
+                <td>{% if role.group.name != 'SuperOwner' %}
+                    <a href="{%  url 'delete_role' role.id %}">Delete</a>
+                {% endif %}
+                </td>
             </tr>
         {% endfor %}
         </tbody>

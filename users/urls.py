@@ -16,6 +16,9 @@ urlpatterns = patterns('',
 
                        url(r'^set-company/(?P<id>[0-9]+)/$', views.set_company, name='set_company'),
 
+                       url(r'^roles/$', views.roles, name='roles'),
+                       url(r'^role/delete/(?P<id>[0-9]+)/$', views.delete_role, name='delete_role'),
+
 
                        url(r'^list$', UserList.as_view(), name='user-list'),
                        # url(r'^$', 'users.views.profile'),

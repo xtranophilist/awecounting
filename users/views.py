@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import login
 from django.contrib.auth import logout as auth_logout
@@ -7,7 +9,7 @@ from rest_framework import generics
 
 from users.forms import UserRegistrationForm
 from users.serializers import UserSerializer
-from users.models import Company
+from users.models import Company, Role
 
 
 def index(request):
@@ -65,5 +67,15 @@ def set_company(request, id):
     request.session['company'] = company.id
     return redirect(request.META.get('HTTP_REFERER', None))
 
+
+@login_required
 def roles(request):
-    return render (request, 'roles.html')
+    objs = Role.objects.filter(company=request.company)
+    return render(request, 'roles.html', {'roles': objs})
+
+
+def delete_role(request, id):
+    obj = Role.objects.get(company=request.company, id=id)
+    if not obj.group.name == 'SuperOwner':
+        obj.delete()
+    return redirect(reverse('roles'))
