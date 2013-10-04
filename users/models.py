@@ -2,6 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 # from django.contrib.auth.models import PermissionsMixin
 from django.contrib.auth.models import Group
+from django.http import HttpResponseForbidden
+from django.shortcuts import redirect
+from acubor import settings
 
 
 class UserManager(BaseUserManager):
@@ -213,6 +216,9 @@ class Role(models.Model):
     group = models.ForeignKey(Group, related_name='roles')
     company = models.ForeignKey(Company, related_name='roles')
 
+    def __str__(self):
+        return self.group.name
+
     class Meta:
         unique_together = ('user', 'group', 'company')
 
@@ -235,4 +241,26 @@ def handle_new_user(sender, user, request, **kwargs):
 from registration.signals import user_registered
 
 user_registered.connect(handle_new_user)
+
+
+def group_required(*groups):
+    def _dec(view_function):
+
+        def _view(request, *args, **kwargs):
+            allowed = False
+            for role in request.roles:
+                if role.group.name in groups:
+                    allowed = True
+            if allowed:
+                return view_function(request, *args, **kwargs)
+            else:
+                if request.user.is_authenticated():
+                    return HttpResponseForbidden("You don't have permission to view this page!")
+                else:
+                    return redirect(settings.LOGIN_URL)
+
+
+        return _view
+
+    return _dec
 

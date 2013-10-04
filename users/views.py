@@ -1,4 +1,3 @@
-from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.shortcuts import render, redirect
 from django.contrib.auth.views import login
@@ -11,7 +10,7 @@ from django.contrib.auth.models import Group
 
 from users.forms import UserRegistrationForm
 from users.serializers import UserSerializer
-from users.models import Company, Role, User
+from users.models import Company, Role, User, group_required
 
 
 def index(request):
@@ -70,7 +69,7 @@ def set_company(request, id):
     return redirect(request.META.get('HTTP_REFERER', None))
 
 
-@login_required
+@group_required('Owner', 'SuperOwner')
 def roles(request):
     if request.POST:
         print request.POST
