@@ -213,6 +213,9 @@ class Role(models.Model):
     group = models.ForeignKey(Group, related_name='roles')
     company = models.ForeignKey(Company, related_name='roles')
 
+    class Meta:
+        unique_together = ('user', 'group', 'company')
+
 
 def handle_new_user(sender, user, request, **kwargs):
     user.full_name = request.POST.get('full_name')

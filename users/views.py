@@ -6,10 +6,12 @@ from django.contrib.auth import logout as auth_logout
 from rest_framework import viewsets
 from django.contrib.auth import get_user_model
 from rest_framework import generics
+from django.contrib import messages
+from django.contrib.auth.models import Group
 
 from users.forms import UserRegistrationForm
 from users.serializers import UserSerializer
-from users.models import Company, Role
+from users.models import Company, Role, User
 
 
 def index(request):
@@ -70,6 +72,46 @@ def set_company(request, id):
 
 @login_required
 def roles(request):
+    if request.POST:
+        print request.POST
+        from django.core.validators import validate_email
+        from django.core.exceptions import ValidationError
+
+        try:
+            validate_email(request.POST['user'])
+            try:
+                user = User.objects.get(email=request.POST['user'])
+                group = Group.objects.get(name=request.POST['group'])
+                try:
+                    Role.objects.get(user=user, company=request.company, group=group)
+                    messages.error(request,
+                                   'User ' + user.username + ' (' + user.email + ') is already the ' + request.POST[
+                                       'group'] + '.')
+                except Role.DoesNotExist:
+                    role = Role(user=user, company=request.company, group=group)
+                    role.save()
+                    messages.success(request,
+                                     'User ' + user.username + ' (' + user.email + ') added as ' + request.POST[
+                                         'group'] + '.')
+            except User.DoesNotExist:
+                messages.error(request, 'No users found with the e-mail address ' + request.POST['user'])
+        except ValidationError:
+            try:
+                user = User.objects.get(username=request.POST['user'])
+                group = Group.objects.get(name=request.POST['group'])
+                try:
+                    Role.objects.get(user=user, company=request.company, group=group)
+                    messages.error(request,
+                                   'User ' + user.username + ' (' + user.email + ') is already the ' + request.POST[
+                                       'group'] + '.')
+                except Role.DoesNotExist:
+                    role = Role(user=user, company=request.company, group=group)
+                    role.save()
+                    messages.success(request,
+                                     'User ' + user.username + ' (' + user.email + ') added as ' + request.POST[
+                                         'group'] + '.')
+            except User.DoesNotExist:
+                messages.error(request, 'No users found with the username ' + request.POST['user'])
     objs = Role.objects.filter(company=request.company)
     return render(request, 'roles.html', {'roles': objs})
 
