@@ -1,6 +1,6 @@
 <!DOCTYPE HTML>
 <html>
-
+{% load filters %}
 <head>
     <title>{% block title %}{% endblock %}</title>
 
@@ -404,6 +404,14 @@
                 Company Settings
             </a>
         </li>
+        {% ifusergroup 'Owner' 'SuperOwner'%}
+        <li>
+            <a href="/user/roles/">
+                <i class="icon-double-angle-right"></i>
+                Company Roles
+            </a>
+        </li>
+        {% endifusergroup %}
         <li>
             <a href="/tax/schemes/">
                 <i class="icon-double-angle-right"></i>
