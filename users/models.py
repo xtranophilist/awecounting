@@ -251,8 +251,10 @@ def group_required(*groups):
 
         def _view(request, *args, **kwargs):
             allowed = False
+
             for role in request.roles:
-                if role.group.name in groups:
+
+                if role.group.name in groups and role.company == request.company:
                     allowed = True
             if allowed:
                 return view_function(request, *args, **kwargs)
