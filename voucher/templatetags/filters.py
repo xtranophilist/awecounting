@@ -3,12 +3,13 @@ from datetime import date, timedelta
 
 from django.core import serializers
 from django.db.models.query import QuerySet
-from django.template import Library
 from django.utils.safestring import mark_safe
 from django.db.models import Model
+from django import template
+from django.template import resolve_variable, NodeList
+from django.contrib.auth.models import Group
 
-
-register = Library()
+register = template.Library()
 
 
 def handler(obj):
@@ -126,13 +127,6 @@ def get_particulars(entry, account):
             lst.append('<a href="' + '/ledger/' + str(row.cr_account.id) + '/#' + str(entry.id) + '">' + str(
                 row.cr_account) + '</a>')
     return ', '.join(lst)
-
-
-from django import template
-from django.template import resolve_variable, NodeList
-from django.contrib.auth.models import Group
-
-register = template.Library()
 
 
 @register.tag()

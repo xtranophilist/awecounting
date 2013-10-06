@@ -233,8 +233,11 @@ def handle_new_user(sender, user, request, **kwargs):
     user.company = company
     user.is_active = True
     user.save()
-    role = Role(user=user, group=Group.objects.get(name='SuperOwner'), company=company)
-    role.save()
+    try:
+        role = Role(user=user, group=Group.objects.get(name='SuperOwner'), company=company)
+        role.save()
+    except Group.DoesNotExist:
+        pass
     create_default(company)
 
 
