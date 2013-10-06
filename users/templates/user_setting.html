@@ -30,7 +30,7 @@
             <th>Role</th>
             </thead>
             <tbody>
-            {% for role in request.roles.all %}
+            {% for role in request.user.roles.all %}
                 <tr>
                     <td>{{ role.company }}</td>
                     <td>{{ role.group }}</td>

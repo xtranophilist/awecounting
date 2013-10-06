@@ -81,7 +81,7 @@
                                 <li><a href="/user/logout">Logout</a>
 
                                 </li>
-                                {% for role in request.roles %}
+                                {% for role in request.user.roles.all %}
                                     {% if role.company.id != request.company.id %}
                                         <li>
                                             <a href="/user/set-company/{{ role.company.id }}">Use
