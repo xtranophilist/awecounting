@@ -250,20 +250,14 @@ def group_required(*groups):
     def _dec(view_function):
 
         def _view(request, *args, **kwargs):
-            allowed = False
 
-            for role in request.roles:
-
-                if role.group.name in groups and role.company == request.company:
-                    allowed = True
-            if allowed:
+            if request.role.group.name in groups:
                 return view_function(request, *args, **kwargs)
             else:
                 if request.user.is_authenticated():
                     return HttpResponseForbidden("You don't have permission to view this page!")
                 else:
                     return redirect(settings.LOGIN_URL)
-
 
         return _view
 
