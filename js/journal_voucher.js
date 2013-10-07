@@ -1,5 +1,6 @@
 $(document).ready(function () {
     $('.date-picker').datepicker().data('datepicker');
+    ko.applyBindings(new JournalVoucher(ko_data));
 });
 
 
