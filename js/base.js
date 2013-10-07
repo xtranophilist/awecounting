@@ -9,6 +9,9 @@ function init_select2(element, callback) {
             text: 'Add New ' + $(element).data('field'),
             'data-toggle': 'modal'
         }).appendTo(drop_class);
+        el.on('click', function () {
+            el.parent().toggle();
+        })
     }
 }
 
@@ -29,10 +32,46 @@ $(document).ready(function () {
                 $('<div class="modal hide fade">' + data + '</div>').modal();
             }).success(function () {
                     $('input:text:visible:first').focus();
+                    console.log($('form'));
                 });
         }
     });
+
+    $('document').on('submit', 'form[data-async]', function (event) {
+        var $form = $(this);
+        var $target = $($form.attr('data-target'));
+
+        $.ajax({
+            type: $form.attr('method'),
+            url: $form.attr('action'),
+            data: $form.serialize(),
+
+            success: function (data, status) {
+                $target.html(data);
+            }
+        });
+
+        event.preventDefault();
+    });
 });
+
+on_form_submit = function (event) {
+    alert('1');
+    var $form = $(this);
+    var $target = $($form.attr('data-target'));
+
+    $.ajax({
+        type: $form.attr('method'),
+        url: $form.attr('action'),
+        data: $form.serialize(),
+
+        success: function (data, status) {
+            $target.html(data);
+        }
+    });
+
+    event.preventDefault();
+}
 
 //Useful Functions
 
