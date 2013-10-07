@@ -14,6 +14,21 @@ ko.bindingHandlers.toggle = {
     }
 };
 
+ko.bindingHandlers.textPercent = {
+    //init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+    //    //init logic
+    //},
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        var val = parseFloat(ko.utils.unwrapObservable(valueAccessor()));
+        if ($.isNumeric(val)) {
+            $(element).text((val * 100).toFixed(2)) + "%";
+        }
+        else {
+            $(element).text("#Error");
+        }
+    }
+}
+
 ko.bindingHandlers.select2 = {
     init: function (element, valueAccessor, allBindingsAccessor) {
         var obj = valueAccessor(),
@@ -91,6 +106,23 @@ ko.bindingHandlers.flash = {
         $(element).hide().fadeIn('slow');
     }
 };
+
+ko.bindingHandlers.eval = {
+    init: function (element, valueAccessor) {
+    },
+    update: function (element, valueAccessor) {
+        var value = ko.utils.unwrapObservable(valueAccessor());
+        try {
+            var val = eval(value);
+            $(element).text(val);
+            var observable = valueAccessor();
+            observable(val);
+            $(element).removeClass('invalid-cell')
+        } catch (e) {
+            $(element).addClass('invalid-cell')
+        }
+    }
+}
 
 
 ko.bindingHandlers.editableText = {

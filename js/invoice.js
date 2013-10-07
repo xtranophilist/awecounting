@@ -156,7 +156,7 @@ function ParticularViewModel(particular) {
     self.item_id = ko.observable();
     self.description = ko.observable();
     self.unit_price = ko.observable(0);
-    self.quantity = ko.observable(1).extend({ numeric: 2 });
+    self.quantity = ko.observable(1);
     self.discount = ko.observable(0).extend({ numeric: 2 });
     self.tax_scheme = ko.observable();
 
@@ -169,6 +169,7 @@ function ParticularViewModel(particular) {
     self.amount = ko.computed(function () {
         var wo_discount = self.quantity() * self.unit_price();
         var amt = wo_discount - ((self.discount() * wo_discount) / 100);
+
         return amt;
     });
 
