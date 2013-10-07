@@ -113,6 +113,7 @@ ko.bindingHandlers.eval = {
     update: function (element, valueAccessor) {
         var value = ko.utils.unwrapObservable(valueAccessor());
         try {
+            value = calculate_percent(value);
             var val = eval(value);
             $(element).text(val);
             var observable = valueAccessor();
@@ -124,6 +125,26 @@ ko.bindingHandlers.eval = {
     }
 }
 
+calculate_percent = function (str) {
+    str = str.replace(/([0-9]+)([\+\-\*\/]{1})([0-9]+)%/, function (s, n1, o, n2) {
+        var n1 = parseFloat(n1);
+        var n2 = parseFloat(n2);
+        if (o == '+') {
+            return n1 + n1 * n2 / 100;
+        }
+        if (o == '-') {
+            return n1 - n1 * n2 / 100;
+        }
+        if (o == '*') {
+            return n1 * n2 / 100;
+        }
+        if (o == '/') {
+            return 100 * n1 / n2;
+        }
+        return s;
+    });
+    return str;
+}
 
 ko.bindingHandlers.editableText = {
     init: function (element, valueAccessor) {
