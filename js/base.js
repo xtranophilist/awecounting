@@ -1,3 +1,24 @@
+function init_select2(element, callback) {
+    if ($(element).data('add-url')) {
+        var drop_class = '.drop-'+$(element).data('field').toLowerCase().replace(' ', '-');
+        console.log(drop_class);
+        $('.drop_'+$(element).data('field').toLowerCase()).find('.appended_link').remove();
+        var el = jQuery('<a/>', {
+            class: 'appended_link',
+            href: $(element).data('add-url'),
+            title: 'Add New ' + $(element).data('field'),
+            text: 'Add New ' + $(element).data('field')
+        }).appendTo(drop_class);
+        el.on('click', function () {
+            alert(1);
+        });
+    }
+}
+
+function return_name(obj) {
+    return obj.name;
+}
+
 //Triggers on document-ready
 $(document).ready(function () {
 
