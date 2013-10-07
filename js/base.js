@@ -1,17 +1,14 @@
 function init_select2(element, callback) {
     if ($(element).data('add-url')) {
-        var drop_class = '.drop-'+$(element).data('field').toLowerCase().replace(' ', '-');
-        console.log(drop_class);
-        $('.drop_'+$(element).data('field').toLowerCase()).find('.appended_link').remove();
+        var drop_class = '.drop-' + $(element).data('field').toLowerCase().replace(' ', '-');
+        $('.drop_' + $(element).data('field').toLowerCase()).find('.appended_link').remove();
         var el = jQuery('<a/>', {
             class: 'appended_link',
             href: $(element).data('add-url'),
             title: 'Add New ' + $(element).data('field'),
-            text: 'Add New ' + $(element).data('field')
+            text: 'Add New ' + $(element).data('field'),
+            'data-toggle': 'modal'
         }).appendTo(drop_class);
-        el.on('click', function () {
-            alert(1);
-        });
     }
 }
 
@@ -21,20 +18,20 @@ function return_name(obj) {
 
 //Triggers on document-ready
 $(document).ready(function () {
-
-//    $('.collapsible-head').on('click', function(e) {
-//        e.preventDefault();
-//        if (e.target.tagName=='BUTTON'){
-//            return false;
-//        }
-//        var $this = $(this);
-//        var $collapse = $this.closest('.collapse-group').find('.collapse');
-//        ($this.closest('.collapse-group').find('.collapsible-head').find('.collapse-show-on-expand').toggle());
-//        $collapse.collapse('toggle');
-//    });
-
     $('.select2').select2();
-
+    $('[data-toggle="modal"]').click(function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        if (url.indexOf('#') == 0) {
+            $(url).modal('open');
+        } else {
+            $.get(url,function (data) {
+                $('<div class="modal hide fade">' + data + '</div>').modal();
+            }).success(function () {
+                    $('input:text:visible:first').focus();
+                });
+        }
+    });
 });
 
 //Useful Functions
