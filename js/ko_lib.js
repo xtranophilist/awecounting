@@ -19,7 +19,6 @@ ko.bindingHandlers.select2 = {
         var obj = valueAccessor(),
             allBindings = allBindingsAccessor(),
             lookupKey = allBindings.lookupKey;
-//        obj['placeholderOption'] = 'first';
         $(element).select2(obj);
         if (lookupKey) {
             var value = ko.utils.unwrapObservable(allBindings.value);
@@ -32,10 +31,32 @@ ko.bindingHandlers.select2 = {
             $(element).select2('destroy');
         });
     },
-    update: function (element) {
-        $(element).trigger('change');
+    update: function (element, valueAccessor, allBindingsAccessor) {
+        var allBindings = allBindingsAccessor(),
+            value = ko.utils.unwrapObservable(allBindings.value || allBindings.selectedOptions);
+        if (value) {
+            $(element).select2('val', value);
+        }
     }
 };
+
+//ko.bindingHandlers.select2 = {
+//    init: function(element, valueAccessor, allBindingsAccessor) {
+//        $(element).select2(valueAccessor());
+//
+//        ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
+//            $(element).select2('destroy');
+//        });
+//    },
+//    update: function(element, valueAccessor, allBindingsAccessor) {
+//        var allBindings = allBindingsAccessor(),
+//            value = ko.utils.unwrapObservable(allBindings.value || allBindings.selectedOptions);
+//        if (value) {
+//            $(element).select2('val', value);
+//        }
+//    }
+//};
+
 
 ko.bindingHandlers.typeahead = {
     init: function (element, valueAccessor) {
