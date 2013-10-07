@@ -15,10 +15,8 @@
     <script src="{{ STATIC_URL }}js/base.js"></script>
     <script src="{{ STATIC_URL }}js/journal_voucher.js"></script>
     <script>
-        $(document).ready(function () {
             {% load filters %}
-            ko.applyBindings(new JournalVoucher({{data|jsonify}}));
-        });
+            ko_data = {{ data|jsonify }};
     </script>
 {% endblock %}
 

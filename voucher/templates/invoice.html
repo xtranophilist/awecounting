@@ -15,10 +15,8 @@
     <script src="{{ STATIC_URL }}js/base.js"></script>
     <script src="{{ STATIC_URL }}js/invoice.js"></script>
     <script>
-        $(document).ready(function () {
-            {% load filters %}
-            ko.applyBindings(new InvoiceViewModel({{data|jsonify}}));
-        });
+        {% load filters %}
+        ko_data = {{ data|jsonify }};
     </script>
 {% endblock %}
 
@@ -113,8 +111,11 @@
                             <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                         </td>
                         <td>
-                            <select class="span12 item-selector"
-                                    data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, optionsCaption: 'Choose an item...', select2: {},  event: {change: $root.itemChanged}"></select>
+                            <input type="hidden" data-field="Item" data-add-url="http://google.com"
+                                   class="span12 item-selector"
+                                   data-bind="value: item_id, select2: {data: {results: $root.items}, formatSelection: return_name,
+formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-item'},  event: {change: $root.itemChanged}, lookupKey: 'id'">
+
                         </td>
                         <td data-bind="editableText: description">
                         </td>
@@ -125,8 +126,9 @@
                         <td data-bind="editableText: discount, numeric: true">
                         </td>
                         <td>
-                            <select class="span12 item-selector"
-                                    data-bind="options: $root.tax_schemes, optionsText: 'descriptor', optionsValue: 'id', value: tax_scheme, select2: {}"></select>
+                            <input type="hidden" data-add-url="http://google.com" data-field="Tax Scheme"
+                                   class="span12 item-selector" data-bind="value: item_id, select2: {data: {results: $root.tax_schemes}, formatSelection: return_name,
+formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-tax-scheme'}, lookupKey: 'id'">
                         </td>
                         <td data-bind="text: amount()">
                         </td>
@@ -168,3 +170,5 @@
     </div>
 
 {% endblock %}
+{#<input type="hidden" class="span12 item-selector"#}
+{#                                    data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, optionsCaption: 'Choose an item...', select2: {},  event: {change: $root.itemChanged}">#}
