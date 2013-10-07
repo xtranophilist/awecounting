@@ -20,13 +20,11 @@
     </script>
 {% endblock %}
 
-{% block content %}
+{% block pageheader %}
+    Invoice
+{% endblock %}
 
-    <div class="page-header position-relative">
-        <h1>
-            Invoice
-        </h1>
-    </div>
+{% block content %}
 
     <form method="post" action="#" data-bind='submit: save'>
         {% csrf_token %}
@@ -111,8 +109,7 @@
                             <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                         </td>
                         <td>
-                            <input type="hidden" data-field="Item" data-add-url="http://google.com"
-                                   class="span12 item-selector"
+                            <input type="hidden" data-field="Item" data-add-url="{% url 'create_inventory_item' %}"
                                    data-bind="value: item_id, select2: {data: {results: $root.items}, formatSelection: return_name,
 formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-item'},  event: {change: $root.itemChanged}, lookupKey: 'id'">
 
@@ -126,7 +123,7 @@ formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-
                         <td data-bind="editableText: discount, numeric: true">
                         </td>
                         <td>
-                            <input type="hidden" data-add-url="http://google.com" data-field="Tax Scheme"
+                            <input type="hidden" data-add-url="{% url 'create_tax_scheme' %}" data-field="Tax Scheme"
                                    class="span12 item-selector" data-bind="value: item_id, select2: {data: {results: $root.tax_schemes}, formatSelection: return_name,
 formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-tax-scheme'}, lookupKey: 'id'">
                         </td>

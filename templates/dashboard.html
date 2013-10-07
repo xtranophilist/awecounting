@@ -404,13 +404,13 @@
                 Company Settings
             </a>
         </li>
-        {% ifusergroup 'Owner' 'SuperOwner'%}
-        <li>
-            <a href="/user/roles/">
-                <i class="icon-double-angle-right"></i>
-                Company Roles
-            </a>
-        </li>
+        {% ifusergroup 'Owner' 'SuperOwner' %}
+            <li>
+                <a href="/user/roles/">
+                    <i class="icon-double-angle-right"></i>
+                    Company Roles
+                </a>
+            </li>
         {% endifusergroup %}
         <li>
             <a href="/tax/schemes/">
@@ -459,6 +459,13 @@
 
     <div id="page-content" class="clearfix">
 
+        <div class="page-header position-relative">
+            <h1>
+                {% block pageheader %}
+                {% endblock %}
+            </h1>
+        </div>
+
         {% block content %}{% endblock %}
 
     </div>
@@ -489,7 +496,7 @@
 <a href="#" id="btn-scroll-up" class="btn btn-small btn-inverse">
     <i class="icon-double-angle-up icon-only bigger-110"></i>
 </a>
-
+<div id="modal"></div>
 </body>
 
 </html>
