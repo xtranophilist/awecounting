@@ -508,3 +508,11 @@ input[type="radio"], input[type="checkbox"] {
 .empty{
     display: none !important;
 }
+
+.inline{
+    display: inline;
+}
+
+td .select2-container {
+    width: 100%
+}
