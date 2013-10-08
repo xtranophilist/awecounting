@@ -11,6 +11,7 @@ function init_select2(element, callback) {
         }).appendTo(drop_class);
         el.on('click', function () {
             el.parent().toggle();
+            window.last_active_select=element;
         })
     }
 }

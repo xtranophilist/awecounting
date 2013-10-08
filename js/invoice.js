@@ -81,7 +81,6 @@ function InvoiceViewModel(data) {
                 }
                 else {
                     $('#message').html('Saved!');
-                    console.log(msg);
                     if (msg.id)
                         self.id = msg.id;
                     $("#particulars-body > tr").each(function (i) {
