@@ -28,32 +28,41 @@ $(document).ready(function () {
         if (url.indexOf('#') == 0) {
             $(url).modal('open');
         } else {
+            var old_forms = $('form');
             $.get(url,function (data) {
-                $('<div class="modal hide fade">' + data + '</div>').modal();
+                $('#modal').html(data).modal();
             }).success(function () {
-                    $('input:text:visible:first').focus();
-                    console.log($('form'));
+                    var new_forms = $('form').not(old_forms).get();
+                    $(new_forms).submit({url: url}, override_form);
+                    $('#modal').on('shown', function () {
+                        $('input:text:visible:first', this).focus();
+                    });
                 });
         }
     });
-
-    $('document').on('submit', 'form[data-async]', function (event) {
-        var $form = $(this);
-        var $target = $($form.attr('data-target'));
-
-        $.ajax({
-            type: $form.attr('method'),
-            url: $form.attr('action'),
-            data: $form.serialize(),
-
-            success: function (data, status) {
-                $target.html(data);
-            }
-        });
-
-        event.preventDefault();
-    });
 });
+
+override_form = function (event) {
+    var $form = $(this);
+    var $target = $('#modal');
+    var action = $form.attr('action');
+    if (typeof action == 'undefined'){
+        action = event.data.url;
+    }
+
+
+    $.ajax({
+        type: $form.attr('method'),
+        url: action,
+        data: $form.serialize(),
+
+        success: function (data, status) {
+            $target.html(data);
+        }
+    });
+
+    event.preventDefault();
+}
 
 on_form_submit = function (event) {
     alert('1');
