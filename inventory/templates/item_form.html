@@ -18,7 +18,7 @@
 {% block content %}
     {{ form.non_field_errors }}
     {{ form.errors }}
-    <form method="post" data-async data-target="#modal-form" action="/inventory/create/">
+    <form method="post">
         {% csrf_token %}
         {#        <div class="row">#}
         {#            <div class="span3">#}

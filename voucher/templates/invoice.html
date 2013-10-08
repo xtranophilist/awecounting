@@ -118,7 +118,7 @@ formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-
                         </td>
                         <td data-bind="editableText: unit_price, numeric: true">
                         </td>
-                        <td data-bind="editableText: quantity, numeric: true">
+                        <td data-bind="editableText: quantity, eval: quantity">
                         </td>
                         <td data-bind="editableText: discount, numeric: true">
                         </td>
@@ -157,15 +157,4 @@ formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-
         </div>
     </form>
 
-    <div id="item_new_form" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-            <h3 id="myModalLabel">Edit Introduction</h3>
-        </div>
-
-    </div>
-
 {% endblock %}
-{#<input type="hidden" class="span12 item-selector"#}
-{#                                    data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, optionsCaption: 'Choose an item...', select2: {},  event: {change: $root.itemChanged}">#}
