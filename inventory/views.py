@@ -39,7 +39,7 @@ def item_form(request, id=None):
             item.company = request.company
             item.save()
             if request.is_ajax():
-                return render(request, 'backcall.html')
+                return render(request, 'backcall.html', {'obj': item})
             return redirect('/inventory/items/')
     else:
         form = ItemForm(instance=item, company=request.company)

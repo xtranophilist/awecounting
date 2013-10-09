@@ -1,8 +1,21 @@
+{% load filters %}
 <script>
-    $('#modal').modal('hide')
+    var obj = {{ obj|jsonify }};
+    $('#modal').modal('hide');
     el = $(window.last_active_select);
-    var temp = el.select2('val'); // save current value
-    temp.push('haha'); // append new one
-    var newOptions = '<option value="1">1</option><option value="2">2</option>';
-    el.select2('destroy').html(newOptions).select2().select2('val', temp);
+    matches = el.data('bind').match(/\{results: \$root\.([a-z]+)\}/)
+    match = matches[1]
+    vm[match].append(obj);
+    {#    var temp = el.select2('val'); // save current value#}
+    {#    temp.push('haha'); // append new one#}
+    {#    var newOptions = '<option value="1">1</option><option value="2">2</option>';#}
+    {#    el.select2('destroy').html(newOptions).select2().select2('val', temp);#}
+    {#    window.last_active_select.select2('data', [#}
+    {#        {id: 1, name: 'haha'},#}
+    {#        {id: 2, name: 'nana'}#}
+    {#    ]);#}
+    {#    vm = new InvoiceViewModel(ko_data);#}
+    {#    ko.applyBindings(vm);#}
+    {#    console.log(el.data('bind'));#}
+
 </script>
