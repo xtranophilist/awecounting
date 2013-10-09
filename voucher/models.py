@@ -19,6 +19,7 @@ class Invoice(models.Model):
 
     class Meta:
         db_table = 'invoice'
+        unique_together = ('invoice_no', 'company')
 
 
 class InvoiceParticular(models.Model):
