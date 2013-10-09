@@ -153,6 +153,9 @@ formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-
                 <i class="icon-plus-sign"></i> Add New Row
             </button>
             <input class="btn" type="submit" value="Save"/>
+            {% if scenario == 'Update' %}
+                <a class="btn delete-warn" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>
+            {% endif %}
             <a class="btn" href="/voucher/invoice/new/">New</a>
         </div>
     </form>

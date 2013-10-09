@@ -49,7 +49,7 @@ def invoice(request, invoice_no=None):
         scenario = 'Create'
         try:
             try:
-                last_invoice = Invoice.objects.latest('id')
+                last_invoice = Invoice.objects.filter(company=request.company).latest('id')
                 last_invoice_no = last_invoice.invoice_no
             except Invoice.DoesNotExist:
                 # for first invoice
