@@ -12,13 +12,10 @@
 {% block head_end %}
     <script src="{{ STATIC_URL }}js/vendors/knockout.js"></script>
     <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
-    <script src="{{ STATIC_URL }}js/base.js"></script>
     <script src="{{ STATIC_URL }}js/invoice.js"></script>
     <script>
-        $(document).ready(function () {
-            {% load filters %}
-            ko.applyBindings(new InvoiceViewModel({{data|jsonify}}));
-        });
+        {% load filters %}
+        ko_data = {{data|jsonify}};
     </script>
 {% endblock %}
 
@@ -133,6 +130,9 @@
                 <i class="icon-plus-sign"></i> Add New Row
             </button>
             <button type="submit" class="btn">Save</button>
+            {% if scenario == 'Update' %}
+                <a class="btn delete-warn" href="{% url 'delete_purchase_voucher' form.instance.id %}">Delete</a>
+            {% endif %}
             <a class="btn" href="/voucher/purchase/new/">New</a>
         </div>
     </form>
