@@ -1,8 +1,8 @@
 $(document).ready(function () {
     $('#inv-date').datepicker().data('datepicker');
     $('#due-date').datepicker({relative_to: '#inv-date'});
-    ko.applyBindings(new InvoiceViewModel(ko_data));
-
+    vm = new InvoiceViewModel(ko_data);
+    ko.applyBindings(vm);
 });
 
 function TaxOptions(name, id) {
