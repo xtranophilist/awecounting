@@ -13,4 +13,10 @@ urlpatterns = patterns('',
                        url(r'^journal/$', views.journal_voucher, name='new_journal_voucher'),
                        url(r'^journal/(?P<id>[0-9]+)/$', views.journal_voucher, name='update_journal_voucher'),
                        url(r'^journal/save/$', views.save_journal_voucher, name='save_journal_voucher'),
+
+                       url(r'^invoice/(?P<invoice_no>[0-9]+)/delete/$', views.delete_invoice, name='delete_invoice'),
+                       url(r'^purchase/(?P<id>[0-9]+)/delete/$', views.delete_purchase_voucher,
+                           name='delete_purchase_voucher'),
+                       url(r'^journal/(?P<id>[0-9]+)/delete/$', views.delete_journal_voucher,
+                           name='delete_journal_voucher'),
 )

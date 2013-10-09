@@ -1,5 +1,6 @@
 import json
 from datetime import date
+from django.core.urlresolvers import reverse
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
@@ -42,8 +43,10 @@ def invoice(request, invoice_no=None):
         return redirect('/settings/company')
     if invoice_no:
         invoice = get_object_or_404(Invoice, invoice_no=invoice_no, company=request.company)
+        scenario = 'Update'
     else:
         invoice = Invoice(date=date.today(), currency=company_setting.default_currency)
+        scenario = 'Create'
         try:
             try:
                 last_invoice = Invoice.objects.latest('id')
@@ -63,7 +66,7 @@ def invoice(request, invoice_no=None):
         'invoice_prefix': company_setting.invoice_prefix,
         'invoice_suffix': company_setting.invoice_suffix,
     }
-    return render(request, 'invoice.html', {'form': form, 'data': invoice_data})
+    return render(request, 'invoice.html', {'form': form, 'data': invoice_data, 'scenario': scenario})
 
 
 @login_required
@@ -128,6 +131,21 @@ def save_invoice(request):
 
 
 @login_required
+def delete_invoice(request, invoice_no):
+    obj = Invoice.objects.get(invoice_no=invoice_no, company=request.company)
+    obj.delete()
+    return redirect(reverse('all_invoices'))
+    #return redirect('/voucher/invoices/')
+
+
+@login_required
+def delete_purchase_voucher(request, id):
+    obj = PurchaseVoucher.objects.get(id=id, company=request.company)
+    obj.delete()
+    return redirect(reverse('all_purchase_vouchers'))
+
+
+@login_required
 def purchase_voucher(request, id=None):
     from core.models import CompanySetting
 
@@ -137,9 +155,10 @@ def purchase_voucher(request, id=None):
         return redirect('/settings/company')
     if id:
         voucher = get_object_or_404(PurchaseVoucher, id=id, company=request.company)
+        scenario = 'Update'
     else:
         voucher = PurchaseVoucher(date=date.today(), currency=company_setting.default_currency)
-
+        scenario = 'Create'
     if request.POST:
         form = PurchaseVoucherForm(request.POST, request.FILES, instance=voucher, company=request.company)
         if form.is_valid():
@@ -173,17 +192,19 @@ def purchase_voucher(request, id=None):
             return redirect('/voucher/purchases/')
     form = PurchaseVoucherForm(instance=voucher, company=request.company)
     purchase_voucher_data = PurchaseVoucherSerializer(voucher).data
-    return render(request, 'purchase_voucher.html', {'form': form, 'data': purchase_voucher_data})
+    return render(request, 'purchase_voucher.html', {'form': form, 'data': purchase_voucher_data, 'scenario': scenario})
 
 
 @login_required
 def journal_voucher(request, id=None):
     if id:
         voucher = get_object_or_404(JournalVoucher, id=id, company=request.company)
+        scenario = 'Update'
     else:
         voucher = JournalVoucher()
+        scenario = 'Create'
     data = JournalVoucherSerializer(voucher).data
-    return render(request, 'journal_voucher.html', {'data': data})
+    return render(request, 'journal_voucher.html', {'data': data, 'scenario': scenario})
 
 
 def empty_to_None(dict, list_of_attr):
@@ -297,5 +318,8 @@ def save_journal_voucher(request):
 #     # delete_rows(params.get('deleted_rows'), model)
 #     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
-
-
+@login_required
+def delete_journal_voucher(request, id):
+    obj = JournalVoucher.objects.get(id=id, company=request.company)
+    obj.delete()
+    return redirect(reverse('all_journal_vouchers'))
