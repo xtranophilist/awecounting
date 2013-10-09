@@ -11,7 +11,7 @@ function init_select2(element, callback) {
         }).appendTo(drop_class);
         el.on('click', function () {
             el.parent().toggle();
-            window.last_active_select=element;
+            window.last_active_select = element;
         })
     }
 }
@@ -23,6 +23,13 @@ function return_name(obj) {
 //Triggers on document-ready
 $(document).ready(function () {
     $('.select2').select2();
+
+    $('.delete-warn').click(function (e) {
+        if (confirm('Are you sure you want to delete?')) {
+            return true;
+        } else return false;
+    });
+
     $('[data-toggle="modal"]').click(function (e) {
         e.preventDefault();
         var url = $(this).attr('href');
@@ -47,7 +54,7 @@ override_form = function (event) {
     var $form = $(this);
     var $target = $('#modal');
     var action = $form.attr('action');
-    if (typeof action == 'undefined'){
+    if (typeof action == 'undefined') {
         action = event.data.url;
     }
 
