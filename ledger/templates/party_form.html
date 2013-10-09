@@ -42,8 +42,8 @@
         <div class="row">
             <div class="span12">
                 <input type="submit" value="Submit" class="btn"/>
-                {% if scenario = 'Update' %}
-                    <a class="btn" href="{% url 'delete_party' form.instance.id %}">Delete!</a>
+                {% if scenario == 'Update' %}
+                    <a class="btn delete-warn" href="{% url 'delete_party' form.instance.id %}">Delete!</a>
                 {% endif %}
             </div>
 

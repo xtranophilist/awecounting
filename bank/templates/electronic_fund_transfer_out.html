@@ -85,8 +85,8 @@
         <br/>
 
         <button type="submit" class="btn">Save</button>
-        {% if scenario = 'Update' %}
-            <a class="btn" href="{% url 'delete_electronic_fund_transfer_out' form.instance.id %}">Delete!</a>
+        {% if scenario == 'Update' %}
+            <a class="btn delete-warn" href="{% url 'delete_electronic_fund_transfer_out' form.instance.id %}">Delete!</a>
         {% endif %}
 
     </form>
