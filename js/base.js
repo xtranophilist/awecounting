@@ -28,6 +28,7 @@ function init_select2(element, callback) {
                         });
                     });
             }
+            return false;
         });
     }
 }
@@ -45,6 +46,16 @@ $(document).ready(function () {
             return true;
         } else return false;
     });
+
+
+    $('#modal').on('shown',function () {
+        $('#modal').off('wheel.modal mousewheel.modal');
+        $('body').on('wheel.modal mousewheel.modal', function () {
+            return false;
+        });
+    }).on('hidden', function () {
+            $('body').off('wheel.modal mousewheel.modal');
+        });
 });
 
 override_form = function (event) {
