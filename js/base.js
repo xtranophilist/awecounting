@@ -38,7 +38,7 @@ function return_name(obj) {
 
 //Triggers on document-ready
 $(document).ready(function () {
-    $('.select2').select2();
+    $('.select2').select2({'dropdownAutoWidth': true});
 
     $('.delete-warn').click(function (e) {
         if (confirm('Are you sure you want to delete?')) {
