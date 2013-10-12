@@ -3,8 +3,8 @@
     var obj = {{ obj|jsonify }};
     $('#modal').modal('hide');
     el = $(window.last_active_select);
-    var matches = el.data('bind').match(/\{results: \$root\.([a-z]+)\}/)
-    var match = matches[1]
+    var matches = el.data('bind').match(/\{results: \$root\.([a-z_]+)\}/);
+    var match = matches[1];
     vm[match].push(obj);
     window.last_active_select.select2('data', obj);
     window.last_active_select.trigger('change');

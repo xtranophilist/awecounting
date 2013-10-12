@@ -28,20 +28,22 @@ def delete_tax_scheme(request, id):
 @login_required
 def tax_scheme_form(request, id=None):
     if id:
-        object = get_object_or_404(TaxScheme, id=id, company=request.company)
+        obj = get_object_or_404(TaxScheme, id=id, company=request.company)
         scenario = 'Update'
     else:
-        object = TaxScheme(company=request.company)
+        obj = TaxScheme(company=request.company)
         scenario = 'Create'
     if request.POST:
-        form = TaxSchemeForm(data=request.POST, instance=object)
+        form = TaxSchemeForm(data=request.POST, instance=obj)
         if form.is_valid():
-            object = form.save(commit=False)
-            object.company = request.company
-            object.save()
+            obj = form.save(commit=False)
+            obj.company = request.company
+            obj.save()
+            if request.is_ajax():
+                return render(request, 'backcall.html', {'obj': TaxSchemeSerializer(obj).data})
             return redirect('/tax/schemes/')
     else:
-        form = TaxSchemeForm(instance=object)
+        form = TaxSchemeForm(instance=obj)
     if request.is_ajax():
         base_template = 'modal.html'
     else:
