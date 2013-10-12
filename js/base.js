@@ -1,9 +1,9 @@
 function init_select2(element, callback) {
     if ($(element).data('add-url')) {
         var drop_class = '.drop-' + $(element).data('field').toLowerCase().replace(' ', '-');
-        $('.drop-' + $(element).data('field').toLowerCase()).find('.appended_link').remove();
+        $('.drop-' + $(element).data('field').toLowerCase()).find('.appended-link').remove();
         var el = jQuery('<a/>', {
-            class: 'appended_link',
+            class: 'appended-link',
             href: $(element).data('add-url'),
             title: 'Add New ' + $(element).data('field'),
             text: 'Add New ' + $(element).data('field'),

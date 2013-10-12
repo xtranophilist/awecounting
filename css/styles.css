@@ -546,3 +546,16 @@ td .select2-container {
 .invalid-cell {
     background: #FBE3E4 !important;
 }
+
+.select2-drop {
+    text-align: center;
+}
+
+.select2-drop .appended-link {
+    text-decoration: underline;
+    /*be*/
+}
+
+.select2-results {
+    text-align: left;
+}
