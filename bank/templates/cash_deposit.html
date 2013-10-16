@@ -18,13 +18,11 @@
     </script>
 {% endblock %}
 
-{% block content %}
+{% block pageheader %}
+    {{ scenario }} Bank Cash Deposit
+{% endblock %}
 
-    <div class="page-header position-relative">
-        <h1>
-            {{ scenario }} Bank Cash Deposit
-        </h1>
-    </div>
+{% block content %}
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}

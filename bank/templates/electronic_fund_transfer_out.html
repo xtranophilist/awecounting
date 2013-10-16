@@ -9,6 +9,10 @@
     <li class="active"><a href="{% url "new_cheque_payment" %}">Electronic Fund Transfer Out</a></li>
 {% endblock %}
 
+{% block pageheader %}
+    {{ scenario }} Electronic Fund Transfer Out
+{% endblock %}
+
 {% block head_end %}
     {#    <script src="{{ STATIC_URL }}js/vendors/knockout.js"></script>#}
     {#    <script src="{{ STATIC_URL }}js/ko_lib.js"></script>#}
@@ -27,12 +31,6 @@
 {% endblock %}
 
 {% block content %}
-
-    <div class="page-header position-relative">
-        <h1>
-            {{ scenario }} Electronic Fund Transfer Out
-        </h1>
-    </div>
 
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}

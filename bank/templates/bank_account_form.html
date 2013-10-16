@@ -9,12 +9,11 @@
     <li class="active">{{ scenario }} Bank Account</li>
 {% endblock %}
 
+{% block pageheader %}
+    {{ scenario }} Bank Account
+{% endblock %}
+
 {% block content %}
-    <div class="page-header position-relative">
-        <h1>
-            {{ scenario }} Bank Account
-        </h1>
-    </div>
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
