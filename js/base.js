@@ -2,35 +2,36 @@ function init_select2(element, callback) {
     if ($(element).data('add-url')) {
         var drop_class = '.drop-' + $(element).data('field').toLowerCase().replace(/ /g, '-');
         $(drop_class).find('.appended-link').remove();
-        var el = jQuery('<a/>', {
+        jQuery('<a/>', {
             class: 'appended-link',
             href: $(element).data('add-url'),
             title: 'Add New ' + $(element).data('field'),
             text: 'Add New ' + $(element).data('field'),
             'data-toggle': 'modal'
-        }).appendTo(drop_class);
-        el.on('click', function (e) {
-            el.parent().toggle();
-            window.last_active_select = element;
-            e.preventDefault();
-            var url = $(this).attr('href');
-            if (url.indexOf('#') == 0) {
-                $(url).modal('open');
-            } else {
-                var old_forms = $('form');
-                $.get(url,function (data) {
-                    $('#modal').html(data).modal();
-                }).success(function () {
-                        var new_forms = $('form').not(old_forms).get();
-                        $(new_forms).submit({url: url}, override_form);
-                        $('#modal').on('shown', function () {
-                            $('input:text:visible:first', this).focus();
-                        });
-                    });
-            }
-            return false;
-        });
+        }).appendTo(drop_class).on('click', [element], appended_link_clicked);
     }
+}
+
+appended_link_clicked = function (e) {
+    get_target(e).parent().toggle();
+    window.last_active_select = e.data[0];
+    e.preventDefault();
+    var url = $(this).attr('href');
+    if (url.indexOf('#') == 0) {
+        $(url).modal('open');
+    } else {
+        var old_forms = $('form');
+        $.get(url,function (data) {
+            $('#modal').html(data).modal();
+        }).success(function () {
+                var new_forms = $('form').not(old_forms).get();
+                $(new_forms).submit({url: url}, override_form);
+                $('#modal').on('shown', function () {
+                    $('input:text:visible:first', this).focus();
+                });
+            });
+    }
+    return false;
 }
 
 function return_name(obj) {
@@ -39,7 +40,27 @@ function return_name(obj) {
 
 //Triggers on document-ready
 $(document).ready(function () {
-    $('.select2').select2({'dropdownAutoWidth': true});
+
+    $('.select2').each(function () {
+        var element = this;
+        var drop_class = 'drop-' + $(element).attr('name')
+        $(element).select2({'dropdownCssClass': drop_class, 'dropdownAutoWidth': true});
+        if ($(element).data('add-url')) {
+            if ($(element).data('field'))
+                var field_name = $(element).data('field');
+            else
+                var field_name = $(element).attr('name').replace(/_/g, ' ').toTitleCase();
+            jQuery('<a/>', {
+                class: 'appended-link',
+                href: $(element).data('add-url'),
+                title: 'Add New ' + field_name,
+                text: 'Add New ' + field_name,
+                'data-toggle': 'modal'
+            }).appendTo('.' + drop_class).on('click', [element], appended_link_clicked);
+        }
+
+
+    });
 
     $('.delete-warn').click(function (e) {
         if (confirm('Are you sure you want to delete?')) {
