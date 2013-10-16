@@ -72,7 +72,8 @@ class BankCashDepositForm(KOModelForm):
                                                                          'create_bank_account')}),
                                           label='Beneficiary Account')
     benefactor = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
-                                        widget=forms.Select(attrs={'class': 'select2'}))
+                                        widget=forms.Select(
+                                            attrs={'class': 'select2', 'data-add-url': reverse_lazy('create_account')}))
     attachment = ExtFileField(
         label='Add an attachment',
         help_text='',

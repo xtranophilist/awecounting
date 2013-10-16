@@ -55,7 +55,8 @@ def account_form(request, id=None):
                                      ['cr', item, form.cleaned_data['opening_cr']])
                     set_transactions(item, date.today(),
                                      ['dr', obd, form.cleaned_data['opening_cr']])
-
+            if request.is_ajax():
+                return render(request, 'backcall.html', {'obj': {'id': item.id, 'text': str(item)}})
             return redirect('/ledger/')
     else:
         form = AccountForm(instance=account, company=request.company, scenario=scenario)
