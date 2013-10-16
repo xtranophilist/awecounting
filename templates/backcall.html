@@ -4,9 +4,16 @@
     $('#modal').modal('hide');
     el = $(window.last_active_select);
     var matches = el.data('bind').match(/\{results: \$root\.([a-z_]+)\}/);
-    var match = matches[1];
-    vm[match].push(obj);
-    window.last_active_select.select2('data', obj);
-    window.last_active_select.trigger('change');
-    window.last_active_select.select2('close');
+    if (matches) {
+        var match = matches[1];
+        vm[match].push(obj);
+        el.select2('data', obj);
+        el.trigger('change');
+    }
+    else {
+        el.append("<option value='" + obj.id + "'>" + obj.text + "</option>")
+        el.trigger('change');
+        el.select2('val', obj.id);
+    }
+    el.select2('close');
 </script>
