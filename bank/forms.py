@@ -1,7 +1,8 @@
 from django import forms
+from django.core.urlresolvers import reverse_lazy
 
 from acubor.lib import KOModelForm, ExtFileField
-from models import BankAccount, ChequeDeposit, BankCashDeposit, ChequePayment, ElectronicFundTransferIn, ElectronicFundTransferInRow, ElectronicFundTransferOut
+from models import BankAccount, ChequeDeposit, BankCashDeposit, ChequePayment, ElectronicFundTransferIn, ElectronicFundTransferOut
 from ledger.models import Account
 
 
@@ -36,6 +37,7 @@ class ChequeDepositForm(KOModelForm):
         model = ChequeDeposit
         exclude = ['company']
 
+
 class ElectronicFundTransferInForm(KOModelForm):
     bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
                                           widget=forms.Select(attrs={'class': 'select2'}), label='Beneficiary Account')
@@ -61,13 +63,16 @@ class ElectronicFundTransferInForm(KOModelForm):
         model = ElectronicFundTransferIn
         exclude = ['company']
 
+
 class BankCashDepositForm(KOModelForm):
     date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
     bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
-                                          widget=forms.Select(attrs={'class': 'select2'}), label='Beneficiary Account')
+                                          widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Bank Acc.',
+                                                                     'data-add-url': reverse_lazy(
+                                                                         'create_bank_account')}),
+                                          label='Beneficiary Account')
     benefactor = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
                                         widget=forms.Select(attrs={'class': 'select2'}))
-    date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
     attachment = ExtFileField(
         label='Add an attachment',
         help_text='',
@@ -84,6 +89,7 @@ class BankCashDepositForm(KOModelForm):
     class Meta:
         model = BankCashDeposit
         exclude = ['company']
+
 
 class ChequePaymentForm(KOModelForm):
     bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
@@ -107,6 +113,7 @@ class ChequePaymentForm(KOModelForm):
     class Meta:
         model = ChequePayment
         exclude = ['company']
+
 
 class ElectronicFundTransferOutForm(KOModelForm):
     bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
