@@ -20,6 +20,9 @@ class BankAccount(models.Model):
             self.account = account
         super(BankAccount, self).save(*args, **kwargs)
 
+    def __str__(self):
+        return self.bank_name + ' Account (' + str(self.ac_no) + ' )'
+
 
 class ChequeDeposit(models.Model):
     date = models.DateField()
