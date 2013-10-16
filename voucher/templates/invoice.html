@@ -1,12 +1,12 @@
 {% extends "dashboard.html" %}
 
-{% block title %}Invoice{% endblock %}
+{% block title %}{{ scenario }} Invoice{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li class="active"><a href="{% url "all_invoices" %}">Invoices</a></li>
+    <li><a href="{% url "all_invoices" %}">Invoices</a></li>
     <span class="divider"><i class="icon-angle-right"></i></span>
-    <li class="active"><a href="{% url "new_invoice" %}">New Invoice</a></li>
+    <li>{{ scenario }} Invoice</li>
 {% endblock %}
 
 {% block head_end %}
@@ -19,9 +19,7 @@
     </script>
 {% endblock %}
 
-{% block pageheader %}
-    Invoice
-{% endblock %}
+{% block pageheader %}{{ scenario }} Invoice{% endblock %}
 
 {% block content %}
 

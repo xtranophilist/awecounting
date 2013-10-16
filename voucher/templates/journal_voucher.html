@@ -1,12 +1,12 @@
 {% extends "dashboard.html" %}
 
-{% block title %}Journal Voucher{% endblock %}
+{% block title %}{{ scenario }} Journal Voucher{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li class="active"><a href="{% url "list_journal_vouchers" %}">All Journal Vouchers</a></li>
+    <li><a href="{% url "list_journal_vouchers" %}">All Journal Vouchers</a></li>
     <span class="divider"><i class="icon-angle-right"></i></span>
-    <li class="active"><a href="{% url "new_journal_voucher" %}">Journal Voucher</a></li>
+    <li>{{ scenario }} Journal Voucher</li>
 {% endblock %}
 
 {% block head_end %}
@@ -14,15 +14,15 @@
     <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
     <script src="{{ STATIC_URL }}js/journal_voucher.js"></script>
     <script>
-            {% load filters %}
-            ko_data = {{ data|jsonify }};
+        {% load filters %}
+        ko_data = {{ data|jsonify }};
     </script>
 {% endblock %}
 
 {% block content %}
 
     <div data-bind="with: journal_voucher">
-        <div><h2 data-bind="css: status()">Journal Voucher</h2>
+        <div><h2 data-bind="css: status()">{{ scenario }} Journal Voucher</h2>
             <span data-bind="text: message()"></span>
 
         </div>

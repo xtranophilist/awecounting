@@ -1,12 +1,12 @@
 {% extends "dashboard.html" %}
 
-{% block title %}Purchase Voucher{% endblock %}
+{% block title %}{{ scenario }} Purchase Voucher{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li class="active"><a href="{% url "all_purchase_vouchers" %}">All Purchase Vouchers</a></li>
+    <li><a href="{% url "all_purchase_vouchers" %}">All Purchase Vouchers</a></li>
     <span class="divider"><i class="icon-angle-right"></i></span>
-    <li class="active"><a href="{% url "new_purchase_voucher" %}">New Purchase Voucher</a></li>
+    <li>{{ scenario }} Purchase Voucher</li>
 {% endblock %}
 
 {% block head_end %}
@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block pageheader %}
-    Purchase Voucher
+    {{ scenario }} Purchase Voucher
 {% endblock %}
 
 {% block content %}

@@ -4,7 +4,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li class="active"><a href="{% url "new_day_journal" %}">Day Journal</a></li>
+    <li><a href="{% url "new_day_journal" %}">Day Journal</a></li>
 {% endblock %}
 
 {% block pageheader %}
@@ -127,7 +127,7 @@
     <!-- Cash Tab -->
     <div class="tabbable">
     <ul class="nav nav-tabs" id="cash-tab">
-        <li class="active">
+        <li>
             <a data-toggle="tab" href="#cash-sales">
                 Cash Sales
             </a>
@@ -392,7 +392,7 @@
     <!-- Banks and Cards Tab -->
     <div class="tabbable">
         <ul class="nav nav-tabs" id="bank-tab">
-            <li class="active">
+            <li>
                 <a data-toggle="tab" href="#summary-bank">
                     Bank
                 </a>
@@ -566,7 +566,7 @@
     <!-- Credit Tabs -->
     <div class="tabbable">
     <ul class="nav nav-tabs" id="credit-tab">
-        <li class="active">
+        <li>
             <a data-toggle="tab" href="#credit-sales">
                 Credit Sales
             </a>
@@ -798,7 +798,7 @@
     <!-- Inventory Tabs -->
     <div class="tabbable">
         <ul class="nav nav-tabs" id="inventory_tab">
-            <li class="active">
+            <li>
                 <a data-toggle="tab" href="#inventory-fuel">
                     Fuel
                 </a>
@@ -985,7 +985,7 @@
     <!-- Summary Tabs -->
     <div class="tabbable">
         <ul class="nav nav-tabs" id="summary-tab">
-            <li class="active">
+            <li>
                 <a data-toggle="tab" href="#summary-cash">
                     Summary Cash
                 </a>
@@ -1093,7 +1093,7 @@
     <!-- Attachment Tabs -->
     <div class="tabbable" id="attachment_tabbable" data-journal-day="{{ day_journal.date|date:"Y-m-d" }}">
         <ul class="nav nav-tabs" id="attachment-tab">
-            <li class="active">
+            <li>
                 <a data-toggle="tab" href="#sales_attach">Sales Attachments</a>
             </li>
             <li>

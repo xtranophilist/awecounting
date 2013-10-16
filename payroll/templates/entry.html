@@ -4,9 +4,9 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li class="active"><a href="{% url "list_payroll_entries" %}">Payroll Entries</a></li>
+    <li><a href="{% url "list_payroll_entries" %}">Payroll Entries</a></li>
     <span class="divider"><i class="icon-angle-right"></i></span>
-    <li class="active"><a href="{% url "create_payroll_entry" %}">{{ scenario }} Payroll Entry</a></li>
+    <li><a href="{% url "create_payroll_entry" %}">{{ scenario }} Payroll Entry</a></li>
 {% endblock %}
 
 {% block head_end %}

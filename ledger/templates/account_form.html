@@ -4,9 +4,9 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li class="active"><a href="{% url "list_account" %}">Accounts</a></li>
+    <li><a href="{% url "list_account" %}">Accounts</a></li>
     <span class="divider"><i class="icon-angle-right"></i></span>
-    <li class="active">{{ scenario }} Account</li>
+    <li>{{ scenario }} Account</li>
 {% endblock %}
 
 {% block pageheader %}

@@ -57,7 +57,7 @@
 
             <div class="nav-collapse collapse">
                 <ul class="nav">
-                    <li class="active"><a href="#">Home</a>
+                    <li><a href="#">Home</a>
                     </li>
                     <li><a href="#about">Payment And Subscriptions</a>
                     </li>
@@ -461,10 +461,7 @@
     <div id="page-content" class="clearfix">
 
         <div class="page-header position-relative">
-            <h1>
-                {% block pageheader %}
-                {% endblock %}
-            </h1>
+            <h1>{% block pageheader %}{% endblock %}</h1>
         </div>
 
         {% block content %}{% endblock %}

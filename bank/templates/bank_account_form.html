@@ -4,9 +4,9 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li class="active"><a href="{% url "list_bank_accounts" %}">Bank Accounts</a></li>
+    <li><a href="{% url "list_bank_accounts" %}">Bank Accounts</a></li>
     <span class="divider"><i class="icon-angle-right"></i></span>
-    <li class="active">{{ scenario }} Bank Account</li>
+    <li>{{ scenario }} Bank Account</li>
 {% endblock %}
 
 {% block pageheader %}

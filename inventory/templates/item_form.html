@@ -4,9 +4,9 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li class="active"><a href="{% url "list_all_items" %}">Inventory Items</a></li>
+    <li><a href="{% url "list_all_items" %}">Inventory Items</a></li>
     <span class="divider"><i class="icon-angle-right"></i></span>
-    <li class="active">{{ scenario }} Inventory Item</li>
+    <li>{{ scenario }} Inventory Item</li>
 {% endblock %}
 
 {% block pageheader %}

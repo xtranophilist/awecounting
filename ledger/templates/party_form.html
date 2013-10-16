@@ -4,9 +4,9 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li class="active"><a href="{% url "list_all_parties" %}">Parties</a></li>
+    <li><a href="{% url "list_all_parties" %}">Parties</a></li>
     <span class="divider"><i class="icon-angle-right"></i></span>
-    <li class="active">{{ scenario }} Party</li>
+    <li>{{ scenario }} Party</li>
 {% endblock %}
 
 {% block pageheader %}
