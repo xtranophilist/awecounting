@@ -109,9 +109,7 @@
                         </td>
                         <td>
                             <input type="hidden" data-field="Item" data-add-url="{% url 'create_inventory_item' %}"
-                                   data-bind="value: item_id, select2: {data: {results: $root.items}, formatSelection: return_name,
-formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-item'},  event: {change: $root.itemChanged}, lookupKey: 'id'">
-
+                                   data-bind="value: item_id, select2: {data: {results: $root.items}},  event: {change: $root.itemChanged}, lookupKey: 'id'">
                         </td>
                         <td data-bind="editableText: description">
                         </td>
@@ -123,8 +121,8 @@ formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-
                         </td>
                         <td>
                             <input type="hidden" data-add-url="{% url 'create_tax_scheme' %}" data-field="Tax Scheme"
-                                   class="span12 item-selector" data-bind="value: item_id, select2: {data: {results: $root.tax_schemes}, formatSelection: return_name,
-formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-tax-scheme'}, lookupKey: 'id'">
+                                   class="span12 item-selector"
+                                   data-bind="value: tax_scheme, select2: {data: {results: $root.tax_schemes}}, lookupKey: 'id'">
                         </td>
                         <td data-bind="text: amount()">
                         </td>
