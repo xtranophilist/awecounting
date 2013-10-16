@@ -35,6 +35,15 @@ ko.bindingHandlers.select2 = {
             allBindings = allBindingsAccessor(),
             lookupKey = allBindings.lookupKey;
         obj['dropdownAutoWidth'] = true;
+        if ($(element).data('field')) {
+            obj['dropdownCssClass'] = 'drop-' + $(element).data('field').toLowerCase().replace(/ /g, '-');
+            if (typeof obj['formatSelection'] == 'undefined')
+                obj['formatSelection'] = return_name;
+            if (typeof obj['formatResult'] == 'undefined')
+                obj['formatResult'] = return_name;
+            if (typeof obj['initSelection'] == 'undefined')
+                obj['initSelection'] = init_select2;
+        }
         $(element).select2(obj);
         if (lookupKey) {
             var value = ko.utils.unwrapObservable(allBindings.value);
