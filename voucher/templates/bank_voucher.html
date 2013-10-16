@@ -21,8 +21,6 @@
 
 {% block content %}
 
-    {{ data }}
-
     <div class="row-fluid collapse-group">
         <div data-bind="foreach: bank_detail">
             <pre data-bind="text: ko.toJSON($data, null, 2)"></pre>

@@ -9,12 +9,11 @@
     <li class="active">Create Inventory Category</li>
 {% endblock %}
 
+{% block pageheader %}
+    Create Inventory Category
+{% endblock %}
+
 {% block content %}
-    <div class="page-header position-relative">
-        <h1>
-            Create Inventory Category
-        </h1>
-    </div>
     <form method="post">
         {% csrf_token %}
 

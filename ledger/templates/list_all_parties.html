@@ -7,13 +7,11 @@
     <li class="active"><a href="{% url "list_all_parties" %}">Parties</a></li>
 {% endblock %}
 
-{% block content %}
+{% block pageheader %}
+    All Parties
+{% endblock %}
 
-    <div class="page-header position-relative">
-        <h1>
-            All Parties
-        </h1>
-    </div>
+{% block content %}
 
     <table class="table table-bordered table-striped table-sortable">
         <thead>

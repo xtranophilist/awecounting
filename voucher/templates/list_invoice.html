@@ -19,13 +19,11 @@
     </script>
 {% endblock %}
 
-{% block content %}
+{% block pageheader %}
+    Invoices
+{% endblock %}
 
-    <div class="page-header position-relative">
-        <h1>
-            Invoices
-        </h1>
-    </div>
+{% block content %}
 
     {% load pagination_tags %}
     {% load sorting_tags %}

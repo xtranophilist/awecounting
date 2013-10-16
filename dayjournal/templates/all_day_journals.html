@@ -12,13 +12,11 @@
     <script type="text/javascript" src="{{ STATIC_URL }}js/dashboard.js"></script>
 {% endblock %}
 
-{% block content %}
+{% block pageheader %}
+    All Day Journals
+{% endblock %}
 
-    <div class="page-header position-relative">
-        <h1>
-            All Day Journals
-        </h1>
-    </div>
+{% block content %}
 
     <input type="text" id="day-journal-date" class="date-picker" data-date-format="yyyy-mm-dd"
            placeholder="Pick a date..."/>

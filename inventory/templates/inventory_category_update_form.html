@@ -9,12 +9,11 @@
     <li class="active">Update Inventory Category</li>
 {% endblock %}
 
+{% block pageheader %}
+    Inventory Update Category
+{% endblock %}
+
 {% block content %}
-    <div class="page-header position-relative">
-        <h1>
-            Inventory Update Category
-        </h1>
-    </div>
     <form method="post">
         {% csrf_token %}
 

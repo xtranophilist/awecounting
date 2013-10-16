@@ -9,12 +9,12 @@
     <li class="active">{{ scenario }} Tax Scheme</li>
 {% endblock %}
 
+{% block pageheader %}
+    {{ scenario }} Tax Scheme
+{% endblock %}
+
 {% block content %}
-    <div class="page-header position-relative">
-        <h1>
-            {{ scenario }} Tax Scheme
-        </h1>
-    </div>
+
     <form method="post">
         {% csrf_token %}
         {{ form.as_p }}

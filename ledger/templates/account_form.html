@@ -9,14 +9,11 @@
     <li class="active">{{ scenario }} Account</li>
 {% endblock %}
 
+{% block pageheader %}
+    {{ scenario }} Account
+{% endblock %}
+
 {% block content %}
-    <div class="page-header position-relative">
-        <h1>
-            {{ scenario }} Account
-        </h1>
-    </div>
-
-
     <form method="post">
         {% csrf_token %}
 

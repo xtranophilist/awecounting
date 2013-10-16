@@ -8,12 +8,12 @@
     <li class="active">User Settings</li>
 {% endblock %}
 
+{% block pageheader %}
+    User Settings
+{% endblock %}
+
 {% block content %}
-    <div class="page-header position-relative">
-        <h1>
-            User Settings
-        </h1>
-    </div>
+
     <form method="post">
         {% csrf_token %}
 

@@ -7,13 +7,11 @@
     <li class="active"><a href="{% url "list_category" %}">Account Categories</a></li>
 {% endblock %}
 
-{% block content %}
+{% block pageheader %}
+    Account Categories
+{% endblock %}
 
-    <div class="page-header position-relative">
-        <h1>
-            Account Categories
-        </h1>
-    </div>
+{% block content %}
 
     {% load mptt_tags %}
     <ul>

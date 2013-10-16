@@ -9,6 +9,10 @@
     <li class="active">{{ account.name }}</li>
 {% endblock %}
 
+{% block pageheader %}
+    {{ account.name }}
+{% endblock %}
+
 {% block head_end %}
     <script src="{{ STATIC_URL }}js/vendors/knockout.js"></script>
     <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
@@ -24,12 +28,6 @@
 {% endblock %}
 {% load filters %}
 {% block content %}
-
-    <div class="page-header position-relative">
-        <h1>
-            {{ account.name }}
-        </h1>
-    </div>
 
     Code: {{ account.code }} <br/>
     Dr Amount: {{ account.current_dr }} <br/>

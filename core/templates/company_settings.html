@@ -8,14 +8,12 @@
 {% endblock %}
 
 
+{% block pageheader %}
+    Company Settings
+{% endblock %}
+
 
 {% block content %}
-
-    <div class="page-header position-relative">
-        <h1>
-            Company Settings
-        </h1>
-    </div>
 
     <form method="post" action="">{% csrf_token %}
 

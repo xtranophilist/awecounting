@@ -7,13 +7,11 @@
     <li class="active"><a href="{% url "list_all_items" %}">Inventory Items</a></li>
 {% endblock %}
 
-{% block content %}
+{% block pageheader %}
+    Inventory Items
+{% endblock %}
 
-    <div class="page-header position-relative">
-        <h1>
-            Inventory Items
-        </h1>
-    </div>
+{% block content %}
 
     {% load pagination_tags %}
     {% load sorting_tags %}

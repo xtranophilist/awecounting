@@ -7,21 +7,14 @@
     <li class="active"><a href="{% url "list_journal_vouchers" %}">All Journal Vouchers</a></li>
 {% endblock %}
 
-{% block head_end %}
-
+{% block pageheader %}
+    Journal Vouchers
 {% endblock %}
 
 {% block content %}
 
-    <div class="page-header position-relative">
-        <h1>
-            Journal Vouchers
-        </h1>
-    </div>
-
     {% load pagination_tags %}
     {% load sorting_tags %}
-
 
     {% autosort objects as sorted_objects %}
     {% autopaginate sorted_objects 25 as paginated_objects %}

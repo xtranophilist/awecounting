@@ -7,6 +7,11 @@
     <li class="active"><a href="{% url "new_day_journal" %}">Day Journal</a></li>
 {% endblock %}
 
+{% block pageheader %}
+    Day Journal for {{ day_journal.date }}
+{% endblock %}
+
+
 {% block head_end %}
     <script src="{{ STATIC_URL }}js/vendors/knockout.js"></script>
     <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
@@ -118,11 +123,6 @@
     </div>
 
     <div class="no-print">
-    <div class="page-header position-relative">
-        <h1>
-            Day Journal for {{ day_journal.date }}
-        </h1>
-    </div>
 
     <!-- Cash Tab -->
     <div class="tabbable">
