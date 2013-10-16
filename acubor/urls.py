@@ -1,6 +1,8 @@
 from django.conf.urls import patterns, url, include
-from users import views as users_views
 from core import views as core_views
+
+from users import views as users_views
+
 # from django.views.generic import TemplateView
 from rest_framework import viewsets, routers
 from django.contrib.auth import get_user_model

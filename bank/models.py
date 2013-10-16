@@ -12,7 +12,7 @@ class BankAccount(models.Model):
 
     def save(self, *args, **kwargs):
         if self.pk is None:
-            account = Account(code=self.ac_no[10:], name=self.bank_name + ' Account (' + str(self.ac_no) + ' )')
+            account = Account(code=self.ac_no[-10:], name=self.bank_name + ' Account (' + str(self.ac_no) + ' )')
             account.company = self.company
             # account
             account.add_category('Bank Account')
