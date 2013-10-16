@@ -106,8 +106,9 @@
                         <span class="wid-pad pull-left" data-bind="text:  $index()+1"> </span>
                     </td>
                     <td>
-                        <select class="span12 item-selector"
-                                data-bind="options: $root.items, optionsText: 'name', optionsValue: 'id', value: item_id, optionsCaption: 'Choose an item...', select2: {},  event: {change: $root.itemChanged}"></select>
+                        <input type="hidden" data-field="Item" data-add-url="{% url 'create_inventory_item' %}"
+                               data-bind="value: item_id, select2: {data: {results: $root.items}, formatSelection: return_name,
+formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-item'},  event: {change: $root.itemChanged}, lookupKey: 'id'">
                     </td>
                     <td data-bind="editableText: description">
                     </td>
