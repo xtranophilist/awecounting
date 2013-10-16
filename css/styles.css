@@ -559,3 +559,12 @@ td .select2-container {
 .select2-results {
     text-align: left;
 }
+
+.page-header{
+    border: none;
+    padding-bottom: 0;
+}
+
+.page-header h1{
+    /*border-bottom: 1px dotted #e2e2e2;*/
+}
