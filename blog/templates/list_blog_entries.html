@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 
+{% load pagination_tags %}
+
 {% block content %}
 
     <h1>Blog Posts</h1>
+    {% autopaginate objs 25 as paginated_objs %}
     <ul>
-        {% for obj in objs %}
+        {% for obj in paginated_objs %}
             <li><a href="{% url 'view_blog_entry'  obj.id %}">{{ obj.title }}</a></li>
         {% endfor %}
     </ul>
+
+    {% paginate %}
 
 {% endblock %}
