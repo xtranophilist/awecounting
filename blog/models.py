@@ -1,4 +1,5 @@
 import datetime
+from redactor.fields import RedactorField
 
 from django.db import models
 
@@ -15,7 +16,8 @@ class Blog(models.Model):
     author = models.ForeignKey(User)
     created = models.DateTimeField(editable=False)
     updated = models.DateTimeField(editable=False)
-    content = models.TextField()
+    content = RedactorField()
+
 
     def save(self, *args, **kwargs):
         """ On save, update timestamps """
@@ -25,5 +27,6 @@ class Blog(models.Model):
         self.updated = timestamp
         return super(Blog, self).save(*args, **kwargs)
 
-    def __str__(self):
-        return self.title
+
+def __str__(self):
+    return self.title
