@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ scenario }} Blog Entry
+{% endblock %}
+
+{% block content %}
+
+    <h1>{{ scenario }} Blog Entry</h1>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit" class="btn">Save</button>
+        {% if scenario == 'Update' %}
+            <a class="btn delete-warn" href="{% url 'delete_blog_entry' form.instance.id %}">Delete!</a>
+        {% endif %}
+    </form>
+
+{% endblock %}
