@@ -2,7 +2,12 @@
 
 {% block content %}
     <h1>{{ obj.title }}</h1>
-    <div class="post-meta"></div>
+    <div class="post-meta">
+        Posted by {{ obj.author.full_name }} on {{ obj.created }}
+        {% if obj.updated > obj.created %}
+            Last updated on {{ obj.updated }}
+        {% endif %}
+    </div>
     <p>
         {{ obj.content }}
     </p>
