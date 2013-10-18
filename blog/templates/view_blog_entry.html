@@ -7,7 +7,7 @@
 {% block content %}
     <h1>{{ obj.title }}</h1>
     <div class="post-meta">
-        Posted by {{ obj.author.full_name }} on {{ obj.created }}
+        Posted by <a href="{% url 'view_blogs_by_author' obj.author.username %}">{{ obj.author.full_name }}</a> on {{ obj.created }}
         {% if obj.updated > obj.created %}
             Last updated on {{ obj.updated }}
         {% endif %}

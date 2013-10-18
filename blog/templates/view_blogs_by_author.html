@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <h1>Blog Posts by {{ user.full_name }}</h1>
+    <ul>
+        {% for obj in objs %}
+            <li><a href="{% url 'view_blog_entry'  obj.id %}">{{ obj.title }}</a></li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
