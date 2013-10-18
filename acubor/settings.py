@@ -188,4 +188,4 @@ AUTHENTICATION_BACKENDS = (
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
 
 REDACTOR_OPTIONS = {'lang': 'en'}
-REDACTOR_UPLOAD = 'uploads/'
+REDACTOR_UPLOAD = 'redactor_uploads/'
