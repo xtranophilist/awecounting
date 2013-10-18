@@ -128,6 +128,7 @@ INSTALLED_APPS = (
     'bank',
     'report',
     'blog',
+    'redactor',
     'mptt',
     'debug_toolbar',
     'pagination',
@@ -185,3 +186,6 @@ AUTHENTICATION_BACKENDS = (
 )
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.cached_db'
+
+REDACTOR_OPTIONS = {'lang': 'en'}
+REDACTOR_UPLOAD = 'uploads/'
