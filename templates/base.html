@@ -2,6 +2,8 @@
 <html>
 <head>
     <title>{% block title %}{% endblock %}</title>
+    {% block meta-keywords %}{% endblock %}
+    {% block meta-description %}{% endblock %}
 
     <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/base.css">
     <link href="{{ STATIC_URL }}css/vendors/bootstrap.min.css" rel="stylesheet"/>
@@ -53,14 +55,16 @@
 </div>
 
 <footer class="footer">
-    <div class="container">
-        <p>Designed and built with all the love in the world</p>
+    {% block footer %}
+        <div class="container">
+            <p>Designed and built with all the love in the world</p>
 
-        <p>&copy; Copyrights All RIghts Reserved Acubor, 2013.</p>
+            <p>&copy; Copyrights All RIghts Reserved Acubor, 2013.</p>
 
-        <p><a href="http://glyphicons.com">Glyphicons Free</a> licensed under <a
-                href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
-    </div>
+            <p><a href="http://glyphicons.com">Glyphicons Free</a> licensed under <a
+                    href="http://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a>.</p>
+        </div>
+    {% endblock %}
 </footer>
 
 </body>
