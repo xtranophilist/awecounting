@@ -16,4 +16,8 @@
         {% endfor %}
     </ul>
 
+    {% if user.is_authenticated %}
+        <a class="btn" href="{% url 'create_blog_entry' %}">Create New Blog Entry</a>
+    {% endif %}
+
 {% endblock %}
