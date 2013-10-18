@@ -127,6 +127,7 @@ INSTALLED_APPS = (
     'payroll',
     'bank',
     'report',
+    'blog',
     'mptt',
     'debug_toolbar',
     'pagination',
