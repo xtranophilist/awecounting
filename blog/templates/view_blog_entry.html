@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
 
+{% block title %}
+    {{ obj.title }} | Blog |Acubor
+{% endblock %}
+
 {% block content %}
     <h1>{{ obj.title }}</h1>
     <div class="post-meta">
@@ -10,6 +14,6 @@
     </div>
     <br/>
     <p>
-        {{ obj.content }}
+        {{ obj.content|safe }}
     </p>
 {% endblock %}
