@@ -87,6 +87,9 @@ class User(AbstractBaseUser):
     def email_user(self, subject, message, from_email):
         pass
 
+    def is_superuser(self):
+        return self.is_admin
+
     def get_company_settings(self):
         from core.models import CompanySetting
 

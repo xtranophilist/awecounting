@@ -9,5 +9,3 @@ django-mptt
 django-pagination
 django-filter
  -e git://github.com/camilonova/django-sorting.git#egg=django_sorting
-django-articles
-https://bitbucket.org/robert_osborne/django-articles/get/tip.zip#egg=articles
