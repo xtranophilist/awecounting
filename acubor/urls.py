@@ -35,6 +35,7 @@ urlpatterns = patterns('',
                        (r'^payroll/', include('payroll.urls')),
                        (r'^bank/', include('bank.urls')),
                        (r'^report/', include('report.urls')),
+                       (r'^blog/', include('blog.urls')),
 
                        url(r'^settings/company/$', core_views.company_settings, name='company_settings'),
                        url(r'^settings/user/$', users_views.user_setting, name='user_settings'),
