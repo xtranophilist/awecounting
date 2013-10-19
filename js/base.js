@@ -44,7 +44,7 @@ $(document).ready(function () {
     $('.select2').each(function () {
         var element = this;
         var drop_class = 'drop-' + $(element).attr('name')
-        $(element).select2({'dropdownCssClass': drop_class, 'dropdownAutoWidth': true});
+        $(element).select2({'dropdownCssClass': drop_class, 'dropdownAutoWidth': true, 'width': 'resolve'});
         if ($(element).data('add-url')) {
             if ($(element).data('field'))
                 var field_name = $(element).data('field');
