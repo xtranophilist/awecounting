@@ -200,8 +200,9 @@ function JournalVoucher(data){
 function JournalVoucherRow(row){
     var self = this;
 
-    self.dr_account_id = ko.observable();
-    self.cr_account_id = ko.observable();
+    self.type = ko.observable();
+    self.account = ko.observable();
+    self.description = ko.observable();
     self.dr_amount = ko.observable();
     self.cr_amount = ko.observable();
 
