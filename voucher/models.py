@@ -78,9 +78,10 @@ class JournalVoucher(models.Model):
 
 
 class JournalVoucherRow(models.Model):
-    sn = models.IntegerField()
-    dr_account = models.ForeignKey(Account, null=True, blank=True, related_name='dr_rows')
-    cr_account = models.ForeignKey(Account, null=True, blank=True, related_name='cr_rows')
+    types = [('Dr', 'Dr'), ('Cr', 'Dr')]
+    type = models.CharField(choices=types, default='Dr', max_length=2)
+    account = models.ForeignKey(Account, related_name='account_rows')
+    description = models.TextField()
     dr_amount = models.FloatField(null=True, blank=True)
     cr_amount = models.FloatField(null=True, blank=True)
     journal_voucher = models.ForeignKey(JournalVoucher, related_name='rows')
