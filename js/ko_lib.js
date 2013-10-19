@@ -14,6 +14,33 @@ ko.bindingHandlers.toggle = {
     }
 };
 
+ko.bindingHandlers.enum = {
+    init: function (element, valueAccessor) {
+
+        $(element).on('keyup blur', function (event) {
+//        ko.utils.registerEventHandler(element, 'input', function (event) {
+            var input = $(element).text();
+            if (jQuery.trim(input)) {
+                var values = valueAccessor()['values'];
+                var matches = [];
+                for (var i = 0; i < values.length; i++) {
+                    var ctag = jQuery.trim(input);
+                    var regex = new RegExp(ctag, "i");
+                    if (values[i].match(regex)) {
+                        matches.push(values[i]);
+                    }
+                }
+                if (matches.length == 1)
+                    $(element).text(matches[0]);
+                else
+                    $(element).text('');
+            }
+        });
+    },
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+    }
+}
+
 ko.bindingHandlers.textPercent = {
     //init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
     //    //init logic
