@@ -240,15 +240,15 @@ def save_journal_voucher(request):
                   'cr_amount': row.get('cr_amount'), 'type': row.get('type'),
                   'journal_voucher': voucher}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-        #if row.get('dr_account_id'):
-        #    print 'dr'
-        #    set_transactions(submodel, params.get('date'),
-        #                     ['dr', Account.objects.get(id=row.get('dr_account_id')), row.get('dr_amount')],
-        #    )
-        #if row.get('cr_account_id'):
-        #    set_transactions(submodel, params.get('date'),
-        #                     ['cr', Account.objects.get(id=row.get('cr_account_id')), row.get('cr_amount')],
-        #    )
+        if row.get('type') == 'Dr':
+            print 'dr'
+            set_transactions(submodel, params.get('date'),
+                             ['dr', Account.objects.get(id=row.get('account')), row.get('dr_amount')],
+            )
+        else:
+            set_transactions(submodel, params.get('date'),
+                             ['cr', Account.objects.get(id=row.get('account')), row.get('cr_amount')],
+            )
         if not created:
             submodel = save_model(submodel, values)
         dct['rows'][index] = submodel.id
