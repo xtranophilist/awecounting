@@ -39,9 +39,9 @@
         <table class="table table-bordered table-striped table-acubor table-sortable">
             <thead>
             <tr>
-                <th>SN</th>
-                <th>Dr Account</th>
-                <th>Cr Account</th>
+                <th>Dr/Cr</th>
+                <th>Particular</th>
+                <th>Description</th>
                 <th>Dr Amount</th>
                 <th>Cr Amount</th>
                 <th class="span1"></th>
@@ -51,19 +51,19 @@
             <tbody id="journal-voucher">
             <!-- ko foreach: rows -->
             <tr data-bind="flash: true">
-                <td>
-                    <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
+                <td data-bind="enum: {values: ['Dr', 'Cr']}, editableText: type">
                 </td>
                 <td>
-                    <select data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: dr_account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first', allowClear: true}"></select>
+                    {#                    <select data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: dr_account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first', allowClear: true}"></select>#}
+                    <input type="hidden" data-field="Account" data-add-url="{% url 'create_account' %}"
+                           data-bind="value: account, select2: {data: {results: $root.accounts}}, lookupKey: 'id'">
                 </td>
-                <td>
-                    <select data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: cr_account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first', allowClear: true}"></select>
+                <td data-bind="editableText: description">
                 </td>
-                <td data-bind="editableText: dr_amount, numeric: true"></td>
-                <td data-bind="editableText: cr_amount, numeric: true"></td>
+                <td data-bind="editableText: dr_amount, numeric: true, disable_content_editable: is_cr(), on_tab: $root.add_row"></td>
+                <td data-bind="editableText: cr_amount, numeric: true, disable_content_editable: is_dr(), on_tab: $root.add_row"></td>
                 <td align="center">
-                    <button class="close" data-bind="click: $parent.removeRow">&times;</button>
+                    <button class="close" data-bind="click: $parent.removeRow" tabindex="-1">&times;</button>
                 </td>
             </tr>
             <!-- /ko -->
