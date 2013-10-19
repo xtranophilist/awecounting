@@ -571,8 +571,15 @@ td .select2-container {
 
 .dissolve .add-on {
     background-color: transparent;
+    color: #444444;
+    padding-left: 0;
+    padding-right: 0;
 }
 
 .dissolve input {
     border-left: none;
+    border-right: none;
+    padding-left: 0;
+    padding-right: 0;
+    color: #444444;
 }
