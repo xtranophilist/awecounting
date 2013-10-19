@@ -16,16 +16,19 @@ ko.bindingHandlers.toggle = {
 
 ko.bindingHandlers.enum = {
     init: function (element, valueAccessor) {
-
+        var va = valueAccessor();
+        if (va['default']) {
+            $(element).text(va['default']);
+        }
         $(element).on('keyup blur', function (event) {
-//        ko.utils.registerEventHandler(element, 'input', function (event) {
+
             var input = $(element).text();
             if (jQuery.trim(input)) {
-                var values = valueAccessor()['values'];
+                var values = va['values'];
                 var matches = [];
                 for (var i = 0; i < values.length; i++) {
-                    var ctag = jQuery.trim(input);
-                    var regex = new RegExp(ctag, "i");
+                    var search = jQuery.trim(input);
+                    var regex = new RegExp(search, "i");
                     if (values[i].match(regex)) {
                         matches.push(values[i]);
                     }
