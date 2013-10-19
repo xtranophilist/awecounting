@@ -236,19 +236,19 @@ def save_journal_voucher(request):
     model = JournalVoucherRow
     for index, row in enumerate(params.get('journal_voucher').get('rows')):
         empty_to_None(row, ['dr_amount', 'cr_amount'])
-        values = {'sn': index + 1, 'dr_account_id': row.get('dr_account_id'), 'dr_amount': row.get('dr_amount'),
-                  'cr_account_id': row.get('cr_account_id'), 'cr_amount': row.get('cr_amount'),
+        values = {'account_id': row.get('account'), 'dr_amount': row.get('dr_amount'),
+                  'cr_amount': row.get('cr_amount'), 'type': row.get('type'),
                   'journal_voucher': voucher}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-        if row.get('dr_account_id'):
-            print 'dr'
-            set_transactions(submodel, params.get('date'),
-                             ['dr', Account.objects.get(id=row.get('dr_account_id')), row.get('dr_amount')],
-            )
-        if row.get('cr_account_id'):
-            set_transactions(submodel, params.get('date'),
-                             ['cr', Account.objects.get(id=row.get('cr_account_id')), row.get('cr_amount')],
-            )
+        #if row.get('dr_account_id'):
+        #    print 'dr'
+        #    set_transactions(submodel, params.get('date'),
+        #                     ['dr', Account.objects.get(id=row.get('dr_account_id')), row.get('dr_amount')],
+        #    )
+        #if row.get('cr_account_id'):
+        #    set_transactions(submodel, params.get('date'),
+        #                     ['cr', Account.objects.get(id=row.get('cr_account_id')), row.get('cr_amount')],
+        #    )
         if not created:
             submodel = save_model(submodel, values)
         dct['rows'][index] = submodel.id
