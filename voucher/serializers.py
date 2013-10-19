@@ -37,8 +37,7 @@ class PurchaseVoucherSerializer(serializers.ModelSerializer):
 
 
 class JournalVoucherRowSerializer(serializers.ModelSerializer):
-    dr_account_id = serializers.Field(source='dr_account_id')
-    cr_account_id = serializers.Field(source='cr_account_id')
+    account = serializers.Field(source='account_id')
 
     class Meta:
         model = JournalVoucherRow
