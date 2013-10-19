@@ -14,14 +14,39 @@ ko.bindingHandlers.toggle = {
     }
 };
 
+ko.bindingHandlers.disable_content_editable = {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+    },
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        if (valueAccessor()) {
+            $(element).text('');
+            $(element).removeAttr('contenteditable');
+        }
+        else {
+            $(element).attr('contenteditable', true);
+        }
+    }
+}
+
+ko.bindingHandlers.on_tab = {
+    init: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+        $(element).on('keydown', function (event) {
+            if (event.keyCode == 9) {
+
+                var fn = valueAccessor();
+                fn(element, viewModel);
+            }
+        });
+    },
+    update: function (element, valueAccessor, allBindingsAccessor, viewModel) {
+
+    }
+}
+
 ko.bindingHandlers.enum = {
     init: function (element, valueAccessor) {
-        var va = valueAccessor();
-        if (va['default']) {
-            $(element).text(va['default']);
-        }
         $(element).on('keyup blur', function (event) {
-
+            var va = valueAccessor();
             var input = $(element).text();
             if (jQuery.trim(input)) {
                 var values = va['values'];
