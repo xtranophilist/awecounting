@@ -21,6 +21,9 @@ class Invoice(models.Model):
         db_table = 'invoice'
         unique_together = ('invoice_no', 'company')
 
+    def get_voucher_number(self):
+        return self.invoice_no
+
 
 class InvoiceParticular(models.Model):
     sn = models.IntegerField()
@@ -54,6 +57,9 @@ class PurchaseVoucher(models.Model):
     attachment = models.FileField(upload_to='purchase_vouchers/%Y/%m/%d', blank=True, null=True)
     company = models.ForeignKey(Company)
 
+    def get_voucher_number(self):
+        return self.id
+
 
 class PurchaseParticular(models.Model):
     sn = models.IntegerField()
@@ -81,6 +87,9 @@ class JournalVoucher(models.Model):
     date = models.DateField()
     company = models.ForeignKey(Company)
     narration = models.TextField()
+
+    def get_voucher_number(self):
+        return self.voucher_no
 
 
 class JournalVoucherRow(models.Model):

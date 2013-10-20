@@ -36,6 +36,9 @@ class ChequeDeposit(models.Model):
     def get_absolute_url(self):
         return '/bank/cheque-deposit/' + str(self.id)
 
+    def get_voucher_number(self):
+        return self.id
+
 
 class ChequeDepositRow(models.Model):
     sn = models.IntegerField()
@@ -65,6 +68,9 @@ class BankCashDeposit(models.Model):
     def get_absolute_url(self):
         return '/bank/cash-deposit/' + str(self.id)
 
+    def get_voucher_number(self):
+        return self.id
+
 
 class ChequePayment(models.Model):
     cheque_number = models.CharField(max_length=50)
@@ -78,6 +84,9 @@ class ChequePayment(models.Model):
 
     def get_absolute_url(self):
         return '/bank/cheque-payment/' + str(self.id)
+
+    def get_voucher_number(self):
+        return self.cheque_number
 
 
 class ElectronicFundTransferOut(models.Model):
@@ -93,6 +102,9 @@ class ElectronicFundTransferOut(models.Model):
     def get_absolute_url(self):
         return '/bank/electronic-fund-transfer-out/' + str(self.id)
 
+    def get_voucher_number(self):
+        return self.id
+
 
 class ElectronicFundTransferIn(models.Model):
     date = models.DateField()
@@ -105,6 +117,9 @@ class ElectronicFundTransferIn(models.Model):
 
     def get_absolute_url(self):
         return '/bank/electronic-fund-transfer-in/' + str(self.id)
+
+    def get_voucher_number(self):
+        return self.id
 
 
 class ElectronicFundTransferInRow(models.Model):
