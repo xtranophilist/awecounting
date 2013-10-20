@@ -6,6 +6,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver
 from django.db.models import F
+from django.contrib.contenttypes import generic
 
 from users.models import Company
 from acubor.lib import zero_for_none, none_for_zero
@@ -124,10 +125,11 @@ class Account(models.Model):
 class JournalEntry(models.Model):
     date = models.DateField()
     content_type = models.ForeignKey(ContentType)
-    model_id = models.IntegerField()
+    object_id = models.PositiveIntegerField()
+    content_object = generic.GenericForeignKey('content_type', 'object_id')
 
     def __str__(self):
-        return str(self.content_type) + ': ' + str(self.model_id) + ' [' + str(self.date) + ']'
+        return str(self.content_type) + ': ' + str(self.object_id) + ' [' + str(self.date) + ']'
 
     class Meta:
         verbose_name_plural = u'Journal Entries'
