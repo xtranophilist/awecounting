@@ -36,6 +36,9 @@ class InvoiceParticular(models.Model):
     def get_absolute_url(self):
         return '/voucher/invoice/' + self.invoice.invoice_no + '/'
 
+    def get_voucher_number(self):
+        return self.invoice.invoice_no
+
     class Meta:
         db_table = 'invoice_particular'
 
@@ -66,6 +69,9 @@ class PurchaseParticular(models.Model):
     def get_absolute_url(self):
         return '/voucher/purchase/' + str(self.purchase_voucher.id) + '/'
 
+    def get_voucher_number(self):
+        return self.purchase_voucher.id
+
     class Meta:
         db_table = 'purchase_particular'
 
@@ -88,6 +94,9 @@ class JournalVoucherRow(models.Model):
 
     def get_absolute_url(self):
         return '/voucher/journal/' + str(self.journal_voucher_id)
+
+    def get_voucher_number(self):
+        return self.journal_voucher.voucher_no
 
 
 # class BankDetail(models.Model):

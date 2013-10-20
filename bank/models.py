@@ -49,6 +49,9 @@ class ChequeDepositRow(models.Model):
     def get_absolute_url(self):
         return self.cheque_deposit.get_absolute_url()
 
+    def get_voucher_number(self):
+        return self.cheque_deposit.id
+
 
 class BankCashDeposit(models.Model):
     date = models.DateField()
@@ -115,5 +118,8 @@ class ElectronicFundTransferInRow(models.Model):
 
     def get_absolute_url(self):
         return self.electronic_fund_transfer_in.get_absolute_url()
+
+    def get_voucher_number(self):
+        return self.electronic_fund_transfer_in.id
 
 

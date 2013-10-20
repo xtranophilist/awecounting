@@ -264,7 +264,7 @@ def set_transactions(submodel, date, *args):
     if isinstance(date, unicode):
         date = datetime.datetime.strptime(date, '%Y-%m-%d')
     journal_entry, created = JournalEntry.objects.get_or_create(
-        content_type=ContentType.objects.get_for_model(submodel), model_id=submodel.id,
+        content_type=ContentType.objects.get_for_model(submodel), object_id=submodel.id,
         defaults={
             'date': date
         })
