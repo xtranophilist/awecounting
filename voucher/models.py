@@ -21,7 +21,7 @@ class Invoice(models.Model):
         db_table = 'invoice'
         unique_together = ('invoice_no', 'company')
 
-    def get_voucher_number(self):
+    def get_voucher_no(self):
         return self.invoice_no
 
 
@@ -39,7 +39,7 @@ class InvoiceParticular(models.Model):
     def get_absolute_url(self):
         return '/voucher/invoice/' + self.invoice.invoice_no + '/'
 
-    def get_voucher_number(self):
+    def get_voucher_no(self):
         return self.invoice.invoice_no
 
     class Meta:
@@ -57,7 +57,7 @@ class PurchaseVoucher(models.Model):
     attachment = models.FileField(upload_to='purchase_vouchers/%Y/%m/%d', blank=True, null=True)
     company = models.ForeignKey(Company)
 
-    def get_voucher_number(self):
+    def get_voucher_no(self):
         return self.id
 
 
@@ -75,7 +75,7 @@ class PurchaseParticular(models.Model):
     def get_absolute_url(self):
         return '/voucher/purchase/' + str(self.purchase_voucher.id) + '/'
 
-    def get_voucher_number(self):
+    def get_voucher_no(self):
         return self.purchase_voucher.id
 
     class Meta:
@@ -88,7 +88,7 @@ class JournalVoucher(models.Model):
     company = models.ForeignKey(Company)
     narration = models.TextField()
 
-    def get_voucher_number(self):
+    def get_voucher_no(self):
         return self.voucher_no
 
 
@@ -104,7 +104,7 @@ class JournalVoucherRow(models.Model):
     def get_absolute_url(self):
         return '/voucher/journal/' + str(self.journal_voucher_id)
 
-    def get_voucher_number(self):
+    def get_voucher_no(self):
         return self.journal_voucher.voucher_no
 
 

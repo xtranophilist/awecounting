@@ -72,11 +72,11 @@
                     {% endif %}
                 </td>
                 <td>
-                    <a href="{{ entry|url_for_content }}">
+                    <a href="{{ entry.source.get_absolute_url }}">
                         {% if entry.content_type.app_label == 'dayjournal' %}
-                            {{ entry|day_journal_id }}
+                            {{ entry.source.day_journal.date }}
                         {% else %}
-                            {{ entry.model_id }}
+                            {{ entry.source.get_voucher_no }}
                         {% endif %}
                     </a>
                 </td>

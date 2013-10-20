@@ -126,7 +126,7 @@ class JournalEntry(models.Model):
     date = models.DateField()
     content_type = models.ForeignKey(ContentType)
     object_id = models.PositiveIntegerField()
-    content_object = generic.GenericForeignKey('content_type', 'object_id')
+    source = generic.GenericForeignKey('content_type', 'object_id')
 
     def __str__(self):
         return str(self.content_type) + ': ' + str(self.object_id) + ' [' + str(self.date) + ']'

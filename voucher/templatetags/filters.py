@@ -87,6 +87,8 @@ def day_journal_id(obj):
 def refine_voucher_type(the_type):
     if the_type[-4:] == ' row':
         the_type = the_type[:-3]
+    if the_type[-11:] == ' particular':
+        the_type = the_type[:-10]
     return the_type.title()
 
 
@@ -111,8 +113,7 @@ def dr_or_cr(val):
 @register.filter
 def remove_account(transactions, account):
     return [transaction for transaction in transactions if
-            transaction.account.id is not account.id and (
-                transaction.dr_amount or transaction.cr_amount)]
+            transaction.account.id != account.id]
 
 
 @register.filter
