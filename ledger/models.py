@@ -233,8 +233,10 @@ class Party(models.Model):
     phone_no = models.CharField(max_length=20, null=True, blank=True)
     email = models.EmailField(max_length=254, null=True, blank=True)
     fax = models.CharField(max_length=20, null=True, blank=True)
-    debtor_choices = [(1, 'Good'), (2, 'Bad'), (3, 'Ugly')]
-    debtor_level = models.IntegerField(choices=debtor_choices, default=1, null=True, blank=True)
+    #debtor_choices = [(1, 'Good'), (2, 'Bad'), (3, 'Ugly')]
+    #debtor_level = models.IntegerField(choices=debtor_choices, default=1, null=True, blank=True)
+    types = [('Customer', 'Customer'), ('Supplier', 'Supplier'), ('Customer/Supplier', 'Customer/Supplier')]
+    type = models.CharField(choices=types, max_length=17)
     company = models.ForeignKey(Company)
 
     def __unicode__(self):

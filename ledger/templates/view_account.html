@@ -58,7 +58,7 @@
                 </td>
                 <td>
                     {% if entry.content_type.name == 'journal voucher row' %}
-{#                        {{ entry }}#}
+{#                        {{ entry|get_particulars }}
                     {% endif %}
                     {% for transaction in entry.transactions.all|remove_account:account %}{% if not forloop.first %},
                     {% endif %}
