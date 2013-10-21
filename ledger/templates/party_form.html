@@ -16,28 +16,8 @@
 {% block content %}
 
     <form method="post">
-        <div class="row">
 
-            <div class="span4">
-                {% csrf_token %}
-                {{ form.name.label_tag }}
-                {{ form.name }}
-                {{ form.address.label_tag }}
-                {{ form.address }}
-            </div>
-
-            <div class="span4">
-                {{ form.phone_no.label_tag }}
-                {{ form.phone_no }}
-                {{ form.email.label_tag }}
-                {{ form.email }}
-                {{ form.fax.label_tag }}
-                {{ form.fax }}
-                {{ form.debtor_level.label_tag }}
-                {{ form.debtor_level }}
-            </div>
-
-        </div>
+            {{ form.as_p }}
 
         <div class="row">
             <div class="span12">

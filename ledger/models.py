@@ -236,20 +236,45 @@ class Party(models.Model):
     #debtor_choices = [(1, 'Good'), (2, 'Bad'), (3, 'Ugly')]
     #debtor_level = models.IntegerField(choices=debtor_choices, default=1, null=True, blank=True)
     types = [('Customer', 'Customer'), ('Supplier', 'Supplier'), ('Customer/Supplier', 'Customer/Supplier')]
-    type = models.CharField(choices=types, max_length=17)
+    type = models.CharField(choices=types, max_length=17, default='Customer')
     company = models.ForeignKey(Company)
+    customer_account = models.ForeignKey(Account, null=True, related_name='customer_detail')
+    supplier_account = models.ForeignKey(Account, null=True, related_name='supplier_detail')
 
     def __unicode__(self):
         return self.name
 
     def save(self, *args, **kwargs):
-        is_new = self.pk is None
-        if is_new:
-            account = Account(name=self.name)
-            account.company = self.company
-            # account.add_category('Party')
-            account.save()
-            self.account = account
+        super(Party, self).save(*args, **kwargs)
+        account = Account(name=self.name)
+        account.company = self.company
+        if self.type == 'Customer':
+            if not self.customer_account:
+                account.category = Category.objects.get(name='Customers')
+                account.code = 'C' + str(self.id)
+                account.save()
+                self.customer_account = account
+            self.supplier_account = None
+        elif self.type == 'Supplier':
+            if not self.supplier_account:
+                account.category = Category.objects.get(name='Suppliers')
+                account.code = 'S' + str(self.id)
+                self.supplier_account = account
+            self.customer_account = None
+        else:
+            if not self.customer_account:
+                account.name += ' (Receivable)'
+                account.category = Category.objects.get(name='Customers')
+                account.code = 'C' + str(self.id)
+                account.save()
+                self.customer_account = account
+            if not self.supplier_account:
+                account2 = Account(name=self.name + ' (Payable)')
+                account2.company = self.company
+                account2.category = Category.objects.get(name='Suppliers')
+                account2.code = 'S' + str(self.id)
+                account2.save()
+                self.supplier_account = account2
         super(Party, self).save(*args, **kwargs)
 
     class Meta:

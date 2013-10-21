@@ -58,7 +58,7 @@ class AccountForm(KOModelForm):
 class PartyForm(KOModelForm):
     class Meta:
         model = Party
-        exclude = ['company']
+        exclude = ['company', 'customer_account', 'supplier_account']
 
 
 class CategoryForm(KOModelForm):
