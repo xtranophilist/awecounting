@@ -44,7 +44,10 @@ $(document).ready(function () {
     $('.select2').each(function () {
         var element = this;
         var drop_class = 'drop-' + $(element).attr('name')
-        $(element).select2({'dropdownCssClass': drop_class, 'dropdownAutoWidth': true, 'width': 'resolve'});
+        var options_dict = {'dropdownCssClass': drop_class, 'dropdownAutoWidth': true, 'width': 'resolve'}
+        if ($(element).hasClass('placehold'))
+            options_dict['placeholderOption'] = 'first';
+        $(element).select2(options_dict);
         if ($(element).data('add-url')) {
             if ($(element).data('field'))
                 var field_name = $(element).data('field');
