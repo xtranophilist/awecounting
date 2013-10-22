@@ -217,6 +217,12 @@ def create_default(company):
     Account(name='Opening Balance Difference', category=opening_balance_difference, company=company,
             code='0-0001').save()
 
+    from core.models import CompanySetting, VoucherSetting
+    company_setting = CompanySetting(company=company)
+    company_setting.save()
+    voucher_setting = VoucherSetting(company=company)
+    voucher_setting.save()
+
 
 class Role(models.Model):
     user = models.ForeignKey(User, related_name='roles')
