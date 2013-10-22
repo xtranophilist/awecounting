@@ -159,7 +159,7 @@ def purchase_voucher(request, id=None):
         voucher = get_object_or_404(PurchaseVoucher, id=id, company=request.company)
         scenario = 'Update'
     else:
-        voucher = PurchaseVoucher(date=date.today(), currency=company_setting.default_currency)
+        voucher = PurchaseVoucher(date=date.today(), currency=company_setting.default_currency, tax='no')
         scenario = 'Create'
     if request.POST:
         form = PurchaseVoucherForm(request.POST, request.FILES, instance=voucher, company=request.company)
