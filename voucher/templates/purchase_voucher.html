@@ -12,7 +12,7 @@
 {% block extra-head %}
     <script src="{{ STATIC_URL }}js/vendors/knockout.js"></script>
     <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
-    <script src="{{ STATIC_URL }}js/invoice.js"></script>
+    <script src="{{ STATIC_URL }}js/purchase_voucher.js"></script>
     <script>
         {% load filters %}
         ko_data = {{data|jsonify}};
@@ -32,11 +32,14 @@
 
             <div class="span3">
                 {{ form.party.label_tag }}
-                {{ form.party }}
+                <input type="hidden" data-field="Supplier"
+                       data-add-url="{% url 'create_party' %}"
+                       data-bind="value: party, select2: {data: {results: $root.suppliers}},  event: {change: $root.supplier_changed}, lookupKey: 'id'">
+                <span class="print-only" data-bind="text: party_address()"></span>
             </div>
 
             <div class="span3">
-{#                {{ form.reference.label_tag }}#}
+                {#                {{ form.reference.label_tag }}#}
                 Vendor Invoice No.
                 {{ form.reference }}
             </div>
@@ -59,10 +62,10 @@
                 {{ form.due_date.errors }}
             </div>
             <div class="span3">
-                {{ form.tax.label_tag }}
+                Price is
                 {{ form.tax }}
             </div>
-            <div class="span3">
+            <div class="span3 hidden">
                 {{ form.currency.label_tag }}
                 {{ form.currency }}
             </div>

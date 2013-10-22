@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse_lazy
 
 from acubor.lib import KOModelForm, ExtFileField
 from core.models import Currency
-from ledger.models import Account, Party
+from ledger.models import Party
 from voucher.models import Invoice, PurchaseVoucher
 
 
@@ -27,8 +27,8 @@ class InvoiceForm(KOModelForm):
 
 
 class PurchaseVoucherForm(KOModelForm):
-    party = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
-                                   widget=forms.Select(attrs={'class': 'select2'}))
+    party = forms.ModelChoiceField(Party.objects.all(), empty_label=None,
+                                   widget=forms.Select(attrs={'class': 'select2'}), label='From')
     currency = forms.ModelChoiceField(Currency.objects.all(), empty_label=None,
                                       widget=forms.Select(attrs={'class': 'select2'}))
     attachment = ExtFileField(
@@ -41,7 +41,7 @@ class PurchaseVoucherForm(KOModelForm):
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
         super(PurchaseVoucherForm, self).__init__(*args, **kwargs)
-        self.fields['party'].queryset = Account.objects.filter(company=company)
+        self.fields['party'].queryset = Party.objects.filter(company=company, supplier_account__isnull=False)
 
     class Meta:
         model = PurchaseVoucher
