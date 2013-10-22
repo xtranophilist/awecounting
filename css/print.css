@@ -63,3 +63,8 @@ body, article {
     display: inline-block !important;
     opacity: 1;
 }
+
+.print-only {
+    display: inline-block !important;
+    opacity: 1;
+}

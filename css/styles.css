@@ -583,3 +583,7 @@ td .select2-container {
     padding-right: 0;
     color: #444444;
 }
+
+.print-only{
+    display:none;
+}
