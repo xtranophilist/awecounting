@@ -33,6 +33,7 @@ class CompanySetting(models.Model):
 
 
 class VoucherSetting(models.Model):
+    company = models.ForeignKey(Company)
     voucher_number_start_date = models.DateField()
     voucher_number_restart_years = models.IntegerField()
     voucher_number_restart_months = models.IntegerField()
