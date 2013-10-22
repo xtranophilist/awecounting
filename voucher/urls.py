@@ -19,4 +19,8 @@ urlpatterns = patterns('',
                            name='delete_purchase_voucher'),
                        url(r'^journal/(?P<id>[0-9]+)/delete/$', views.delete_journal_voucher,
                            name='delete_journal_voucher'),
+
+                       url(r'^cash-receipts/$', views.list_cash_receipts, name='list_cash_receipts'),
+                       url(r'^cash-receipt/$', views.cash_receipt, name='create_cash_receipt'),
+                       url(r'^cash-receipt/(?P<id>[0-9]+)/$', views.cash_receipt, name='update_cash_receipt'),
 )

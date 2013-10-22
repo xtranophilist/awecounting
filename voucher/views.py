@@ -325,3 +325,13 @@ def delete_journal_voucher(request, id):
     obj = JournalVoucher.objects.get(id=id, company=request.company)
     obj.delete()
     return redirect(reverse('all_journal_vouchers'))
+
+
+@login_required
+def list_cash_receipts(request):
+    pass
+
+
+@login_required
+def cash_receipt(request, id=None):
+    pass
