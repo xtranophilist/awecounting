@@ -1,6 +1,6 @@
 from django.db import models
 from inventory.models import Item
-from ledger.models import Account
+from ledger.models import Account, Party
 from tax.models import TaxScheme
 from core.models import Currency
 from users.models import Company
@@ -8,7 +8,7 @@ from users.models import Company
 
 class Invoice(models.Model):
     tax_choices = [('inclusive', 'Tax Inclusive'), ('exclusive', 'Tax Exclusive'), ('no', 'No Tax')]
-    party = models.ForeignKey(Account, verbose_name=u'To')
+    party = models.ForeignKey(Party, verbose_name=u'To')
     date = models.DateField()
     due_date = models.DateField(null=True, blank=True)
     invoice_no = models.CharField(max_length=20)
