@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 
 from ledger.models import Account, JournalEntry, Category, Party, set_transactions
-from ledger.serializers import AccountSerializer
+from ledger.serializers import AccountSerializer, PartySerializer
 from forms import AccountForm, CategoryForm, PartyForm
 
 
@@ -23,6 +23,13 @@ def accounts_by_day_as_json(request, day):
     items_data = AccountSerializer(accounts, day=day).data
     # items_data = AccountSerializer(accounts).data
     return HttpResponse(json.dumps(items_data), mimetype="application/json")
+
+
+@login_required
+def customers_as_json(request):
+    objs = Party.objects.filter(company=request.company, customer_account__isnull=False)
+    objs_data = PartySerializer(objs).data
+    return HttpResponse(json.dumps(objs_data), mimetype="application/json")
 
 
 @login_required
@@ -184,6 +191,8 @@ def party_form(request, id=None):
             party = form.save(commit=False)
             party.company = request.company
             party.save()
+            if request.is_ajax():
+                return render(request, 'backcall.html', {'obj': {'id': party.id, 'text': party.name}})
             redirect('/ledger/parties')
     else:
         form = PartyForm(instance=party)

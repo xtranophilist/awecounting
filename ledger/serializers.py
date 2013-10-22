@@ -2,7 +2,7 @@ from datetime import date
 
 from rest_framework import serializers
 
-from models import Account
+from models import Account, Party
 
 
 class AccountSerializer(serializers.ModelSerializer):
@@ -29,3 +29,6 @@ class AccountSerializer(serializers.ModelSerializer):
         return obj.get_day_opening(self.day)
 
 
+class PartySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Party

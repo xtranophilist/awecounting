@@ -15,6 +15,7 @@ urlpatterns = patterns('',
                        url(r'^party/create/$', views.party_form, name='create_party'),
                        url(r'^party/(?P<id>[0-9]+)/$', views.party_form, name='update_party'),
                        url(r'^party/(?P<id>[0-9]+)/delete$', views.delete_party, name='delete_party'),
+                       url(r'^party/customers.json$', views.customers_as_json, name='customers_as_json'),
 
                        url(r'^categories/$', views.list_categories, name='list_category'),
                        url(r'^category/create/$', views.create_category, name='create_category'),
