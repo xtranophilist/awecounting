@@ -47,7 +47,7 @@ class InvoiceParticular(models.Model):
 
 
 class PurchaseVoucher(models.Model):
-    party = models.ForeignKey(Account, verbose_name=u'From')
+    party = models.ForeignKey(Party, verbose_name=u'From')
     date = models.DateField()
     due_date = models.DateField(null=True, blank=True)
     reference = models.CharField(max_length=100, null=True, blank=True)
