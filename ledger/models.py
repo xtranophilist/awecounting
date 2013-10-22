@@ -250,7 +250,7 @@ class Party(models.Model):
         account.company = self.company
         if self.type == 'Customer':
             if not self.customer_account:
-                account.category = Category.objects.get(name='Customers')
+                account.category = Category.objects.get(name='Customers', company=self.company)
                 account.code = 'C' + str(self.id)
                 account.save()
                 self.customer_account = account

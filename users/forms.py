@@ -30,6 +30,31 @@ class UserRegistrationForm(RegistrationForm):
         else:
             return self.cleaned_data['username']
 
+    def clean_email(self):
+        """
+        Validate that the username is alphanumeric and is not already
+        in use.
+
+        """
+        existing = get_user_model().objects.filter(email__iexact=self.cleaned_data['email'])
+        if existing.exists():
+            raise forms.ValidationError(_("A user with that email already exists."))
+        else:
+            return self.cleaned_data['email']
+
+    def clean_name_of_company(self):
+        """
+        Validate that the username is alphanumeric and is not already
+        in use.
+
+        """
+        from users.models import Company
+        existing = Company.objects.filter(name__iexact=self.cleaned_data['name_of_company'])
+        if existing.exists():
+            raise forms.ValidationError(_("The company name is already taken."))
+        else:
+            return self.cleaned_data['name_of_company']
+
         #
     def clean(self):
         """

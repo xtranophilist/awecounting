@@ -9,8 +9,6 @@ from acubor import settings
 
 class UserManager(BaseUserManager):
     def create_user(self, username, email, password=None, full_name='', identifier=None):
-        # import pdb
-        # pdb.set_trace()
         if not email:
             raise ValueError('Users must have an email address')
         user = self.model(
