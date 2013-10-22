@@ -70,7 +70,7 @@ def account_form(request, id=None):
                     set_transactions(item, date.today(),
                                      ['dr', obd, form.cleaned_data['opening_cr']])
             if request.is_ajax():
-                return render(request, 'backcall.html', {'obj': {'id': item.id, 'text': str(item)}})
+                return render(request, 'callback.html', {'obj': {'id': item.id, 'text': str(item)}})
             return redirect('/ledger/')
     else:
         form = AccountForm(instance=account, company=request.company, scenario=scenario)
@@ -201,7 +201,7 @@ def party_form(request, id=None):
             party.company = request.company
             party.save()
             if request.is_ajax():
-                return render(request, 'backcall.html', {'obj': PartySerializer(party).data})
+                return render(request, 'callback.html', {'obj': PartySerializer(party).data})
             redirect('/ledger/parties')
     else:
         form = PartyForm(instance=party)

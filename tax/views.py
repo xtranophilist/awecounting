@@ -40,7 +40,7 @@ def tax_scheme_form(request, id=None):
             obj.company = request.company
             obj.save()
             if request.is_ajax():
-                return render(request, 'backcall.html', {'obj': TaxSchemeSerializer(obj).data})
+                return render(request, 'callback.html', {'obj': TaxSchemeSerializer(obj).data})
             return redirect('/tax/schemes/')
     else:
         form = TaxSchemeForm(instance=obj)

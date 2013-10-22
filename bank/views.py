@@ -106,7 +106,7 @@ def bank_account_form(request, id=None):
             item.company = request.company
             item.save()
             if request.is_ajax():
-                return render(request, 'backcall.html', {'obj': {'id': item.account.id, 'text': str(item)}})
+                return render(request, 'callback.html', {'obj': {'id': item.account.id, 'text': str(item)}})
             return redirect('/bank/accounts/')
     else:
         form = BankAccountForm(instance=bank_account)
