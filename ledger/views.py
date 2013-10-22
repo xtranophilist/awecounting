@@ -31,6 +31,12 @@ def customers_as_json(request):
     objs_data = PartySerializer(objs).data
     return HttpResponse(json.dumps(objs_data), mimetype="application/json")
 
+@login_required
+def suppliers_as_json(request):
+    objs = Party.objects.filter(company=request.company, supplier_account__isnull=False)
+    objs_data = PartySerializer(objs).data
+    return HttpResponse(json.dumps(objs_data), mimetype="application/json")
+
 
 @login_required
 def account_form(request, id=None):
