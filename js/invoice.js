@@ -83,7 +83,17 @@ function InvoiceViewModel(data) {
 //        self.particulars.remove(particular);
 //    };
 
+    self.validate = function () {
+        if (!self.party) {
+            self.message('"To" field is required!')
+            return false;
+        }
+        return true;
+    }
+
     self.save = function (item, event) {
+        if (!self.validate())
+            return false;
         $.ajax({
             type: "POST",
             url: '/voucher/invoice/save/',
