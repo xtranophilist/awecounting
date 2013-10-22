@@ -34,9 +34,11 @@ def all_purchase_vouchers(request):
 
 @login_required
 def invoice(request, invoice_no=None):
+    from core.models import VoucherSetting
     from core.models import CompanySetting
 
     try:
+        voucher_setting = VoucherSetting.objects.get(company=request.company)
         company_setting = CompanySetting.objects.get(company=request.company)
     except CompanySetting.DoesNotExist:
         #TODO Add a flash message
@@ -57,7 +59,7 @@ def invoice(request, invoice_no=None):
                 # for first invoice
                 last_invoice_no = 0
             new_invoice_no = int(last_invoice_no) + 1
-            invoice.invoice_no = "0" * (int(company_setting.invoice_digit_count) - str(new_invoice_no).__len__()) \
+            invoice.invoice_no = "0" * (int(voucher_setting.invoice_digit_count) - str(new_invoice_no).__len__()) \
                                  + str(new_invoice_no)
         except:
             invoice.invoice_no = ''
@@ -65,8 +67,9 @@ def invoice(request, invoice_no=None):
     form = InvoiceForm(data=request.POST, instance=invoice, company=request.company)
     invoice_data = InvoiceSerializer(invoice).data
     invoice_data['read_only'] = {
-        'invoice_prefix': company_setting.invoice_prefix,
-        'invoice_suffix': company_setting.invoice_suffix,
+        'invoice_heading': voucher_setting.invoice_heading,
+        'invoice_prefix': voucher_setting.invoice_prefix,
+        'invoice_suffix': voucher_setting.invoice_suffix,
     }
     return render(request, 'invoice.html', {'form': form, 'data': invoice_data, 'scenario': scenario})
 
