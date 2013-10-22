@@ -23,7 +23,7 @@
 
 {% block content %}
 
-    <form method="post" action="#" data-bind='submit: save'>
+    <form method="post" action="#">
         {% csrf_token %}
 
         <div class="row-fluid">
@@ -151,7 +151,7 @@
             <button class="btn" data-bind="click: addRow">
                 <i class="icon-plus-sign"></i> Add New Row
             </button>
-            <input class="btn" type="submit" value="Save"/>
+            <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
             {% if scenario == 'Update' %}
                 <a class="btn delete-warn" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>
             {% endif %}
