@@ -120,3 +120,18 @@ class JournalVoucherRow(models.Model):
 #     type = models.CharField(max_length=3)
 #     amount = models.FloatField()
 #     bank_detail = models.ForeignKey(BankDetail, related_name='rows')
+
+
+class CashReceipt(models.Model):
+    party = models.ForeignKey(Party)
+    receipt_on = models.DateField()
+    reference = models.CharField(max_length=50)
+    amount = models.FloatField()
+    description = models.TextField()
+
+
+class CashReceiptRow(models.Model):
+    invoice = models.ForeignKey(Invoice)
+    receipt = models.FloatField()
+    discount = models.FloatField()
+    cash_receipt = models.ForeignKey(CashReceipt, related_name='rows')
