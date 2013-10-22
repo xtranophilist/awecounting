@@ -31,6 +31,7 @@ def customers_as_json(request):
     objs_data = PartySerializer(objs).data
     return HttpResponse(json.dumps(objs_data), mimetype="application/json")
 
+
 @login_required
 def suppliers_as_json(request):
     objs = Party.objects.filter(company=request.company, supplier_account__isnull=False)
@@ -191,6 +192,8 @@ def party_form(request, id=None):
     else:
         scenario = 'Create'
         party = Party()
+    for query in request.GET:
+        setattr(party, query, request.GET[query])
     if request.POST:
         form = PartyForm(data=request.POST, instance=party)
         if form.is_valid():
@@ -198,10 +201,12 @@ def party_form(request, id=None):
             party.company = request.company
             party.save()
             if request.is_ajax():
-                return render(request, 'backcall.html', {'obj': {'id': party.id, 'text': party.name}})
+                return render(request, 'backcall.html', {'obj': PartySerializer(party).data})
             redirect('/ledger/parties')
     else:
         form = PartyForm(instance=party)
+        for query in request.GET:
+            form.fields[query].widget = form.fields[query].hidden_widget()
     if request.is_ajax():
         base_template = 'modal.html'
     else:

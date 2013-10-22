@@ -33,7 +33,7 @@
             <div class="span3">
                 {{ form.party.label_tag }}
                 <input type="hidden" data-field="Supplier"
-                       data-add-url="{% url 'create_party' %}"
+                       data-add-url="{% url 'create_party' %}?type=Supplier"
                        data-bind="value: party, select2: {data: {results: $root.suppliers}},  event: {change: $root.supplier_changed}, lookupKey: 'id'">
                 <span class="print-only" data-bind="text: party_address()"></span>
             </div>
