@@ -30,6 +30,15 @@ function InvoiceViewModel(data) {
     });
 
     $.ajax({
+        url: '/ledger/party/customers.json',
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+            self.customers = data;
+        }
+    });
+
+    $.ajax({
         url: '/tax/schemes/json/',
         dataType: 'json',
         async: false,
@@ -45,12 +54,16 @@ function InvoiceViewModel(data) {
         return scheme[0];
     }
 
+    self.party = ko.observable();
+
     for (var k in data)
         self[k] = data[k];
 
     self.tax = ko.observable(data['tax']);
 
     self.message = ko.observable('');
+
+    self.party_address = ko.observable('');
 
     var invoice_options = {
         rows: data.particulars
@@ -144,6 +157,20 @@ function InvoiceViewModel(data) {
             row.unit_price(selected_item.sales_price);
         if (!row.tax_scheme())
             row.tax_scheme(selected_item.tax_scheme);
+    }
+
+    self.customer_changed = function (vm) {
+        var selected_obj = $.grep(self.customers, function (i) {
+            return i.id == vm.party;
+        })[0];
+        self.party_address(selected_obj.address);
+//        if (!selected_item) return;
+//        if (!row.description())
+//            row.description(selected_item.description);
+//        if (!row.unit_price())
+//            row.unit_price(selected_item.sales_price);
+//        if (!row.tax_scheme())
+//            row.tax_scheme(selected_item.tax_scheme);
     }
 
 }
