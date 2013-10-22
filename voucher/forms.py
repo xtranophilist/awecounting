@@ -1,21 +1,25 @@
 from django import forms
+from django.core.urlresolvers import reverse_lazy
 
 from acubor.lib import KOModelForm, ExtFileField
 from core.models import Currency
-from ledger.models import Account
+from ledger.models import Account, Party
 from voucher.models import Invoice, PurchaseVoucher
 
 
 class InvoiceForm(KOModelForm):
-    party = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
-                                   widget=forms.Select(attrs={'class': 'select2'}))
+    party = forms.ModelChoiceField(Party.objects.all(), empty_label='Choose a customer',
+                                   widget=forms.Select(attrs={'class': 'select2 placehold', 'data-field': 'Customer',
+                                                              'data-add-url': reverse_lazy('create_party'),
+                                   }),
+                                   label='To')
     currency = forms.ModelChoiceField(Currency.objects.all(), empty_label=None,
                                       widget=forms.Select(attrs={'class': 'select2'}))
 
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
         super(InvoiceForm, self).__init__(*args, **kwargs)
-        self.fields['party'].queryset = Account.objects.filter(company=company)
+        self.fields['party'].queryset = Party.objects.filter(company=company, customer_account__isnull=False)
 
     class Meta:
         model = Invoice

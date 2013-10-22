@@ -30,7 +30,10 @@
 
             <div class="span3">
                 {{ form.party.label_tag }}
-                {{ form.party }}
+                <input type="hidden" data-field="Customer"
+                       data-add-url="{% url 'create_party' %}"
+                       data-bind="value: party, select2: {data: {results: $root.customers}},  event: {change: $root.customer_changed}, lookupKey: 'id'">
+                <span class="print-only" data-bind="text: party_address()"></span>
             </div>
 
             <div class="span3">
@@ -69,7 +72,7 @@
                 Price is
                 <select data-bind="options: tax_options, optionsText: 'name', optionsValue: 'id', value: tax"></select>
             </div>
-            <div class="span3">
+            <div class="span3 hidden">
                 {{ form.currency.label_tag }}
                 {{ form.currency }}
             </div>
@@ -106,7 +109,8 @@
                             <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                         </td>
                         <td>
-                            <input type="hidden" data-field="Item" data-add-url="{% url 'create_inventory_item' %}"
+                            <input type="hidden" data-field="Item"
+                                   data-add-url="{% url 'create_inventory_item' %}"
                                    data-bind="value: item_id, select2: {data: {results: $root.items}},  event: {change: $root.itemChanged}, lookupKey: 'id'">
                         </td>
                         <td data-bind="editableText: description">

@@ -45,7 +45,9 @@ def invoice(request, invoice_no=None):
         invoice = get_object_or_404(Invoice, invoice_no=invoice_no, company=request.company)
         scenario = 'Update'
     else:
-        invoice = Invoice(date=date.today(), currency=company_setting.default_currency)
+        invoice = Invoice(date=date.today(),
+                          currency=company_setting.default_currency
+        )
         scenario = 'Create'
         try:
             try:
