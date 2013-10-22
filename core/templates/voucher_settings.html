@@ -1,23 +1,43 @@
 {% extends "dashboard.html" %}
 
-{% block title %}Company Settings{% endblock %}
+{% block title %}Voucher Settings{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li><a href="{% url "company_settings" %}">Company Settings</a></li>
+    <li><a href="{% url "voucher_settings" %}">Voucher Settings</a></li>
 {% endblock %}
 
 
 {% block pageheader %}
-    Company Settings
+    Voucher Settings
 {% endblock %}
+
+{% load filters %}
+
+
 
 
 {% block content %}
 
     <form method="post" action="">{% csrf_token %}
 
-        {{ form.as_p }}
+{#        <fieldset id="contact_details">#}
+{#            <legend>General</legend>#}
+{#            <ul>#}
+{#                {% get_fieldset voucher_number_start_date,voucher_number_restart_years,voucher_number_restart_months,voucher_number_restart_days as general from form %}#}
+{#                {{ general.as_ul }}#}
+{#            </ul>#}
+{#        </fieldset>#}
+{##}
+{#        <fieldset>#}
+{#            <legend>Address details</legend>#}
+{#            <ul>#}
+{#                {% get_fieldset street_address,post_code,city as address_fields from form %}#}
+{#                {{ address_fields.as_ul }}#}
+{#            </ul>#}
+{#        </fieldset>#}
+
+                {{ form.as_p }}
 
         <input type="submit" value="Submit" class="btn"/>
     </form>

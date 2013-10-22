@@ -1,3 +1,4 @@
+import datetime
 from django.db import models
 from users.models import Company
 
@@ -34,12 +35,12 @@ class CompanySetting(models.Model):
 
 class VoucherSetting(models.Model):
     company = models.ForeignKey(Company)
-    voucher_number_start_date = models.DateField()
-    voucher_number_restart_years = models.IntegerField()
-    voucher_number_restart_months = models.IntegerField()
-    voucher_number_restart_days = models.IntegerField()
+    voucher_number_start_date = models.DateField(default=datetime.date.today())
+    voucher_number_restart_years = models.IntegerField(default=1)
+    voucher_number_restart_months = models.IntegerField(default=0)
+    voucher_number_restart_days = models.IntegerField(default=0)
 
-    invoice_heading = models.CharField(max_length=100)
+    invoice_heading = models.CharField(max_length=100, default='Invoice')
     invoice_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
     invoice_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
     invoice_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in unique Invoice #')

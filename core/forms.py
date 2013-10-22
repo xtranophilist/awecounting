@@ -1,5 +1,5 @@
 from django import forms
-from core.models import CompanySetting, Currency
+from core.models import CompanySetting, Currency, VoucherSetting
 
 
 class CompanySettingsForm(forms.ModelForm):
@@ -10,3 +10,7 @@ class CompanySettingsForm(forms.ModelForm):
         exclude = ['company', 'default_dayjournal']
 
 
+class VoucherSettingsForm(forms.ModelForm):
+    class Meta:
+        model = VoucherSetting
+        exclude = ['company']

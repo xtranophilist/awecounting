@@ -39,6 +39,7 @@ urlpatterns = patterns('',
 
                        url(r'^settings/company/$', core_views.company_settings, name='company_settings'),
                        url(r'^settings/user/$', users_views.user_setting, name='user_settings'),
+                       url(r'^settings/voucher/$', core_views.voucher_settings, name='voucher_settings'),
 
                        url(r'^redactor/', include('redactor.urls')),
                        url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
