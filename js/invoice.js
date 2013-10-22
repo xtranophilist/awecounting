@@ -94,31 +94,32 @@ function InvoiceViewModel(data) {
     self.save = function (item, event) {
         if (!self.validate())
             return false;
-        $.ajax({
-            type: "POST",
-            url: '/voucher/invoice/save/',
-            data: ko.toJSON(self),
-            success: function (msg) {
-                if (typeof (msg.error_message) != 'undefined') {
-                    $('#message').html(msg.error_message);
-                }
-                else {
-                    $('#message').html('Saved!');
-                    if (msg.id)
-                        self.id = msg.id;
-                    $("#particulars-body > tr").each(function (i) {
-                        $($("#particulars-body > tr")[i]).addClass('invalid-row');
-                    });
-                    for (var i in msg.rows) {
-                        self.particulars.rows()[i].id = msg.rows[i];
-                        $($("#particulars-body > tr")[i]).removeClass('invalid-row');
+        if (get_form(event).checkValidity()) {
+            $.ajax({
+                type: "POST",
+                url: '/voucher/invoice/save/',
+                data: ko.toJSON(self),
+                success: function (msg) {
+                    if (typeof (msg.error_message) != 'undefined') {
+                        $('#message').html(msg.error_message);
+                    }
+                    else {
+                        $('#message').html('Saved!');
+                        if (msg.id)
+                            self.id = msg.id;
+                        $("#particulars-body > tr").each(function (i) {
+                            $($("#particulars-body > tr")[i]).addClass('invalid-row');
+                        });
+                        for (var i in msg.rows) {
+                            self.particulars.rows()[i].id = msg.rows[i];
+                            $($("#particulars-body > tr")[i]).removeClass('invalid-row');
+                        }
                     }
                 }
-            }
-//            error: function(XMLHttpRequest, textStatus, errorThrown) {
-//                $('#message').html(XMLHttpRequest.responseText.message);
-//            }
-        });
+            });
+        }
+        else
+            return true;
     }
 
     self.sub_total = function () {

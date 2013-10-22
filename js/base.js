@@ -196,6 +196,10 @@ function get_target(e) {
     return $((e.currentTarget) ? e.currentTarget : e.srcElement); //for IE <9 compatibility
 }
 
+function get_form(e){
+    return $(get_target(e)).closest('form')[0];
+}
+
 Object.size = function (obj) {
     var size = 0, key;
     for (key in obj) {
