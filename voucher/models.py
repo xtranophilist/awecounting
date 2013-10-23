@@ -16,6 +16,9 @@ class Invoice(models.Model):
     currency = models.ForeignKey(Currency)
     tax = models.CharField(max_length=10, choices=tax_choices, default='inclusive')
     company = models.ForeignKey(Company)
+    statuses = [('Cancelled', 'Cancelled'), ('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
+    status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
+    pending_amount = models.FloatField()
 
     class Meta:
         db_table = 'invoice'
