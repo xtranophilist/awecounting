@@ -7,6 +7,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
 from forms import InvoiceForm, PurchaseVoucherForm
+from users.models import group_required
 from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, PurchaseParticular, JournalVoucher, \
     JournalVoucherRow
 from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, \
@@ -133,6 +134,19 @@ def save_invoice(request):
         dct['rows'][index] = submodel.id
     delete_rows(params.get('particulars').get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+@login_required
+def save_invoice_and_continue(request):
+    pass
+
+@group_required('Owner', 'SuperOwner', 'Supervisor')
+def approve(request):
+    pass
+
+@login_required
+def approve(request):
+    pass
+
 
 
 @login_required

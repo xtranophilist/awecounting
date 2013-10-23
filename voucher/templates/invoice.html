@@ -151,11 +151,18 @@
             <button class="btn" data-bind="click: addRow">
                 <i class="icon-plus-sign"></i> Add New Row
             </button>
-            <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
-            {% if scenario == 'Update' %}
-                <a class="btn delete-warn" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>
-            {% endif %}
-            <a class="btn" href="/voucher/invoice/new/">New</a>
+            <div>
+                <input class="btn" type="submit" value="Cancel" data-bind="click: $root.save">
+                {% if scenario == 'Update' %}
+                    <a class="btn delete-warn" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>
+                {% endif %}
+                <input class="btn" type="submit" value="Approve" data-bind="click: $root.approve">
+                <input class="btn" type="submit" value="Cancel" data-bind="click: $root.cancel">
+                <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
+                <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save_and_continue">
+
+
+            </div>
         </div>
     </form>
 
