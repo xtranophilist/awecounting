@@ -19,6 +19,7 @@ class Invoice(models.Model):
     statuses = [('Cancelled', 'Cancelled'), ('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
     status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
     pending_amount = models.FloatField()
+    total_amount = models.FloatField()
 
     class Meta:
         db_table = 'invoice'
@@ -26,6 +27,11 @@ class Invoice(models.Model):
 
     def get_voucher_no(self):
         return self.invoice_no
+
+    #def total_amount(self):
+    #    total = 0;
+    #    for particular in self.particulars:
+
 
 
 class InvoiceParticular(models.Model):
@@ -126,7 +132,7 @@ class JournalVoucherRow(models.Model):
 
 
 class CashReceipt(models.Model):
-    party = models.ForeignKey(Party)
+    party = models.ForeignKey(Party, verbose_name='Receipt From')
     receipt_on = models.DateField()
     reference = models.CharField(max_length=50)
     amount = models.FloatField()

@@ -1,0 +1,36 @@
+{% extends "dashboard.html" %}
+
+{% block title %}{{ scenario }} Cash Receipt{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li><a href="{% url "cash_receipt" %}">Cash Receipt</a></li>
+{% endblock %}
+
+{% block extra-head %}
+    <script>
+        $(document).ready(function () {
+            $('.date-picker').datepicker();
+        });
+    </script>
+{% endblock %}
+
+{% block pageheader %}
+    {{ scenario }} Cash Receipt
+{% endblock %}
+
+{% block content %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit" class="btn">Save</button>
+        {% if scenario == 'Update' %}
+            <a class="btn delete-warn" href="{% url 'delete_cash_deposit' form.instance.id %}">Delete!</a>
+        {% endif %}
+    </form>
+
+
+{% endblock %}

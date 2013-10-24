@@ -82,7 +82,8 @@ def save_invoice(request):
     invoice_values = {'party_id': params.get('party'), 'invoice_no': params.get('invoice_no'),
                       'reference': params.get('reference'), 'date': params.get('date'),
                       'due_date': params.get('due_date'), 'tax': params.get('tax'),
-                      'currency_id': params.get('currency'), 'company': request.company}
+                      'currency_id': params.get('currency'), 'company': request.company,
+                      'pending_amount': params.get('total_amount'), 'total_amount': params.get('total_amount')}
     # try:
     if params.get('id'):
         invoice = Invoice.objects.get(id=params.get('id'))
