@@ -131,6 +131,7 @@ class CashReceipt(models.Model):
     reference = models.CharField(max_length=50)
     amount = models.FloatField()
     description = models.TextField()
+    company = models.ForeignKey(Company)
 
 
 class CashReceiptRow(models.Model):
