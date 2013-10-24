@@ -150,12 +150,17 @@ function InvoiceViewModel(data) {
         return round2(sum);
     }
 
+    self.total_amount = 0;
+
     self.grand_total = function () {
         if (self.tax() == 'exclusive') {
-            return self.sub_total() + self.tax_amount();
+            self.total_amount = self.sub_total() + self.tax_amount();
         }
-        return round2(self.sub_total());
+        self.total_amount = round2(self.sub_total());
+        return self.total_amount;
     }
+
+    self.total_amount = 0;
 
     self.itemChanged = function (row) {
         var selected_item = $.grep(self.items, function (i) {
