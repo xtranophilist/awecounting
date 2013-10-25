@@ -76,7 +76,7 @@
 
         </div>
 
-        <a href="#" class="btn" data-bind="click: load_related_invoices, visible: party()">Load Invoices</a>
+        <a href="#" class="btn" data-bind="click: load_related_invoices, visible: party() && !table_vm().rows()">Load Invoices</a>
 
         <div class="row-fluid" data-bind="with: table_vm()">
             <table class="table table-bordered table-striped table-acubor table-sortable" id="voucher_table"
@@ -121,7 +121,7 @@
             <div>
 
                 {% if scenario == 'Update' %}
-                    <a class="btn delete-warn" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>
+                    {#                    <a class="btn delete-warn" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>#}
                 {% endif %}
                 <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
                 {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
@@ -139,10 +139,7 @@
         </div>
 
 
-        <button type="submit" class="btn">Save</button>
-        {% if scenario == 'Update' %}
-            <a class="btn delete-warn" href="{% url 'delete_cash_deposit' data.id %}">Delete!</a>
-        {% endif %}
+
     </form>
 
 

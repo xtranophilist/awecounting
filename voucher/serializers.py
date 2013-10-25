@@ -53,11 +53,15 @@ class JournalVoucherSerializer(serializers.ModelSerializer):
         exclude = ['company']
 
 
+class CashReceiptRowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CashReceiptRow
+
+
 class CashReceiptSerializer(serializers.ModelSerializer):
+    rows = CashReceiptRowSerializer()
+
     class Meta:
         model = CashReceipt
 
 
-class CashReceiptRowSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = CashReceiptRow

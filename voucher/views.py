@@ -416,6 +416,12 @@ def save_cash_receipt(request):
             if not created:
                 submodel = save_model(submodel, values)
             dct['rows'][index] = submodel.id
+        total = float(params.get('total_payment')) + float(params.get('total_discount'))
+        voucher.amount = total
+        voucher.save()
+    else:
+        voucher.amount = params.get('amount')
+        voucher.save()
     if params.get('continue'):
         dct = {'redirect_to': str(reverse_lazy('create_cash_receipt'))}
     return HttpResponse(json.dumps(dct), mimetype="application/json")
