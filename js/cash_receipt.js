@@ -19,13 +19,23 @@ function CashReceiptVM(data) {
         }
     });
 
+    self.id = ko.observable('hey');
+    self.message = ko.observable();
+    self.status = ko.observable('standby');
     self.party = ko.observable();
     self.receipt_on = ko.observable();
     self.party_address = ko.observable();
     self.reference = ko.observable();
     self.current_balance = ko.observable();
     self.amount = ko.observable();
-    self.table_vm = ko.observable({'rows': function(){}, 'get_total': function(){}});
+    self.table_vm = ko.observable({'rows': function () {
+    }, 'get_total': function () {
+    }});
+
+    for (var k in data) {
+        self[k] = ko.observable(data[k]);
+    }
+
 
     self.party_changed = function (vm) {
         var selected_obj = $.grep(self.parties, function (i) {
@@ -54,53 +64,90 @@ function CashReceiptVM(data) {
 
     }
 
+    self.total_payment = ko.computed(function () {
+        return self.table_vm().get_total('payment');
+    }, self);
 
-//    var validate = function(msg, rows, tr_wrapper_id){
-//        var selection = $("#" + tr_wrapper_id + " > tr");
-//        selection.each(function (index) {
-//            $(selection[index]).addClass('invalid-row');
-//        });
-//        for (var i in msg['saved']){
-//            rows[i].id = msg['saved'][''+i+''];
-//            $(selection[i]).removeClass('invalid-row');
-//        }
-//        var model = self[tr_wrapper_id.toUnderscore()];
-//        var saved_size = Object.size(msg['saved']) ;
-//        if(saved_size==rows.length)
-//            model.message('Saved!');
-//        else if(saved_size==0){
-//            model.message('No rows saved!');
-//            model.status('error');
-//        }
-//        else if(saved_size<rows.length){
-//            var message = saved_size.toString() +' row' + ((saved_size==1)?'':'s') + ' saved! ';
-//            message += (rows.length-saved_size).toString() +' row' + ((rows.length-saved_size==1)?' is':'s are') + ' incomplete!';
-//            model.message(message);
-//            model.status('error');
-//        }
-//    }
-//
-//    var key_to_options = function(key){
-//        return {
-//            rows: data['rows'],
-//            save_to_url : '/payroll/save/',
-//            properties : {id : self.id},
-//            onSaveSuccess : function(msg, rows){
-//                self.payroll_entry.id = msg.id;
-//                validate(msg, rows, key.toDash());
-//            }
-//        };
-//    }
-//
+    self.total_discount = ko.computed(function () {
+        return self.table_vm().get_total('discount');
+    }, self);
 
+    self.validate = function () {
+        if (!self.party()) {
+            self.message('"Party" field is required!')
+            self.status('error');
+            return false;
+        }
+        return true;
+    }
+
+    self.save = function (item, event) {
+        if (!self.validate())
+            return false;
+        if (get_form(event).checkValidity()) {
+            if ($(get_target(event)).data('continue')) {
+                self.continue = true;
+            }
+            var data = ko.toJSON(self);
+            $.ajax({
+                type: "POST",
+                url: '/voucher/cash-receipt/save/',
+                data: data,
+                success: function (msg) {
+                    if (typeof (msg.error_message) != 'undefined') {
+                        self.message(msg.error_message);
+                        self.status('error');
+                    }
+                    else {
+                        self.message('Saved!');
+                        self.status('success');
+                        if (msg.id)
+                            self.id(msg.id);
+                        if (msg.redirect_to) {
+                            window.location = msg.redirect_to;
+                        }
+                    }
+                }
+            });
+        }
+        else
+            return true;
+    }
+
+
+    self.approve = function (item, event) {
+        if (!self.validate())
+            return false;
+        if (get_form(event).checkValidity()) {
+            $.ajax({
+                type: "POST",
+                url: '/voucher/cash-receipt/approve/',
+                data: ko.toJSON(self),
+                success: function (msg) {
+                    if (typeof (msg.error_message) != 'undefined') {
+                        self.message(msg.error_message);
+                        self.status('error');
+                    }
+                    else {
+                        self.message('Approved!');
+                        self.status('success');
+                        if (msg.id)
+                            self.id(msg.id);
+                    }
+                }
+            });
+        }
+        else
+            return true;
+    }
 }
 
 
 function CashReceiptRowVM(row) {
     var self = this;
 
-    self.payment = ko.observable(0);
-    self.discount = ko.observable(0);
+    self.payment = ko.observable();
+    self.discount = ko.observable();
 
     for (var k in row) {
         self[k] = ko.observable(row[k]);

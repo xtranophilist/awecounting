@@ -338,7 +338,8 @@ function TableViewModel(options, row_model) {
             var total = 0;
             self.rows().forEach(function (i) {
                 var f = i[field];
-                total += parseFloat(f());
+                if (isAN(parseFloat(f())))
+                    total += parseFloat(f());
             });
             return total;
         }
