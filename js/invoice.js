@@ -122,6 +122,100 @@ function InvoiceViewModel(data) {
             return true;
     }
 
+    self.approve = function (item, event) {
+        if (!self.validate())
+            return false;
+        if (get_form(event).checkValidity()) {
+            $.ajax({
+                type: "POST",
+                url: '/voucher/invoice/approve/',
+                data: ko.toJSON(self),
+                success: function (msg) {
+                    if (typeof (msg.error_message) != 'undefined') {
+                        $('#message').html(msg.error_message);
+                    }
+                    else {
+                        $('#message').html('Saved!');
+                        if (msg.id)
+                            self.id = msg.id;
+                        $("#particulars-body > tr").each(function (i) {
+                            $($("#particulars-body > tr")[i]).addClass('invalid-row');
+                        });
+                        for (var i in msg.rows) {
+                            self.particulars.rows()[i].id = msg.rows[i];
+                            $($("#particulars-body > tr")[i]).removeClass('invalid-row');
+                        }
+                    }
+                }
+            });
+        }
+        else
+            return true;
+    }
+
+    self.cancel = function (item, event) {
+        if (!self.validate())
+            return false;
+        if (get_form(event).checkValidity()) {
+            $.ajax({
+                type: "POST",
+                url: '/voucher/invoice/cancel/',
+                data: ko.toJSON(self),
+                success: function (msg) {
+                    if (typeof (msg.error_message) != 'undefined') {
+                        $('#message').html(msg.error_message);
+                    }
+                    else {
+                        $('#message').html('Saved!');
+                        if (msg.id)
+                            self.id = msg.id;
+                        $("#particulars-body > tr").each(function (i) {
+                            $($("#particulars-body > tr")[i]).addClass('invalid-row');
+                        });
+                        for (var i in msg.rows) {
+                            self.particulars.rows()[i].id = msg.rows[i];
+                            $($("#particulars-body > tr")[i]).removeClass('invalid-row');
+                        }
+                    }
+                }
+            });
+        }
+        else
+            return true;
+    }
+
+    self.save_and_continue = function (item, event) {
+        if (!self.validate())
+            return false;
+        if (get_form(event).checkValidity()) {
+            $.ajax({
+                type: "POST",
+                url: '/voucher/invoice/save_and_continue/',
+                data: ko.toJSON(self),
+                success: function (msg) {
+                    if (typeof (msg.error_message) != 'undefined') {
+                        $('#message').html(msg.error_message);
+                    }
+                    else {
+                        $('#message').html('Saved!');
+                        if (msg.id)
+                            self.id = msg.id;
+                        $("#particulars-body > tr").each(function (i) {
+                            $($("#particulars-body > tr")[i]).addClass('invalid-row');
+                        });
+                        for (var i in msg.rows) {
+                            self.particulars.rows()[i].id = msg.rows[i];
+                            $($("#particulars-body > tr")[i]).removeClass('invalid-row');
+                        }
+                    }
+                }
+            });
+        }
+        else
+            return true;
+    }
+
+
     self.sub_total = function () {
         var sum = 0;
         self.particulars.rows().forEach(function (i) {
