@@ -146,3 +146,20 @@ class CashReceiptRow(models.Model):
     receipt = models.FloatField()
     discount = models.FloatField()
     cash_receipt = models.ForeignKey(CashReceipt, related_name='rows')
+
+class CashPayment(models.Model):
+    party = models.ForeignKey(Party, verbose_name='Paid To')
+    payment_on = models.DateField()
+    reference = models.CharField(max_length=50, null=True, blank=True)
+    amount = models.FloatField(null=True, blank=True)
+    description = models.TextField()
+    company = models.ForeignKey(Company)
+    statuses = [('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
+    status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
+
+
+class CashPaymentRow(models.Model):
+    purchase_voucher = models.ForeignKey(PurchaseVoucher)
+    payment = models.FloatField()
+    discount = models.FloatField()
+    cash_receipt = models.ForeignKey(CashPayment, related_name='rows')
