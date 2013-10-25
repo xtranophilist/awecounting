@@ -9,9 +9,9 @@ from django.contrib.auth.decorators import login_required
 from forms import InvoiceForm, PurchaseVoucherForm, CashReceiptForm
 from users.models import group_required
 from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, PurchaseParticular, JournalVoucher, \
-    JournalVoucherRow, CashReceipt, CashReceiptRow
+    JournalVoucherRow, CashReceipt, CashReceiptRow, CashPayment, CashPaymentRow
 from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, \
-    JournalVoucherSerializer, CashReceiptSerializer
+    JournalVoucherSerializer, CashReceiptSerializer, CashPaymentSerializer
 from acubor.lib import invalid, save_model
 from ledger.models import delete_rows, Account, set_transactions, Party
 from voucher.filters import InvoiceFilter, PurchaseVoucherFilter
@@ -433,6 +433,114 @@ def approve_cash_receipt(request):
     dct = {}
     if params.get('id'):
         voucher = CashReceipt.objects.get(id=params.get('id'))
+    else:
+        dct['error_message'] = 'Voucher needs to be saved before being approved!'
+        return HttpResponse(json.dumps(dct), mimetype="application/json")
+        #set_transactions(voucher, params.get('receipt_on'),
+    #                         ['cr', Account.objects.get(id=params.get('total_payment')), row.get('cr_amount')],
+    #        )
+    cash_account = Account.objects.get(name='Cash Account', company=request.company)
+    discount_expenses_account = Account.objects.get(name='Discounting Expenses', company=request.company)
+    if params.get('table_vm') and params.get('table_vm').get('rows'):
+        total = float(params.get('total_payment')) + float(params.get('total_discount'))
+        set_transactions(voucher, params.get('receipt_on'),
+                         ['dr', cash_account, params.get('total_payment')],
+                         ['dr', discount_expenses_account, params.get('total_payment')],
+                         ['cr', Party.objects.get(id=params.get('party')).customer_account, total]
+        )
+    else:
+        set_transactions(voucher, params.get('receipt_on'),
+                         ['dr', cash_account, params.get('amount')],
+                         #['dr', discount_expenses_account, params.get('total_payment')],
+                         ['cr', Party.objects.get(id=params.get('party')).customer_account, params.get('amount')]
+        )
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+@login_required
+def list_cash_payments(request):
+    pass
+
+
+@login_required
+def cash_payment(request, id=None):
+    if id:
+        voucher = get_object_or_404(CashPayment, id=id, company=request.company)
+        scenario = 'Update'
+    else:
+        voucher = CashPayment()
+        scenario = 'Create'
+    #form = CashReceiptForm(instance=voucher)
+    data = CashPaymentSerializer(voucher).data
+    return render(request, 'cash_payment.html', {'scenario': scenario, 'data': data})
+
+
+@login_required
+def party_invoices(request, id):
+    objs = Invoice.objects.filter(company=request.company, party=Party.objects.get(id=id), pending_amount__gt=0)
+    lst = []
+    for obj in objs:
+        lst.append({'id': obj.id, 'bill_no': obj.invoice_no, 'date': obj.date, 'total_amount': obj.total_amount,
+                    'pending_amount': obj.pending_amount, 'due_date': obj.due_date})
+    return HttpResponse(json.dumps(lst, default=handler), mimetype="application/json")
+
+
+@login_required
+def save_cash_payment(request):
+    params = json.loads(request.body)
+    dct = {'rows': {}}
+    values = {'party_id': params.get('party'), 'receipt_on': params.get('receipt_on'),
+              'reference': params.get('reference'), 'company': request.company}
+    # try:
+    if params.get('id'):
+        voucher = CashPayment.objects.get(id=params.get('id'))
+    else:
+        voucher = CashPayment()
+        # if not created:
+    voucher = save_model(voucher, values)
+    dct['id'] = voucher.id
+    # except Exception as e:
+    #
+    #     if hasattr(e, 'messages'):
+    #         dct['error_message'] = '; '.join(e.messages)
+    #     else:
+    #         dct['error_message'] = 'Error in form data!'
+    model = CashPaymentRow
+    #cash_account = Account.objects.get(name='Cash Account', company=request.company)
+    #sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
+    if params.get('table_vm').get('rows'):
+        for index, row in enumerate(params.get('table_vm').get('rows')):
+            if invalid(row, ['payment']) and invalid(row, ['discount']):
+                continue
+            if (row.get('discount') == '') | (row.get('discount') is None):
+                row['discount'] = 0
+            if (row.get('payment') == '') | (row.get('payment') is None):
+                row['payment'] = 0
+            print row
+            values = {'discount': row.get('discount'), 'payment': row.get('payment'),
+                      'cash_payment': voucher,
+                      'purchase_voucher': PurchaseVoucher.objects.get(id=row.get('id'), company=request.company)}
+            submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+            if not created:
+                submodel = save_model(submodel, values)
+            dct['rows'][index] = submodel.id
+        total = float(params.get('total_payment')) + float(params.get('total_discount'))
+        voucher.amount = total
+        voucher.save()
+    else:
+        voucher.amount = params.get('amount')
+        voucher.save()
+    if params.get('continue'):
+        dct = {'redirect_to': str(reverse_lazy('create_cash_receipt'))}
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+@group_required('SuperOwner', 'Owner', "supervisor")
+def approve_cash_payment(request):
+    params = json.loads(request.body)
+    dct = {}
+    if params.get('id'):
+        voucher = CashPayment.objects.get(id=params.get('id'))
     else:
         dct['error_message'] = 'Voucher needs to be saved before being approved!'
         return HttpResponse(json.dumps(dct), mimetype="application/json")

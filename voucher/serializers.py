@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, PurchaseParticular, JournalVoucher, \
-    JournalVoucherRow, CashReceipt, CashReceiptRow
+    JournalVoucherRow, CashReceipt, CashReceiptRow, CashPaymentRow, CashPayment
 
 
 class InvoiceParticularSerializer(serializers.ModelSerializer):
@@ -63,5 +63,16 @@ class CashReceiptSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CashReceipt
+
+class CashPaymentRowSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CashPaymentRow
+
+
+class CashPaymentSerializer(serializers.ModelSerializer):
+    rows = CashPaymentRowSerializer()
+
+    class Meta:
+        model = CashPayment
 
 
