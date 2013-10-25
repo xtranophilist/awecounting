@@ -58,7 +58,6 @@ body{ font-family: 'Open Sans', "Helvetica Neue",Helvetica,Arial,sans-serif}
 }
 .table button i, .table .btn i{
     font-size: 14px;
-    font-weight: bold;
 }
 .btn:hover{
     background-color: #C6D2DA;
@@ -179,4 +178,16 @@ input.full-width {
 }
 .table thead th a{
     color: #fff;
+}
+.page-journal .nav-tabs>li{
+    margin-bottom: 0;
+}
+.btn-none{
+    border: 0;
+    color: rgb(255, 20, 0);
+    background: none;
+    line-height: 0px;
+}
+.btn-none:hover{
+    color: rgb(207, 27, 12);
 }
