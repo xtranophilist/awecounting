@@ -32,8 +32,8 @@
 
             <div class="span6">
                 Paid To:<br/>
-                <input type="hidden" data-field="Customer"
-                       data-add-url="{% url 'create_party' %}?type=Customer"
+                <input type="hidden" data-field="Supplier"
+                       data-add-url="{% url 'create_party' %}?type=Supplier"
                        data-bind="value: party, select2: {data: {results: $root.parties}},  event: {change: $root.party_changed}, lookupKey: 'id'">
             </div>
 
@@ -48,7 +48,7 @@
         <div class="row-fluid">
 
             <div class="span6">
-                Customer Address:
+                Vendor Address:
                 <br/>
                 <input type="text" data-bind="value: party_address" disabled>
             </div>
@@ -76,7 +76,8 @@
 
         </div>
 
-        <a href="#" class="btn" data-bind="click: load_related_invoices, visible: party() && !table_vm().rows()">Load Invoices</a>
+        <a href="#" class="btn" data-bind="click: load_purchase_vouchers, visible: party() && !table_vm().rows()">Load
+           Purchase Vouchers</a>
 
         <div class="row-fluid" data-bind="with: table_vm()">
             <table class="table table-bordered table-striped table-acubor table-sortable" id="voucher_table"
@@ -137,7 +138,6 @@
 
             </div>
         </div>
-
 
 
     </form>

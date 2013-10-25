@@ -45,7 +45,7 @@ class PurchaseVoucherForm(KOModelForm):
 
     class Meta:
         model = PurchaseVoucher
-        exclude = ['company']
+        exclude = ['company', 'pending_amount', 'total_amount']
 
 
 class CashReceiptForm(KOModelForm):

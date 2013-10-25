@@ -185,6 +185,8 @@ def purchase_voucher(request, id=None):
         scenario = 'Create'
     if request.POST:
         form = PurchaseVoucherForm(request.POST, request.FILES, instance=voucher, company=request.company)
+        import pdb
+        pdb.set_trace()
         if form.is_valid():
             voucher = form.save(commit=False)
             if 'attachment' in request.FILES:
@@ -476,8 +478,8 @@ def cash_payment(request, id=None):
 
 
 @login_required
-def party_invoices(request, id):
-    objs = Invoice.objects.filter(company=request.company, party=Party.objects.get(id=id), pending_amount__gt=0)
+def party_purchase_vouchers(request, id):
+    objs = PurchaseVoucher.objects.filter(company=request.company, party=Party.objects.get(id=id), pending_amount__gt=0)
     lst = []
     for obj in objs:
         lst.append({'id': obj.id, 'bill_no': obj.invoice_no, 'date': obj.date, 'total_amount': obj.total_amount,
