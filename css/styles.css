@@ -552,8 +552,16 @@ td .select2-container {
 }
 
 .select2-drop .appended-link {
-    text-decoration: underline;
-    /*be*/
+    display: block;
+    background: #368EE0;
+    padding: 5px;
+    text-decoration: none;
+    color: #fff;
+    margin: 4px;
+}
+
+.select2-drop .appended-link:hover{
+    background: #2278C9;
 }
 
 .select2-results {

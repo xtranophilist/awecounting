@@ -82,6 +82,9 @@
 			}
 		});
 
+		if (options.autoclose === undefined)
+			options["autoclose"] = true
+
 		this.autoclose = false;
 		if ('autoclose' in options) {
 			this.autoclose = options.autoclose;

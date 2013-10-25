@@ -1,4 +1,4 @@
-body{ font-family: 'Open Sans', helvetica, arial;}
+body{ font-family: 'Open Sans', "Helvetica Neue",Helvetica,Arial,sans-serif}
 .fixed-header{ padding-top: 40px; }
 .intro{
     color: #E4F1F6;
@@ -10,10 +10,10 @@ body{ font-family: 'Open Sans', helvetica, arial;}
 }
 .navbar-inverse .navbar-inner{
     padding: 0px;
-    background: #185179;
+    background: #368EE0;
     min-height: 40px
 }
-.navbar-inverse a.brand{ color: #fff; font-weight: bold;}
+.navbar-inverse a.brand{ color: #fff; font-weight: 100;}
 .navbar-inverse .nav .active > a, .navbar-inverse .nav .active > a:hover, .navbar-inverse .nav .active > a:focus{
     background: none;
     text-shadow: none;
@@ -23,7 +23,7 @@ body{ font-family: 'Open Sans', helvetica, arial;}
 .navbar-inverse .nav li.dropdown.open>.dropdown-toggle{
     background-color: #103047;
 }
-.navbar-inverse .brand, .navbar-inverse .nav > li > a{ color: #90ADC2; font-weight: bold; }
+.navbar-inverse .brand, .navbar-inverse .nav > li > a{ color: #def; font-weight: 200; }
 .navbar .brand{
     margin-left: 0;
 }
@@ -56,8 +56,9 @@ body{ font-family: 'Open Sans', helvetica, arial;}
     background-color: #fff;
     position: relative;
 }
-.btn{
-    border-width: 4px;
+.table button i, .table .btn i{
+    font-size: 14px;
+    font-weight: bold;
 }
 .btn:hover{
     background-color: #C6D2DA;
@@ -161,4 +162,21 @@ input.full-width {
 #page-content .page-header:first-child h1{
     margin: 0;
     font-weight: bold;
+}
+.table thead:first-child tr{
+    background: #368EE0;
+    color: #fff;
+}
+.table.table-bordered thead:first-child tr th:first-child{
+    border-left: 1px solid #3882CA;
+}
+.table.table-bordered thead:first-child tr th:last-child{
+    border-right: 1px solid #3882CA;
+}
+.table.table-bordered thead:first-child tr th{
+    border-color: #5DA3EE;
+    border-top: 1px solid #3882CA;
+}
+.table thead th a{
+    color: #fff;
 }
