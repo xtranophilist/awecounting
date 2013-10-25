@@ -64,6 +64,8 @@ class PurchaseVoucher(models.Model):
     tax = models.CharField(max_length=10, choices=tax_choices, default='inclusive')
     attachment = models.FileField(upload_to='purchase_vouchers/%Y/%m/%d', blank=True, null=True)
     company = models.ForeignKey(Company)
+    pending_amount = models.FloatField()
+    total_amount = models.FloatField()
 
     def get_voucher_no(self):
         return self.id
