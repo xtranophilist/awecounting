@@ -26,6 +26,8 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
+        <span data-bind="text: message(), css: status()"></span>
+
         <div class="row-fluid">
 
             <div class="span6">
@@ -74,6 +76,7 @@
         </div>
 
         <a href="#" class="btn" data-bind="click: load_related_invoices, visible: party()">Load Invoices</a>
+
         <div class="row-fluid" data-bind="with: table_vm()">
             <table class="table table-bordered table-striped table-acubor table-sortable" id="voucher_table"
                    data-bind="visible: $parent.table_vm().rows()">
@@ -100,8 +103,8 @@
                         <td data-bind="text: pending_amount"></td>
                         <td data-bind="text: due_date"></td>
                         <td data-bind="text: overdue_days()"></td>
-                        <td data-bind="editableText: payment"></td>
-                        <td data-bind="editableText: discount"></td>
+                        <td data-bind="editableText: payment, numeric: true"></td>
+                        <td data-bind="editableText: discount, numeric: true"></td>
                     </tr>
                     <!-- /ko -->
                 </div>

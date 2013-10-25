@@ -28,10 +28,9 @@ class Invoice(models.Model):
     def get_voucher_no(self):
         return self.invoice_no
 
-    #def total_amount(self):
-    #    total = 0;
-    #    for particular in self.particulars:
-
+        #def total_amount(self):
+        #    total = 0;
+        #    for particular in self.particulars:
 
 
 class InvoiceParticular(models.Model):
@@ -138,6 +137,8 @@ class CashReceipt(models.Model):
     amount = models.FloatField()
     description = models.TextField()
     company = models.ForeignKey(Company)
+    statuses = [('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
+    status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
 
 
 class CashReceiptRow(models.Model):
