@@ -42,13 +42,13 @@ function CashPaymentVM(data) {
             return i.id == vm.party();
         })[0];
         self.party_address(selected_obj.address);
-        self.current_balance(selected_obj.customer_balance);
+        self.current_balance(selected_obj.supplier_balance);
     }
 
-    self.load_related_invoices = function () {
+    self.load_purchase_vouchers = function () {
         if (self.party()) {
             $.ajax({
-                url: '/voucher/invoice/party/' + self.party() + '.json',
+                url: '/voucher/purchase/party/' + self.party() + '.json',
                 dataType: 'json',
                 async: false,
                 success: function (data) {
@@ -67,11 +67,11 @@ function CashPaymentVM(data) {
                             rows: self.invoices
                         };
                         self.table_vm(new TableViewModel(options, CashPaymentRowVM));
-                        self.message('Invoices loaded!');
+                        self.message('Purchase Vouchers loaded!');
                         self.status('success');
                     }
                     else {
-                        self.message('No pending invoices found for the customer!');
+                        self.message('No pending purchase vouchers found for the supplier!');
                         self.status('error');
                     }
                 }
@@ -81,7 +81,7 @@ function CashPaymentVM(data) {
     }
 
     if (self.rows().length) {
-        self.load_related_invoices();
+        self.load_purchase_vouchers();
     }
 
     self.total_payment = ko.computed(function () {
