@@ -133,8 +133,8 @@ class JournalVoucherRow(models.Model):
 class CashReceipt(models.Model):
     party = models.ForeignKey(Party, verbose_name='Receipt From')
     receipt_on = models.DateField()
-    reference = models.CharField(max_length=50)
-    amount = models.FloatField()
+    reference = models.CharField(max_length=50, null=True, blank=True)
+    amount = models.FloatField(null=True, blank=True)
     description = models.TextField()
     company = models.ForeignKey(Company)
     statuses = [('Approved', 'Approved'), ('Unapproved', 'Unapproved')]

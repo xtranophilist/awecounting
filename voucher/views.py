@@ -1,6 +1,6 @@
 import json
 from datetime import date
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from forms import InvoiceForm, PurchaseVoucherForm, CashReceiptForm
 from users.models import group_required
 from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, PurchaseParticular, JournalVoucher, \
-    JournalVoucherRow, CashReceipt
+    JournalVoucherRow, CashReceipt, CashReceiptRow
 from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, \
     JournalVoucherSerializer, CashReceiptSerializer
 from acubor.lib import invalid, save_model
@@ -375,3 +375,79 @@ def party_invoices(request, id):
         lst.append({'id': obj.id, 'bill_no': obj.invoice_no, 'date': obj.date, 'total_amount': obj.total_amount,
                     'pending_amount': obj.pending_amount, 'due_date': obj.due_date})
     return HttpResponse(json.dumps(lst, default=handler), mimetype="application/json")
+
+
+@login_required
+def save_cash_receipt(request):
+    params = json.loads(request.body)
+    dct = {'rows': {}}
+    values = {'party_id': params.get('party'), 'receipt_on': params.get('receipt_on'),
+              'reference': params.get('reference'), 'company': request.company}
+    # try:
+    if params.get('id'):
+        voucher = CashReceipt.objects.get(id=params.get('id'))
+    else:
+        voucher = CashReceipt()
+        # if not created:
+    voucher = save_model(voucher, values)
+    dct['id'] = voucher.id
+    # except Exception as e:
+    #
+    #     if hasattr(e, 'messages'):
+    #         dct['error_message'] = '; '.join(e.messages)
+    #     else:
+    #         dct['error_message'] = 'Error in form data!'
+    model = CashReceiptRow
+    #cash_account = Account.objects.get(name='Cash Account', company=request.company)
+    #sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
+    if params.get('table_vm').get('rows'):
+        for index, row in enumerate(params.get('table_vm').get('rows')):
+            if invalid(row, ['payment']) and invalid(row, ['discount']):
+                continue
+            if (row.get('discount') == '') | (row.get('discount') is None):
+                row['discount'] = 0
+            if (row.get('payment') == '') | (row.get('payment') is None):
+                row['payment'] = 0
+            print row
+            values = {'discount': row.get('discount'), 'receipt': row.get('payment'),
+                      'cash_receipt': voucher,
+                      'invoice': Invoice.objects.get(invoice_no=row.get('bill_no'), company=request.company)}
+            submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+            if not created:
+                submodel = save_model(submodel, values)
+            dct['rows'][index] = submodel.id
+    if params.get('continue'):
+        dct = {'redirect_to': str(reverse_lazy('create_cash_receipt'))}
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+@group_required('SuperOwner', 'Owner', "supervisor")
+def approve_cash_receipt(request):
+    params = json.loads(request.body)
+    dct = {}
+    if params.get('id'):
+        voucher = CashReceipt.objects.get(id=params.get('id'))
+    else:
+        dct['error_message'] = 'Voucher needs to be saved before being approved!'
+        return HttpResponse(json.dumps(dct), mimetype="application/json")
+        #set_transactions(voucher, params.get('receipt_on'),
+    #                         ['cr', Account.objects.get(id=params.get('total_payment')), row.get('cr_amount')],
+    #        )
+    cash_account = Account.objects.get(name='Cash Account', company=request.company)
+    discount_expenses_account = Account.objects.get(name='Discounting Expenses', company=request.company)
+    if params.get('table_vm') and params.get('table_vm').get('rows'):
+        total = float(params.get('total_payment')) + float(params.get('total_discount'))
+        set_transactions(voucher, params.get('receipt_on'),
+                         ['dr', cash_account, params.get('total_payment')],
+                         ['dr', discount_expenses_account, params.get('total_payment')],
+                         ['cr', Party.objects.get(id=params.get('party')).customer_account, total]
+        )
+    else:
+        print params.get('amount')
+
+        set_transactions(voucher, params.get('receipt_on'),
+                         ['dr', cash_account, params.get('amount')],
+                         #['dr', discount_expenses_account, params.get('total_payment')],
+                         ['cr', Party.objects.get(id=params.get('party')).customer_account, params.get('amount')]
+        )
+    return HttpResponse(json.dumps(dct), mimetype="application/json")

@@ -31,4 +31,6 @@ urlpatterns = patterns('',
                        url(r'^cash-receipts/$', views.list_cash_receipts, name='list_cash_receipts'),
                        url(r'^cash-receipt/$', views.cash_receipt, name='create_cash_receipt'),
                        url(r'^cash-receipt/(?P<id>[0-9]+)/$', views.cash_receipt, name='update_cash_receipt'),
+                       url(r'^cash-receipt/save/$', views.save_cash_receipt, name='save_cash_receipt'),
+                       url(r'^cash-receipt/approve/$', views.approve_cash_receipt, name='approve_cash_receipt'),
 )

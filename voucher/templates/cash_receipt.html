@@ -39,7 +39,8 @@
 
             <div class="span6">
                 Receipt On:<br/>
-                <input type="text" data-bind="value: receipt_on" class="date-picker" required>
+                <input type="text" data-date-format="yyyy-mm-dd" data-bind="value: receipt_on" class="date-picker"
+                       required>
             </div>
 
         </div>
@@ -88,7 +89,7 @@
                     <th class="span2">Pending Amount</th>
                     <th class="span1">Due Date</th>
                     <th class="span1">Overdue Days</th>
-                    <th class="span1">Payment</th>
+                    <th class="span1">Receipt</th>
                     <th class="span1">Discount</th>
                 </tr>
                 </thead>
@@ -118,14 +119,20 @@
             </table>
 
             <div>
-                <input class="btn" type="submit" value="Cancel" data-bind="click: $root.save">
+
                 {% if scenario == 'Update' %}
                     <a class="btn delete-warn" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>
                 {% endif %}
-                <input class="btn" type="submit" value="Approve" data-bind="click: $root.approve">
-                <input class="btn" type="submit" value="Cancel" data-bind="click: $root.cancel">
                 <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
-                <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save_and_continue">
+                {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
+                    {% if data.status == 'Unapproved' %}
+                        <input class="btn" type="submit" value="Approve"
+                               data-bind="click: $root.approve, visible: $root.id">
+                    {% endif %}
+                {% endifusergroup %}
+
+                <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save"
+                       data-continue="true">
 
 
             </div>
