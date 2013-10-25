@@ -196,7 +196,7 @@ function get_target(e) {
     return $((e.currentTarget) ? e.currentTarget : e.srcElement); //for IE <9 compatibility
 }
 
-function get_form(e){
+function get_form(e) {
     return $(get_target(e)).closest('form')[0];
 }
 
@@ -334,6 +334,14 @@ function TableViewModel(options, row_model) {
             self.rows(self._initial_rows);
         }
 
+        self.get_total = function (field) {
+            var total = 0;
+            self.rows().forEach(function (i) {
+                var f = i[field];
+                total += parseFloat(f());
+            });
+            return total;
+        }
     }
 
 
