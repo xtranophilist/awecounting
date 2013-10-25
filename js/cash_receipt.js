@@ -45,7 +45,6 @@ function CashReceiptVM(data) {
         self.current_balance(selected_obj.customer_balance);
     }
 
-
     self.load_related_invoices = function () {
         if (self.party()) {
             $.ajax({
@@ -53,15 +52,36 @@ function CashReceiptVM(data) {
                 dataType: 'json',
                 async: false,
                 success: function (data) {
-                    self.invoices = data;
-                    var options = {
-                        rows: self.invoices
-                    };
-                    self.table_vm(new TableViewModel(options, CashReceiptRowVM));
+                    if (data.length) {
+                        self.invoices = data;
+                        for (k in self.rows()) {
+                            var row = self.rows()[k];
+                            $.each(self.invoices, function (i, o) {
+                                if (o.id == row.id) {
+                                    o.payment = row.receipt;
+                                    o.discount = row.discount;
+                                }
+                            });
+                        }
+                        var options = {
+                            rows: self.invoices
+                        };
+                        self.table_vm(new TableViewModel(options, CashReceiptRowVM));
+                        self.message('Invoices loaded!');
+                        self.status('success');
+                    }
+                    else {
+                        self.message('No pending invoices found for the customer!');
+                        self.status('error');
+                    }
                 }
             });
         }
 
+    }
+
+    if (self.rows().length) {
+        self.load_related_invoices();
     }
 
     self.total_payment = ko.computed(function () {
