@@ -4,7 +4,7 @@ from django.core.urlresolvers import reverse_lazy
 from acubor.lib import KOModelForm, ExtFileField
 from core.models import Currency
 from ledger.models import Party
-from voucher.models import Invoice, PurchaseVoucher
+from voucher.models import Invoice, PurchaseVoucher, CashReceipt
 
 
 class InvoiceForm(KOModelForm):
@@ -45,4 +45,13 @@ class PurchaseVoucherForm(KOModelForm):
 
     class Meta:
         model = PurchaseVoucher
+        exclude = ['company']
+
+
+class CashReceiptForm(KOModelForm):
+    receipt_on = forms.DateField(
+        widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
+
+    class Meta:
+        model = CashReceipt
         exclude = ['company']

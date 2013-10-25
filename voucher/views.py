@@ -6,17 +6,18 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
-from forms import InvoiceForm, PurchaseVoucherForm
+from forms import InvoiceForm, PurchaseVoucherForm, CashReceiptForm
 from users.models import group_required
 from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, PurchaseParticular, JournalVoucher, \
-    JournalVoucherRow
+    JournalVoucherRow, CashReceipt
 from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, \
-    JournalVoucherSerializer
+    JournalVoucherSerializer, CashReceiptSerializer
 from acubor.lib import invalid, save_model
-from ledger.models import delete_rows, Account, set_transactions
+from ledger.models import delete_rows, Account, set_transactions, Party
 from voucher.filters import InvoiceFilter, PurchaseVoucherFilter
 from tax.models import TaxScheme
 from inventory.models import Item
+from voucher.templatetags.filters import handler
 
 
 @login_required
@@ -101,6 +102,7 @@ def save_invoice(request):
     model = InvoiceParticular
     cash_account = Account.objects.get(name='Cash Account', company=request.company)
     sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
+    print params
     for index, row in enumerate(params.get('particulars').get('rows')):
         if invalid(row, ['item_id', 'unit_price', 'quantity']):
             continue
@@ -136,18 +138,20 @@ def save_invoice(request):
     delete_rows(params.get('particulars').get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
+
 @login_required
 def save_invoice_and_continue(request):
     pass
 
+
 @group_required('Owner', 'SuperOwner', 'Supervisor')
-def approve(request):
+def approve_invoice(request):
     pass
+
 
 @login_required
-def approve(request):
+def cancel_invoice(request):
     pass
-
 
 
 @login_required
@@ -352,4 +356,22 @@ def list_cash_receipts(request):
 
 @login_required
 def cash_receipt(request, id=None):
-    pass
+    if id:
+        voucher = get_object_or_404(CashReceipt, id=id, company=request.company)
+        scenario = 'Update'
+    else:
+        voucher = CashReceipt()
+        scenario = 'Create'
+    form = CashReceiptForm(instance=voucher)
+    data = CashReceiptSerializer(voucher).data
+    return render(request, 'cash_receipt.html', {'form': form, 'scenario': scenario, 'data': data})
+
+
+@login_required
+def party_invoices(request, id):
+    objs = Invoice.objects.filter(company=request.company, party=Party.objects.get(id=id), pending_amount__gt=0)
+    lst = []
+    for obj in objs:
+        lst.append({'id': obj.id, 'bill_no': obj.invoice_no, 'date': obj.date, 'total_amount': obj.total_amount,
+                    'pending_amount': obj.pending_amount, 'due_date': obj.due_date})
+    return HttpResponse(json.dumps(lst, default=handler), mimetype="application/json")

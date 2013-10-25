@@ -30,5 +30,7 @@ class AccountSerializer(serializers.ModelSerializer):
 
 
 class PartySerializer(serializers.ModelSerializer):
+    customer_balance = serializers.Field(source='customer_account.get_balance')
+    supplier_balance = serializers.Field(source='supplier_account.get_balance')
     class Meta:
         model = Party
