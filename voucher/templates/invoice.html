@@ -88,9 +88,9 @@
                 <thead>
                 <tr>
                     <th class="span1">SN</th>
-                    <th class="span2">Item</th>
+                    <th class="span3">Item</th>
                     <th class="span3">Description</th>
-                    <th class="span2">Price</th>
+                    <th class="span1">Price</th>
                     <th class="span1">Quantity</th>
                     <th class="span1">Discount %</th>
                     <th class="span1">Tax Scheme</th>
@@ -108,7 +108,7 @@
                             </div>
                             <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                         </td>
-                        <td>
+                        <td class="with_ip">
                             <input type="hidden" data-field="Item"
                                    data-add-url="{% url 'create_inventory_item' %}"
                                    data-bind="value: item_id, select2: {data: {results: $root.items}},  event: {change: $root.itemChanged}, lookupKey: 'id'">
@@ -121,7 +121,7 @@
                         </td>
                         <td data-bind="editableText: discount, numeric: true">
                         </td>
-                        <td>
+                        <td class="with_ip">
                             <input type="hidden" data-add-url="{% url 'create_tax_scheme' %}" data-field="Tax Scheme"
                                    class="span12 item-selector"
                                    data-bind="value: tax_scheme, select2: {data: {results: $root.tax_schemes}}, lookupKey: 'id'">
@@ -129,7 +129,9 @@
                         <td data-bind="text: amount()">
                         </td>
                         <td>
-                            <button class="close" data-bind="click: $parent.removeRow">&times;</button>
+                            <button class="btn btn-mini btn-danger" data-bind="click: $parent.removeRow">
+                                <i class="icon-trash"></i>
+                            </button>
                         </td>
                     </tr>
                     <!-- /ko -->
@@ -151,7 +153,7 @@
             <button class="btn" data-bind="click: addRow">
                 <i class="icon-plus-sign"></i> Add New Row
             </button>
-            <div>
+     
                 <input class="btn" type="submit" value="Cancel" data-bind="click: $root.save">
                 {% if scenario == 'Update' %}
                     <a class="btn delete-warn" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>
@@ -161,8 +163,6 @@
                 <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
                 <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save_and_continue">
 
-
-            </div>
         </div>
     </form>
 
