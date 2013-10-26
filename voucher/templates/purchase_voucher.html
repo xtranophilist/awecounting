@@ -25,6 +25,8 @@
 
 {% block content %}
 
+    <span data-bind="text: message, css: status"></span>
+
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
@@ -32,7 +34,7 @@
 
             <div class="span3">
                 {{ form.party.label_tag }}
-                <input type="hidden" data-field="Supplier"
+                <input type="hidden" data-field="Supplier" name="party"
                        data-add-url="{% url 'create_party' %}?type=Supplier"
                        data-bind="value: party, select2: {data: {results: $root.suppliers}},  event: {change: $root.supplier_changed}, lookupKey: 'id'">
                 <span class="print-only" data-bind="text: party_address()"></span>
@@ -130,11 +132,11 @@ formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-
                 </tr>
                 </tbody>
             </table>
-            <div class="pull-right"><b>Grand Total: </b> <span data-bind="text: $parent.grand_total()"></span></div>
+            <div class="pull-right"><b>Grand Total: </b> <span data-bind="text: $root.particulars.grand_total()"></span></div>
             <button class="btn" data-bind="click: addRow">
                 <i class="icon-plus-sign"></i> Add New Row
             </button>
-            <button type="submit" class="btn">Save</button>
+            <button type="submit" class="btn" data-bind="click: $root.validate">Save</button>
             {% if scenario == 'Update' %}
                 <a class="btn delete-warn" href="{% url 'delete_purchase_voucher' form.instance.id %}">Delete</a>
             {% endif %}

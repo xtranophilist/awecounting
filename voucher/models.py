@@ -64,6 +64,8 @@ class PurchaseVoucher(models.Model):
     tax = models.CharField(max_length=10, choices=tax_choices, default='inclusive')
     attachment = models.FileField(upload_to='purchase_vouchers/%Y/%m/%d', blank=True, null=True)
     company = models.ForeignKey(Company)
+    pending_amount = models.FloatField()
+    total_amount = models.FloatField()
 
     def get_voucher_no(self):
         return self.id
@@ -147,6 +149,7 @@ class CashReceiptRow(models.Model):
     discount = models.FloatField()
     cash_receipt = models.ForeignKey(CashReceipt, related_name='rows')
 
+
 class CashPayment(models.Model):
     party = models.ForeignKey(Party, verbose_name='Paid To')
     payment_on = models.DateField()
@@ -162,4 +165,33 @@ class CashPaymentRow(models.Model):
     purchase_voucher = models.ForeignKey(PurchaseVoucher)
     payment = models.FloatField()
     discount = models.FloatField()
-    cash_receipt = models.ForeignKey(CashPayment, related_name='rows')
+    cash_payment = models.ForeignKey(CashPayment, related_name='rows')
+
+
+class FixedAsset(models.Model):
+    from_account = models.ForeignKey(Account)
+    voucher_number = models.CharField(max_length=50)
+    date = models.DateField()
+    reference_number = models.CharField(max_length=50, null=True, blank=True)
+    description = models.TextField()
+    company = models.ForeignKey(Company)
+
+
+class FixedAssetRow(models.Model):
+    assets_ledger = models.ForeignKey(Account)
+    description = models.TextField(null=True, blank=True)
+    amount = models.FloatField()
+    fixed_asset = models.ForeignKey(FixedAsset, related_name='rows')
+
+
+class AdditionalDetail(models.Model):
+    assets_code = models.CharField(max_length=100, null=True, blank=True)
+    assets_type = models.CharField(max_length=100, null=True, blank=True)
+    vendor_name = models.CharField(max_length=100, null=True, blank=True)
+    vendor_address = models.CharField(max_length=254, null=True, blank=True)
+    amount = models.FloatField(null=True, blank=True)
+    useful_life = models.CharField(max_length=254, null=True, blank=True)
+    description = models.TextField(blank=True, null=True)
+    warranty_period = models.CharField(max_length=100, null=True, blank=True)
+    maintenance = models.CharField(max_length=100, null=True, blank=True)
+    fixed_asset = models.ForeignKey(FixedAsset, related_name='additional_details')

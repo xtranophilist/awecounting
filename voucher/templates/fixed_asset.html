@@ -1,16 +1,16 @@
 {% extends "dashboard.html" %}
 
-{% block title %}{{ scenario }} Cash Payment{% endblock %}
+{% block title %}{{ scenario }} Fixed Asset{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li><a href="{% url "create_cash_payment" %}">Cash Payment</a></li>
+    <li><a href="{% url "create_cash_payment" %}">Fixed Asset</a></li>
 {% endblock %}
 {% load filters %}
 {% block extra-head %}
     <script src="{{ STATIC_URL }}js/vendors/knockout.js"></script>
     <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
-    <script src="{{ STATIC_URL }}js/cash_payment.js"></script>
+    <script src="{{ STATIC_URL }}js/fixed_asset.js"></script>
     <script>
         ko_data =
         {{ data|jsonify }}
@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block pageheader %}
-    {{ scenario }} Cash Payment
+    {{ scenario }} Fixed Asset
 {% endblock %}
 
 {% block content %}
@@ -31,9 +31,8 @@
         <div class="row-fluid">
 
             <div class="span6">
-                Paid To:<br/>
-                <input type="hidden" data-field="Supplier"
-                       data-add-url="{% url 'create_party' %}?type=Supplier"
+                From:<br/>
+                <input type="hidden"
                        data-bind="value: party, select2: {data: {results: $root.parties}},  event: {change: $root.party_changed}, lookupKey: 'id'">
             </div>
 
@@ -77,7 +76,7 @@
         </div>
 
         <a href="#" class="btn" data-bind="click: load_purchase_vouchers, visible: party() && !table_vm().rows()">Load
-           Purchase Vouchers</a>
+            Purchase Vouchers</a>
 
         <div class="row-fluid" data-bind="with: table_vm()">
             <table class="table table-bordered table-striped table-acubor table-sortable" id="voucher_table"

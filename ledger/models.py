@@ -254,13 +254,17 @@ class Party(models.Model):
                 account.code = 'C' + str(self.id)
                 account.save()
                 self.customer_account = account
-            self.supplier_account = None
+            if self.supplier_account:
+                self.supplier_account.delete()
+                self.supplier_account = None
         elif self.type == 'Supplier':
             if not self.supplier_account:
                 account.category = Category.objects.get(name='Suppliers')
                 account.code = 'S' + str(self.id)
                 self.supplier_account = account
-            self.customer_account = None
+            if self.customer_account:
+                self.customer_account.delete()
+                self.customer_account = None
         else:
             if not self.customer_account:
                 account.name += ' (Receivable)'

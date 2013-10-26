@@ -9,9 +9,8 @@ from django.contrib.auth.decorators import login_required
 from forms import InvoiceForm, PurchaseVoucherForm, CashReceiptForm
 from users.models import group_required
 from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, PurchaseParticular, JournalVoucher, \
-    JournalVoucherRow, CashReceipt, CashReceiptRow, CashPayment, CashPaymentRow
-from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, \
-    JournalVoucherSerializer, CashReceiptSerializer, CashPaymentSerializer
+    JournalVoucherRow, CashReceipt, CashReceiptRow, CashPayment, CashPaymentRow, FixedAsset
+from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, JournalVoucherSerializer, CashReceiptSerializer, CashPaymentSerializer, FixedAssetSerializer
 from acubor.lib import invalid, save_model
 from ledger.models import delete_rows, Account, set_transactions, Party
 from voucher.filters import InvoiceFilter, PurchaseVoucherFilter
@@ -186,14 +185,16 @@ def purchase_voucher(request, id=None):
     if request.POST:
         form = PurchaseVoucherForm(request.POST, request.FILES, instance=voucher, company=request.company)
         if form.is_valid():
+            particulars = json.loads(request.POST['particulars'])
             voucher = form.save(commit=False)
             if 'attachment' in request.FILES:
                 voucher.attachment = request.FILES['attachment']
+            voucher.total_amount = particulars.get('grand_total')
+            voucher.pending_amount = particulars.get('grand_total')
             voucher.company = request.company
             voucher.save()
 
         if id or form.is_valid():
-            particulars = json.loads(request.POST['particulars'])
             model = PurchaseParticular
             cash_account = Account.objects.get(name='Cash Account', company=request.company)
             for index, row in enumerate(particulars.get('rows')):
@@ -445,7 +446,7 @@ def approve_cash_receipt(request):
         total = float(params.get('total_payment')) + float(params.get('total_discount'))
         set_transactions(voucher, params.get('receipt_on'),
                          ['dr', cash_account, params.get('total_payment')],
-                         ['dr', discount_expenses_account, params.get('total_payment')],
+                         ['dr', discount_expenses_account, params.get('total_discount')],
                          ['cr', Party.objects.get(id=params.get('party')).customer_account, total]
         )
     else:
@@ -470,17 +471,17 @@ def cash_payment(request, id=None):
     else:
         voucher = CashPayment()
         scenario = 'Create'
-    #form = CashReceiptForm(instance=voucher)
+        #form = CashReceiptForm(instance=voucher)
     data = CashPaymentSerializer(voucher).data
     return render(request, 'cash_payment.html', {'scenario': scenario, 'data': data})
 
 
 @login_required
-def party_invoices(request, id):
-    objs = Invoice.objects.filter(company=request.company, party=Party.objects.get(id=id), pending_amount__gt=0)
+def party_purchase_vouchers(request, id):
+    objs = PurchaseVoucher.objects.filter(company=request.company, party=Party.objects.get(id=id), pending_amount__gt=0)
     lst = []
     for obj in objs:
-        lst.append({'id': obj.id, 'bill_no': obj.invoice_no, 'date': obj.date, 'total_amount': obj.total_amount,
+        lst.append({'id': obj.id, 'bill_no': obj.reference, 'date': obj.date, 'total_amount': obj.total_amount,
                     'pending_amount': obj.pending_amount, 'due_date': obj.due_date})
     return HttpResponse(json.dumps(lst, default=handler), mimetype="application/json")
 
@@ -489,7 +490,7 @@ def party_invoices(request, id):
 def save_cash_payment(request):
     params = json.loads(request.body)
     dct = {'rows': {}}
-    values = {'party_id': params.get('party'), 'receipt_on': params.get('receipt_on'),
+    values = {'party_id': params.get('party'), 'payment_on': params.get('payment_on'),
               'reference': params.get('reference'), 'company': request.company}
     # try:
     if params.get('id'):
@@ -497,6 +498,7 @@ def save_cash_payment(request):
     else:
         voucher = CashPayment()
         # if not created:
+
     voucher = save_model(voucher, values)
     dct['id'] = voucher.id
     # except Exception as e:
@@ -510,13 +512,13 @@ def save_cash_payment(request):
     #sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
     if params.get('table_vm').get('rows'):
         for index, row in enumerate(params.get('table_vm').get('rows')):
+            print row
             if invalid(row, ['payment']) and invalid(row, ['discount']):
                 continue
             if (row.get('discount') == '') | (row.get('discount') is None):
                 row['discount'] = 0
             if (row.get('payment') == '') | (row.get('payment') is None):
                 row['payment'] = 0
-            print row
             values = {'discount': row.get('discount'), 'payment': row.get('payment'),
                       'cash_payment': voucher,
                       'purchase_voucher': PurchaseVoucher.objects.get(id=row.get('id'), company=request.company)}
@@ -531,7 +533,7 @@ def save_cash_payment(request):
         voucher.amount = params.get('amount')
         voucher.save()
     if params.get('continue'):
-        dct = {'redirect_to': str(reverse_lazy('create_cash_receipt'))}
+        dct = {'redirect_to': str(reverse_lazy('create_cash_payment'))}
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
@@ -548,13 +550,13 @@ def approve_cash_payment(request):
     #                         ['cr', Account.objects.get(id=params.get('total_payment')), row.get('cr_amount')],
     #        )
     cash_account = Account.objects.get(name='Cash Account', company=request.company)
-    discount_expenses_account = Account.objects.get(name='Discounting Expenses', company=request.company)
+    discount_income_account = Account.objects.get(name='Discount Income', company=request.company)
     if params.get('table_vm') and params.get('table_vm').get('rows'):
         total = float(params.get('total_payment')) + float(params.get('total_discount'))
-        set_transactions(voucher, params.get('receipt_on'),
-                         ['dr', cash_account, params.get('total_payment')],
-                         ['dr', discount_expenses_account, params.get('total_payment')],
-                         ['cr', Party.objects.get(id=params.get('party')).customer_account, total]
+        set_transactions(voucher, params.get('payment_on'),
+                         ['dr', Party.objects.get(id=params.get('party')).supplier_account, total],
+                         ['cr', discount_income_account, params.get('total_discount')],
+                         ['cr', cash_account, params.get('total_payment')]
         )
     else:
         print params.get('amount')
@@ -565,3 +567,28 @@ def approve_cash_payment(request):
                          ['cr', Party.objects.get(id=params.get('party')).customer_account, params.get('amount')]
         )
     return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+@login_required
+def list_fixed_assets(request):
+    pass
+
+@login_required
+def fixed_asset(request, id=None):
+    if id:
+        voucher = get_object_or_404(FixedAsset, id=id, company=request.company)
+        scenario = 'Update'
+    else:
+        voucher = FixedAsset()
+        scenario = 'Create'
+    data = FixedAssetSerializer(voucher).data
+    return render(request, 'fixed_asset.html', {'scenario': scenario, 'data': data})
+
+@login_required
+def save_fixed_asset(request):
+    pass
+
+@login_required
+def approve_fixed_asset(request):
+    pass
+
