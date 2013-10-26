@@ -19,81 +19,50 @@ function FixedAssetVM(data) {
         }
     });
 
+    $.ajax({
+        url: '/ledger/fixed-assets.json',
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+            self.fixed_assets = data;
+        }
+    });
+
     self.id = ko.observable('hey');
     self.message = ko.observable();
     self.status = ko.observable('standby');
-    self.party = ko.observable();
-    self.payment_on = ko.observable();
+    self.from_account = ko.observable();
+    self.voucher_no = ko.observable();
     self.party_address = ko.observable();
+    self.date = ko.observable();
     self.reference = ko.observable();
-    self.current_balance = ko.observable();
-    self.amount = ko.observable();
-    self.table_vm = ko.observable({'rows': function () {
-    }, 'get_total': function () {
-    }});
 
     for (var k in data) {
         self[k] = ko.observable(data[k]);
     }
 
-    self.party_changed = function (vm) {
-        var selected_obj = $.grep(self.parties, function (i) {
-            return i.id == vm.party();
+    var options = {
+        rows: data.rows
+    };
+
+    self.table_vm = new TableViewModel(options, FixedAssetRowVM);
+
+    var options2 = {
+        rows: data.additional_details
+    }
+
+    self.additional_details = new TableViewModel(options2, AdditionalDetailVM);
+
+    self.account_changed = function (vm) {
+        var selected_obj = $.grep(self.from_accounts, function (i) {
+            return i.id == vm.from_account();
         })[0];
         self.party_address(selected_obj.address);
-        self.current_balance(selected_obj.supplier_balance);
     }
-
-    self.load_purchase_vouchers = function () {
-        if (self.party()) {
-            $.ajax({
-                url: '/voucher/purchase/party/' + self.party() + '.json',
-                dataType: 'json',
-                async: false,
-                success: function (data) {
-                    if (data.length) {
-                        self.invoices = data;
-                        for (k in self.rows()) {
-                            var row = self.rows()[k];
-                            $.each(self.invoices, function (i, o) {
-                                if (o.id == row.id) {
-                                    o.payment = row.payment;
-                                    o.discount = row.discount;
-                                }
-                            });
-                        }
-                        var options = {
-                            rows: self.invoices
-                        };
-                        self.table_vm(new TableViewModel(options, CashPaymentRowVM));
-                        self.message('Purchase Vouchers loaded!');
-                        self.status('success');
-                    }
-                    else {
-                        self.message('No pending purchase vouchers found for the supplier!');
-                        self.status('error');
-                    }
-                }
-            });
-        }
-
-    }
-
-    if (self.rows().length) {
-        self.load_purchase_vouchers();
-    }
-
-    self.total_payment = ko.computed(function () {
-        return self.table_vm().get_total('payment');
-    }, self);
-
-    self.total_discount = ko.computed(function () {
-        return self.table_vm().get_total('discount');
-    }, self);
 
     self.validate = function () {
-        if (!self.party()) {
-            self.message('"Party" field is required!')
+        if (!self.from_account()) {
+            self.message('"From" field is required!')
             self.status('error');
             return false;
         }
@@ -110,7 +79,7 @@ function FixedAssetVM(data) {
             var data = ko.toJSON(self);
             $.ajax({
                 type: "POST",
-                url: '/voucher/cash-payment/save/',
+                url: '/voucher/fixed-asset/save/',
                 data: data,
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
@@ -139,7 +108,7 @@ function FixedAssetVM(data) {
         if (get_form(event).checkValidity()) {
             $.ajax({
                 type: "POST",
-                url: '/voucher/cash-payment/approve/',
+                url: '/voucher/fixed-asset/approve/',
                 data: ko.toJSON(self),
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
@@ -164,20 +133,31 @@ function FixedAssetVM(data) {
 function FixedAssetRowVM(row) {
     var self = this;
 
-    self.payment = ko.observable();
-    self.discount = ko.observable();
+    self.asset_ledger = ko.observable();
+    self.description = ko.observable();
+    self.amount = ko.observable();
 
     for (var k in row) {
         self[k] = ko.observable(row[k]);
     }
 
-    self.overdue_days = function () {
-        if (self.due_date()) {
-            var diff = days_between(new Date(self.due_date()), new Date());
-            if (diff >= 0)
-                return diff;
-        }
-        return '';
+}
+
+function AdditionalDetailVM(row) {
+    var self = this;
+
+    self.assets_code = ko.observable();
+    self.assets_type = ko.observable();
+    self.vendor_name = ko.observable();
+    self.vendor_address = ko.observable();
+    self.amount = ko.observable();
+    self.useful_life = ko.observable();
+    self.description = ko.observable();
+    self.warranty_period = ko.observable();
+    self.maintenance = ko.observable();
+
+    for (var k in row) {
+        self[k] = ko.observable(row[k]);
     }
 
 }
