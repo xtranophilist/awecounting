@@ -58,7 +58,7 @@ function CashPaymentVM(data) {
                             var row = self.rows()[k];
                             $.each(self.invoices, function (i, o) {
                                 if (o.id == row.id) {
-                                    o.payment = row.receipt;
+                                    o.payment = row.payment;
                                     o.discount = row.discount;
                                 }
                             });
