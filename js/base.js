@@ -65,7 +65,7 @@ $(document).ready(function () {
 
     });
 
-    $('.delete-warn').click(function (e) {
+    $('.btn-danger').click(function (e) {
         if (confirm('Are you sure you want to delete?')) {
             return true;
         } else return false;

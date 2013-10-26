@@ -94,6 +94,20 @@ function FixedAssetVM(data) {
                         if (msg.redirect_to) {
                             window.location = msg.redirect_to;
                         }
+                        $("#rows-body > tr").each(function (i) {
+                            $($("#rows-body > tr")[i]).addClass('invalid-row');
+                        });
+                        for (var i in msg.rows1) {
+                            self.table_vm.rows()[i].id = msg.rows1[i];
+                            $($("#rows-body > tr")[i]).removeClass('invalid-row');
+                        }
+                        $("#additional-body > tr").each(function (i) {
+                            $($("#additional-body > tr")[i]).addClass('invalid-row');
+                        });
+                        for (var i in msg.rows2) {
+                            self.additional_details.rows()[i].id = msg.rows2[i];
+                            $($("#additional-body > tr")[i]).removeClass('invalid-row');
+                        }
                     }
                 }
             });
@@ -157,7 +171,8 @@ function AdditionalDetailVM(row) {
     self.maintenance = ko.observable();
 
     for (var k in row) {
-        self[k] = ko.observable(row[k]);
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
     }
 
 }
