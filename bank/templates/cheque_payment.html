@@ -84,7 +84,7 @@
 
         <button type="submit" class="btn">Save</button>
         {% if scenario == 'Update' %}
-            <a class="btn delete-warn" href="{% url 'delete_cheque_payment' form.instance.id %}">Delete!</a>
+            <a class="btn btn-danger" href="{% url 'delete_cheque_payment' form.instance.id %}">Delete!</a>
         {% endif %}
 
     </form>

@@ -19,13 +19,8 @@
 
         {{ form.as_p }}
 
-        <div class="row">
-
-            <input type="submit" value="Submit" class="btn"/>
-            <a class="btn delete-warn" href="{% url 'delete_inventory_category' form.instance.id %}">Delete this category!</a>
-
-        </div>
-
+        <input type="submit" value="Submit" class="btn"/>
+        <a class="btn btn-danger" href="{% url 'delete_inventory_category' form.instance.id %}">Delete this category!</a>
 
     </form>
 

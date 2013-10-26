@@ -83,7 +83,7 @@
             <button class="btn" data-bind="click: reset">Reset</button>
             <a class="btn" href="/voucher/journal/">New</a>
             {% if scenario == 'Update' %}
-                <a class="button delete-warn" href="{% url 'delete_journal_voucher' data.id %}">Delete</a>
+                <a class="btn btn-danger" href="{% url 'delete_journal_voucher' data.id %}">Delete</a>
             {% endif %}
         </span>
 

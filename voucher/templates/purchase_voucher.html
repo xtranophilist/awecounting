@@ -104,7 +104,7 @@
 
                 <tbody data-bind="foreach: rows" id="particulars-body">
                 <tr>
-                    <td>
+                    <td class="with_ip">
                         <div class="drag_handle"><i class="icon-ellipsis-vertical"></i>
                         </div>
                         <span class="wid-pad pull-left" data-bind="text:  $index()+1"> </span>
@@ -138,7 +138,7 @@ formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-
             </button>
             <button type="submit" class="btn" data-bind="click: $root.validate">Save</button>
             {% if scenario == 'Update' %}
-                <a class="btn delete-warn" href="{% url 'delete_purchase_voucher' form.instance.id %}">Delete</a>
+                <a class="btn btn-danger" href="{% url 'delete_purchase_voucher' form.instance.id %}">Delete</a>
             {% endif %}
             <a class="btn" href="/voucher/purchase/new/">New</a>
         </div>

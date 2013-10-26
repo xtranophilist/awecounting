@@ -95,13 +95,13 @@
                     <td data-bind="editableText: drawee_bank_address"></td>
                     <td data-bind="editableText: amount, numeric: true"></td>
                     <td>
-                        <button class="close" data-bind="click: $parent.removeRow"><i class="icon-trash"></i></button>
+                        <button class="btn-none" data-bind="click: $parent.removeRow"><i class="icon-trash"></i></button>
                     </td>
                 </tr>
                 <!-- /ko -->
                 <tr>
                     <td colspan="2">
-                        <a class="button" data-bind="click: addRow">
+                        <a class="btn" data-bind="click: addRow">
                             <i class="icon-plus-sign"></i> Add New Row
                         </a>
                     </td>
@@ -137,7 +137,7 @@
 
         <button type="submit" class="btn">Save</button>
         {% if scenario == 'Update' %}
-            <a class="btn delete-warn" href="{% url 'delete_cheque_deposit' form.instance.id %}">Delete!</a>
+            <a class="btn btn-danger" href="{% url 'delete_cheque_deposit' form.instance.id %}">Delete!</a>
         {% endif %}
 
     </form>
