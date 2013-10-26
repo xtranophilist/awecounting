@@ -9,9 +9,8 @@ from django.contrib.auth.decorators import login_required
 from forms import InvoiceForm, PurchaseVoucherForm, CashReceiptForm
 from users.models import group_required
 from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, PurchaseParticular, JournalVoucher, \
-    JournalVoucherRow, CashReceipt, CashReceiptRow, CashPayment, CashPaymentRow
-from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, \
-    JournalVoucherSerializer, CashReceiptSerializer, CashPaymentSerializer
+    JournalVoucherRow, CashReceipt, CashReceiptRow, CashPayment, CashPaymentRow, FixedAsset
+from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, JournalVoucherSerializer, CashReceiptSerializer, CashPaymentSerializer, FixedAssetSerializer
 from acubor.lib import invalid, save_model
 from ledger.models import delete_rows, Account, set_transactions, Party
 from voucher.filters import InvoiceFilter, PurchaseVoucherFilter
@@ -568,3 +567,28 @@ def approve_cash_payment(request):
                          ['cr', Party.objects.get(id=params.get('party')).customer_account, params.get('amount')]
         )
     return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+@login_required
+def list_fixed_assets(request):
+    pass
+
+@login_required
+def fixed_asset(request, id=None):
+    if id:
+        voucher = get_object_or_404(FixedAsset, id=id, company=request.company)
+        scenario = 'Update'
+    else:
+        voucher = FixedAsset()
+        scenario = 'Create'
+    data = FixedAssetSerializer(voucher).data
+    return render(request, 'fixed_asset.html', {'scenario': scenario, 'data': data})
+
+@login_required
+def save_fixed_asset(request):
+    pass
+
+@login_required
+def approve_fixed_asset(request):
+    pass
+

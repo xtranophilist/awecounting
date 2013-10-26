@@ -181,7 +181,7 @@ class FixedAssetRow(models.Model):
     assets_ledger = models.ForeignKey(Account)
     description = models.TextField(null=True, blank=True)
     amount = models.FloatField()
-    fixed_asset = models.ForeignKey(FixedAsset)
+    fixed_asset = models.ForeignKey(FixedAsset, related_name='rows')
 
 
 class AdditionalDetail(models.Model):
@@ -194,12 +194,4 @@ class AdditionalDetail(models.Model):
     description = models.TextField(blank=True, null=True)
     warranty_period = models.CharField(max_length=100, null=True, blank=True)
     maintenance = models.CharField(max_length=100, null=True, blank=True)
-    fixed_asset = models.ForeignKey(FixedAsset)
-
-
-
-
-
-
-
-
+    fixed_asset = models.ForeignKey(FixedAsset, related_name='additional_details')
