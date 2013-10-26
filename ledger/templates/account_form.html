@@ -23,9 +23,8 @@
             <div class="span12">
                 <input type="submit" value="Submit" class="btn"/>
                 {% if scenario == 'Update' %}
-                    <a href="{% url 'delete_account' form.instance.id %}" class="btn delete-warn"/>Delete</a>
+                    <a href="{% url 'delete_account' form.instance.id %}" class="btn btn-danger"/>Delete</a>
                 {% endif %}
-                <a class="btn" target="_blank" href="{% url 'create_category' %}">Create New Category</a>
             </div>
 
         </div>

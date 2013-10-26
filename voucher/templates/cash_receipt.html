@@ -121,7 +121,7 @@
             <div>
 
                 {% if scenario == 'Update' %}
-                    {#                    <a class="btn delete-warn" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>#}
+                    {#                    <a class="btn btn-danger" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>#}
                 {% endif %}
                 <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
                 {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}

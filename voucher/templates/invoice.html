@@ -103,7 +103,7 @@
                 <div id="particulars-body">
                 <!-- ko foreach:rows -->
                     <tr>
-                        <td>
+                        <td class="with_ip">
                             <div class="drag_handle"><i class="icon-ellipsis-vertical"></i>
                             </div>
                             <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
@@ -156,7 +156,7 @@
      
                 <input class="btn" type="submit" value="Cancel" data-bind="click: $root.save">
                 {% if scenario == 'Update' %}
-                    <a class="btn delete-warn" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>
+                    <a class="btn btn-danger" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>
                 {% endif %}
                 <input class="btn" type="submit" value="Approve" data-bind="click: $root.approve">
                 <input class="btn" type="submit" value="Cancel" data-bind="click: $root.cancel">
