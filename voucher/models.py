@@ -149,6 +149,7 @@ class CashReceiptRow(models.Model):
     discount = models.FloatField()
     cash_receipt = models.ForeignKey(CashReceipt, related_name='rows')
 
+
 class CashPayment(models.Model):
     party = models.ForeignKey(Party, verbose_name='Paid To')
     payment_on = models.DateField()
@@ -165,3 +166,40 @@ class CashPaymentRow(models.Model):
     payment = models.FloatField()
     discount = models.FloatField()
     cash_payment = models.ForeignKey(CashPayment, related_name='rows')
+
+
+class FixedAsset(models.Model):
+    from_account = models.ForeignKey(Account)
+    voucher_number = models.CharField(max_length=50)
+    date = models.DateField()
+    reference_number = models.CharField(max_length=50, null=True, blank=True)
+    description = models.TextField()
+    company = models.ForeignKey(Company)
+
+
+class FixedAssetRow(models.Model):
+    assets_ledger = models.ForeignKey(Account)
+    description = models.TextField(null=True, blank=True)
+    amount = models.FloatField()
+    fixed_asset = models.ForeignKey(FixedAsset)
+
+
+class AdditionalDetail(models.Model):
+    assets_code = models.CharField(max_length=100, null=True, blank=True)
+    assets_type = models.CharField(max_length=100, null=True, blank=True)
+    vendor_name = models.CharField(max_length=100, null=True, blank=True)
+    vendor_address = models.CharField(max_length=254, null=True, blank=True)
+    amount = models.FloatField(null=True, blank=True)
+    useful_life = models.CharField(max_length=254, null=True, blank=True)
+    description = models.TextField(blank=True, null=True)
+    warranty_period = models.CharField(max_length=100, null=True, blank=True)
+    maintenance = models.CharField(max_length=100, null=True, blank=True)
+    fixed_asset = models.ForeignKey(FixedAsset)
+
+
+
+
+
+
+
+
