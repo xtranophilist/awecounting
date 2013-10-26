@@ -81,7 +81,7 @@ tbody > tr > td[contenteditable="true"]:focus {
 
 .drag_handle {
     float: left;
-    padding: 5px 6px 5px 2px;
+    padding: 6px 12px 5px 7px;
     opacity: .6;
     cursor: move;
     cursor: -webkit-grab;
@@ -116,7 +116,7 @@ tbody > tr > td[contenteditable="true"]:focus {
 }
 
 .wid-pad {
-    padding: 5px;
+    padding-top : 5px;
 }
 
 #id_invoice_no {
@@ -594,4 +594,11 @@ td .select2-container {
 
 .print-only{
     display:none;
+}
+.table td input[type="text"]{
+    border: 0;
+    width: 100%;
+    display: block;
+    margin: 0;
+    background: transparent;
 }

@@ -10,10 +10,12 @@ body{ font-family: 'Open Sans', "Helvetica Neue",Helvetica,Arial,sans-serif}
 }
 .navbar-inverse .navbar-inner{
     padding: 0px;
-    background: #368EE0;
-    min-height: 40px
+    background: #36a9e1;
+    min-height: 40px;
+    border-color: #1184BB;
 }
-.navbar-inverse a.brand{ color: #fff; font-weight: 100;}
+.navbar-inverse a.brand{ color: #fff; font-weight: 100;padding: 0;min-width: 184px;text-align: center;}
+.navbar .brand img{height: 40px;}
 .navbar-inverse .nav .active > a, .navbar-inverse .nav .active > a:hover, .navbar-inverse .nav .active > a:focus{
     background: none;
     text-shadow: none;
@@ -21,7 +23,7 @@ body{ font-family: 'Open Sans', "Helvetica Neue",Helvetica,Arial,sans-serif}
     box-shadow: none;
 }
 .navbar-inverse .nav li.dropdown.open>.dropdown-toggle{
-    background-color: #103047;
+    background-color: #1F84B4;
 }
 .navbar-inverse .brand, .navbar-inverse .nav > li > a{ color: #def; font-weight: 200; }
 .navbar .brand{
@@ -58,12 +60,6 @@ body{ font-family: 'Open Sans', "Helvetica Neue",Helvetica,Arial,sans-serif}
 }
 .table button i, .table .btn i{
     font-size: 14px;
-}
-.btn:hover{
-    background-color: #C6D2DA;
-}
-.btn:active{
-    background: #BDCAD3;
 }
 .acubor-splash{
     margin-top: 15px;
@@ -163,18 +159,18 @@ input.full-width {
     font-weight: bold;
 }
 .table thead:first-child tr{
-    background: #368EE0;
+    background: #36a9e1;
     color: #fff;
 }
 .table.table-bordered thead:first-child tr th:first-child{
-    border-left: 1px solid #3882CA;
+    border-left: 1px solid #3895CA;
 }
 .table.table-bordered thead:first-child tr th:last-child{
-    border-right: 1px solid #3882CA;
+    border-right: 1px solid #3895CA;
 }
 .table.table-bordered thead:first-child tr th{
-    border-color: #5DA3EE;
-    border-top: 1px solid #3882CA;
+    border-color: #3895CA;
+    border-top: 1px solid #3895CA;
 }
 .table thead th a{
     color: #fff;
