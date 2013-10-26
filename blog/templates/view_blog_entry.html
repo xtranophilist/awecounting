@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'blog.html' %}
 
 {% block title %}
     {{ obj.title }} | Blog |Acubor
@@ -14,7 +14,8 @@
         {% endif %}
     </div>
     {% if obj.author == user %}
-        <div><a href="{% url 'update_blog_entry' obj.id%}">Edit</a></div>
+        <br>
+        <div><a href="{% url 'update_blog_entry' obj.id%}" class="btn btn-custom">Edit this blog</a></div>
     {% endif %}
     <br/>
     <p>
