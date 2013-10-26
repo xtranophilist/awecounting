@@ -32,5 +32,21 @@ class AccountSerializer(serializers.ModelSerializer):
 class PartySerializer(serializers.ModelSerializer):
     customer_balance = serializers.Field(source='customer_account.get_balance')
     supplier_balance = serializers.Field(source='supplier_account.get_balance')
+
     class Meta:
         model = Party
+
+
+class CashVendorSerializer(serializers.ModelSerializer):
+    text = serializers.Field('name')
+    category = serializers.Field(source='category.name')
+    address = serializers.SerializerMethodField('get_address')
+
+    def get_address(self, obj):
+        if obj.category.name == 'Suppliers':
+            return obj.supplier_detail.address
+        return None
+
+    class Meta:
+        model = Account
+        fields = ['id', 'text', 'category', 'address']

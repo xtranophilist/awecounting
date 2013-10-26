@@ -11,6 +11,7 @@ urlpatterns = patterns('',
                        url(r'^(?P<id>[0-9]+)/$', views.view_account, name='view_account'),
                        url(r'^account/(?P<id>[0-9]+)/delete/$', views.delete_account, name='delete_account'),
 
+
                        url(r'^parties/$', views.list_all_parties, name='list_all_parties'),
                        url(r'^party/create/$', views.party_form, name='create_party'),
                        url(r'^party/(?P<id>[0-9]+)/$', views.party_form, name='update_party'),
@@ -22,4 +23,7 @@ urlpatterns = patterns('',
                        url(r'^category/create/$', views.create_category, name='create_category'),
                        url(r'^category/(?P<id>[0-9]+)/$', views.update_category, name='update_category'),
                        url(r'^category/(?P<id>[0-9]+)/delete$', views.delete_category, name='delete_category'),
+
+                       url(r'^cash-and-vendors.json$', views.cash_and_vendors, name='cash_and_vendors'),
+                       url(r'^fixed-assets.json$', views.fixed_assets, name='fixed_assets'),
 )
