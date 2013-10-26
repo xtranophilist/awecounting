@@ -482,7 +482,7 @@ def party_purchase_vouchers(request, id):
     objs = PurchaseVoucher.objects.filter(company=request.company, party=Party.objects.get(id=id), pending_amount__gt=0)
     lst = []
     for obj in objs:
-        lst.append({'id': obj.id, 'bill_no': obj.invoice_no, 'date': obj.date, 'total_amount': obj.total_amount,
+        lst.append({'id': obj.id, 'bill_no': obj.reference, 'date': obj.date, 'total_amount': obj.total_amount,
                     'pending_amount': obj.pending_amount, 'due_date': obj.due_date})
     return HttpResponse(json.dumps(lst, default=handler), mimetype="application/json")
 
@@ -491,7 +491,7 @@ def party_purchase_vouchers(request, id):
 def save_cash_payment(request):
     params = json.loads(request.body)
     dct = {'rows': {}}
-    values = {'party_id': params.get('party'), 'receipt_on': params.get('receipt_on'),
+    values = {'party_id': params.get('party'), 'payment_on': params.get('payment_on'),
               'reference': params.get('reference'), 'company': request.company}
     # try:
     if params.get('id'):
@@ -499,6 +499,7 @@ def save_cash_payment(request):
     else:
         voucher = CashPayment()
         # if not created:
+
     voucher = save_model(voucher, values)
     dct['id'] = voucher.id
     # except Exception as e:
@@ -512,13 +513,13 @@ def save_cash_payment(request):
     #sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
     if params.get('table_vm').get('rows'):
         for index, row in enumerate(params.get('table_vm').get('rows')):
+            print row
             if invalid(row, ['payment']) and invalid(row, ['discount']):
                 continue
             if (row.get('discount') == '') | (row.get('discount') is None):
                 row['discount'] = 0
             if (row.get('payment') == '') | (row.get('payment') is None):
                 row['payment'] = 0
-            print row
             values = {'discount': row.get('discount'), 'payment': row.get('payment'),
                       'cash_payment': voucher,
                       'purchase_voucher': PurchaseVoucher.objects.get(id=row.get('id'), company=request.company)}
@@ -533,7 +534,7 @@ def save_cash_payment(request):
         voucher.amount = params.get('amount')
         voucher.save()
     if params.get('continue'):
-        dct = {'redirect_to': str(reverse_lazy('create_cash_receipt'))}
+        dct = {'redirect_to': str(reverse_lazy('create_cash_payment'))}
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
@@ -553,7 +554,7 @@ def approve_cash_payment(request):
     discount_expenses_account = Account.objects.get(name='Discounting Expenses', company=request.company)
     if params.get('table_vm') and params.get('table_vm').get('rows'):
         total = float(params.get('total_payment')) + float(params.get('total_discount'))
-        set_transactions(voucher, params.get('receipt_on'),
+        set_transactions(voucher, params.get('payment_on'),
                          ['dr', cash_account, params.get('total_payment')],
                          ['dr', discount_expenses_account, params.get('total_payment')],
                          ['cr', Party.objects.get(id=params.get('party')).customer_account, total]

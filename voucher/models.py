@@ -164,4 +164,4 @@ class CashPaymentRow(models.Model):
     purchase_voucher = models.ForeignKey(PurchaseVoucher)
     payment = models.FloatField()
     discount = models.FloatField()
-    cash_receipt = models.ForeignKey(CashPayment, related_name='rows')
+    cash_payment = models.ForeignKey(CashPayment, related_name='rows')
