@@ -122,12 +122,12 @@
         </div>
     </div>
 
-    <div class="no-print">
+    <div class="no-print page-journal">
 
     <!-- Cash Tab -->
     <div class="tabbable">
     <ul class="nav nav-tabs" id="cash-tab">
-        <li>
+        <li class="active">
             <a data-toggle="tab" href="#cash-sales">
                 Cash Sales
             </a>
@@ -183,7 +183,7 @@
                     <td data-bind="editableText: amount, numeric: true"></td>
                     <td data-bind="text: tax()"></td>
                     <td align="center">
-                        <button class="btn btn-mini btn-danger" data-bind="click: $parent.removeRow">
+                        <button class="btn-none" data-bind="click: $parent.removeRow">
                             <i class="icon-trash"></i>
                         </button>
                     </td>
@@ -227,7 +227,7 @@
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td>
-                        <button class="btn btn-mini btn-danger" data-bind="click: $parent.removeRow">
+                        <button class="btn-none" data-bind="click: $parent.removeRow">
                             <i class="icon-trash"></i>
                         </button>
                     </td>
@@ -272,7 +272,7 @@
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td>
-                        <button class="btn btn-mini btn-danger" data-bind="click: $parent.removeRow">
+                        <button class="btn-none" data-bind="click: $parent.removeRow">
                             <i class="icon-trash"></i>
                         </button>
                     </td>
@@ -316,7 +316,7 @@
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td>
-                        <button class="btn btn-mini btn-danger" data-bind="click: $parent.removeRow">
+                        <button class="btn-none" data-bind="click: $parent.removeRow">
                             <i class="icon-trash"></i>
                         </button>
                     </td>
@@ -362,7 +362,7 @@
                     <td data-bind="editableText: cheque"></td>
                     <td data-bind="editableText: card"></td>
                     <td>
-                        <button class="btn btn-mini btn-danger" data-bind="click: $parent.removeRow">
+                        <button class="btn-none" data-bind="click: $parent.removeRow">
                             <i class="icon-trash"></i>
                         </button>
                     </td>
@@ -392,7 +392,7 @@
     <!-- Banks and Cards Tab -->
     <div class="tabbable">
         <ul class="nav nav-tabs" id="bank-tab">
-            <li>
+            <li class="active">
                 <a data-toggle="tab" href="#summary-bank">
                     Bank
                 </a>
@@ -537,7 +537,7 @@
                             </td>
                             <td data-bind="editableText: amount"></td>
                             <td>
-                                <button class="btn btn-mini btn-danger" data-bind="click: $parent.removeRow"><i class="icon-trash"></i>
+                                <button class="btn-none" data-bind="click: $parent.removeRow"><i class="icon-trash"></i>
                                 </button>
                             </td>
                         </tr>
@@ -623,7 +623,7 @@
                     <td data-bind="editableText: amount"></td>
                     <td data-bind="text: tax()"></td>
                     <td align="center">
-                        <button class="btn btn-mini btn-danger" data-bind="click: $parent.removeRow">
+                        <button class="btn-none" data-bind="click: $parent.removeRow">
                             <i class="icon-trash"></i>
                         </button>
                     </td>
@@ -672,9 +672,9 @@
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td>
-                        <a class="close" data-bind="click: $parent.removeRow">
+                        <button class="btn-none" data-bind="click: $parent.removeRow">
                             <i class="icon-trash"></i>
-                        </a>
+                        </button>
                     </td>
                 </tr>
                 <!-- /ko -->
@@ -722,7 +722,7 @@
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td>
-                        <button class="close" data-bind="click: $parent.removeRow"><i class="icon-trash"></i>
+                        <button class="btn-none" data-bind="click: $parent.removeRow"><i class="icon-trash"></i>
                         </button>
                     </td>
                 </tr>
@@ -758,20 +758,19 @@
                 <tbody id="credit-income">
                 <!-- ko foreach: rows -->
                 <tr data-bind="flash: true">
-                    <td>
-                        <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
+                    <td data-bind="text: $index()+1">
                     </td>
-                    <td>
+                    <td class="with_ip">
                         <select class="span12"
                                 data-bind="options: $root.accounts_by_category('Income'), optionsText: 'name', optionsValue: 'id', value: account_cr_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
                     </td>
-                    <td>
+                    <td class="with_ip">
                         <select class="span12"
                                 data-bind="options: $root.accounts_by_category('Assets', 'Equity', 'Liabilities'), optionsText: 'name', optionsValue: 'id', value: account_dr_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td>
-                        <button class="close" data-bind="click: $parent.removeRow"><i class="icon-trash"></i>
+                        <button class="btn-none" data-bind="click: $parent.removeRow"><i class="icon-trash"></i>
                         </button>
                     </td>
                 </tr>
@@ -798,7 +797,7 @@
     <!-- Inventory Tabs -->
     <div class="tabbable">
         <ul class="nav nav-tabs" id="inventory_tab">
-            <li>
+            <li class="active">
                 <a data-toggle="tab" href="#inventory-fuel">
                     Fuel
                 </a>
@@ -852,7 +851,7 @@
                             <td data-bind="editableText: actual, numeric: true"></td>
                             <td data-bind="text: difference()"></td>
                             <td>
-                                <button class="close" data-bind="click: $parent.removeRow"><i
+                                <button class="btn-none" data-bind="click: $parent.removeRow"><i
                                         class="icon-trash"></i></button>
                             </td>
                         </tr>
@@ -906,7 +905,7 @@
                             <td data-bind="editableText: actual, numeric: true"></td>
                             <td data-bind="text: difference()"></td>
                             <td>
-                                <button class="close" data-bind="click: $parent.removeRow"><i
+                                <button class="btn-none" data-bind="click: $parent.removeRow"><i
                                         class="icon-trash"></i></button>
                             </td>
                         </tr>
@@ -954,7 +953,7 @@
                             <td data-bind="editableText: addition, numeric: true"></td>
                             <td data-bind="text: sales()"></td>
                             <td>
-                                <button class="close" data-bind="click: $parent.removeRow"><i
+                                <button class="btn-none" data-bind="click: $parent.removeRow"><i
                                         class="icon-trash"></i></button>
                             </td>
                         </tr>
@@ -985,7 +984,7 @@
     <!-- Summary Tabs -->
     <div class="tabbable">
         <ul class="nav nav-tabs" id="summary-tab">
-            <li>
+            <li class="active">
                 <a data-toggle="tab" href="#summary-cash">
                     Summary Cash
                 </a>
@@ -1093,7 +1092,7 @@
     <!-- Attachment Tabs -->
     <div class="tabbable" id="attachment_tabbable" data-journal-day="{{ day_journal.date|date:"Y-m-d" }}">
         <ul class="nav nav-tabs" id="attachment-tab">
-            <li>
+            <li class="active">
                 <a data-toggle="tab" href="#sales_attach">Sales Attachments</a>
             </li>
             <li>
