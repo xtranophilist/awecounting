@@ -238,8 +238,8 @@ class Party(models.Model):
     types = [('Customer', 'Customer'), ('Supplier', 'Supplier'), ('Customer/Supplier', 'Customer/Supplier')]
     type = models.CharField(choices=types, max_length=17, default='Customer')
     company = models.ForeignKey(Company)
-    customer_account = models.ForeignKey(Account, null=True, related_name='customer_detail')
-    supplier_account = models.ForeignKey(Account, null=True, related_name='supplier_detail')
+    customer_account = models.OneToOneField(Account, null=True, related_name='customer_detail')
+    supplier_account = models.OneToOneField(Account, null=True, related_name='supplier_detail')
 
     def __unicode__(self):
         return self.name
