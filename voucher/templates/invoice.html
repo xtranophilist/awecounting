@@ -99,43 +99,42 @@
                 </tr>
                 </thead>
 
-                <tbody>
-                <div id="particulars-body">
+                <tbody id="particulars-body">
                 <!-- ko foreach:rows -->
-                    <tr>
-                        <td class="with_ip">
-                            <div class="drag_handle"><i class="icon-ellipsis-vertical"></i>
-                            </div>
-                            <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
-                        </td>
-                        <td class="with_ip">
-                            <input type="hidden" data-field="Item"
-                                   data-add-url="{% url 'create_inventory_item' %}"
-                                   data-bind="value: item_id, select2: {data: {results: $root.items}},  event: {change: $root.itemChanged}, lookupKey: 'id'">
-                        </td>
-                        <td data-bind="editableText: description">
-                        </td>
-                        <td data-bind="editableText: unit_price, numeric: true">
-                        </td>
-                        <td data-bind="editableText: quantity, eval: quantity">
-                        </td>
-                        <td data-bind="editableText: discount, numeric: true">
-                        </td>
-                        <td class="with_ip">
-                            <input type="hidden" data-add-url="{% url 'create_tax_scheme' %}" data-field="Tax Scheme"
-                                   class="span12 item-selector"
-                                   data-bind="value: tax_scheme, select2: {data: {results: $root.tax_schemes}}, lookupKey: 'id'">
-                        </td>
-                        <td data-bind="text: amount()">
-                        </td>
-                        <td>
-                            <button class="btn-none" data-bind="click: $parent.removeRow">
-                                <i class="icon-trash"></i>
-                            </button>
-                        </td>
-                    </tr>
-                    <!-- /ko -->
-                </div>
+                <tr>
+                    <td class="with_ip">
+                        <div class="drag_handle"><i class="icon-ellipsis-vertical"></i>
+                        </div>
+                        <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
+                    </td>
+                    <td class="with_ip">
+                        <input type="hidden" data-field="Item"
+                               data-add-url="{% url 'create_inventory_item' %}"
+                               data-bind="value: item_id, select2: {data: {results: $root.items}},  event: {change: $root.itemChanged}, lookupKey: 'id'">
+                    </td>
+                    <td data-bind="editableText: description">
+                    </td>
+                    <td data-bind="editableText: unit_price, numeric: true">
+                    </td>
+                    <td data-bind="editableText: quantity, eval: quantity">
+                    </td>
+                    <td data-bind="editableText: discount, numeric: true">
+                    </td>
+                    <td class="with_ip">
+                        <input type="hidden" data-add-url="{% url 'create_tax_scheme' %}" data-field="Tax Scheme"
+                               class="span12 item-selector"
+                               data-bind="value: tax_scheme, select2: {data: {results: $root.tax_schemes}}, lookupKey: 'id'">
+                    </td>
+                    <td data-bind="text: amount()">
+                    </td>
+                    <td>
+                        <button class="btn-none" data-bind="click: $parent.removeRow">
+                            <i class="icon-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <!-- /ko -->
+
                 <tr>
                     <td colspan="7"><b class="pull-right">SUB-TOTAL</b></td>
                     <td colspan="2" data-bind="text: $parent.sub_total()"></td>
@@ -153,15 +152,15 @@
             <button class="btn" data-bind="click: addRow">
                 <i class="icon-plus-sign"></i> Add New Row
             </button>
-     
-                <input class="btn" type="submit" value="Cancel" data-bind="click: $root.save">
-                {% if scenario == 'Update' %}
-                    <a class="btn btn-danger" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>
-                {% endif %}
-                <input class="btn" type="submit" value="Approve" data-bind="click: $root.approve">
-                <input class="btn" type="submit" value="Cancel" data-bind="click: $root.cancel">
-                <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
-                <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save_and_continue">
+
+            <input class="btn" type="submit" value="Cancel" data-bind="click: $root.save">
+            {% if scenario == 'Update' %}
+                <a class="btn btn-danger" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>
+            {% endif %}
+            <input class="btn" type="submit" value="Approve" data-bind="click: $root.approve">
+            <input class="btn" type="submit" value="Cancel" data-bind="click: $root.cancel">
+            <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
+            <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save_and_continue">
 
         </div>
     </form>
