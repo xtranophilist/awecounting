@@ -185,17 +185,17 @@ def purchase_voucher(request, id=None):
         scenario = 'Create'
     if request.POST:
         form = PurchaseVoucherForm(request.POST, request.FILES, instance=voucher, company=request.company)
-        import pdb
-        pdb.set_trace()
         if form.is_valid():
+            particulars = json.loads(request.POST['particulars'])
             voucher = form.save(commit=False)
             if 'attachment' in request.FILES:
                 voucher.attachment = request.FILES['attachment']
+            voucher.total_amount = particulars.get('grand_total')
+            voucher.pending_amount = particulars.get('grand_total')
             voucher.company = request.company
             voucher.save()
 
         if id or form.is_valid():
-            particulars = json.loads(request.POST['particulars'])
             model = PurchaseParticular
             cash_account = Account.objects.get(name='Cash Account', company=request.company)
             for index, row in enumerate(particulars.get('rows')):
