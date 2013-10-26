@@ -169,7 +169,6 @@ tbody > tr > td[contenteditable="true"]:focus {
     -moz-border-radius: 0px !important;
     border-radius: 0px !important;
     border-collapse: collapse !important;
-    background-image: none !important;
 }
 
 /*Flatten select2*/
@@ -597,8 +596,10 @@ td .select2-container {
 }
 .table td input[type="text"]{
     border: 0;
-    width: 100%;
+    width: 94%;
     display: block;
     margin: 0;
-    background: transparent;
+}
+input.date-picker{
+    background: transparent url(../images/calendar.png) center right no-repeat;
 }

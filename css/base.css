@@ -183,6 +183,11 @@ input.full-width {
     color: rgb(255, 20, 0);
     background: none;
     line-height: 0px;
+    padding: 2px 4px 2px 3px;
+    border-radius: 2px;
+}
+.btn-none:focus{
+    box-shadow: 0 0 2px #69c,0 0 3px #69c,0 0 5px #69c;
 }
 .btn-none:hover{
     color: rgb(207, 27, 12);
