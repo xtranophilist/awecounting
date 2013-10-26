@@ -62,14 +62,15 @@ function PurchaseVoucherViewModel(data) {
     self.tax = ko.observable(data['tax']);
 
     self.message = ko.observable('');
+    self.status = ko.observable('standby');
 
     self.party_address = ko.observable('');
 
-    var invoice_options = {
+    var options = {
         rows: data.particulars
     };
 
-    self.particulars = new TableViewModel(invoice_options, ParticularViewModel);
+    self.particulars = new TableViewModel(options, ParticularViewModel);
 
 //    self.addParticular = function() {
 //        var new_item_index = self.particulars().length+1;
@@ -139,12 +140,15 @@ function PurchaseVoucherViewModel(data) {
         return round2(sum);
     }
 
-    self.grand_total = function () {
-        if (self.tax() == 'exclusive') {
-            return self.sub_total() + self.tax_amount();
+    self.validate = function () {
+        if (!self.party) {
+            self.message('"From" field is required!');
+            self.status('error');
+            return false;
         }
-        return round2(self.sub_total());
+        return true;
     }
+
 
     self.itemChanged = function (row) {
         var selected_item = $.grep(self.items, function (i) {
@@ -160,11 +164,18 @@ function PurchaseVoucherViewModel(data) {
     }
 
     self.supplier_changed = function (vm) {
-        var selected_obj = $.grep(self.customers, function (i) {
+        var selected_obj = $.grep(self.suppliers, function (i) {
             return i.id == vm.party;
         })[0];
         self.party_address(selected_obj.address);
     }
+
+    self.particulars.grand_total = ko.computed(function () {
+        if (self.tax() == 'exclusive') {
+            return self.sub_total() + self.tax_amount();
+        }
+        return round2(self.sub_total());
+    }, self);
 
 }
 

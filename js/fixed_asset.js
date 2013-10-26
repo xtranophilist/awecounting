@@ -2,20 +2,20 @@ $(document).ready(function () {
     $(document).ready(function () {
         $('.date-picker').datepicker();
     });
-    vm = new CashPaymentVM(ko_data);
+    vm = new FixedAssetVM(ko_data);
     ko.applyBindings(vm);
 });
 
 
-function CashPaymentVM(data) {
+function FixedAssetVM(data) {
     var self = this;
 
     $.ajax({
-        url: '/ledger/party/suppliers.json',
+        url: '/ledger/cash-and-vendors.json',
         dataType: 'json',
         async: false,
         success: function (data) {
-            self.parties = data;
+            self.from_accounts = data;
         }
     });
 
@@ -35,7 +35,6 @@ function CashPaymentVM(data) {
     for (var k in data) {
         self[k] = ko.observable(data[k]);
     }
-
 
     self.party_changed = function (vm) {
         var selected_obj = $.grep(self.parties, function (i) {
@@ -162,7 +161,7 @@ function CashPaymentVM(data) {
 }
 
 
-function CashPaymentRowVM(row) {
+function FixedAssetRowVM(row) {
     var self = this;
 
     self.payment = ko.observable();

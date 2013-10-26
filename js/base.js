@@ -292,7 +292,6 @@ function TableViewModel(options, row_model) {
     self.message = ko.observable();
     self.status = ko.observable('standby');
 
-
     if (typeof row_model != 'undefined') {
         self.rows = ko.observableArray(ko.utils.arrayMap(options.rows, function (item) {
             return new row_model(item);
@@ -338,13 +337,14 @@ function TableViewModel(options, row_model) {
             var total = 0;
             self.rows().forEach(function (i) {
                 var f = i[field];
+                if (typeof f != 'function')
+                    throw new Error(field + ' isn\'t a property of row model ' + row_model.name + '!')
                 if (isAN(parseFloat(f())))
                     total += parseFloat(f());
             });
             return total;
         }
     }
-
 
     if (typeof(options.save_to_url) != 'undefined') {
         self.save = function (model, e) {
@@ -367,7 +367,6 @@ function TableViewModel(options, row_model) {
                     self.status('error');
                 }
             });
-
         }
     }
     else {
@@ -375,8 +374,6 @@ function TableViewModel(options, row_model) {
             throw new Error("'save_to_url' option not passed to TableViewModel or save() not implemented!");
         }
     }
-
-
 }
 
 function days_between(first, second) {
