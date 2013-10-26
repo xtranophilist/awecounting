@@ -158,6 +158,7 @@ def create_default(company):
 
     income = Category(name='Income', company=company)
     income.save()
+    Account(name='Discount Income', category=income, code='4-0012', company=company).save()
     sales = Category(name='Sales', parent=income, company=company)
     sales.save()
     Account(name='Fuel Sales', category=sales, code='4-0001', company=company).save()
@@ -207,7 +208,7 @@ def create_default(company):
             company=company).save()
     Account(name='Lunch and Refreshment Expenses', category=indirect_expenses, code='13-0009', company=company).save()
     Account(name='Cleaning Expenses', category=indirect_expenses, code='13-0010', company=company).save()
-    Account(name='Discounting Expenses', category=indirect_expenses, code='13-0011', company=company).save()
+    Account(name='Discount Expenses', category=indirect_expenses, code='13-0011', company=company).save()
     Account(name='Repairs and Maintenance Expenses', category=indirect_expenses, code='13-0012', company=company).save()
 
     opening_balance_difference = Category(name='Opening Balance Difference', company=company)

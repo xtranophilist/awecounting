@@ -447,7 +447,7 @@ def approve_cash_receipt(request):
         total = float(params.get('total_payment')) + float(params.get('total_discount'))
         set_transactions(voucher, params.get('receipt_on'),
                          ['dr', cash_account, params.get('total_payment')],
-                         ['dr', discount_expenses_account, params.get('total_payment')],
+                         ['dr', discount_expenses_account, params.get('total_discount')],
                          ['cr', Party.objects.get(id=params.get('party')).customer_account, total]
         )
     else:
@@ -472,7 +472,7 @@ def cash_payment(request, id=None):
     else:
         voucher = CashPayment()
         scenario = 'Create'
-    #form = CashReceiptForm(instance=voucher)
+        #form = CashReceiptForm(instance=voucher)
     data = CashPaymentSerializer(voucher).data
     return render(request, 'cash_payment.html', {'scenario': scenario, 'data': data})
 
@@ -551,13 +551,13 @@ def approve_cash_payment(request):
     #                         ['cr', Account.objects.get(id=params.get('total_payment')), row.get('cr_amount')],
     #        )
     cash_account = Account.objects.get(name='Cash Account', company=request.company)
-    discount_expenses_account = Account.objects.get(name='Discounting Expenses', company=request.company)
+    discount_income_account = Account.objects.get(name='Discount Income', company=request.company)
     if params.get('table_vm') and params.get('table_vm').get('rows'):
         total = float(params.get('total_payment')) + float(params.get('total_discount'))
         set_transactions(voucher, params.get('payment_on'),
-                         ['dr', cash_account, params.get('total_payment')],
-                         ['dr', discount_expenses_account, params.get('total_payment')],
-                         ['cr', Party.objects.get(id=params.get('party')).customer_account, total]
+                         ['dr', Party.objects.get(id=params.get('party')).supplier_account, total],
+                         ['cr', discount_income_account, params.get('total_discount')],
+                         ['cr', cash_account, params.get('total_payment')]
         )
     else:
         print params.get('amount')
