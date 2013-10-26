@@ -38,6 +38,7 @@ class PartySerializer(serializers.ModelSerializer):
 
 
 class CashVendorSerializer(serializers.ModelSerializer):
+    text = serializers.Field('name')
     category = serializers.Field(source='category.name')
     address = serializers.SerializerMethodField('get_address')
 
@@ -48,6 +49,4 @@ class CashVendorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ['id', 'name', 'category', 'address']
-
-
+        fields = ['id', 'text', 'category', 'address']

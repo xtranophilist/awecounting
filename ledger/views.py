@@ -1,12 +1,13 @@
 import json
 from datetime import date
+from django.db.models import Q
 
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 
 from ledger.models import Account, JournalEntry, Category, Party, set_transactions
-from ledger.serializers import AccountSerializer, PartySerializer
+from ledger.serializers import AccountSerializer, PartySerializer, CashVendorSerializer
 from forms import AccountForm, CategoryForm, PartyForm
 
 
@@ -172,8 +173,8 @@ def delete_category(request, id):
 
 @login_required
 def delete_account(request, id):
-    object = get_object_or_404(Account, id=id, company=request.company)
-    object.delete()
+    obj = get_object_or_404(Account, id=id, company=request.company)
+    obj.delete()
     return redirect('/ledger/')
 
 
@@ -216,3 +217,17 @@ def party_form(request, id=None):
         'scenario': scenario,
         'base_template': base_template,
     })
+
+
+@login_required
+def cash_and_vendors(request):
+    objs = Account.objects.filter(Q(category__name="Cash Account") | Q(category__name="Suppliers")).filter(
+        company=request.company)
+    objs_data = CashVendorSerializer(objs).data
+    return HttpResponse(json.dumps(objs_data), mimetype="application/json")
+
+@login_required
+def fixed_assets(request):
+    objs = Account.objects.filter(category__name='Fixed Assets', company=request.company)
+    objs_data = AccountSerializer(objs).data
+    return HttpResponse(json.dumps(objs_data), mimetype="application/json")
