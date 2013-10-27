@@ -80,7 +80,7 @@
         </div>
         <br/>
 
-        <div data-bind="text: message()" id="message"></div>
+        <div data-bind="text: message(), css: status()" id="message"></div>
 
         <div class="row-fluid" data-bind="with: particulars">
 
@@ -152,6 +152,10 @@
             <button class="btn" data-bind="click: addRow">
                 <i class="icon-plus-sign"></i> Add New Row
             </button>
+
+            <div>
+                Description: <textarea data-bind="value: $root.description"></textarea>
+            </div>
 
             <input class="btn" type="submit" value="Cancel" data-bind="click: $root.save">
             {% if scenario == 'Update' %}

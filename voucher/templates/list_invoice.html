@@ -1,10 +1,10 @@
 {% extends "dashboard.html" %}
 
-{% block title %}Invoices{% endblock %}
+{% block title %}Invoice Register{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li><a href="{% url "all_invoices" %}">Invoices</a></li>
+    <li><a href="{% url "all_invoices" %}">Invoice Register</a></li>
 {% endblock %}
 
 {% block extra-head %}
@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block pageheader %}
-    Invoices
+    Invoice Register
 {% endblock %}
 
 {% block content %}
@@ -66,6 +66,8 @@
         <th>{% anchor date 'Date' %}</th>
         <th>{% anchor due_date 'Due Date' %}</th>
         <th>{% anchor total_amount 'Amount' %}</th>
+        <th>{% anchor pending_amount 'Pending Amount' %}</th>
+        <th>{% anchor description 'Description' %}</th>
         </thead>
         <tbody>
         {% for item in paginated_objects %}
@@ -79,6 +81,8 @@
                 <td>{{ item.date }}</td>
                 <td>{{ item.due_date }}</td>
                 <td>{{ item.total_amount }}</td>
+                <td>{{ item.pending_amount }}</td>
+                <td>{{ item.description }}</td>
             </tr>
         {% endfor %}
         </tbody>

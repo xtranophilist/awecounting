@@ -4,7 +4,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li><a href="{% url "all_purchase_vouchers" %}">All Purchase Vouchers</a></li>
+    <li><a href="{% url "all_purchase_vouchers" %}">Purchase Register</a></li>
     <span class="divider"><i class="icon-angle-right"></i></span>
     <li>{{ scenario }} Purchase Voucher</li>
 {% endblock %}
@@ -132,10 +132,14 @@ formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-
                 </tr>
                 </tbody>
             </table>
-            <div class="pull-right"><b>Grand Total: </b> <span data-bind="text: $root.particulars.grand_total()"></span></div>
+            <div class="pull-right"><b>Grand Total: </b> <span data-bind="text: $root.particulars.grand_total()"></span>
+            </div>
             <button class="btn" data-bind="click: addRow">
                 <i class="icon-plus-sign"></i> Add New Row
             </button>
+            <div>
+                Description: <textarea name="description" data-bind="value: $root.description"></textarea>
+            </div>
             <button type="submit" class="btn" data-bind="click: $root.validate">Save</button>
             {% if scenario == 'Update' %}
                 <a class="btn btn-danger" href="{% url 'delete_purchase_voucher' form.instance.id %}">Delete</a>

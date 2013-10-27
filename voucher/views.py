@@ -80,6 +80,7 @@ def save_invoice(request):
     params = json.loads(request.body)
     dct = {'rows': {}}
     invoice_values = {'party_id': params.get('party'), 'invoice_no': params.get('invoice_no'),
+                      'description': params.get('description'),
                       'reference': params.get('reference'), 'date': params.get('date'),
                       'due_date': params.get('due_date'), 'tax': params.get('tax'),
                       'currency_id': params.get('currency'), 'company': request.company,
@@ -90,6 +91,10 @@ def save_invoice(request):
     else:
         invoice = Invoice()
         # if not created:
+    if invoice_values['total_amount'] == '':
+        invoice_values['total_amount'] = 0
+    if invoice_values['pending_amount'] == '':
+        invoice_values['pending_amount'] = 0
     invoice = save_model(invoice, invoice_values)
     dct['id'] = invoice.id
     # except Exception as e:
@@ -192,6 +197,10 @@ def purchase_voucher(request, id=None):
             voucher.total_amount = particulars.get('grand_total')
             voucher.pending_amount = particulars.get('grand_total')
             voucher.company = request.company
+            if voucher.total_amount == '':
+                voucher.total_amount = 0
+            if voucher.pending_amount == '':
+                voucher.pending_amount = 0
             voucher.save()
 
         if id or form.is_valid():
@@ -600,7 +609,7 @@ def save_fixed_asset(request):
     model = FixedAssetRow
     for index, row in enumerate(params.get('table_vm').get('rows')):
         if invalid(row, ['asset_ledger', 'amount']):
-                    continue
+            continue
         values = {'asset_ledger_id': row.get('asset_ledger'), 'description': row.get('description'),
                   'amount': row.get('amount'), 'fixed_asset': voucher}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
