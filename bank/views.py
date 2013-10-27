@@ -6,10 +6,15 @@ from django.shortcuts import render, get_object_or_404, redirect
 from bank.models import BankAccount, ChequeDeposit, ChequeDepositRow, BankCashDeposit, ChequePayment, ElectronicFundTransferIn, ElectronicFundTransferInRow, ElectronicFundTransferOut
 from bank.forms import BankAccountForm, ChequeDepositForm, BankCashDepositForm, ChequePaymentForm, ElectronicFundTransferInForm, ElectronicFundTransferOutForm
 from acubor.lib import invalid, save_model
-from ledger.models import delete_rows
-from bank.serializers import ChequeDepositSerializer, ElectronicFundTransferInRowSerializer, ElectronicFundTransferInSerializer, ElectronicFundTransferOutSerializer
+from bank.serializers import ChequeDepositSerializer, ElectronicFundTransferInSerializer
 from bank.filters import ChequeDepositFilter, CashDepositFilter, ChequePaymentFilter, ElectronicFundTransferInFilter, ElectronicFundTransferOutFilter
-from ledger.models import set_transactions, Account
+from ledger.models import set_transactions, Account, delete_rows, JournalEntry
+
+
+@login_required
+def bank_settings(request):
+    items = BankAccount.objects.filter(company=request.company)
+    return render(request, 'bank_settings.html', {'items': items})
 
 
 @login_required
@@ -31,11 +36,13 @@ def delete_cheque_deposit(request, id):
     object.delete()
     return redirect('/bank/cheque-deposits/')
 
+
 @login_required
 def delete_electronic_fund_transfer_in(request, id):
     object = get_object_or_404(ElectronicFundTransferIn, id=id, company=request.company)
     object.delete()
     return redirect('/bank/electronic-fund-transfers-in/')
+
 
 @login_required
 def delete_cash_deposit(request, id):
@@ -49,6 +56,7 @@ def delete_cheque_payment(request, id):
     object = get_object_or_404(ChequePayment, id=id, company=request.company)
     object.delete()
     return redirect('/bank/cheque-payments/')
+
 
 @login_required
 def delete_electronic_fund_transfer_out(request, id):
@@ -69,6 +77,7 @@ def list_cheque_payments(request):
     items = ChequePayment.objects.filter(company=request.company)
     filtered_items = ChequePaymentFilter(request.GET, queryset=items, company=request.company)
     return render(request, 'list_cheque_payments.html', {'objects': filtered_items})
+
 
 @login_required
 def list_electronic_fund_transfers_in(request):
@@ -162,6 +171,7 @@ def cheque_deposit(request, id=None):
     receipt_data = ChequeDepositSerializer(receipt).data
     return render(request, 'cheque_deposit.html', {'form': form, 'data': receipt_data, 'scenario': scenario})
 
+
 @login_required
 def electronic_fund_transfer_in(request, id=None):
     if id:
@@ -201,7 +211,8 @@ def electronic_fund_transfer_in(request, id=None):
             return redirect('/bank/electronic-fund-transfers-in/')
     form = ElectronicFundTransferInForm(instance=receipt, company=request.company)
     receipt_data = ElectronicFundTransferInSerializer(receipt).data
-    return render(request, 'electronic_fund_transfer_in.html', {'form': form, 'data': receipt_data, 'scenario': scenario})
+    return render(request, 'electronic_fund_transfer_in.html',
+                  {'form': form, 'data': receipt_data, 'scenario': scenario})
 
 
 @login_required
@@ -289,3 +300,14 @@ def electronic_fund_transfer_out(request, id=None):
     else:
         form = ElectronicFundTransferOutForm(instance=payment, company=request.company)
     return render(request, 'electronic_fund_transfer_out.html', {'form': form, 'scenario': scenario})
+
+
+@login_required
+def bank_book(request, id):
+    bank_account = BankAccount.objects.get(id=id)
+    account = bank_account.account
+    journal_entries = JournalEntry.objects.filter(transactions__account_id=account.id).order_by('id',
+                                                                                                'date') \
+        .prefetch_related('transactions', 'content_type', 'transactions__account').select_related()
+    return render(request, 'bank_book.html',
+                  {'account': account, 'bank_account': bank_account, 'journal_entries': journal_entries})
