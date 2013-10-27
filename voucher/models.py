@@ -20,6 +20,7 @@ class Invoice(models.Model):
     status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
     pending_amount = models.FloatField()
     total_amount = models.FloatField()
+    description = models.TextField(null=True, blank=True)
 
     class Meta:
         db_table = 'invoice'
@@ -66,6 +67,7 @@ class PurchaseVoucher(models.Model):
     company = models.ForeignKey(Company)
     pending_amount = models.FloatField()
     total_amount = models.FloatField()
+    description = models.TextField(null=True, blank=True)
 
     def get_voucher_no(self):
         return self.id
@@ -170,15 +172,15 @@ class CashPaymentRow(models.Model):
 
 class FixedAsset(models.Model):
     from_account = models.ForeignKey(Account)
-    voucher_number = models.CharField(max_length=50)
+    voucher_no = models.CharField(max_length=50)
     date = models.DateField()
-    reference_number = models.CharField(max_length=50, null=True, blank=True)
+    reference = models.CharField(max_length=50, null=True, blank=True)
     description = models.TextField()
     company = models.ForeignKey(Company)
 
 
 class FixedAssetRow(models.Model):
-    assets_ledger = models.ForeignKey(Account)
+    asset_ledger = models.ForeignKey(Account)
     description = models.TextField(null=True, blank=True)
     amount = models.FloatField()
     fixed_asset = models.ForeignKey(FixedAsset, related_name='rows')

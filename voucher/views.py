@@ -9,9 +9,9 @@ from django.contrib.auth.decorators import login_required
 from forms import InvoiceForm, PurchaseVoucherForm, CashReceiptForm
 from users.models import group_required
 from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, PurchaseParticular, JournalVoucher, \
-    JournalVoucherRow, CashReceipt, CashReceiptRow, CashPayment, CashPaymentRow, FixedAsset
+    JournalVoucherRow, CashReceipt, CashReceiptRow, CashPayment, CashPaymentRow, FixedAsset, FixedAssetRow, AdditionalDetail
 from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, JournalVoucherSerializer, CashReceiptSerializer, CashPaymentSerializer, FixedAssetSerializer
-from acubor.lib import invalid, save_model
+from acubor.lib import invalid, save_model, all_empty_in_dict
 from ledger.models import delete_rows, Account, set_transactions, Party
 from voucher.filters import InvoiceFilter, PurchaseVoucherFilter
 from tax.models import TaxScheme
@@ -80,6 +80,7 @@ def save_invoice(request):
     params = json.loads(request.body)
     dct = {'rows': {}}
     invoice_values = {'party_id': params.get('party'), 'invoice_no': params.get('invoice_no'),
+                      'description': params.get('description'),
                       'reference': params.get('reference'), 'date': params.get('date'),
                       'due_date': params.get('due_date'), 'tax': params.get('tax'),
                       'currency_id': params.get('currency'), 'company': request.company,
@@ -90,6 +91,10 @@ def save_invoice(request):
     else:
         invoice = Invoice()
         # if not created:
+    if invoice_values['total_amount'] == '':
+        invoice_values['total_amount'] = 0
+    if invoice_values['pending_amount'] == '':
+        invoice_values['pending_amount'] = 0
     invoice = save_model(invoice, invoice_values)
     dct['id'] = invoice.id
     # except Exception as e:
@@ -192,6 +197,10 @@ def purchase_voucher(request, id=None):
             voucher.total_amount = particulars.get('grand_total')
             voucher.pending_amount = particulars.get('grand_total')
             voucher.company = request.company
+            if voucher.total_amount == '':
+                voucher.total_amount = 0
+            if voucher.pending_amount == '':
+                voucher.pending_amount = 0
             voucher.save()
 
         if id or form.is_valid():
@@ -559,11 +568,8 @@ def approve_cash_payment(request):
                          ['cr', cash_account, params.get('total_payment')]
         )
     else:
-        print params.get('amount')
-
         set_transactions(voucher, params.get('receipt_on'),
                          ['dr', cash_account, params.get('amount')],
-                         #['dr', discount_expenses_account, params.get('total_payment')],
                          ['cr', Party.objects.get(id=params.get('party')).customer_account, params.get('amount')]
         )
     return HttpResponse(json.dumps(dct), mimetype="application/json")
@@ -573,20 +579,63 @@ def approve_cash_payment(request):
 def list_fixed_assets(request):
     pass
 
+
 @login_required
 def fixed_asset(request, id=None):
     if id:
         voucher = get_object_or_404(FixedAsset, id=id, company=request.company)
         scenario = 'Update'
     else:
-        voucher = FixedAsset()
+        voucher = FixedAsset(date=date.today())
         scenario = 'Create'
     data = FixedAssetSerializer(voucher).data
     return render(request, 'fixed_asset.html', {'scenario': scenario, 'data': data})
 
+
 @login_required
 def save_fixed_asset(request):
-    pass
+    params = json.loads(request.body)
+    dct = {'rows1': {}, 'rows2': {}}
+
+    voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'),
+                      'description': params.get('description'), 'company': request.company,
+                      'from_account_id': params.get('from_account'), 'reference': params.get('reference')}
+    if params.get('id'):
+        voucher = FixedAsset.objects.get(id=params.get('id'))
+    else:
+        voucher = FixedAsset()
+    voucher = save_model(voucher, voucher_values)
+    dct['id'] = voucher.id
+    model = FixedAssetRow
+    for index, row in enumerate(params.get('table_vm').get('rows')):
+        if invalid(row, ['asset_ledger', 'amount']):
+            continue
+        values = {'asset_ledger_id': row.get('asset_ledger'), 'description': row.get('description'),
+                  'amount': row.get('amount'), 'fixed_asset': voucher}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct['rows1'][index] = submodel.id
+    delete_rows(params.get('table_vm').get('deleted_rows'), model)
+    model = AdditionalDetail
+    for index, row in enumerate(params.get('additional_details').get('rows')):
+        values = {'assets_code': row.get('assets_code'), 'assets_type': row.get('assets_type'),
+                  'vendor_name': row.get('vendor_name'), 'vendor_address': row.get('vendor_address'),
+                  'amount': row.get('amount'), 'useful_life': row.get('useful_life'),
+                  'description': row.get('description'), 'warranty_period': row.get('warranty_period'),
+                  'maintenance': row.get('maintenance')}
+        if all_empty_in_dict(values):
+            continue
+        values['fixed_asset'] = voucher
+        if row.get('amount') == '':
+            values['amount'] = None
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct['rows2'][index] = submodel.id
+    delete_rows(params.get('additional_details').get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
 
 @login_required
 def approve_fixed_asset(request):

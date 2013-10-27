@@ -23,8 +23,6 @@
 
 {% block content %}
 
-    {{ data }}
-
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
@@ -102,6 +100,9 @@
             </button>
 
         </div>
+
+        Description:<br/>
+        <textarea data-bind="value: description"></textarea>
 
         <div class="row-fluid" data-bind="with: additional_details">
 

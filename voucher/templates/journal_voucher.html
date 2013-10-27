@@ -4,7 +4,7 @@
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li><a href="{% url "list_journal_vouchers" %}">All Journal Vouchers</a></li>
+    <li><a href="{% url "list_journal_vouchers" %}">Journal Register</a></li>
     <span class="divider"><i class="icon-angle-right"></i></span>
     <li>{{ scenario }} Journal Voucher</li>
 {% endblock %}
@@ -31,7 +31,8 @@
 
         <div class="pull-right">
             Date:
-            <input data-date-format="yyyy-mm-dd" type="text" name="date" data-bind="value: $root.date" class="date-picker"/>
+            <input data-date-format="yyyy-mm-dd" type="text" name="date" data-bind="value: $root.date"
+                   class="date-picker"/>
         </div>
 
         <table class="table table-bordered table-striped table-acubor table-sortable">
@@ -52,7 +53,8 @@
                 <td data-bind="enum: {values: ['Dr', 'Cr']}, editableText: type"></td>
                 <td class="with_ip">
                     {# <select data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: dr_account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first', allowClear: true}"></select>#}
-                    <input type="hidden" data-field="Account" data-add-url="{% url 'create_account' %}" data-bind="value: account, select2: {data: {results: $root.accounts}}, lookupKey: 'id'">
+                    <input type="hidden" data-field="Account" data-add-url="{% url 'create_account' %}"
+                           data-bind="value: account, select2: {data: {results: $root.accounts}}, lookupKey: 'id'">
                 </td>
                 <td data-bind="editableText: description"></td>
                 <td data-bind="editableText: dr_amount, numeric: true, disable_content_editable: is_cr(), on_tab: $root.add_row"></td>

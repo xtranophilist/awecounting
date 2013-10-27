@@ -79,12 +79,18 @@ def invalid(row, required_fields):
 
 
 def all_empty(row, required_fields):
-    empty = True
     for attr in required_fields:
         # if one of the required attributes isn received or is not an empty string
         if attr in row and row.get(attr) != "":
-            empty = False
-    return empty
+            return False
+    return True
+
+
+def all_empty_in_dict(dct):
+    for val in dct:
+        if dct[val]:
+            return False
+    return True
 
 
 def save_model(model, values):

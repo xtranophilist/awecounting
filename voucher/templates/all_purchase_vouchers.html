@@ -1,14 +1,14 @@
 {% extends "dashboard.html" %}
 
-{% block title %}All Purchase Vouchers{% endblock %}
+{% block title %}Purchase Register{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li><a href="{% url "all_purchase_vouchers" %}">All Purchase Vouchers</a></li>
+    <li><a href="{% url "all_purchase_vouchers" %}">Purchase Register</a></li>
 {% endblock %}
 
 {% block pageheader %}
-    All Purchase Vouchers
+    Purchase Register
 {% endblock %}
 
 {% block content %}
@@ -50,6 +50,9 @@
         <th>{% anchor party 'From' %}</th>
         <th>{% anchor date 'Date' %}</th>
         <th>{% anchor due_date 'Due Date' %}</th>
+        <th>{% anchor total_amount 'Amount' %}</th>
+        <th>{% anchor pending_amount 'Pending Amount' %}</th>
+        <th>{% anchor description 'Description' %}</th>
         <th>Actions</th>
         </thead>
         <tbody>
@@ -61,6 +64,9 @@
                 <td>{{ item.party }}</td>
                 <td>{{ item.date }}</td>
                 <td>{{ item.due_date }}</td>
+                <td>{{ item.total_amount }}</td>
+                <td>{{ item.pending_amount }}</td>
+                <td>{{ item.description }}</td>
                 <td><a href="{% url "view_purchase_voucher" item.id %}">
                     Edit
                 </a>

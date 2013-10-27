@@ -1,37 +1,59 @@
 {% extends "dashboard.html" %}
 
-{% block title %}All Journal Vouchers{% endblock %}
+{% block title %}Journal Register{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li><a href="{% url "list_journal_vouchers" %}">All Journal Vouchers</a></li>
+    <li><a href="{% url "list_journal_vouchers" %}">Journal Register</a></li>
 {% endblock %}
 
 {% block pageheader %}
-    Journal Vouchers
+    Journal Register
 {% endblock %}
 
 {% block content %}
 
     {% load pagination_tags %}
     {% load sorting_tags %}
+    {% load filters %}
 
     {% autosort objects as sorted_objects %}
     {% autopaginate sorted_objects 25 as paginated_objects %}
 
     <table class="table table-bordered table-striped table-sortable">
         <thead>
-        <th>{% anchor voucher_no 'Voucher No.' %}</th>
         <th>{% anchor date 'Date' %}</th>
+        <th>Particulars</th>
+        <th>{% anchor voucher_no 'Voucher No.' %}</th>
+        <th>Debit Amount</th>
+        <th>Credit Amount</th>
         <th>Actions</th>
         </thead>
         <tbody>
         {% for item in paginated_objects %}
             <tr>
-                <td>
-                    {{ item.voucher_no }}
-                </td>
                 <td>{{ item.date }}</td>
+                <td>
+                    {% for row in item.rows.all %}
+                        <a href="{{ row.account.get_absolute_url }}">{{ row.account.name }}</a>
+                        <br/>
+                    {% endfor %}
+                </td>
+                <td><a href="{% url 'update_journal_voucher' item.id %}">{{ item.voucher_no }}</a></td>
+                <td>
+                    {% for row in item.rows.all %}
+                        {{ row.dr_amount|if_not_none|if_not_zero }}
+                        <br/>
+                    {% endfor %}
+                </td>
+                <td>
+                    {% for row in item.rows.all %}
+                        {{ row.cr_amount|if_not_none|if_not_zero }}
+                        <br/>
+                    {% endfor %}
+                </td>
+
+
                 <td>
                     <a href="{% url 'update_journal_voucher' item.id %}">Edit</a>
                 </td>
