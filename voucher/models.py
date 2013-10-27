@@ -20,6 +20,7 @@ class Invoice(models.Model):
     status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
     pending_amount = models.FloatField()
     total_amount = models.FloatField()
+    description = models.TextField(null=True, blank=True)
 
     class Meta:
         db_table = 'invoice'
@@ -66,6 +67,7 @@ class PurchaseVoucher(models.Model):
     company = models.ForeignKey(Company)
     pending_amount = models.FloatField()
     total_amount = models.FloatField()
+    description = models.TextField(null=True, blank=True)
 
     def get_voucher_no(self):
         return self.id
