@@ -80,6 +80,11 @@ $(document).ready(function () {
     }).on('hidden', function () {
             $('body').off('wheel.modal mousewheel.modal');
         });
+    $('.col-box a').click(function(e){
+        e.preventDefault();
+        $(this).parent('.col-box-header').siblings('.col-box-body').slideToggle();
+        $(this).find('.status-handle').toggleClass('icon-chevron-down');
+    });
 });
 
 override_form = function (event) {

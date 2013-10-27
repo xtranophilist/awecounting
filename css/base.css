@@ -192,3 +192,30 @@ input.full-width {
 .btn-none:hover{
     color: rgb(207, 27, 12);
 }
+.table th a{
+    display: block;
+    text-decoration: underline;
+}
+.table th a:hover{
+    text-decoration: none;
+}
+.col-box{
+    border: 1px solid #B2D8F7;
+}
+.col-box-header a{
+    display: block;
+    padding-left: 6px;
+    background: #d9edf7;
+    color: #3a87ad;
+}
+.col-box-header a h3{
+    margin: 0;
+}
+.col-box-body{
+    padding: 6px;
+    padding-top: 20px;
+    display: none;
+}
+.col-box-header a h3 .status-handle{
+    padding: 8px;
+}
