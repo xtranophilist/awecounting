@@ -55,6 +55,7 @@ function PurchaseVoucherViewModel(data) {
     }
 
     self.party = ko.observable();
+    self.description = ko.observable();
 
     for (var k in data)
         self[k] = data[k];
@@ -65,6 +66,8 @@ function PurchaseVoucherViewModel(data) {
     self.status = ko.observable('standby');
 
     self.party_address = ko.observable('');
+
+
 
     var options = {
         rows: data.particulars

@@ -55,6 +55,7 @@ function InvoiceViewModel(data) {
     }
 
     self.party = ko.observable();
+    self.description = ko.observable();
 
     for (var k in data)
         self[k] = data[k];
@@ -62,6 +63,7 @@ function InvoiceViewModel(data) {
     self.tax = ko.observable(data['tax']);
 
     self.message = ko.observable('');
+    self.status = ko.observable('standby');
 
     self.party_address = ko.observable('');
 
@@ -86,6 +88,7 @@ function InvoiceViewModel(data) {
     self.validate = function () {
         if (!self.party) {
             self.message('"To" field is required!')
+            self.status('error');
             return false;
         }
         return true;
