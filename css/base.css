@@ -14,7 +14,7 @@ body{ font-family: 'Open Sans', "Helvetica Neue",Helvetica,Arial,sans-serif}
     min-height: 40px;
     border-color: #1184BB;
 }
-.navbar-inverse a.brand{ color: #fff; font-weight: 100;padding: 0;min-width: 184px;text-align: center;}
+.navbar-inverse a.brand{ color: #fff; font-weight: 100;padding: 0;min-width: 231px;text-align: center;}
 .navbar .brand img{height: 40px;}
 .navbar-inverse .nav .active > a, .navbar-inverse .nav .active > a:hover, .navbar-inverse .nav .active > a:focus{
     background: none;
@@ -218,4 +218,26 @@ input.full-width {
 }
 .col-box-header a h3 .status-handle{
     padding: 8px;
+}
+.nav-list  li  a .arrow {
+    display: inline-block;
+    width: 14px !important;
+    height: 14px;
+    line-height: 14px;
+    text-shadow: none;
+    font-size: 18px;
+    position: absolute;
+    right: 9px;
+    top: 11px;
+    padding: 0;
+    color: #666;
+}
+#sidebar {
+    width: 229px;
+}
+#sidebar:before {
+    width: 229px;
+}
+#main-content {
+    margin-left: 230px;
 }
