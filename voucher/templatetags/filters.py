@@ -55,6 +55,12 @@ def if_not_none(obj):
         return ''
     return obj
 
+@register.filter
+def if_not_zero(obj):
+    if obj == 0:
+        return ''
+    return obj
+
 
 @register.filter
 def subtract(value, arg):
