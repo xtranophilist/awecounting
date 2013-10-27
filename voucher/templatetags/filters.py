@@ -127,14 +127,11 @@ def remove_account(transactions, account):
 @register.filter
 def get_particulars(entry, account):
     lst = []
-    source = entry.content_type.get_object_for_this_type(id=entry.model_id)
+    source = entry.content_type.get_object_for_this_type(id=entry.object_id)
     for row in source.journal_voucher.rows.all():
-        if row.dr_account is not None and not row.dr_account == account:
-            lst.append('<a href="' + '/ledger/' + str(row.dr_account.id) + '/#' + str(entry.id) + '">' + str(
-                row.dr_account) + '</a>')
-        if row.cr_account is not None and not account == row.cr_account:
-            lst.append('<a href="' + '/ledger/' + str(row.cr_account.id) + '/#' + str(entry.id) + '">' + str(
-                row.cr_account) + '</a>')
+        if row.account is not None and not row.account == account:
+            lst.append('<a href="' + '/ledger/' + str(row.account.id) + '/#' + str(entry.id) + '">' + str(
+                row.account) + '</a>')
     return ', '.join(lst)
 
 

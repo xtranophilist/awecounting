@@ -58,11 +58,14 @@
                 </td>
                 <td>
                     {% if entry.content_type.name == 'journal voucher row' %}
-{#                        {{ entry|get_particulars }}
+                        {{ entry|get_particulars:account|safe }}
+                    {% else %}
+                        {% for transaction in entry.transactions.all|remove_account:account %}{% if not forloop.first %}
+                            ,
+                        {% endif %}
+                            <a href="{{ transaction.account.get_absolute_url }}/#{{ entry.id }}">{{ transaction.account.name }}</a>
+                        {% endfor %}
                     {% endif %}
-                    {% for transaction in entry.transactions.all|remove_account:account %}{% if not forloop.first %},
-                    {% endif %}
-                        <a href="{{ transaction.account.get_absolute_url }}/#{{ entry.id }}">{{ transaction.account.name }}</a>{% endfor %}
                 </td>
                 <td>
                     {% if entry.content_type.app_label == 'dayjournal' %}
