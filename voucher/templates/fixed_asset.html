@@ -79,7 +79,7 @@
                 <tbody id="rows-body">
                 <!-- ko foreach:rows -->
                 <tr>
-                    <td>
+                    <td class="with_ip">
                         <input type="hidden" data-field="Asset Ledger"
                                data-add-url="{% url 'create_inventory_item' %}"
                                data-bind="value: asset_ledger, select2: {data: {results: $root.fixed_assets}}, lookupKey: 'id'">
