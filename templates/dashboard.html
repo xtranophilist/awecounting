@@ -108,8 +108,7 @@
                     </form>
                 {% endif %}
             </div>
-            <!--/.nav-collapse -->
-        </div>
+            </div>
     </div>
 </div>
 
@@ -121,7 +120,7 @@
 <div id="sidebar">
 
 <div class="sidebar-collapse">
-    <i class="icon-double-angle-right"></i>
+    <i class="icon-double-angle-left"></i>
 </div>
 
 <ul class="nav nav-list">
@@ -129,37 +128,158 @@
 <li>
     <a href="#" class="dropdown-toggle">
         <i class="icon-edit"></i>
-        <span>Day Journal</span>
+        <span>Entries</span>
         <b class="arrow icon-angle-down"></b>
     </a>
     <ul class="submenu">
         <li>
             <a href="/day/">
                 <i class="icon-double-angle-right"></i>
-                Today's Day Journal
+                Day Journal
+            </a>
+        </li>
+         <li>
+            <a href="/voucher/invoice/new/">
+                <i class="icon-double-angle-right"></i>
+                Invoice
+            </a>
+        </li>
+         <li>
+            <a href="/voucher/purchase/new/">
+                <i class="icon-double-angle-right"></i>
+                Purchase Voucher
+            </a>
+        </li>
+         <li>
+            <a href="/voucher/journal/">
+                <i class="icon-double-angle-right"></i>
+                Journal Voucher
             </a>
         </li>
         <li>
-            <a href="/day/journals/">
+            <a href="#" class="dropdown-toggle">
                 <i class="icon-double-angle-right"></i>
-                All Day Journals
+                Bank
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="/bank/cash-deposit/">
+                        <i class="icon-double-angle-right"></i>
+                        Cash Deposit
+                    </a>
+                </li>
+                <li>
+                    <a href="/bank/cheque-deposit/">
+                        <i class="icon-double-angle-right"></i>
+                        Cheque Deposit
+                    </a>
+                </li>
+                <li>
+                    <a href="/bank/electronic-fund-transfer-in/">
+                        <i class="icon-double-angle-right"></i>
+                        EFT Inward
+                    </a>
+                </li>
+                <li>
+                    <a href="/bank/cheque-payment/">
+                        <i class="icon-double-angle-right"></i>
+                        Cheque Payment
+                    </a>
+                </li>
+                <li>
+                    <a href="/bank/electronic-fund-transfer-out/">
+                        <i class="icon-double-angle-right"></i>
+                        EFT Outward
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        Bank Withdrawls
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-double-angle-right"></i>
+                Cash
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="/voucher/cash-receipt">
+                        <i class="icon-double-angle-right"></i>
+                        Cash Reciept
+                    </a>
+                </li>
+                <li>
+                    <a href="/voucher/cash-payment">
+                        <i class="icon-double-angle-right"></i>
+                        Cash Payment
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="/inventory/create/">
+                <i class="icon-double-angle-right"></i>
+                Inventory Entries
+            </a>
+        </li>
+        <li>
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-double-angle-right"></i>
+                Payroll Entries
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        Day Attendance Voucher
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        Hour Attendance Voucher
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        Group payroll Voucher
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        Individual Payroll Voucher
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="/voucher/fixed-asset">
+                <i class="icon-double-angle-right"></i>
+                Fixed Asset Purchase
             </a>
         </li>
     </ul>
 </li>
-
 <li>
     <a href="#" class="dropdown-toggle">
-        <i class="icon-file"></i>
-        <span>Invoice</span>
-
+        <i class="icon-book"></i>
+        <span>Book of Accounts</span>
         <b class="arrow icon-angle-down"></b>
     </a>
     <ul class="submenu">
         <li>
-            <a href="/voucher/invoice/new/">
+            <a href="/ledger">
                 <i class="icon-double-angle-right"></i>
-                New Invoice
+                Ledgers
             </a>
         </li>
         <li>
@@ -168,124 +288,10 @@
                 Invoice Register
             </a>
         </li>
-    </ul>
-</li>
-<li>
-    <a href="#" class="dropdown-toggle">
-        <i class="icon-file-text-alt"></i>
-        <span>Purchase Bill</span>
-
-        <b class="arrow icon-angle-down"></b>
-    </a>
-    <ul class="submenu">
-        <li>
-            <a href="/voucher/purchase/new/">
-                <i class="icon-double-angle-right"></i>
-                New Bill
-            </a>
-        </li>
         <li>
             <a href="/voucher/purchases/">
                 <i class="icon-double-angle-right"></i>
                 Purchase Register
-            </a>
-        </li>
-    </ul>
-</li>
-<li>
-    <a href="#" class="dropdown-toggle">
-        <i class="icon-building"></i>
-        <span>Bank</span>
-
-        <b class="arrow icon-angle-down"></b>
-    </a>
-    <ul class="submenu">
-        <li>
-            <a href="/bank/account/create/">
-                <i class="icon-double-angle-right"></i>
-                New Bank Account
-            </a>
-        </li>
-        <li>
-            <a href="/bank/accounts/">
-                <i class="icon-double-angle-right"></i>
-                All Bank Accounts
-            </a>
-        </li>
-        <li>
-            <a href="/bank/cash-deposit/">
-                <i class="icon-double-angle-right"></i>
-                New Cash Deposit
-            </a>
-        </li>
-        <li>
-            <a href="/bank/cash-deposits/">
-                <i class="icon-double-angle-right"></i>
-                All Cash Deposits
-            </a>
-        </li>
-        <li>
-            <a href="/bank/cheque-deposit/">
-                <i class="icon-double-angle-right"></i>
-                New Cheque Deposit
-            </a>
-        </li>
-        <li>
-            <a href="/bank/cheque-deposits/">
-                <i class="icon-double-angle-right"></i>
-                All Cheque deposits
-            </a>
-        </li>
-        <li>
-            <a href="/bank/cheque-payment/">
-                <i class="icon-double-angle-right"></i>
-                New Cheque Payment
-            </a>
-        </li>
-        <li>
-            <a href="/bank/cheque-payments/">
-                <i class="icon-double-angle-right"></i>
-                All Cheque Payments
-            </a>
-        </li>
-        <li>
-            <a href="/bank/electronic-fund-transfer-in/">
-                <i class="icon-double-angle-right"></i>
-                New EFT In
-            </a>
-        </li>
-        <li>
-            <a href="/bank/electronic-fund-transfers-in/">
-                <i class="icon-double-angle-right"></i>
-                All EFTs In
-            </a>
-        </li>
-        <li>
-            <a href="/bank/electronic-fund-transfer-out/">
-                <i class="icon-double-angle-right"></i>
-                New EFT Out
-            </a>
-        </li>
-        <li>
-            <a href="/bank/electronic-fund-transfers-out/">
-                <i class="icon-double-angle-right"></i>
-                All EFTs Out
-            </a>
-        </li>
-    </ul>
-</li>
-<li>
-    <a href="#" class="dropdown-toggle">
-        <i class="icon-book"></i>
-        <span>Journal Voucher</span>
-
-        <b class="arrow icon-angle-down"></b>
-    </a>
-    <ul class="submenu">
-        <li>
-            <a href="/voucher/journal">
-                <i class="icon-double-angle-right"></i>
-                New Journal Voucher
             </a>
         </li>
         <li>
@@ -294,109 +300,87 @@
                 Journal Register
             </a>
         </li>
-    </ul>
-</li>
-<li>
-    <a href="#" class="dropdown-toggle">
-        <i class="icon-group"></i>
-        <span>Accounts</span>
-
-        <b class="arrow icon-angle-down"></b>
-    </a>
-    <ul class="submenu">
         <li>
-            <a href="/ledger/create/">
+            <a href="#">
                 <i class="icon-double-angle-right"></i>
-                New Account
+                Cash Book
             </a>
         </li>
         <li>
-            <a href="/ledger/">
+            <a href="/bank/accounts/">
                 <i class="icon-double-angle-right"></i>
-                All Accounts
-            </a>
-        </li>
-        <li>
-            <a href="/ledger/category/create/">
-                <i class="icon-double-angle-right"></i>
-                New Category
-            </a>
-        </li>
-        <li>
-            <a href="/ledger/categories/">
-                <i class="icon-double-angle-right"></i>
-                All Categories
-            </a>
-        </li>
-    </ul>
-</li>
-<li>
-    <a href="#" class="dropdown-toggle">
-        <i class="icon-briefcase"></i>
-        <span>Inventory</span>
-
-        <b class="arrow icon-angle-down"></b>
-    </a>
-    <ul class="submenu">
-        <li>
-            <a href="/inventory/create/">
-                <i class="icon-double-angle-right"></i>
-                New Item
+                Bank Book
             </a>
         </li>
         <li>
             <a href="/inventory/items/">
                 <i class="icon-double-angle-right"></i>
-                All Items
+                Inventory Register
             </a>
         </li>
         <li>
-            <a href="/inventory/category/create/">
+            <a href="/day/journals/">
                 <i class="icon-double-angle-right"></i>
-                New Inventory Category
+                Day Journal Register
             </a>
         </li>
         <li>
-            <a href="/inventory/categories/">
+            <a href="/voucher/fixed-assets">
                 <i class="icon-double-angle-right"></i>
-                All Inventory Categories
+                Fixed Asset Register
             </a>
+        </li>
+        <li>
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-double-angle-right"></i>
+                Bank Entries
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="/bank/cash-deposits/">
+                        <i class="icon-double-angle-right"></i>
+                        All Cash Deposits
+                    </a>
+                </li>
+                <li>
+                    <a href="/bank/cheque-deposits/">
+                        <i class="icon-double-angle-right"></i>
+                        All Cheque Deposits
+                    </a>
+                </li>
+                <li>
+                    <a href="/bank/electronic-fund-transfers-in/">
+                        <i class="icon-double-angle-right"></i>
+                        All EFT Inwards
+                    </a>
+                </li>
+                <li>
+                    <a href="/bank/cheque-payments/">
+                        <i class="icon-double-angle-right"></i>
+                        All Cheque Payments
+                    </a>
+                </li>
+                <li>
+                    <a href="/bank/electronic-fund-transfers-out/">
+                        <i class="icon-double-angle-right"></i>
+                        All EFT Outwards
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        All Bank Withdrawls
+                    </a>
+                </li>
+            </ul>
         </li>
     </ul>
-</li>
-<li>
-    <a href="#" class="dropdown-toggle">
-        <i class="icon-money"></i>
-        <span>Payroll</span>
-
-        <b class="arrow icon-angle-down"></b>
-    </a>
-    <ul class="submenu">
-        <li>
-            <a href="/payroll/entry/">
-                <i class="icon-double-angle-right"></i>
-                New Payroll Entry
-            </a>
-        </li>
-        <li>
-            <a href="/payroll/entries/">
-                <i class="icon-double-angle-right"></i>
-                All Payroll Entries
-            </a>
-        </li>
-    </ul>
-</li>
-<li>
-    <a href="/report/trial-balance/">
-        <i class="icon-list-alt"></i>
-        <span>Reports</span>
-    </a>
 </li>
 <li>
     <a href="#" class="dropdown-toggle">
         <i class="icon-gears"></i>
         <span>Settings</span>
-
         <b class="arrow icon-angle-down"></b>
     </a>
     <ul class="submenu">
@@ -406,33 +390,284 @@
                 Company Settings
             </a>
         </li>
-        {% ifusergroup 'Owner' 'SuperOwner' %}
-            <li>
-                <a href="/user/roles/">
-                    <i class="icon-double-angle-right"></i>
-                    Company Roles
-                </a>
-            </li>
-        {% endifusergroup %}
         <li>
-            <a href="/tax/schemes/">
+            <a href="/settings/voucher/">
                 <i class="icon-double-angle-right"></i>
-                Tax Schemes
+                Voucher Settings
             </a>
         </li>
         <li>
-            <a href="/tax/scheme/create/">
+            <a href="#" class="dropdown-toggle">
                 <i class="icon-double-angle-right"></i>
-                New Tax Scheme
+                Account Settings
+                <b class="arrow icon-angle-down"></b>
             </a>
+            <ul class="submenu">
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        Create New
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        View/Edit
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-double-angle-right"></i>
+                Account Category Settings
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="/ledger/category/create/">
+                        <i class="icon-double-angle-right"></i>
+                        Create New
+                    </a>
+                </li>
+                <li>
+                    <a href="/ledger/categories/">
+                        <i class="icon-double-angle-right"></i>
+                        View/Edit
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-double-angle-right"></i>
+                Inventory Items Settings
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="/inventory/create/">
+                        <i class="icon-double-angle-right"></i>
+                        Create New
+                    </a>
+                </li>
+                <li>
+                    <a href="/inventory/items/">
+                        <i class="icon-double-angle-right"></i>
+                        View/Edit
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-double-angle-right"></i>
+                Inventory Category Settings
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="/inventory/category/create/">
+                        <i class="icon-double-angle-right"></i>
+                        Create New
+                    </a>
+                </li>
+                <li>
+                    <a href="/inventory/categories/">
+                        <i class="icon-double-angle-right"></i>
+                        View/Edit
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-double-angle-right"></i>
+                Inventory Units Settings
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        Create New
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        View/Edit
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-double-angle-right"></i>
+                Bank Accounts Settings
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="/bank/account/create/">
+                        <i class="icon-double-angle-right"></i>
+                        Create New
+                    </a>
+                </li>
+                <li>
+                    <a href="/bank/accounts/">
+                        <i class="icon-double-angle-right"></i>
+                        View/Edit
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-double-angle-right"></i>
+                Party Settings
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="/ledger/party/create/">
+                        <i class="icon-double-angle-right"></i>
+                        Create New
+                    </a>
+                </li>
+                <li>
+                    <a href="/ledger/parties/">
+                        <i class="icon-double-angle-right"></i>
+                        View/Edit
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-double-angle-right"></i>
+                Tax Scheme Settings
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="/tax/scheme/create/">
+                        <i class="icon-double-angle-right"></i>
+                        Create New
+                    </a>
+                </li>
+                <li>
+                    <a href="/tax/schemes/">
+                        <i class="icon-double-angle-right"></i>
+                        View/Edit
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-double-angle-right"></i>
+                Employee Settings
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        Create New
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        View/Edit
+                    </a>
+                </li>
+            </ul>
         </li>
     </ul>
 </li>
+<li>
+    <a href="#" class="dropdown-toggle">
+        <i class="icon-list-alt"></i>
+        <span>Reports</span>
+        <b class="arrow icon-angle-down"></b>
+    </a>
+    <ul class="submenu">
+        <li>
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-double-angle-right"></i>
+                Financial Settings
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        Balance Sheet
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        Profit and Loss
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        Cash Flow
+                    </a>
+                </li>
+                <li>
+                    <a href="/report/trial-balance/">
+                        <i class="icon-double-angle-right"></i>
+                        Trial Balance
+                    </a>
+                </li>
+            </ul>
+        </li>
+        <li>
+            <a href="#" class="dropdown-toggle">
+                <i class="icon-double-angle-right"></i>
+                Management Settings
+                <b class="arrow icon-angle-down"></b>
+            </a>
+            <ul class="submenu">
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        Fund Flow
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        Ratio Analysis
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        Ageing A/R
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <i class="icon-double-angle-right"></i>
+                        Aeging A/P
+                    </a>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</li>
+
 </ul>
 <!--/.nav-list-->
 
 <div class="sidebar-collapse">
-    <i class="icon-double-angle-right"></i>
+    <i class="icon-double-angle-left"></i>
 </div>
 </div>
 <div id="main-content" class="clearfix">
