@@ -577,7 +577,9 @@ def approve_cash_payment(request):
 
 @login_required
 def list_fixed_assets(request):
-    pass
+    objs = FixedAsset.objects.filter(company=request.company)
+    #filtered_items = InvoiceFilter(request.GET, queryset=objs, company=request.company)
+    return render(request, 'list_fixed_assets.html', {'objects': objs})
 
 
 @login_required

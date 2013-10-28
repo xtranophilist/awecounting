@@ -47,4 +47,6 @@ urlpatterns = patterns('',
                        url(r'^fixed-asset/(?P<id>[0-9]+)/$', views.fixed_asset, name='update_fixed_asset'),
                        url(r'^fixed-asset/save/$', views.save_fixed_asset, name='save_fixed_asset'),
                        url(r'^fixed-asset/approve/$', views.approve_fixed_asset, name='approve_fixed_asset'),
+
+
 )
