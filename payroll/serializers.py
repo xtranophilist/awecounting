@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from payroll.models import Entry, EntryRow
+from payroll.models import Entry, EntryRow, AttendanceVoucher, Employee
 
 
 class EntryRowSerializer(serializers.ModelSerializer):
@@ -14,4 +14,18 @@ class EntrySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Entry
+        exclude = ['company']
+
+
+class EmployeeSerializer(serializers.ModelSerializer):
+    text = serializers.Field(source='name')
+
+    class Meta:
+        model = Employee
+        exclude = ['company', 'address', 'designation', 'account', 'name']
+
+
+class AttendanceVoucherSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AttendanceVoucher
         exclude = ['company']

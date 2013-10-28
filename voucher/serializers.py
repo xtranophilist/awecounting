@@ -90,5 +90,3 @@ class FixedAssetSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = FixedAsset
-
-

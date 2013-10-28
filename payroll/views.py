@@ -1,3 +1,4 @@
+from datetime import date
 import json
 from django.core.urlresolvers import reverse_lazy
 
@@ -5,8 +6,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
-from payroll.models import Entry, EntryRow, Employee
-from payroll.serializers import EntrySerializer
+from payroll.models import Entry, EntryRow, Employee, AttendanceVoucher
+from payroll.serializers import EntrySerializer, AttendanceVoucherSerializer, EmployeeSerializer
 from acubor.lib import save_model, invalid
 from ledger.models import delete_rows, set_transactions, Account
 from payroll.forms import EmployeeForm
@@ -44,7 +45,6 @@ def save_entry(request):
     values = {
         'company': request.company, 'entry_no': params.get('entry_no')
     }
-    print params
     if params.get('id'):
         entry = Entry.objects.get(id=params.get('id'))
     else:
@@ -122,7 +122,59 @@ def list_employees(request):
 
 
 @login_required
+def employees_as_json(request):
+    objs = Employee.objects.filter(company=request.company)
+    objs_data = EmployeeSerializer(objs).data
+    return HttpResponse(json.dumps(objs_data), mimetype="application/json")
+
+
+@login_required
 def delete_employee(request, id):
     obj = get_object_or_404(Employee, id=id, company=request.company)
     obj.delete()
     return redirect(reverse_lazy('list_employees'))
+
+
+@login_required
+def attendance_voucher(request, id=None):
+    if id:
+        voucher = get_object_or_404(AttendanceVoucher, id=id, company=request.company)
+        scenario = 'Update'
+    else:
+        voucher = AttendanceVoucher(date=date.today())
+        scenario = 'Create'
+    data = AttendanceVoucherSerializer(voucher).data
+    return render(request, 'attendance_voucher.html', {'scenario': scenario, 'data': data})
+
+
+@login_required
+def save_attendance_voucher(request):
+    params = json.loads(request.body)
+    dct = {}
+    values = {
+        'company': request.company, 'voucher_no': params.get('voucher_no'), 'date': params.get('date'),
+        'employee_id': params.get('employee'), 'from_date': params.get('from_date'), 'to_date': params.get('to_date'),
+        'total_working_days': params.get('total_working_days'), 'full_present_day': params.get('full_present_day'),
+        'half_present_day': params.get('half_present_day'), 'half_multiplier': params.get('half_multiplier'),
+        'early_late_attendance_day': params.get('early_late_attendance_day'),
+        'early_late_multiplier': params.get('early_late_multiplier'), 'total_ot_hours': params.get('total_ot_hours'),
+        'paid': False
+    }
+    if params.get('id'):
+        voucher = AttendanceVoucher.objects.get(id=params.get('id'))
+    else:
+        voucher = AttendanceVoucher()
+    voucher = save_model(voucher, values)
+    voucher.save()
+    dct['id'] = voucher.id
+    if params.get('continue'):
+        dct = {'redirect_to': str(reverse_lazy('create_attendance_voucher'))}
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+@login_required
+def delete_attendance_voucher(request, id):
+    obj = get_object_or_404(AttendanceVoucher, id=id, company=request.company)
+    obj.delete()
+    return redirect(reverse_lazy('list_attendance_voucher'))
+
