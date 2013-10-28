@@ -63,7 +63,7 @@ function PurchaseVoucherViewModel(data) {
     self.tax = ko.observable(data['tax']);
 
     self.message = ko.observable('');
-    self.status = ko.observable('standby');
+    self.state = ko.observable('standby');
 
     self.party_address = ko.observable('');
 
@@ -146,7 +146,7 @@ function PurchaseVoucherViewModel(data) {
     self.validate = function () {
         if (!self.party) {
             self.message('"From" field is required!');
-            self.status('error');
+            self.state('error');
             return false;
         }
         return true;

@@ -30,7 +30,7 @@ function FixedAssetVM(data) {
 
     self.id = ko.observable('hey');
     self.message = ko.observable();
-    self.status = ko.observable('standby');
+    self.state = ko.observable('standby');
     self.from_account = ko.observable();
     self.voucher_no = ko.observable();
     self.party_address = ko.observable();
@@ -63,7 +63,7 @@ function FixedAssetVM(data) {
     self.validate = function () {
         if (!self.from_account()) {
             self.message('"From" field is required!')
-            self.status('error');
+            self.state('error');
             return false;
         }
         return true;
@@ -84,13 +84,14 @@ function FixedAssetVM(data) {
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
                         self.message(msg.error_message);
-                        self.status('error');
+                        self.state('error');
                     }
                     else {
                         self.message('Saved!');
-                        self.status('success');
+                        self.state('success');
                         if (msg.id)
                             self.id(msg.id);
+                            self.status('Unapproved');
                         if (msg.redirect_to) {
                             window.location = msg.redirect_to;
                         }
@@ -127,11 +128,11 @@ function FixedAssetVM(data) {
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
                         self.message(msg.error_message);
-                        self.status('error');
+                        self.state('error');
                     }
                     else {
                         self.message('Approved!');
-                        self.status('success');
+                        self.state('success');
                         if (msg.id)
                             self.id(msg.id);
                     }

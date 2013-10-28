@@ -19,9 +19,9 @@ function CashReceiptVM(data) {
         }
     });
 
-    self.id = ko.observable('hey');
+    self.id = ko.observable('');
     self.message = ko.observable();
-    self.status = ko.observable('standby');
+    self.state = ko.observable('standby');
     self.party = ko.observable();
     self.receipt_on = ko.observable();
     self.party_address = ko.observable();
@@ -68,11 +68,11 @@ function CashReceiptVM(data) {
                         };
                         self.table_vm(new TableViewModel(options, CashReceiptRowVM));
                         self.message('Invoices loaded!');
-                        self.status('success');
+                        self.state('success');
                     }
                     else {
                         self.message('No pending invoices found for the customer!');
-                        self.status('error');
+                        self.state('error');
                     }
                 }
             });
@@ -95,7 +95,7 @@ function CashReceiptVM(data) {
     self.validate = function () {
         if (!self.party()) {
             self.message('"Party" field is required!')
-            self.status('error');
+            self.state('error');
             return false;
         }
         return true;
@@ -116,11 +116,11 @@ function CashReceiptVM(data) {
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
                         self.message(msg.error_message);
-                        self.status('error');
+                        self.state('error');
                     }
                     else {
                         self.message('Saved!');
-                        self.status('success');
+                        self.state('success');
                         if (msg.id)
                             self.id(msg.id);
                         if (msg.redirect_to) {
@@ -146,11 +146,11 @@ function CashReceiptVM(data) {
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
                         self.message(msg.error_message);
-                        self.status('error');
+                        self.state('error');
                     }
                     else {
                         self.message('Approved!');
-                        self.status('success');
+                        self.state('success');
                         if (msg.id)
                             self.id(msg.id);
                     }

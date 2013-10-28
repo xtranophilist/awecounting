@@ -295,7 +295,7 @@ function TableViewModel(options, row_model) {
     }
 
     self.message = ko.observable();
-    self.status = ko.observable('standby');
+    self.state = ko.observable('standby');
 
     if (typeof row_model != 'undefined') {
         self.rows = ko.observableArray(ko.utils.arrayMap(options.rows, function (item) {
@@ -353,7 +353,7 @@ function TableViewModel(options, row_model) {
 
     if (typeof(options.save_to_url) != 'undefined') {
         self.save = function (model, e) {
-            self.status('waiting');
+            self.state('waiting');
             var el = get_target(e);
             $.ajax({
                 type: "POST",
@@ -364,12 +364,12 @@ function TableViewModel(options, row_model) {
                     if (typeof(options.onSaveSuccess) != 'undefined') {
                         options.onSaveSuccess(msg, self.rows());
                     }
-                    self.status('success');
+                    self.state('success');
                     self.deleted_rows = [];
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     self.message('Saving Failed!');
-                    self.status('error');
+                    self.state('error');
                 }
             });
         }
