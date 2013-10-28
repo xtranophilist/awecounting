@@ -24,7 +24,7 @@
 {% block content %}
 
     <div data-bind="with: payroll_entry">
-        <div><h2 data-bind="css: status()">{{ scenario }} Payroll Entry</h2>
+        <div><h2 data-bind="css: state()">{{ scenario }} Payroll Entry</h2>
             <span data-bind="text: message()"></span>
 
         </div>

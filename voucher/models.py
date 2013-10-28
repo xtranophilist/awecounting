@@ -177,6 +177,8 @@ class FixedAsset(models.Model):
     reference = models.CharField(max_length=50, null=True, blank=True)
     description = models.TextField()
     company = models.ForeignKey(Company)
+    statuses = [('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
+    status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
 
 
 class FixedAssetRow(models.Model):

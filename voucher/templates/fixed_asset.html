@@ -23,10 +23,11 @@
 
 {% block content %}
 
+
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-        <span data-bind="text: message(), css: status()"></span>
+        <span data-bind="text: message(), css: state()"></span>
 
         <div class="row-fluid">
 
@@ -151,14 +152,13 @@
         <div>
 
             {% if scenario == 'Update' %}
+{#                TODO#}
                 {#                    <a class="btn delete-warn" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>#}
             {% endif %}
             <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
             {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
-                {% if data.status == 'Unapproved' %}
                     <input class="btn" type="submit" value="Approve"
-                           data-bind="click: $root.approve, visible: $root.id">
-                {% endif %}
+                           data-bind="click: $root.approve, visible: $root.id && $root.status() == 'Unapproved'">
             {% endifusergroup %}
 
             <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save"

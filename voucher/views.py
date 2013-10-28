@@ -572,6 +572,8 @@ def approve_cash_payment(request):
                          ['dr', cash_account, params.get('amount')],
                          ['cr', Party.objects.get(id=params.get('party')).customer_account, params.get('amount')]
         )
+    voucher.status = 'Approved'
+    voucher.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
@@ -636,10 +638,27 @@ def save_fixed_asset(request):
             submodel = save_model(submodel, values)
         dct['rows2'][index] = submodel.id
     delete_rows(params.get('additional_details').get('deleted_rows'), model)
+    voucher.status = 'Unapproved'
+    if params.get('continue'):
+        dct = {'redirect_to': str(reverse_lazy('create_fixed_asset'))}
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
 @login_required
 def approve_fixed_asset(request):
-    pass
+    params = json.loads(request.body)
+    dct = {}
+    if params.get('id'):
+        voucher = FixedAsset.objects.get(id=params.get('id'))
+    else:
+        dct['error_message'] = 'Voucher needs to be saved before being approved!'
+        return HttpResponse(json.dumps(dct), mimetype="application/json")
+    from_account = Account.objects.get(id=params.get('from_account'))
+    for row in voucher.rows.all():
+        set_transactions(row, params.get('date'),
+                         ['dr', row.asset_ledger, row.amount],
+                         ['cr', from_account, row.amount])
+    voucher.status = 'Approved'
+    voucher.save()
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
 
