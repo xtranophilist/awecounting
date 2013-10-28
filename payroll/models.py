@@ -27,3 +27,27 @@ class EntryRow(models.Model):
 
     def get_absolute_url(self):
         return self.entry.get_absolute_url()
+
+
+class Employee(models.Model):
+    name = models.CharField(max_length=254)
+    address = models.TextField(null=True, blank=True)
+    tax_id = models.CharField(max_length=100, null=True, blank=True)
+    designation = models.CharField(max_length=100, null=True, blank=True)
+    account = models.OneToOneField(Account)
+    company = models.ForeignKey(Company)
+
+    def save(self, *args, **kwargs):
+        if self.pk is None:
+            dummy_account = Account.objects.all()[:1][0]
+            self.account = dummy_account
+            super(Employee, self).save(*args, **kwargs)
+            account = Account(code='13-0001-' + str(self.id), name=self.name)
+            account.company = self.company
+            account.add_category('Indirect Expenses')
+            account.save()
+            self.account = account
+        super(Employee, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name

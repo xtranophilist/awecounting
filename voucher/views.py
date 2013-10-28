@@ -661,4 +661,3 @@ def approve_fixed_asset(request):
     voucher.status = 'Approved'
     voucher.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
-

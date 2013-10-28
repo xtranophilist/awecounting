@@ -1,13 +1,15 @@
 import json
+from django.core.urlresolvers import reverse_lazy
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
-from payroll.models import Entry, EntryRow
+from payroll.models import Entry, EntryRow, Employee
 from payroll.serializers import EntrySerializer
 from acubor.lib import save_model, invalid
 from ledger.models import delete_rows, set_transactions, Account
+from payroll.forms import EmployeeForm
 
 
 @login_required
@@ -76,3 +78,51 @@ def save_entry(request):
     delete_rows(params.get('deleted_rows'), model)
 
     return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+@login_required
+def list_employees(request):
+    pass
+
+
+@login_required
+def employee_form(request, id=None):
+    if id:
+        obj = get_object_or_404(Employee, id=id, company=request.company)
+        scenario = 'Update'
+    else:
+        obj = Employee(company=request.company)
+        scenario = 'Create'
+    if request.POST:
+        form = EmployeeForm(data=request.POST, instance=obj)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.company = request.company
+            obj.save()
+            #if request.is_ajax():
+            #    return render(request, 'callback.html', {'obj': TaxSchemeSerializer(obj).data})
+            return redirect(reverse_lazy('list_employees'))
+    else:
+        form = EmployeeForm(instance=obj)
+    if request.is_ajax():
+        base_template = 'modal.html'
+    else:
+        base_template = 'dashboard.html'
+    return render(request, 'employee_form.html', {
+        'scenario': scenario,
+        'form': form,
+        'base_template': base_template,
+    })
+
+
+@login_required
+def list_employees(request):
+    objs = Employee.objects.filter(company=request.company)
+    return render(request, 'list_employees.html', {'objects': objs})
+
+
+@login_required
+def delete_employee(request, id):
+    obj = get_object_or_404(Employee, id=id, company=request.company)
+    obj.delete()
+    return redirect(reverse_lazy('list_employees'))
