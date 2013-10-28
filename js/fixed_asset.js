@@ -28,7 +28,7 @@ function FixedAssetVM(data) {
         }
     });
 
-    self.id = ko.observable('hey');
+    self.id = ko.observable('');
     self.message = ko.observable();
     self.state = ko.observable('standby');
     self.from_account = ko.observable();
