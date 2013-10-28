@@ -16,15 +16,16 @@
 
     <form method="post">
         {% csrf_token %}
-
+        <p>
         <label for="full-name">Full Name</label>
         <input name="full_name" id="full-name" value="{{ request.user.full_name }}">
-
+        </p>
+        <p>
         <label for="full-name">E-mail</label>
         <input name="email" id="email" value="{{ request.user.email }}">
-
+        </p>
         <h3>Roles:</h3>
-        <table class="table-bordered">
+        <table class="table table-bordered">
             <thead>
             <th>Company</th>
             <th>Role</th>
