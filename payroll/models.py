@@ -51,3 +51,19 @@ class Employee(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class AttendanceVoucher(models.Model):
+    voucher_no = models.CharField(max_length=50)
+    date = models.DateField()
+    employee = models.ForeignKey(Employee)
+    from_date = models.DateField()
+    to_date = models.DateField()
+    total_working_days = models.FloatField()
+    full_present_day = models.FloatField()
+    half_present_day = models.FloatField()
+    half_multiplier = models.FloatField(default=0.5)
+    early_late_attendance_day = models.FloatField()
+    early_late_multiplier = models.FloatField(default=1)
+    total_ot_hours = models.FloatField()
+    paid = models.BooleanField()
