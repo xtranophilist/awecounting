@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 import json
 from django.core.urlresolvers import reverse_lazy
 
@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
-from payroll.models import Entry, EntryRow, Employee, AttendanceVoucher, WorkTimeVoucher
+from payroll.models import Entry, EntryRow, Employee, AttendanceVoucher, WorkTimeVoucher, WorkTimeVoucherRow, WorkDay
 from payroll.serializers import EntrySerializer, AttendanceVoucherSerializer, EmployeeSerializer, WorkTimeVoucherSerializer
 from acubor.lib import save_model, invalid
 from ledger.models import delete_rows, set_transactions, Account
@@ -194,25 +194,40 @@ def work_time_voucher(request, id=None):
 @login_required
 def save_work_time_voucher(request):
     params = json.loads(request.body)
-    dct = {}
+    #import pprint
+    #pp = pprint.PrettyPrinter(indent=4)
+    #pp.pprint(params)
+    #import pdb
+    #pdb.set_trace()
+    dct = {'rows': {}}
     values = {
         'company': request.company, 'voucher_no': params.get('voucher_no'), 'date': params.get('date'),
-        'employee_id': params.get('employee'), 'from_date': params.get('from_date'), 'to_date': params.get('to_date'),
-        'total_working_days': params.get('total_working_days'), 'full_present_day': params.get('full_present_day'),
-        'half_present_day': params.get('half_present_day'), 'half_multiplier': params.get('half_multiplier'),
-        'early_late_attendance_day': params.get('early_late_attendance_day'),
-        'early_late_multiplier': params.get('early_late_multiplier'), 'total_ot_hours': params.get('total_ot_hours'),
-        'paid': False
-    }
+        'from_date': params.get('from_date'), 'to_date': params.get('to_date')}
     if params.get('id'):
         voucher = WorkTimeVoucher.objects.get(id=params.get('id'))
     else:
-        voucher = AttendanceVoucher()
+        voucher = WorkTimeVoucher()
     voucher = save_model(voucher, values)
-    voucher.save()
     dct['id'] = voucher.id
+    model = WorkTimeVoucherRow
+    umodel = WorkDay
+    for index, row in enumerate(params.get('rows')):
+        values = {'employee_id': row.get('employee'), 'work_time_voucher': voucher}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct['rows'][index] = submodel.id
+        for i, r in enumerate(row.get('work_days')):
+            day = datetime.strptime(r.get('day').get('date'), "%a, %d %b %Y %H:%M:%S %Z")
+            values = {'in_time': r.get('in_time'), 'out_time': r.get('out_time'), 'day': day,
+                      'work_time_voucher_row': submodel}
+            print values
+            ubersubmodel, created = umodel.objects.get_or_create(id=row.get('id'), defaults=values)
+            if not created:
+                ubersubmodel = save_model(umodel, values)
+    delete_rows(params.get('rows'), model)
     if params.get('continue'):
-        dct = {'redirect_to': str(reverse_lazy('create_attendance_voucher'))}
+        dct = {'redirect_to': str(reverse_lazy('create_work_time_voucher'))}
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
