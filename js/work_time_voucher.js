@@ -55,14 +55,42 @@ function WorkTimeVoucherVM(data) {
         self.rows.push(new WorkTimeVoucherRowVM({}, self.days()));
     };
 
+    self.save = function (item, event) {
+        if (get_form(event).checkValidity()) {
+            $.ajax({
+                type: "POST",
+                url: '/payroll/attendance-voucher/save/',
+                data: ko.toJSON(self),
+                success: function (msg) {
+                    if (typeof (msg.error_message) != 'undefined') {
+                        $('#message').html(msg.error_message);
+                    }
+                    else {
+                        $('#message').html('Saved!');
+                        if (msg.id)
+                            self.id = msg.id;
+                        $("#particulars-body > tr").each(function (i) {
+                            $($("#particulars-body > tr")[i]).addClass('invalid-row');
+                        });
+                        for (var i in msg.rows) {
+                            self.particulars.rows()[i].id = msg.rows[i];
+                            $($("#particulars-body > tr")[i]).removeClass('invalid-row');
+                        }
+                    }
+                }
+            });
+        }
+        else
+            return true;
+    }
+
+
 }
 
 function WorkTimeVoucherRowVM(data, days) {
     var self = this;
 
-    console.log(data);
-
-    self.employee = ko.observable('6');
+    self.employee = ko.observable();
     self.work_days = ko.observableArray();
 
     for (var k in data) {
@@ -76,26 +104,24 @@ function WorkTimeVoucherRowVM(data, days) {
     }
 }
 
+function WorkDayVM(data, day) {
+    var self = this;
+
+    self.in_time = ko.observable();
+    self.out_time = ko.observable();
+
+    for (var k in data) {
+        if (data[k])
+            self[k] = ko.observable(data[k]);
+    }
+
+    self.day = day;
+}
+
 function DateM(date) {
     var self = this;
 
     self.weekday = get_weekday(date);
-    self.date = date.toString();
+    self.date = date.toUTCString();
 
 }
-
-function WorkDayVM(data, day) {
-    var self = this;
-
-    self.in_time = ko.observable('20');
-    self.out_time = ko.observable('25');
-
-    self.day = day;
-
-
-//    for (var k in data) {
-//        if (data[k])
-//            self[k] = ko.observable(data[k]);
-//    }
-}
-
