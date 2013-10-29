@@ -23,7 +23,7 @@
 
 {% block content %}
 
-    {{ data }}
+    {{ data|jsonify }}
 
     <form method="post">
         {% csrf_token %}
@@ -96,7 +96,7 @@
 
 
         {% if scenario == 'Update' %}
-            <a class="btn delete-warn" href="{% url 'delete_attendance_vouchers' data.id %}">Delete</a>
+{#            <a class="btn delete-warn" href="{% url 'delete_attendance_vouchers' data.id %}">Delete</a>#}
         {% endif %}
         <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
         <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save"

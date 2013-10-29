@@ -82,11 +82,11 @@ class WorkTimeVoucher(models.Model):
 
 class WorkTimeVoucherRow(models.Model):
     employee = models.ForeignKey(Employee)
-    work_time_voucher = models.ForeignKey(WorkTimeVoucher)
+    work_time_voucher = models.ForeignKey(WorkTimeVoucher, related_name='rows')
 
 
 class WorkDay(models.Model):
     in_time = models.TimeField()
     out_time = models.TimeField()
-    work_time_voucher_row = models.ForeignKey(WorkTimeVoucherRow)
+    work_time_voucher_row = models.ForeignKey(WorkTimeVoucherRow, related_name='work_days')
     day = models.DateField()

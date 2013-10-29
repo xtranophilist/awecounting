@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from payroll.models import Entry, EntryRow, AttendanceVoucher, Employee, WorkTimeVoucher
+from payroll.models import Entry, EntryRow, AttendanceVoucher, Employee, WorkTimeVoucher, WorkTimeVoucherRow, WorkDay
 
 
 class EntryRowSerializer(serializers.ModelSerializer):
@@ -31,7 +31,23 @@ class AttendanceVoucherSerializer(serializers.ModelSerializer):
         exclude = ['company']
 
 
+class WorkDaySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = WorkDay
+        exclude = ['work_time_voucher_row']
+
+
+class WorkTimeVoucherRowSerializer(serializers.ModelSerializer):
+    work_days = WorkDaySerializer()
+
+    class Meta:
+        model = WorkTimeVoucherRow
+        exclude = ['work_time_voucher']
+
+
 class WorkTimeVoucherSerializer(serializers.ModelSerializer):
+    rows = WorkTimeVoucherRowSerializer()
+
     class Meta:
         model = WorkTimeVoucher
         exclude = ['company']
