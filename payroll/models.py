@@ -70,3 +70,23 @@ class AttendanceVoucher(models.Model):
     #statuses = [('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
     #status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
     company = models.ForeignKey(Company)
+
+
+class WorkTimeVoucher(models.Model):
+    voucher_no = models.CharField(max_length=50)
+    date = models.DateField()
+    from_date = models.DateField()
+    to_date = models.DateField()
+    company = models.ForeignKey(Company)
+
+
+class WorkTimeVoucherRow(models.Model):
+    employee = models.ForeignKey(Employee)
+    work_time_voucher = models.ForeignKey(WorkTimeVoucher)
+
+
+class WorkDay(models.Model):
+    in_time = models.TimeField()
+    out_time = models.TimeField()
+    work_time_voucher_row = models.ForeignKey(WorkTimeVoucherRow)
+    day = models.DateField()

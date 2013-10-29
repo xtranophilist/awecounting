@@ -1,0 +1,112 @@
+{% extends "dashboard.html" %}
+
+{% block title %}{{ scenario }} Attendance Voucher{% endblock %}
+
+{% block breadcrumbs %}
+    {{ block.super }}
+    <li><a href="{% url "create_attendance_voucher" %}"> Attendance Voucher</a></li>
+{% endblock %}
+{% load filters %}
+{% block extra-head %}
+    <script src="{{ STATIC_URL }}js/vendors/knockout.js"></script>
+    <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
+    <script src="{{ STATIC_URL }}js/work_time_voucher.js"></script>
+    <script>
+        ko_data =
+        {{ data|jsonify }}
+    </script>
+{% endblock %}
+
+{% block pageheader %}
+    {{ scenario }} Attendance Voucher
+{% endblock %}
+
+{% block content %}
+
+    {{ data }}
+
+    <form method="post">
+        {% csrf_token %}
+
+        <span data-bind="text: message(), css: state()"></span>
+
+        <div class="row-fluid">
+            <span class="span2">
+                Voucher No.
+            </span>
+            <span class="span3">
+                <input type="text" data-bind="value: voucher_no" required>
+            </span>
+            <span class="span2">
+                Voucher Date
+                </span>
+            <span class="span3">
+                <input type="text" data-bind="value: date" class="date-picker"
+                       data-date-format="yyyy-mm-dd" required>
+                </span>
+        </div>
+
+        <div class="row-fluid">
+            <span class="span8">
+                From : <input type="text" data-bind="value: from_date, event: {change: $root.date_changed}"
+                              class="date-picker" data-date-format="yyyy-mm-dd" required>
+            </span>
+            <span class="span4">
+                To : <input type="text" data-bind="value: to_date, event: {change: $root.date_changed}"
+                            class="date-picker" data-date-format="yyyy-mm-dd" required>
+            </span>
+        </div>
+
+        <table class="table table-bordered table-striped table-sortable">
+            <thead>
+            <tr>
+                <td rowspan="2">Employee</td>
+                <!-- ko foreach:days -->
+                <td colspan="3" data-bind="text: date"></td>
+                <!-- /ko -->
+            </tr>
+            <tr>
+                <!-- ko foreach:days -->
+                <td>In</td>
+                <td>Out</td>
+                <td>W. Time</td>
+                <!-- /ko -->
+            </tr>
+            </thead>
+            <tbody>
+            <!-- ko foreach: rows -->
+            <tr>
+                <td>
+                    <input type="hidden"
+                           data-bind="value: employee, select2: {data: {results: $root.employees}}, lookupKey: 'id'">
+                </td>
+                <!-- ko foreach: work_days -->
+                <td data-bind="editableText: in_time"></td>
+                <td data-bind="editableText: out_time"></td>
+                <td></td>
+                <!-- /ko -->
+            </tr>
+            <!-- /ko -->
+            </tbody>
+        </table>
+
+        <button class="btn" data-bind="click: $root.add_row">
+            <i class="icon-plus-sign"></i> Add New Row
+        </button>
+
+
+        {% if scenario == 'Update' %}
+            <a class="btn delete-warn" href="{% url 'delete_attendance_vouchers' data.id %}">Delete</a>
+        {% endif %}
+        <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
+        <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save"
+               data-continue="true">
+
+
+        </div>
+
+
+    </form>
+
+
+{% endblock %}
