@@ -81,9 +81,9 @@
                            data-bind="value: employee, select2: {data: {results: $root.employees}}, lookupKey: 'id'">
                 </td>
                 <!-- ko foreach: work_days -->
-                <td data-bind="editableText: in_time"></td>
-                <td data-bind="editableText: out_time"></td>
-                <td></td>
+                <td><input type="text" data-bind="value: in_time"></td>
+                <td><input type="text" data-bind="value: out_time"></td>
+                <td><input type="text" data-bind="value: work_time" disabled></td>
                 <!-- /ko -->
             </tr>
             <!-- /ko -->
@@ -96,7 +96,7 @@
 
 
         {% if scenario == 'Update' %}
-{#            <a class="btn delete-warn" href="{% url 'delete_attendance_vouchers' data.id %}">Delete</a>#}
+            {#            <a class="btn delete-warn" href="{% url 'delete_attendance_vouchers' data.id %}">Delete</a>#}
         {% endif %}
         <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
         <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save"

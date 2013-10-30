@@ -32,6 +32,9 @@ class AttendanceVoucherSerializer(serializers.ModelSerializer):
 
 
 class WorkDaySerializer(serializers.ModelSerializer):
+    in_time = serializers.Field(source='get_in_time')
+    out_time = serializers.Field(source='get_out_time')
+
     class Meta:
         model = WorkDay
         exclude = ['work_time_voucher_row']
@@ -51,3 +54,4 @@ class WorkTimeVoucherSerializer(serializers.ModelSerializer):
     class Meta:
         model = WorkTimeVoucher
         exclude = ['company']
+
