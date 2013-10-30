@@ -90,3 +90,15 @@ class WorkDay(models.Model):
     out_time = models.TimeField()
     work_time_voucher_row = models.ForeignKey(WorkTimeVoucherRow, related_name='work_days')
     day = models.DateField()
+
+    def get_in_time(self):
+        hms = str(self.in_time)
+        pieces = hms.split(':')
+        hm = pieces[0] + ':' + pieces[1]
+        return hm
+
+    def get_out_time(self):
+        hms = str(self.out_time)
+        pieces = hms.split(':')
+        hm = pieces[0] + ':' + pieces[1]
+        return hm
