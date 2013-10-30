@@ -95,10 +95,11 @@ function WorkTimeVoucherRowVM(data, days) {
     self.employee = ko.observable();
     self.work_days = ko.observableArray();
 
-    for (var k in data) {
-        if (data[k])
-            self[k] = ko.observable(data[k]);
-    }
+    if (data.employee)
+        self.employee = ko.observable(data.employee);
+
+    if (data.id)
+        self.id = ko.observable(data.id);
 
     for (var k in days) {
         var day = days[k];
