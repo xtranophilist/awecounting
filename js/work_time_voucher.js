@@ -40,12 +40,15 @@ function WorkTimeVoucherVM(data) {
             return;
         var date = new Date(self.from_date());
         while (date <= new Date(self.to_date())) {
-            self.days.push(new DateM(date));
+            var new_date = new DateM(date);
+            var match = $.grep(self.days(), function (i) {
+                return i.yyyy_mm_dd() == new_date.yyyy_mm_dd();
+            })[0];
+            if (!match)
+                self.days.push(new_date);
             date.setDate(date.getDate() + 1);
         }
-//        self.rows = ko.observableArray(ko.utils.arrayMap(self.rows(), function (item) {
-//            return new WorkTimeVoucherRowVM({}, self.days());
-//        }));
+
     }
 
     self.date_changed();
