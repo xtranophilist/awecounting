@@ -405,5 +405,10 @@ function get_weekday(date) {
     weekday[4] = "Friday";
     weekday[5] = "Saturday";
     weekday[6] = "Sunday";
-    return weekday[date.getDay()-1];
+    return weekday[date.getDay() - 1];
+}
+
+function hms_to_s(t) { // h:m:s
+    var a = t.split(/\D+/);
+    return (a[0] * 60 + +a[1]) * 60 + +a[2]
 }
