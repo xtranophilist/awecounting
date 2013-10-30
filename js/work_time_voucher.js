@@ -38,15 +38,38 @@ function WorkTimeVoucherVM(data) {
     self.date_changed = function () {
         if (!self.from_date() || !self.to_date())
             return;
-        var date = new Date(self.from_date());
-        while (date <= new Date(self.to_date())) {
-            var new_date = new DateM(date);
+        var the_date = new Date(self.from_date());
+        while (the_date <= new Date(self.to_date())) {
+            var new_date = new DateM(the_date);
             var match = $.grep(self.days(), function (i) {
                 return i.yyyy_mm_dd() == new_date.yyyy_mm_dd();
             })[0];
-            if (!match)
+            if (!match) {
                 self.days.push(new_date);
-            date.setDate(date.getDate() + 1);
+                for (var i = 0; i < self.rows().length; i++) {
+                    var row = self.rows()[i];
+                    row.work_days.push(new WorkDayVM({}, new_date))
+                }
+            }
+            the_date.setDate(the_date.getDate() + 1);
+        }
+        for (var i = 0; i < self.days().length; i++) {
+            var day = self.days()[i];
+            var date1 = new Date(day.yyyy_mm_dd());
+            if (date1 < new Date(self.from_date()) || date1 > new Date(self.to_date())) {
+                self.days.remove(day);
+                for (var j = 0; j < self.rows().length; j++) {
+                    var row = self.rows()[j];
+                    for (var k = 0; k < row.work_days().length; k++) {
+                        var work_day = row.work_days()[k];
+                        var work_date = new Date(work_day.day.date_string);
+                        if (date1.getTime() == work_date.getTime()) {
+                            row.work_days.remove(work_day);
+                        }
+                    }
+                }
+
+            }
         }
 
     }
@@ -146,7 +169,6 @@ function WorkDayVM(data, day) {
         if (diff_hour < 0)
             diff_hour += 24;
         return diff_hour + ':' + (out_minute - in_minute);
-//        return '12:10';
     }, this);
 
 
@@ -156,21 +178,20 @@ function WorkDayVM(data, day) {
 function DateM(date) {
     var self = this;
 
+    self.date = date;
     self.weekday = get_weekday(date);
     self.date_string = date.toUTCString();
-    self.date = date.getDate();
+    self.day = date.getDate();
     self.month = date.getMonth() + 1; //Months are zero based
     self.year = date.getFullYear();
 
     self.yyyy_mm_dd = function () {
         var month = self.month;
-        var date = self.date;
+        var day = self.day;
         if (month < 10)
             month = '0' + month;
-        if (date < 10)
-            date = '0' + date;
-        return self.year + '-' + month + '-' + date;
+        if (day < 10)
+            day = '0' + day;
+        return self.year + '-' + month + '-' + day;
     }
-
-
 }
