@@ -51,6 +51,8 @@ function WorkTimeVoucherVM(data) {
 //        }));
     }
 
+    self.date_changed();
+
     self.add_row = function () {
         self.rows.push(new WorkTimeVoucherRowVM({}, self.days()));
     };
