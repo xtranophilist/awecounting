@@ -597,8 +597,9 @@ td .select2-container {
 .table td input[type="text"]{
     border: 0;
     width: 94%;
-    display: block;
+    /*display: block;*/
     margin: 0;
+    background: transparent;
 }
 input.date-picker{
     background: transparent url(../images/calendar.png) center right no-repeat;
