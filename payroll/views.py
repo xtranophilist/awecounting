@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date
 import json
 from django.core.urlresolvers import reverse_lazy
 
@@ -216,16 +216,16 @@ def save_work_time_voucher(request):
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
-        dct['rows'][index] = submodel.id
+        dct['rows'][index] = {'id': submodel.id, 'days': {}}
         for i, r in enumerate(row.get('work_days')):
-            day = datetime.strptime(r.get('day').get('date'), "%a, %d %b %Y %H:%M:%S %Z")
-            values = {'in_time': r.get('in_time'), 'out_time': r.get('out_time'), 'day': day,
+            values = {'in_time': r.get('in_time'), 'out_time': r.get('out_time'), 'day': r.get('day'),
                       'work_time_voucher_row': submodel}
             print values
-            ubersubmodel, created = umodel.objects.get_or_create(id=row.get('id'), defaults=values)
+            ubersubmodel, created = umodel.objects.get_or_create(id=r.get('id'), defaults=values)
             if not created:
-                ubersubmodel = save_model(umodel, values)
-    delete_rows(params.get('rows'), model)
+                ubersubmodel = save_model(ubersubmodel, values)
+            dct['rows'][index]['days'][i] = ubersubmodel.id
+            #delete_rows(params.get('rows'), model)
     if params.get('continue'):
         dct = {'redirect_to': str(reverse_lazy('create_work_time_voucher'))}
     return HttpResponse(json.dumps(dct), mimetype="application/json")
