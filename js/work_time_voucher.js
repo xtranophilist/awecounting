@@ -34,9 +34,6 @@ function WorkTimeVoucherVM(data) {
             self[k] = ko.observable(data[k]);
     }
 
-    self.rows = ko.observableArray(ko.utils.arrayMap(self.rows, function (item) {
-        return new WorkTimeVoucherRowVM(item, self.days());
-    }));
 
     self.date_changed = function () {
         if (!self.from_date() || !self.to_date())
@@ -52,6 +49,10 @@ function WorkTimeVoucherVM(data) {
     }
 
     self.date_changed();
+
+    self.rows = ko.observableArray(ko.utils.arrayMap(self.rows(), function (item) {
+        return new WorkTimeVoucherRowVM(item, self.days());
+    }));
 
     self.add_row = function () {
         self.rows.push(new WorkTimeVoucherRowVM({}, self.days()));
@@ -91,9 +92,8 @@ function WorkTimeVoucherVM(data) {
 
 function WorkTimeVoucherRowVM(data, days) {
     var self = this;
-
-    self.employee = ko.observable();
     self.work_days = ko.observableArray();
+    self.employee = ko.observable();
 
     if (data.employee)
         self.employee = ko.observable(data.employee);
@@ -103,7 +103,15 @@ function WorkTimeVoucherRowVM(data, days) {
 
     for (var k in days) {
         var day = days[k];
-        self.work_days().push(new WorkDayVM({}, day))
+        if (data.work_days) {
+            var selected_item = $.grep(data.work_days, function (i) {
+                return i.day == day.yyyy_mm_dd();
+            })[0];
+            if (selected_item)
+                self.work_days().push(new WorkDayVM(selected_item, day))
+        }
+        else
+            self.work_days().push(new WorkDayVM({}, day))
     }
 }
 
@@ -146,6 +154,20 @@ function DateM(date) {
     var self = this;
 
     self.weekday = get_weekday(date);
-    self.date = date.toUTCString();
+    self.date_string = date.toUTCString();
+    self.date = date.getDate();
+    self.month = date.getMonth() + 1; //Months are zero based
+    self.year = date.getFullYear();
+
+    self.yyyy_mm_dd = function () {
+        var month = self.month;
+        var date = self.date;
+        if (month < 10)
+            month = '0' + month;
+        if (date < 10)
+            date = '0' + date;
+        return self.year + '-' + month + '-' + date;
+    }
+
 
 }
