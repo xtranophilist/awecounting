@@ -115,6 +115,27 @@ function WorkDayVM(data, day) {
             self[k] = ko.observable(data[k]);
     }
 
+    self.work_time = ko.computed(function () {
+        var in_time = self.in_time();
+        var out_time = self.out_time();
+        if (!in_time || !out_time)
+            return;
+        var in_hour = parseInt(in_time.split(':')[0]);
+        var in_minute = parseInt(in_time.split(':')[1]);
+        var out_hour = parseInt(out_time.split(':')[0]);
+        var out_minute = parseInt(out_time.split(':')[1]);
+        if (out_minute < in_minute) {
+            out_minute += 60;
+            out_hour -= 1;
+        }
+        var diff_hour = out_hour - in_hour;
+        if (diff_hour < 0)
+            diff_hour += 24;
+        return diff_hour + ':' + (out_minute - in_minute);
+//        return '12:10';
+    }, this);
+
+
     self.day = day;
 }
 
