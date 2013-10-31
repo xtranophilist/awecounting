@@ -89,7 +89,7 @@
                     <th></th>
                 </tr>
                 </thead>
-                <tbody id="table-body">
+                <tbody id="table-body-inclusions">
                 <!-- ko foreach:rows -->
                 <tr>
                     <td>
@@ -104,7 +104,7 @@
                     </td>
                 </tr>
                 <!-- /ko -->
-                <tr>
+                <tr class="dont-validate">
                     <td><b>TOTAL</b></td>
                     <td data-bind="text: get_total('amount')"></td>
                     <td></td>
@@ -126,7 +126,7 @@
                     <th></th>
                 </tr>
                 </thead>
-                <tbody id="table-body">
+                <tbody id="table-body-deductions">
                 <!-- ko foreach:rows -->
                 <tr>
                     <td>
@@ -141,7 +141,7 @@
                     </td>
                 </tr>
                 <!-- /ko -->
-                <tr>
+                <tr class="dont-validate">
                     <td><b>TOTAL</b></td>
                     <td data-bind="text: get_total('amount')"></td>
                     <td></td>
