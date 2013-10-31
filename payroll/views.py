@@ -219,14 +219,15 @@ def save_work_time_voucher(request):
         if not created:
             submodel = save_model(submodel, values)
         dct['rows'][index] = {'id': submodel.id, 'days': {}}
+        #deletion of work days not falling in range
         for work_day in submodel.work_days.all():
             from_date = datetime.strptime(params.get('from_date'), "%Y-%m-%d").date()
-            to_date = datetime.strptime(params.get('from_date'), "%Y-%m-%d").date()
+            to_date = datetime.strptime(params.get('to_date'), "%Y-%m-%d").date()
             if work_day.day < from_date or work_day.day > to_date:
                 work_day.delete()
         for i, r in enumerate(row.get('work_days')):
             if invalid(r, ['in_time', 'out_time']):
-                submodel.delete()
+                #submodel.delete()
                 del dct['rows'][index]
                 break
             values = {'in_time': r.get('in_time'), 'out_time': r.get('out_time'), 'day': r.get('day').get('yyyy_mm_dd'),
@@ -236,9 +237,11 @@ def save_work_time_voucher(request):
                 if not created:
                     ubersubmodel = save_model(ubersubmodel, values)
             except Exception as e:
-                dct['error_message'] = str(e)
-                dct['culprit_row'] = index
-                dct['culprit_work_day'] = i
+                #dct['error_message'] = str(e)
+                #dct['culprit_row'] = index
+                #dct['culprit_work_day'] = i
+                del dct['rows'][index]
+                break
             dct['rows'][index]['days'][i] = ubersubmodel.id
     delete_rows(params.get('deleted_rows'), model)
     if params.get('continue'):
