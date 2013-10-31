@@ -213,6 +213,7 @@ def create_default(company):
     Account(name='Repairs and Maintenance Expenses', category=indirect_expenses, code='13-0012', company=company).save()
 
     pay_head = Category(name='Pay Head', parent=indirect_expenses, company=company)
+    pay_head.save()
     Account(name='Salary', category=pay_head, code='13-0013', company=company).save()
     Account(name='Allowances', category=pay_head, code='13-0014', company=company).save()
     Account(name='Benefits', category=pay_head, code='13-0015', company=company).save()
