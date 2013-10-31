@@ -37,6 +37,28 @@ class Employee(models.Model):
     account = models.OneToOneField(Account)
     company = models.ForeignKey(Company)
 
+    def get_unpaid_days(self):
+        total = 0
+        attendance_vouchers = AttendanceVoucher.objects.filter(employee=self, paid=False)
+        for voucher in attendance_vouchers:
+            total += voucher.total_present_days()
+        return total
+
+    def get_unpaid_hours(self):
+        total = 0
+        work_time_voucher_rows = WorkTimeVoucherRow.objects.filter(employee=self, paid=False)
+        for row in work_time_voucher_rows:
+            for work_day in row.work_days.all():
+                total += work_day.work_minutes()
+        return round(float(total) / 60, 2)
+
+    def get_unpaid_ot_hours(self):
+        total = 0
+        attendance_vouchers = AttendanceVoucher.objects.filter(employee=self, paid=False)
+        for voucher in attendance_vouchers:
+            total += voucher.total_ot_hours
+        return total
+
     def save(self, *args, **kwargs):
         if self.pk is None:
             dummy_account = Account.objects.all()[:1][0]
@@ -71,6 +93,9 @@ class AttendanceVoucher(models.Model):
     #status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
     company = models.ForeignKey(Company)
 
+    def total_present_days(self):
+        return self.full_present_day + self.half_present_day * self.half_multiplier + self.early_late_attendance_day * self.early_late_multiplier
+
 
 class WorkTimeVoucher(models.Model):
     voucher_no = models.CharField(max_length=50)
@@ -103,6 +128,9 @@ class WorkDay(models.Model):
         pieces = hms.split(':')
         hm = pieces[0] + ':' + pieces[1]
         return hm
+
+    def work_minutes(self):
+        return (self.out_time.hour - self.in_time.hour) * 60 + self.out_time.minute - self.in_time.minute
 
 
 class GroupPayroll(models.Model):
