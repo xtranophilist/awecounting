@@ -116,7 +116,7 @@ tbody > tr > td[contenteditable="true"]:focus {
 }
 
 .wid-pad {
-    padding-top : 5px;
+    padding-top: 5px;
 }
 
 #id_invoice_no {
@@ -126,6 +126,10 @@ tbody > tr > td[contenteditable="true"]:focus {
 
 .invalid-row td {
     background: #FBE3E4 !important;
+}
+
+.dont-validate td {
+    background: transparent !important;
 }
 
 .errorlist {
@@ -559,7 +563,7 @@ td .select2-container {
     margin: 4px;
 }
 
-.select2-drop .appended-link:hover{
+.select2-drop .appended-link:hover {
     background: #2278C9;
 }
 
@@ -591,16 +595,18 @@ td .select2-container {
     color: #444444;
 }
 
-.print-only{
-    display:none;
+.print-only {
+    display: none;
 }
-.table td input[type="text"]{
+
+.table td input[type="text"] {
     border: 0;
     width: 94%;
     /*display: block;*/
     margin: 0;
     background: transparent;
 }
-input.date-picker{
+
+input.date-picker {
     background: transparent url(../images/calendar.png) center right no-repeat;
 }
