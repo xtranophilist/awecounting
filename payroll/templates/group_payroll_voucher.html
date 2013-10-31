@@ -88,6 +88,17 @@
                     </td>
                 </tr>
                 <!-- /ko -->
+                <tr>
+                    <td><b>TOTAL</b></td>
+                    <td data-bind="text: get_total('present_days')"></td>
+                    <td data-bind="text: get_total('present_hours')"></td>
+                    <td data-bind="text: get_total('present_ot_hours')"></td>
+                    <td colspan="3"></td>
+                    <td data-bind="text: get_total('amount')"></td>
+                    <td data-bind="text: get_total('payroll_tax')"></td>
+                    <td data-bind="text: get_total('net')"></td>
+                    <td colspan="2"></td>
+                </tr>
                 </tbody>
             </table>
             <button class="btn" data-bind="click: addRow">
