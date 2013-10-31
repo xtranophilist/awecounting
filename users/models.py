@@ -133,6 +133,7 @@ def create_default(company):
     Category(name='Fixed Assets', parent=assets, company=company).save()
     Category(name='Loads and Advances Given', parent=assets, company=company).save()
     Category(name='Deposits Made', parent=assets, company=company).save()
+    Category(name='Employee', parent=assets, company=company).save()
 
     liabilities = Category(name='Liabilities', company=company)
     liabilities.save()
@@ -211,12 +212,23 @@ def create_default(company):
     Account(name='Discount Expenses', category=indirect_expenses, code='13-0011', company=company).save()
     Account(name='Repairs and Maintenance Expenses', category=indirect_expenses, code='13-0012', company=company).save()
 
+    pay_head = Category(name='Pay Head', parent=indirect_expenses, company=company)
+    Account(name='Salary', category=pay_head, code='13-0013', company=company).save()
+    Account(name='Allowances', category=pay_head, code='13-0014', company=company).save()
+    Account(name='Benefits', category=pay_head, code='13-0015', company=company).save()
+    Account(name='Benefits', category=pay_head, code='13-0016', company=company).save()
+    Account(name='Employees\' Insurance', category=pay_head, code='13-0017', company=company).save()
+    Account(name='Travelling Allowance', category=pay_head, code='13-0018', company=company).save()
+    Account(name='Daily Allowance', category=pay_head, code='13-0019', company=company).save()
+
+
     opening_balance_difference = Category(name='Opening Balance Difference', company=company)
     opening_balance_difference.save()
     Account(name='Opening Balance Difference', category=opening_balance_difference, company=company,
             code='0-0001').save()
 
     from core.models import CompanySetting, VoucherSetting
+
     company_setting = CompanySetting(company=company)
     company_setting.save()
     voucher_setting = VoucherSetting(company=company)
