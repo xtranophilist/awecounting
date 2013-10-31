@@ -1,16 +1,16 @@
 {% extends "dashboard.html" %}
 
-{% block title %}{{ scenario }} Group Payroll Voucher{% endblock %}
+{% block title %}{{ scenario }} Individual Payroll Voucher{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li><a href="{% url "create_attendance_voucher" %}">Group Payroll Voucher</a></li>
+    <li><a href="{% url "create_attendance_voucher" %}">Individual Payroll Voucher</a></li>
 {% endblock %}
 {% load filters %}
 {% block extra-head %}
     <script src="{{ STATIC_URL }}js/vendors/knockout.js"></script>
     <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
-    <script src="{{ STATIC_URL }}js/group_payroll_voucher.js"></script>
+    <script src="{{ STATIC_URL }}js/individual_payroll_voucher.js"></script>
     <script>
         ko_data =
         {{ data|jsonify }}
@@ -18,15 +18,20 @@
 {% endblock %}
 
 {% block pageheader %}
-    {{ scenario }} Group Payroll Voucher
+    {{ scenario }} Individual Payroll Voucher
 {% endblock %}
 
 {% block content %}
+
+    {{ data }}
 
     <form method="post">
         {% csrf_token %}
 
         <span data-bind="text: message(), css: state()"></span>
+
+        <input type="hidden" class="change-on-ready"
+               data-bind="value: employee, select2: {data: {results: $root.employees}}, event: {change: $root.employee_changed}, lookupKey: 'id'">
 
         <div class="row-fluid">
             <span class="span6"></span>
@@ -40,47 +45,58 @@
             <span class="span4"><input type="text" data-bind="value: date" class="date-picker"
                                        data-date-format="yyyy-mm-dd" required></span>
         </div>
-        <div data-bind="with: table_vm">
+
+        <table class="table table-bordered table-striped table-sortable">
+            <thead>
+            <th>Particular</th>
+            <th>Worked</th>
+            <th>Rate</th>
+            <th>Amount</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Days</td>
+                <td data-bind="text: days_worked"></td>
+                <td data-bind="editableText: day_rate"></td>
+                <td data-bind="text: day_amount()"></td>
+            </tr>
+            <tr>
+                <td>Hours</td>
+                <td data-bind="text: hours_worked"></td>
+                <td data-bind="editableText: hour_rate"></td>
+                <td data-bind="text: hour_amount()"></td>
+            </tr>
+            <tr>
+                <td>OT Hours</td>
+                <td data-bind="text: ot_hours_worked"></td>
+                <td data-bind="editableText: ot_hour_rate"></td>
+                <td data-bind="text: ot_hour_amount()"></td>
+            </tr>
+            <tr>
+                <td colspan="3"><b>TOTAL</b></td>
+                <td data-bind="text: total()"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div data-bind="with: inclusions">
+            <h2>Inclusions</h2>
             <table class="table table-bordered table-striped table-sortable">
                 <thead>
-                <th rowspan="2">Employee</th>
-                <th colspan="3">Present</th>
-                <th colspan="3">Rate</th>
-                <th rowspan="2">Amount</th>
-                <th rowspan="2">Payroll Tax</th>
-                <th rowspan="2">Net</th>
-                <th rowspan="2">Pay Head</th>
-                <th rowspan="2"></th>
                 <tr>
-                    <th>Days</th>
-                    <th>Hours</th>
-                    <th>OT Hours</th>
-                    <th>Day</th>
-                    <th>Hour</th>
-                    <th>OT Hour</th>
+                    <th>Particular</th>
+                    <th>Amount</th>
+                    <th></th>
                 </tr>
                 </thead>
                 <tbody id="table-body">
                 <!-- ko foreach:rows -->
-
                 <tr>
                     <td>
-                        <input type="hidden" class="change-on-ready"
-                               data-bind="value: employee, select2: {data: {results: $root.employees}}, event: {change: $root.employee_changed}, lookupKey: 'id'">
-                    </td>
-                    <td data-bind="text: present_days"></td>
-                    <td data-bind="text: present_hours"></td>
-                    <td data-bind="text: present_ot_hours"></td>
-                    <td data-bind="editableText: rate_day"></td>
-                    <td data-bind="editableText: rate_hour"></td>
-                    <td data-bind="editableText: rate_ot_hour"></td>
-                    <td data-bind="text: amount()"></td>
-                    <td data-bind="editableText: payroll_tax"></td>
-                    <td data-bind="text: net()"></td>
-                    <td>
                         <input type="hidden"
-                               data-bind="value: pay_head, select2: {data: {results: $root.accounts}}, lookupKey: 'id'">
+                               data-bind="value: account, select2: {data: {results: $root.accounts}}, lookupKey: 'id'">
                     </td>
+                    <td data-bind="editableText: amount"></td>
                     <td>
                         <button class="btn-none" data-bind="click: $parent.removeRow">
                             <i class="icon-trash"></i>
@@ -90,14 +106,45 @@
                 <!-- /ko -->
                 <tr>
                     <td><b>TOTAL</b></td>
-                    <td data-bind="text: get_total('present_days')"></td>
-                    <td data-bind="text: get_total('present_hours')"></td>
-                    <td data-bind="text: get_total('present_ot_hours')"></td>
-                    <td colspan="3"></td>
                     <td data-bind="text: get_total('amount')"></td>
-                    <td data-bind="text: get_total('payroll_tax')"></td>
-                    <td data-bind="text: get_total('net')"></td>
-                    <td colspan="2"></td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+            <button class="btn" data-bind="click: addRow">
+                <i class="icon-plus-sign"></i> Add New Row
+            </button>
+        </div>
+
+        <div data-bind="with: deductions">
+            <h2>Deductions</h2>
+            <table class="table table-bordered table-striped table-sortable">
+                <thead>
+                <tr>
+                    <th>Particular</th>
+                    <th>Amount</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody id="table-body">
+                <!-- ko foreach:rows -->
+                <tr>
+                    <td>
+                        <input type="hidden"
+                               data-bind="value: account, select2: {data: {results: $root.accounts}}, lookupKey: 'id'">
+                    </td>
+                    <td data-bind="editableText: amount"></td>
+                    <td>
+                        <button class="btn-none" data-bind="click: $parent.removeRow">
+                            <i class="icon-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <!-- /ko -->
+                <tr>
+                    <td><b>TOTAL</b></td>
+                    <td data-bind="text: get_total('amount')"></td>
+                    <td></td>
                 </tr>
                 </tbody>
             </table>
