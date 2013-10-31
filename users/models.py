@@ -221,7 +221,6 @@ def create_default(company):
     Account(name='Travelling Allowance', category=pay_head, code='13-0018', company=company).save()
     Account(name='Daily Allowance', category=pay_head, code='13-0019', company=company).save()
 
-
     opening_balance_difference = Category(name='Opening Balance Difference', company=company)
     opening_balance_difference.save()
     Account(name='Opening Balance Difference', category=opening_balance_difference, company=company,

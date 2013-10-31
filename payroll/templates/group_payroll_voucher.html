@@ -23,8 +23,6 @@
 
 {% block content %}
 
-    {{ data }}
-
     <form method="post">
         {% csrf_token %}
 
@@ -64,9 +62,10 @@
                 </thead>
                 <tbody id="table-body">
                 <!-- ko foreach:rows -->
+
                 <tr>
                     <td>
-                        <input type="hidden"
+                        <input type="hidden" class="change-on-ready"
                                data-bind="value: employee, select2: {data: {results: $root.employees}}, event: {change: $root.employee_changed}, lookupKey: 'id'">
                     </td>
                     <td data-bind="text: present_days"></td>
@@ -97,7 +96,7 @@
         </div>
 
         {% if scenario == 'Update' %}
-            <a class="btn delete-warn" href="{% url 'delete_attendance_vouchers' data.id %}">Delete</a>
+            {#            <a class="btn delete-warn" href="{% url 'delete_attendance_vouchers' data.id %}">Delete</a>#}
         {% endif %}
         <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
         <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save"

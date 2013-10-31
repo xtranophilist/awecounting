@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
-from payroll.models import Entry, EntryRow, Employee, AttendanceVoucher, WorkTimeVoucher, WorkTimeVoucherRow, WorkDay, GroupPayroll
+from payroll.models import Entry, EntryRow, Employee, AttendanceVoucher, WorkTimeVoucher, WorkTimeVoucherRow, WorkDay, GroupPayroll, GroupPayrollRow
 from payroll.serializers import EntrySerializer, AttendanceVoucherSerializer, EmployeeSerializer, WorkTimeVoucherSerializer, GroupPayrollSerializer
 from acubor.lib import save_model, invalid
 from ledger.models import delete_rows, set_transactions, Account
@@ -269,5 +269,36 @@ def group_payroll_voucher(request, id=None):
 
 
 @login_required
-def save_group_payroll_voucher(request, id):
-    pass
+def save_group_payroll_voucher(request):
+    params = json.loads(request.body)
+    dct = {'rows': {}}
+    voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'), 'company': request.company}
+    if params.get('id'):
+        voucher = GroupPayroll.objects.get(id=params.get('id'))
+    else:
+        voucher = GroupPayroll()
+    voucher = save_model(voucher, voucher_values)
+    dct['id'] = voucher.id
+    model = GroupPayrollRow
+    for index, row in enumerate(params.get('table_vm').get('rows')):
+        if invalid(row, ['employee', 'pay_head']):
+                continue
+        values = {'employee_id': row.get('employee'), 'rate_day': row.get('rate_day'),
+                  'rate_hour': row.get('rate_hour'), 'rate_ot_hour': row.get('rate_ot_hour'),
+                  'payroll_tax': row.get('payroll_tax'), 'pay_head_id': row.get('pay_head'),
+                  'group_payroll': voucher}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        #if row.get('type') == 'Dr':
+        #    print 'dr'
+        #    set_transactions(submodel, params.get('date'),
+        #                     ['dr', Account.objects.get(id=row.get('account')), row.get('dr_amount')],
+        #    )
+        #else:
+        #    set_transactions(submodel, params.get('date'),
+        #                     ['cr', Account.objects.get(id=row.get('account')), row.get('cr_amount')],
+        #    )
+        if not created:
+            submodel = save_model(submodel, values)
+        dct['rows'][index] = submodel.id
+    delete_rows(params.get('table_vm').get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")

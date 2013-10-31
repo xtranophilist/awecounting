@@ -141,9 +141,9 @@ class GroupPayroll(models.Model):
 
 class GroupPayrollRow(models.Model):
     employee = models.ForeignKey(Employee)
-    rate_day = models.FloatField()
-    rate_hour = models.FloatField()
-    rate_ot_hour = models.FloatField()
-    payroll_tax = models.FloatField()
+    rate_day = models.FloatField(null=True, blank=True)
+    rate_hour = models.FloatField(null=True, blank=True)
+    rate_ot_hour = models.FloatField(null=True, blank=True)
+    payroll_tax = models.FloatField(null=True, blank=True)
     pay_head = models.ForeignKey(Account)
     group_payroll = models.ForeignKey(GroupPayroll, related_name='rows')
