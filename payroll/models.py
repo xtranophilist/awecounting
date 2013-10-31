@@ -137,6 +137,8 @@ class GroupPayroll(models.Model):
     voucher_no = models.CharField(max_length=50)
     date = models.DateField()
     company = models.ForeignKey(Company)
+    statuses = [('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
+    status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
 
 
 class GroupPayrollRow(models.Model):
@@ -157,9 +159,11 @@ class IndividualPayroll(models.Model):
     #days_worked = models.FloatField()
     #hours_worked = models.FloatField()
     #ot_hours_worked = models.FloatField()
-    day_rate = models.FloatField()
-    hour_rate = models.FloatField()
-    ot_hour_rate = models.FloatField()
+    day_rate = models.FloatField(null=True, blank=True)
+    hour_rate = models.FloatField(null=True, blank=True)
+    ot_hour_rate = models.FloatField(null=True, blank=True)
+    statuses = [('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
+    status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
 
 
 class Inclusion(models.Model):
@@ -167,7 +171,8 @@ class Inclusion(models.Model):
     amount = models.FloatField()
     individual_payroll = models.ForeignKey(IndividualPayroll, related_name='inclusions')
 
+
 class Deduction(models.Model):
-    particular = models.FloatField(Account)
+    particular = models.ForeignKey(Account)
     amount = models.FloatField()
     individual_payroll = models.ForeignKey(IndividualPayroll, related_name='deductions')

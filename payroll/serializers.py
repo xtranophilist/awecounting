@@ -72,11 +72,15 @@ class GroupPayrollSerializer(serializers.ModelSerializer):
 
 
 class InclusionSerializer(serializers.ModelSerializer):
+    account = serializers.Field(source='particular.id')
+
     class Meta:
         model = Inclusion
 
 
 class DeductionSerializer(serializers.ModelSerializer):
+    account = serializers.Field(source='particular.id')
+
     class Meta:
         model = Inclusion
 
