@@ -2,13 +2,13 @@ $(document).ready(function () {
     $(document).ready(function () {
         $('.date-picker').datepicker();
     });
-    vm = new GroupPayrollVoucherVM(ko_data);
+    vm = new IndividualPayrollVoucherVM(ko_data);
     ko.applyBindings(vm);
     $('.change-on-ready').trigger('change');
 });
 
 
-function GroupPayrollVoucherVM(data) {
+function IndividualPayrollVoucherVM(data) {
     var self = this;
 
     $.ajax({
@@ -34,16 +34,40 @@ function GroupPayrollVoucherVM(data) {
     self.state = ko.observable('standby');
     self.voucher_no = ko.observable();
     self.date = ko.observable();
+    self.employee = ko.observable();
 
-    self.employee_changed = function (row) {
+    self.days_worked = ko.observable();
+    self.hours_worked = ko.observable();
+    self.ot_hours_worked = ko.observable();
+
+    self.day_rate = ko.observable();
+    self.hour_rate = ko.observable();
+    self.ot_hour_rate = ko.observable();
+
+    self.employee_changed = function (data) {
         var selected_item = $.grep(self.employees, function (i) {
-            return i.id == row.employee();
+            return i.id == data.employee();
         })[0];
         if (!selected_item) return;
+        self.days_worked(selected_item.unpaid_days);
+        self.hours_worked(selected_item.unpaid_hours);
+        self.ot_hours_worked(selected_item.unpaid_ot_hours);
+    }
 
-        row.present_days(selected_item.unpaid_days);
-        row.present_hours(selected_item.unpaid_hours);
-        row.present_ot_hours(selected_item.unpaid_ot_hours);
+    self.day_amount = function () {
+        return round2(self.days_worked() * self.day_rate());
+    }
+
+    self.hour_amount = function () {
+        return round2(self.hours_worked() * self.hour_rate());
+    }
+
+    self.ot_hour_amount = function () {
+        return round2(self.ot_hours_worked() * self.ot_hour_rate());
+    }
+
+    self.total = function () {
+        return self.day_amount() + self.hour_amount() + self.ot_hour_amount();
     }
 
 
@@ -52,11 +76,23 @@ function GroupPayrollVoucherVM(data) {
             self[k] = ko.observable(data[k]);
     }
 
-    var options = {rows: data.rows}
+    self.inclusions = new TableViewModel({rows: data.inclusions}, IndividualPayrollVoucherRowVM);
 
-    self.table_vm = new TableViewModel(options, GroupPayrollVoucherRowVM);
+    self.deductions = new TableViewModel({rows: data.deductions}, IndividualPayrollVoucherRowVM);
+
+    self.validate = function () {
+        self.message('');
+        if (!self.employee()) {
+            self.message('"Employee" is required!')
+            self.state('error');
+            return false;
+        }
+        return true;
+    }
 
     self.save = function (item, event) {
+        if (!self.validate())
+            return false;
         if (get_form(event).checkValidity()) {
             if ($(get_target(event)).data('continue')) {
                 self.continue = true;
@@ -64,7 +100,7 @@ function GroupPayrollVoucherVM(data) {
             var data = ko.toJSON(self);
             $.ajax({
                 type: "POST",
-                url: '/payroll/group-voucher/save/',
+                url: '/payroll/individual-voucher/save/',
                 data: data,
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
@@ -74,14 +110,26 @@ function GroupPayrollVoucherVM(data) {
                     else {
                         self.message('Saved!');
                         self.state('success');
-                        if (msg.id)
+                        if (msg.id) {
                             self.id(msg.id);
-                        $("#table-body > tr").each(function (i) {
-                            $($("#table-body > tr")[i]).addClass('invalid-row');
+                            self.status('Unapproved');
+                        }
+                        if (msg.redirect_to) {
+                            window.location = msg.redirect_to;
+                        }
+                        $("#table-body-inclusions > tr").each(function (i) {
+                            $($("#table-body-inclusions > tr")[i]).addClass('invalid-row');
                         });
-                        for (var i in msg.rows) {
-                            self.table_vm.rows()[i].id = msg.rows[i];
-                            $($("#table-body > tr")[i]).removeClass('invalid-row');
+                        $("#table-body-deductions > tr").each(function (i) {
+                            $($("#table-body-deductions > tr")[i]).addClass('invalid-row');
+                        });
+                        for (var i in msg.rows1) {
+                            self.inclusions.rows()[i].id = msg.rows1[i];
+                            $($("#table-body-inclusions > tr")[i]).removeClass('invalid-row');
+                        }
+                        for (var i in msg.rows2) {
+                            self.deductions.rows()[i].id = msg.rows2[i];
+                            $($("#table-body-deductions > tr")[i]).removeClass('invalid-row');
                         }
                         if (msg.redirect_to) {
                             window.location = msg.redirect_to;
@@ -96,30 +144,15 @@ function GroupPayrollVoucherVM(data) {
 
 }
 
-function GroupPayrollVoucherRowVM(data) {
+function IndividualPayrollVoucherRowVM(data) {
 
     var self = this;
 
-    self.employee = ko.observable();
-    self.present_days = ko.observable();
-    self.present_hours = ko.observable();
-    self.present_ot_hours = ko.observable();
-    self.rate_day = ko.observable();
-    self.rate_hour = ko.observable();
-    self.rate_ot_hour = ko.observable();
-    self.payroll_tax = ko.observable();
-    self.pay_head = ko.observable();
+    self.account = ko.observable();
+    self.amount = ko.observable();
 
     for (var k in data)
         if (data[k])
             self[k] = ko.observable(data[k]);
-
-    self.amount = function () {
-        return round2z(self.present_days()) * round2z(self.rate_day()) + round2z(self.present_hours()) * round2z(self.rate_hour()) + round2z(self.present_ot_hours()) * round2z(self.rate_ot_hour());
-    }
-
-    self.net = function () {
-        return self.amount() - round2z(self.payroll_tax());
-    }
 
 }
