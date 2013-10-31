@@ -64,6 +64,7 @@
                 <!-- ko foreach:days -->
                 <td colspan="3" data-bind="text: date"></td>
                 <!-- /ko -->
+                <td rowspan="2"></td>
             </tr>
             <tr>
                 <!-- ko foreach:days -->
@@ -71,9 +72,10 @@
                 <td>Out</td>
                 <td>W. Time</td>
                 <!-- /ko -->
+
             </tr>
             </thead>
-            <tbody>
+            <tbody id="work-time-table">
             <!-- ko foreach: rows -->
             <tr>
                 <td>
@@ -85,6 +87,11 @@
                 <td><input type="text" data-bind="value: out_time"></td>
                 <td><input type="text" data-bind="value: work_time" disabled></td>
                 <!-- /ko -->
+                <td>
+                    <button class="btn-none" data-bind="click: $root.remove_row">
+                        <i class="icon-trash"></i>
+                    </button>
+                </td>
             </tr>
             <!-- /ko -->
             </tbody>

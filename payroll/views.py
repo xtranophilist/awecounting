@@ -212,20 +212,30 @@ def save_work_time_voucher(request):
     model = WorkTimeVoucherRow
     umodel = WorkDay
     for index, row in enumerate(params.get('rows')):
+        if invalid(row, ['employee']):
+            continue
         values = {'employee_id': row.get('employee'), 'work_time_voucher': voucher}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
         dct['rows'][index] = {'id': submodel.id, 'days': {}}
         for i, r in enumerate(row.get('work_days')):
-            values = {'in_time': r.get('in_time'), 'out_time': r.get('out_time'), 'day': r.get('day'),
+            if invalid(r, ['in_time', 'out_time']):
+                submodel.delete()
+                del dct['rows'][index]
+                break
+            values = {'in_time': r.get('in_time'), 'out_time': r.get('out_time'), 'day': r.get('day').get('yyyy_mm_dd'),
                       'work_time_voucher_row': submodel}
-            print values
-            ubersubmodel, created = umodel.objects.get_or_create(id=r.get('id'), defaults=values)
-            if not created:
-                ubersubmodel = save_model(ubersubmodel, values)
+            try:
+                ubersubmodel, created = umodel.objects.get_or_create(id=r.get('id'), defaults=values)
+                if not created:
+                    ubersubmodel = save_model(ubersubmodel, values)
+            except Exception as e:
+                dct['error_message'] = str(e)
+                dct['culprit_row'] = index
+                dct['culprit_work_day'] = i
             dct['rows'][index]['days'][i] = ubersubmodel.id
-            #delete_rows(params.get('rows'), model)
+    delete_rows(params.get('deleted_rows'), model)
     if params.get('continue'):
         dct = {'redirect_to': str(reverse_lazy('create_work_time_voucher'))}
     return HttpResponse(json.dumps(dct), mimetype="application/json")
