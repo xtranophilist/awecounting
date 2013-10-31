@@ -151,6 +151,21 @@ function WorkTimeVoucherRowVM(data, days) {
         else
             self.work_days().push(new WorkDayVM({}, day))
     }
+
+    self.working_time = function () {
+        var total = 0;
+        for (var i = 0; i < self.work_days().length; i++) {
+            var work_time = self.work_days()[i].work_time();
+            var hours = parseInt(work_time.split(':')[0])
+            var minutes = parseInt(work_time.split(':')[1])
+            var total_minutes = hours * 60 + minutes;
+            total += total_minutes;
+        }
+        var total_hours = Math.floor(total / 60)
+        var total_minutes = total % 60
+        return total_hours + ':' + total_minutes;
+    }
+
 }
 
 function WorkDayVM(data, day) {
