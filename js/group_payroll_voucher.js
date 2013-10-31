@@ -4,6 +4,7 @@ $(document).ready(function () {
     });
     vm = new GroupPayrollVoucherVM(ko_data);
     ko.applyBindings(vm);
+    $('.change-on-ready').trigger('change');
 });
 
 
@@ -56,8 +57,6 @@ function GroupPayrollVoucherVM(data) {
     self.table_vm = new TableViewModel(options, GroupPayrollVoucherRowVM);
 
     self.save = function (item, event) {
-        if (!self.validate())
-            return false;
         if (get_form(event).checkValidity()) {
             if ($(get_target(event)).data('continue')) {
                 self.continue = true;
@@ -65,7 +64,7 @@ function GroupPayrollVoucherVM(data) {
             var data = ko.toJSON(self);
             $.ajax({
                 type: "POST",
-                url: '/payroll/attendance-voucher/save/',
+                url: '/payroll/group-voucher/save/',
                 data: data,
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
@@ -79,6 +78,13 @@ function GroupPayrollVoucherVM(data) {
                             self.id(msg.id);
                         if (msg.redirect_to) {
                             window.location = msg.redirect_to;
+                        }
+                        $("#table-body > tr").each(function (i) {
+                            $($("#table-body > tr")[i]).addClass('invalid-row');
+                        });
+                        for (var i in msg.rows) {
+                            self.table_vm.rows()[i].id = msg.rows[i];
+                            $($("#table-body > tr")[i]).removeClass('invalid-row');
                         }
                     }
                 }
@@ -103,6 +109,10 @@ function GroupPayrollVoucherRowVM(data) {
     self.rate_ot_hour = ko.observable();
     self.payroll_tax = ko.observable();
     self.pay_head = ko.observable();
+
+    for (var k in data)
+        if (data[k])
+            self[k] = ko.observable(data[k]);
 
     self.amount = function () {
         return round2z(self.present_days()) * round2z(self.rate_day()) + round2z(self.present_hours()) * round2z(self.rate_hour()) + round2z(self.present_ot_hours()) * round2z(self.rate_ot_hour());
