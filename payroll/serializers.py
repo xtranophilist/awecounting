@@ -19,10 +19,13 @@ class EntrySerializer(serializers.ModelSerializer):
 
 class EmployeeSerializer(serializers.ModelSerializer):
     text = serializers.Field(source='name')
+    unpaid_days = serializers.Field(source='get_unpaid_days')
+    unpaid_hours = serializers.Field(source='get_unpaid_hours')
+    unpaid_ot_hours = serializers.Field(source='get_unpaid_ot_hours')
 
     class Meta:
         model = Employee
-        exclude = ['company', 'address', 'designation', 'account', 'name']
+        fields = ['text', 'id', 'tax_id', 'unpaid_days', 'unpaid_hours', 'unpaid_ot_hours']
 
 
 class AttendanceVoucherSerializer(serializers.ModelSerializer):
