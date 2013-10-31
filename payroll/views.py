@@ -6,7 +6,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
-from payroll.models import Entry, EntryRow, Employee, AttendanceVoucher, WorkTimeVoucher, WorkTimeVoucherRow, WorkDay, GroupPayroll, GroupPayrollRow, IndividualPayroll
+from payroll.models import Entry, EntryRow, Employee, AttendanceVoucher, WorkTimeVoucher, WorkTimeVoucherRow, WorkDay, GroupPayroll, GroupPayrollRow, IndividualPayroll, Inclusion, Deduction
 from payroll.serializers import EntrySerializer, AttendanceVoucherSerializer, EmployeeSerializer, WorkTimeVoucherSerializer, GroupPayrollSerializer, IndividualPayrollSerializer
 from acubor.lib import save_model, invalid
 from ledger.models import delete_rows, set_transactions, Account
@@ -328,38 +328,39 @@ def individual_payroll_voucher(request, id=None):
 @login_required
 def save_individual_payroll_voucher(request):
     params = json.loads(request.body)
-    dct = {'rows': {}}
-    voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'), 'company': request.company}
+    dct = {'rows1': {}, 'rows2': {}}
+
+    voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'),
+                      'employee_id': params.get('employee'), 'company': request.company, }
     if params.get('id'):
-        voucher = GroupPayroll.objects.get(id=params.get('id'))
+        voucher = IndividualPayroll.objects.get(id=params.get('id'))
     else:
-        voucher = GroupPayroll()
+        voucher = IndividualPayroll()
     voucher = save_model(voucher, voucher_values)
     dct['id'] = voucher.id
-    model = GroupPayrollRow
-    for index, row in enumerate(params.get('table_vm').get('rows')):
-        if invalid(row, ['employee', 'pay_head']):
+    model = Inclusion
+    for index, row in enumerate(params.get('inclusions').get('rows')):
+        if invalid(row, ['account', 'amount']):
             continue
-        values = {'employee_id': row.get('employee'), 'rate_day': row.get('rate_day'),
-                  'rate_hour': row.get('rate_hour'), 'rate_ot_hour': row.get('rate_ot_hour'),
-                  'payroll_tax': row.get('payroll_tax'), 'pay_head_id': row.get('pay_head'),
-                  'group_payroll': voucher}
+        values = {'particular_id': row.get('account'), 'amount': row.get('amount'), 'individual_payroll': voucher}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-        #if row.get('type') == 'Dr':
-        #    print 'dr'
-        #    set_transactions(submodel, params.get('date'),
-        #                     ['dr', Account.objects.get(id=row.get('account')), row.get('dr_amount')],
-        #    )
-        #else:
-        #    set_transactions(submodel, params.get('date'),
-        #                     ['cr', Account.objects.get(id=row.get('account')), row.get('cr_amount')],
-        #    )
         if not created:
             submodel = save_model(submodel, values)
-        dct['rows'][index] = submodel.id
-    delete_rows(params.get('table_vm').get('deleted_rows'), model)
+        dct['rows1'][index] = submodel.id
+    delete_rows(params.get('inclusions').get('deleted_rows'), model)
+    model = Deduction
+    for index, row in enumerate(params.get('deductions').get('rows')):
+        if invalid(row, ['account', 'amount']):
+            continue
+        values = {'particular_id': row.get('account'), 'amount': row.get('amount'), 'individual_payroll': voucher}
+        submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+        if not created:
+            submodel = save_model(submodel, values)
+        dct['rows2'][index] = submodel.id
+    delete_rows(params.get('deductions').get('deleted_rows'), model)
+    voucher.status = 'Unapproved'
     if params.get('continue'):
-        dct = {'redirect_to': str(reverse_lazy('create_group_payroll_voucher'))}
+        dct = {'redirect_to': str(reverse_lazy('create_individual_payroll_voucher'))}
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
