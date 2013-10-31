@@ -6,8 +6,8 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
-from payroll.models import Entry, EntryRow, Employee, AttendanceVoucher, WorkTimeVoucher, WorkTimeVoucherRow, WorkDay
-from payroll.serializers import EntrySerializer, AttendanceVoucherSerializer, EmployeeSerializer, WorkTimeVoucherSerializer
+from payroll.models import Entry, EntryRow, Employee, AttendanceVoucher, WorkTimeVoucher, WorkTimeVoucherRow, WorkDay, GroupPayroll
+from payroll.serializers import EntrySerializer, AttendanceVoucherSerializer, EmployeeSerializer, WorkTimeVoucherSerializer, GroupPayrollSerializer
 from acubor.lib import save_model, invalid
 from ledger.models import delete_rows, set_transactions, Account
 from payroll.forms import EmployeeForm
@@ -254,3 +254,20 @@ def delete_work_time_voucher(request, id):
     obj = get_object_or_404(AttendanceVoucher, id=id, company=request.company)
     obj.delete()
     return redirect(reverse_lazy('list_attendance_voucher'))
+
+
+@login_required
+def group_payroll_voucher(request, id=None):
+    if id:
+        voucher = get_object_or_404(GroupPayroll, id=id, company=request.company)
+        scenario = 'Update'
+    else:
+        voucher = GroupPayroll(date=date.today())
+        scenario = 'Create'
+    data = GroupPayrollSerializer(voucher).data
+    return render(request, 'group_payroll_voucher.html', {'scenario': scenario, 'data': data})
+
+
+@login_required
+def save_group_payroll_voucher(request, id):
+    pass

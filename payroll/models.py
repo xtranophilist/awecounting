@@ -44,7 +44,7 @@ class Employee(models.Model):
             super(Employee, self).save(*args, **kwargs)
             account = Account(code='13-0001-' + str(self.id), name=self.name)
             account.company = self.company
-            account.add_category('Indirect Expenses')
+            account.add_category('Employee')
             account.save()
             self.account = account
         super(Employee, self).save(*args, **kwargs)
@@ -117,4 +117,4 @@ class GroupPayrollRow(models.Model):
     rate_hour = models.FloatField()
     rate_ot_hour = models.FloatField()
     pay_head = models.ForeignKey(Account)
-    group_payroll = models.ForeignKey(GroupPayroll)
+    group_payroll = models.ForeignKey(GroupPayroll, related_name='rows')

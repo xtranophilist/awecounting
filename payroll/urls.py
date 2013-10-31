@@ -31,4 +31,11 @@ urlpatterns = patterns('',
                        url(r'^attendance-voucher/(?P<id>[0-9]+)/$', views.work_time_voucher,
                            name='update_work_time_voucher'),
 
+                       url(r'^group-voucher/$', views.group_payroll_voucher, name='create_group_payroll_voucher'),
+                       url(r'^group-voucher/(?P<id>[0-9]+)/$', views.group_payroll_voucher,
+                           name='update_group_payroll_voucher'),
+                       url(r'^group-voucher/save/$', views.save_group_payroll_voucher,
+                           name='save_group_payroll_voucher'),
+
+
 )

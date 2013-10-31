@@ -1,16 +1,16 @@
 {% extends "dashboard.html" %}
 
-{% block title %}{{ scenario }} Day Attendance Voucher{% endblock %}
+{% block title %}{{ scenario }} Group Payroll Voucher{% endblock %}
 
 {% block breadcrumbs %}
     {{ block.super }}
-    <li><a href="{% url "create_attendance_voucher" %}">Day Attendance Voucher</a></li>
+    <li><a href="{% url "create_attendance_voucher" %}">Group Payroll Voucher</a></li>
 {% endblock %}
 {% load filters %}
 {% block extra-head %}
     <script src="{{ STATIC_URL }}js/vendors/knockout.js"></script>
     <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
-    <script src="{{ STATIC_URL }}js/attendance_voucher.js"></script>
+    <script src="{{ STATIC_URL }}js/group_payroll_voucher.js"></script>
     <script>
         ko_data =
         {{ data|jsonify }}
@@ -18,10 +18,12 @@
 {% endblock %}
 
 {% block pageheader %}
-    {{ scenario }} Day Attendance Voucher
+    {{ scenario }} Group Payroll Voucher
 {% endblock %}
 
 {% block content %}
+
+    {{ data }}
 
     <form method="post">
         {% csrf_token %}
@@ -40,59 +42,59 @@
             <span class="span4"><input type="text" data-bind="value: date" class="date-picker"
                                        data-date-format="yyyy-mm-dd" required></span>
         </div>
-
-        <table class="table table-bordered table-striped table-sortable">
-            <tr>
-                <td>Employee:
-                    <input type="hidden"
-                           data-bind="value: employee, select2: {data: {results: $root.employees}}, lookupKey: 'id'">
-                </td>
-                <td>
-                    From : <input type="text" data-bind="value: from_date" class="date-picker"
-                                  data-date-format="yyyy-mm-dd" required>
-                </td>
-                <td>
-                    To : <input type="text" data-bind="value: to_date" class="date-picker"
-                                data-date-format="yyyy-mm-dd" required>
-                </td>
-            </tr>
-            <tr>
-                <td>Total Working Days</td>
-                <td data-bind="editableText: total_working_days, numeric: true"></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Full Present Days</td>
-                <td data-bind="editableText: full_present_day, numeric: true"></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Half Present Days</td>
-                <td data-bind="editableText: half_present_day, numeric: true"></td>
-                <td data-bind="editableText: half_multiplier, numeric: true"></td>
-            </tr>
-            <tr>
-                <td>Early/Late Attendance Days</td>
-                <td data-bind="editableText: early_late_attendance_day, numeric: true"></td>
-                <td data-bind="editableText: early_late_multiplier, numeric: true"></td>
-            </tr>
-            <tr>
-                <td>Total Present Days</td>
-                <td data-bind="text: total_present_day()"></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Total Absent Days</td>
-                <td data-bind="text: total_absent_day()"></td>
-                <td></td>
-            </tr>
-            <tr>
-                <td>Total OT Hours</td>
-                <td data-bind="editableText: total_ot_hours, numeric: true"></td>
-                <td></td>
-            </tr>
-        </table>
-
+        <div data-bind="with: table_vm">
+            <table class="table table-bordered table-striped table-sortable">
+                <thead>
+                <th rowspan="2">Employee</th>
+                <th colspan="3">Present</th>
+                <th colspan="3">Rate</th>
+                <th rowspan="2">Amount</th>
+                <th rowspan="2">Payroll Tax</th>
+                <th rowspan="2">Net</th>
+                <th rowspan="2">Pay Head</th>
+                <th rowspan="2"></th>
+                <tr>
+                    <th>Days</th>
+                    <th>Hours</th>
+                    <th>OT Hours</th>
+                    <th>Day</th>
+                    <th>Hour</th>
+                    <th>OT Hour</th>
+                </tr>
+                </thead>
+                <tbody id="table-body">
+                <!-- ko foreach:rows -->
+                <tr>
+                    <td>
+                        <input type="hidden"
+                               data-bind="value: employee, select2: {data: {results: $root.employees}}, event: {change: $root.employee_changed}, lookupKey: 'id'">
+                    </td>
+                    <td data-bind="text: present_days"></td>
+                    <td data-bind="text: present_hours"></td>
+                    <td data-bind="text: present_ot_hours"></td>
+                    <td data-bind="editableText: rate_day"></td>
+                    <td data-bind="editableText: rate_hour"></td>
+                    <td data-bind="editableText: rate_ot_hour"></td>
+                    <td data-bind="text: amount()"></td>
+                    <td data-bind="editableText: payroll_tax"></td>
+                    <td data-bind="text: net()"></td>
+                    <td>
+                        <input type="hidden"
+                               data-bind="value: pay_head, select2: {data: {results: $root.accounts}}, lookupKey: 'id'">
+                    </td>
+                    <td>
+                        <button class="btn-none" data-bind="click: $parent.removeRow">
+                            <i class="icon-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <!-- /ko -->
+                </tbody>
+            </table>
+            <button class="btn" data-bind="click: addRow">
+                <i class="icon-plus-sign"></i> Add New Row
+            </button>
+        </div>
 
         {% if scenario == 'Update' %}
             <a class="btn delete-warn" href="{% url 'delete_attendance_vouchers' data.id %}">Delete</a>
@@ -100,10 +102,7 @@
         <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
         <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save"
                data-continue="true">
-
-
         </div>
-
 
     </form>
 
