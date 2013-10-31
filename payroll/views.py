@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 import json
 from django.core.urlresolvers import reverse_lazy
 
@@ -219,6 +219,11 @@ def save_work_time_voucher(request):
         if not created:
             submodel = save_model(submodel, values)
         dct['rows'][index] = {'id': submodel.id, 'days': {}}
+        for work_day in submodel.work_days.all():
+            from_date = datetime.strptime(params.get('from_date'), "%Y-%m-%d").date()
+            to_date = datetime.strptime(params.get('from_date'), "%Y-%m-%d").date()
+            if work_day.day < from_date or work_day.day > to_date:
+                work_day.delete()
         for i, r in enumerate(row.get('work_days')):
             if invalid(r, ['in_time', 'out_time']):
                 submodel.delete()
