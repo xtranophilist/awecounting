@@ -154,9 +154,9 @@ class IndividualPayroll(models.Model):
     voucher_no = models.CharField(max_length=50)
     date = models.DateField()
     company = models.ForeignKey(Company)
-    days_worked = models.FloatField()
-    hours_worked = models.FloatField()
-    ot_hours_worked = models.FloatField()
+    #days_worked = models.FloatField()
+    #hours_worked = models.FloatField()
+    #ot_hours_worked = models.FloatField()
     day_rate = models.FloatField()
     hour_rate = models.FloatField()
     ot_hour_rate = models.FloatField()
@@ -167,7 +167,7 @@ class Inclusion(models.Model):
     amount = models.FloatField()
     individual_payroll = models.ForeignKey(IndividualPayroll, related_name='inclusions')
 
-class Deductions(models.Model):
+class Deduction(models.Model):
     particular = models.FloatField(Account)
     amount = models.FloatField()
-    individual_payroll = models.ForeignKey(IndividualPayroll, related_name='exclusions')
+    individual_payroll = models.ForeignKey(IndividualPayroll, related_name='deductions')
