@@ -98,8 +98,12 @@ function WorkTimeVoucherVM(data) {
                         $('#message').html('Saved!');
                         if (msg.id)
                             self.id = msg.id;
+                        $("#work-time-table > tr").each(function (i) {
+                            $($("#work-time-table > tr")[i]).addClass('invalid-row');
+                        });
                         for (var i in msg.rows) {
                             self.rows()[i].id = msg.rows[i]['id'];
+                            $($("#work-time-table > tr")[i]).removeClass('invalid-row');
                             for (var j in msg.rows[i]['days']) {
                                 self.rows()[i].work_days()[j].id = msg.rows[i]['days'][j];
                             }
