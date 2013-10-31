@@ -38,14 +38,11 @@ function GroupPayrollVoucherVM(data) {
         var selected_item = $.grep(self.employees, function (i) {
             return i.id == row.employee();
         })[0];
-        console.log(selected_item);
-//        if (!selected_item) return;
-//        if (!row.description())
-//            row.description(selected_item.description);
-//        if (!row.unit_price())
-//            row.unit_price(selected_item.sales_price);
-//        if (!row.tax_scheme())
-//            row.tax_scheme(selected_item.tax_scheme);
+        if (!selected_item) return;
+
+        row.present_days(selected_item.unpaid_days);
+        row.present_hours(selected_item.unpaid_hours);
+        row.present_ot_hours(selected_item.unpaid_ot_hours);
     }
 
 
@@ -108,11 +105,11 @@ function GroupPayrollVoucherRowVM(data) {
     self.pay_head = ko.observable();
 
     self.amount = function () {
-        return;
+        return round2z(self.present_days()) * round2z(self.rate_day()) + round2z(self.present_hours()) * round2z(self.rate_hour()) + round2z(self.present_ot_hours()) * round2z(self.rate_ot_hour());
     }
 
     self.net = function () {
-        return;
+        return self.amount() - round2z(self.payroll_tax());
     }
 
 }
