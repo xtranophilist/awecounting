@@ -98,12 +98,11 @@ function WorkTimeVoucherVM(data) {
                         $('#message').html('Saved!');
                         if (msg.id)
                             self.id = msg.id;
-                        $("#particulars-body > tr").each(function (i) {
-                            $($("#particulars-body > tr")[i]).addClass('invalid-row');
-                        });
                         for (var i in msg.rows) {
-                            self.particulars.rows()[i].id = msg.rows[i];
-                            $($("#particulars-body > tr")[i]).removeClass('invalid-row');
+                            self.rows()[i].id = msg.rows[i]['id'];
+                            for (var j in msg.rows[i]['days']) {
+                                self.rows()[i].work_days()[j].id = msg.rows[i]['days'][j];
+                            }
                         }
                     }
                 }
@@ -185,7 +184,7 @@ function DateM(date) {
     self.month = date.getMonth() + 1; //Months are zero based
     self.year = date.getFullYear();
 
-    self.yyyy_mm_dd = function () {
+    self.yyyy_mm_dd = ko.computed(function () {
         var month = self.month;
         var day = self.day;
         if (month < 10)
@@ -193,5 +192,5 @@ function DateM(date) {
         if (day < 10)
             day = '0' + day;
         return self.year + '-' + month + '-' + day;
-    }
+    }, this);
 }
