@@ -80,8 +80,17 @@ function WorkTimeVoucherVM(data) {
         return new WorkTimeVoucherRowVM(item, self.days());
     }));
 
+    self.deleted_rows = ko.observableArray();
+
+    self._initial_rows = self.rows().slice(0);
+
     self.add_row = function () {
         self.rows.push(new WorkTimeVoucherRowVM({}, self.days()));
+    };
+
+    self.remove_row = function (row) {
+        self.rows.remove(row);
+        self.deleted_rows.push(row);
     };
 
     self.save = function (item, event) {
