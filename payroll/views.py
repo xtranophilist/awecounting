@@ -282,7 +282,7 @@ def save_group_payroll_voucher(request):
     model = GroupPayrollRow
     for index, row in enumerate(params.get('table_vm').get('rows')):
         if invalid(row, ['employee', 'pay_head']):
-                continue
+            continue
         values = {'employee_id': row.get('employee'), 'rate_day': row.get('rate_day'),
                   'rate_hour': row.get('rate_hour'), 'rate_ot_hour': row.get('rate_ot_hour'),
                   'payroll_tax': row.get('payroll_tax'), 'pay_head_id': row.get('pay_head'),
@@ -301,4 +301,13 @@ def save_group_payroll_voucher(request):
             submodel = save_model(submodel, values)
         dct['rows'][index] = submodel.id
     delete_rows(params.get('table_vm').get('deleted_rows'), model)
+    if params.get('continue'):
+        dct = {'redirect_to': str(reverse_lazy('create_group_payroll_voucher'))}
     return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+@login_required
+def delete_group_payroll_voucher(request, id):
+    obj = get_object_or_404(GroupPayroll, id=id, company=request.company)
+    obj.delete()
+    return redirect(reverse_lazy('list_group_payroll_voucher'))

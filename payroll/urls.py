@@ -36,6 +36,8 @@ urlpatterns = patterns('',
                            name='update_group_payroll_voucher'),
                        url(r'^group-voucher/save/$', views.save_group_payroll_voucher,
                            name='save_group_payroll_voucher'),
+                       url(r'^group-voucher/delete/(?P<id>[0-9]+)/$', views.delete_group_payroll_voucher,
+                           name='delete_group_payroll_voucher'),
 
 
 )
