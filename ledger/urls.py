@@ -19,6 +19,8 @@ urlpatterns = patterns('',
                        url(r'^party/customers.json$', views.customers_as_json, name='customers_as_json'),
                        url(r'^party/suppliers.json$', views.suppliers_as_json, name='suppliers_as_json'),
 
+                       url(r'^payheads.json$', views.payheads_as_json, name='suppliers_as_json'),
+
                        url(r'^categories/$', views.list_categories, name='list_category'),
                        url(r'^category/create/$', views.create_category, name='create_category'),
                        url(r'^category/(?P<id>[0-9]+)/$', views.update_category, name='update_category'),

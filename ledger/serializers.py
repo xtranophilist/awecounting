@@ -9,11 +9,12 @@ class AccountSerializer(serializers.ModelSerializer):
     opening = serializers.SerializerMethodField('get_last_day_closing')
     # opening = serializers.Field(source='day_opening')
     categories = serializers.Field()
+    text = serializers.Field(source='name')
 
     class Meta:
         model = Account
         # exclude = ['code', 'company', 'parent', 'current_balance']
-        fields = ['id', 'name', 'categories', 'opening', 'tax_rate']
+        fields = ['id', 'name', 'categories', 'opening', 'tax_rate', 'text']
         # fields = ['id', 'name', 'categories', 'tax_rate']
 
     def __init__(self, *args, **kwargs):
