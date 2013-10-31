@@ -147,3 +147,27 @@ class GroupPayrollRow(models.Model):
     payroll_tax = models.FloatField(null=True, blank=True)
     pay_head = models.ForeignKey(Account)
     group_payroll = models.ForeignKey(GroupPayroll, related_name='rows')
+
+
+class IndividualPayroll(models.Model):
+    employee = models.ForeignKey(Employee)
+    voucher_no = models.CharField(max_length=50)
+    date = models.DateField()
+    company = models.ForeignKey(Company)
+    days_worked = models.FloatField()
+    hours_worked = models.FloatField()
+    ot_hours_worked = models.FloatField()
+    day_rate = models.FloatField()
+    hour_rate = models.FloatField()
+    ot_hour_rate = models.FloatField()
+
+
+class Inclusion(models.Model):
+    particular = models.ForeignKey(Account)
+    amount = models.FloatField()
+    individual_payroll = models.ForeignKey(IndividualPayroll, related_name='inclusions')
+
+class Deductions(models.Model):
+    particular = models.FloatField(Account)
+    amount = models.FloatField()
+    individual_payroll = models.ForeignKey(IndividualPayroll, related_name='exclusions')
