@@ -197,6 +197,10 @@ function round2(n) {
     return isAN(n) ? Math.round(n * 100) / 100 : '';
 }
 
+function round2z(n) {
+    return isAN(n) ? Math.round(parseFloat(n) * 100) / 100 : 0;
+}
+
 function get_target(e) {
     return $((e.currentTarget) ? e.currentTarget : e.srcElement); //for IE <9 compatibility
 }

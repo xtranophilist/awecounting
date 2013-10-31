@@ -69,7 +69,7 @@ function AttendanceVoucherVM(data) {
             var data = ko.toJSON(self);
             $.ajax({
                 type: "POST",
-                url: '/payroll/attendance-voucher/save/',
+                url: '/payroll/day-attendance-voucher/save/',
                 data: data,
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
