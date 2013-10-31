@@ -89,9 +89,10 @@ function FixedAssetVM(data) {
                     else {
                         self.message('Saved!');
                         self.state('success');
-                        if (msg.id)
+                        if (msg.id){
                             self.id(msg.id);
                             self.status('Unapproved');
+                        }
                         if (msg.redirect_to) {
                             window.location = msg.redirect_to;
                         }

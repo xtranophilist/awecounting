@@ -76,15 +76,15 @@ function GroupPayrollVoucherVM(data) {
                         self.state('success');
                         if (msg.id)
                             self.id(msg.id);
-                        if (msg.redirect_to) {
-                            window.location = msg.redirect_to;
-                        }
                         $("#table-body > tr").each(function (i) {
                             $($("#table-body > tr")[i]).addClass('invalid-row');
                         });
                         for (var i in msg.rows) {
                             self.table_vm.rows()[i].id = msg.rows[i];
                             $($("#table-body > tr")[i]).removeClass('invalid-row');
+                        }
+                        if (msg.redirect_to) {
+                            window.location = msg.redirect_to;
                         }
                     }
                 }
