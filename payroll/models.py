@@ -82,6 +82,7 @@ class WorkTimeVoucher(models.Model):
 
 class WorkTimeVoucherRow(models.Model):
     employee = models.ForeignKey(Employee)
+    paid = models.BooleanField(default=False)
     work_time_voucher = models.ForeignKey(WorkTimeVoucher, related_name='rows')
 
 
@@ -102,3 +103,18 @@ class WorkDay(models.Model):
         pieces = hms.split(':')
         hm = pieces[0] + ':' + pieces[1]
         return hm
+
+
+class GroupPayroll(models.Model):
+    voucher_no = models.CharField(max_length=50)
+    date = models.DateField()
+    company = models.ForeignKey(Company)
+
+
+class GroupPayrollRow(models.Model):
+    employee = models.ForeignKey(Employee)
+    rate_day = models.FloatField()
+    rate_hour = models.FloatField()
+    rate_ot_hour = models.FloatField()
+    pay_head = models.ForeignKey(Account)
+    group_payroll = models.ForeignKey(GroupPayroll)
