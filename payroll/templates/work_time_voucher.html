@@ -23,8 +23,6 @@
 
 {% block content %}
 
-    {{ data|jsonify }}
-
     <form method="post">
         {% csrf_token %}
 
@@ -57,58 +55,60 @@
             </span>
         </div>
 
-        <table class="table table-bordered table-striped table-sortable">
-            <thead>
-            <tr>
-                <td rowspan="2">Employee</td>
-                <!-- ko foreach:days -->
-                <td colspan="3" data-bind="text: date"></td>
-                <!-- /ko -->
-                <td rowspan="2">Working Time</td>
-                <td rowspan="2"></td>
-            </tr>
-            <tr>
-                <!-- ko foreach:days -->
-                <td>In</td>
-                <td>Out</td>
-                <td>W. Time</td>
-                <!-- /ko -->
-            </tr>
-            </thead>
-            <tbody id="work-time-table">
-            <!-- ko foreach: rows -->
-            <tr>
-                <td>
-                    <input type="hidden"
-                           data-bind="value: employee, select2: {data: {results: $root.employees}}, lookupKey: 'id'">
-                </td>
-                <!-- ko foreach: work_days -->
-                <td><input type="text" data-bind="value: in_time"></td>
-                <td><input type="text" data-bind="value: out_time"></td>
-                <td><input type="text" data-bind="value: work_time" disabled></td>
-                <!-- /ko -->
-                <td><input type="text" data-bind="value: working_time()"></td>
-                <td>
-                    <button class="btn-none" data-bind="click: $root.remove_row">
-                        <i class="icon-trash"></i>
-                    </button>
-                </td>
-            </tr>
-            <!-- /ko -->
-            </tbody>
-        </table>
+        <div data-bind="visible: has_range">
 
-        <button class="btn" data-bind="click: $root.add_row">
-            <i class="icon-plus-sign"></i> Add New Row
-        </button>
+            <table class="table table-bordered table-striped table-sortable">
+                <thead>
+                <tr>
+                    <td rowspan="2">Employee</td>
+                    <!-- ko foreach:days -->
+                    <td colspan="3" data-bind="text: weekday + ' ' + yyyy_mm_dd()"></td>
+                    <!-- /ko -->
+                    <td rowspan="2">Working Time</td>
+                    <td rowspan="2"></td>
+                </tr>
+                <tr>
+                    <!-- ko foreach:days -->
+                    <td>In</td>
+                    <td>Out</td>
+                    <td>W. Time</td>
+                    <!-- /ko -->
+                </tr>
+                </thead>
+                <tbody id="work-time-table">
+                <!-- ko foreach: rows -->
+                <tr>
+                    <td>
+                        <input type="hidden"
+                               data-bind="value: employee, select2: {data: {results: $root.employees}}, lookupKey: 'id'">
+                    </td>
+                    <!-- ko foreach: work_days -->
+                    <td><input type="text" data-bind="value: in_time"></td>
+                    <td><input type="text" data-bind="value: out_time"></td>
+                    <td><input type="text" data-bind="value: work_time" disabled></td>
+                    <!-- /ko -->
+                    <td><input type="text" data-bind="value: working_time()"></td>
+                    <td>
+                        <button class="btn-none" data-bind="click: $root.remove_row">
+                            <i class="icon-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <!-- /ko -->
+                </tbody>
+            </table>
+
+            <button class="btn" data-bind="click: $root.add_row">
+                <i class="icon-plus-sign"></i> Add New Row
+            </button>
 
 
-        {% if scenario == 'Update' %}
-            {#            <a class="btn delete-warn" href="{% url 'delete_attendance_vouchers' data.id %}">Delete</a>#}
-        {% endif %}
-        <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
-        <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save"
-               data-continue="true">
+            {% if scenario == 'Update' %}
+                {#            <a class="btn delete-warn" href="{% url 'delete_attendance_vouchers' data.id %}">Delete</a>#}
+            {% endif %}
+            <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
+            <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save"
+                   data-continue="true">
 
 
         </div>
