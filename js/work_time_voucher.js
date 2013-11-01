@@ -72,6 +72,24 @@ function WorkTimeVoucherVM(data) {
             }
         }
 
+        self.days(self.days().sort(function (a, b) {
+            var x = (new Date(a.date_string)).getTime();
+            var y = (new Date(b.date_string)).getTime();
+            return (x - y);
+        }));
+
+        for (var i = 0; i < self.rows().length; i++) {
+            var row = self.rows()[i];
+            if (typeof row.work_days == 'function') {
+                row.work_days(row.work_days().sort(function (a, b) {
+                    var x = (new Date(a.day.date_string)).getTime();
+                    var y = (new Date(b.day.date_string)).getTime();
+                    return (x - y);
+                }));
+            }
+        }
+
+
     }
 
     self.date_changed();

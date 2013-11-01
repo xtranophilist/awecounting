@@ -402,17 +402,44 @@ function days_between(first, second) {
 
 function get_weekday(date) {
     var weekday = new Array(7);
-    weekday[0] = "Monday";
-    weekday[1] = "Tuesday";
-    weekday[2] = "Wednesday";
-    weekday[3] = "Thursday";
-    weekday[4] = "Friday";
-    weekday[5] = "Saturday";
-    weekday[6] = "Sunday";
-    return weekday[date.getDay() - 1];
+    weekday[0] = "Sunday";
+    weekday[1] = "Monday";
+    weekday[2] = "Tuesday";
+    weekday[3] = "Wednesday";
+    weekday[4] = "Thursday";
+    weekday[5] = "Friday";
+    weekday[6] = "Saturday";
+    return weekday[date.getDay()];
 }
 
 function hms_to_s(t) { // h:m:s
     var a = t.split(/\D+/);
     return (a[0] * 60 + +a[1]) * 60 + +a[2]
 }
+
+(function () {
+    if (typeof Object.defineProperty === 'function') {
+        try {
+            Object.defineProperty(Array.prototype, 'sortBy', {value: sb});
+        } catch (e) {
+        }
+    }
+    if (!Array.prototype.sortBy) Array.prototype.sortBy = sb;
+
+    function sb(f) {
+        for (var i = this.length; i;) {
+            var o = this[--i];
+            this[i] = [].concat(f.call(o, o, i), o);
+        }
+        this.sort(function (a, b) {
+            for (var i = 0, len = a.length; i < len; ++i) {
+                if (a[i] != b[i]) return a[i] < b[i] ? -1 : 1;
+            }
+            return 0;
+        });
+        for (var i = this.length; i;) {
+            this[--i] = this[i][this[i].length - 1];
+        }
+        return this;
+    }
+})();
