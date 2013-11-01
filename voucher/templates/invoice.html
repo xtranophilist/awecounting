@@ -23,6 +23,8 @@
 
 {% block content %}
 
+    {{ data|jsonify }}
+
     <form method="post" action="#">
         {% csrf_token %}
 
@@ -135,15 +137,15 @@
                 </tr>
                 <!-- /ko -->
 
-                <tr>
+                <tr class="dont-validate">
                     <td colspan="7"><b class="pull-right">SUB-TOTAL</b></td>
                     <td colspan="2" data-bind="text: $parent.sub_total()"></td>
                 </tr>
-                <tr>
+                <tr class="dont-validate">
                     <td colspan="7"><b class="pull-right">TAX AMOUNT</b></td>
                     <td colspan="2" data-bind="text: $parent.tax_amount()"></td>
                 </tr>
-                <tr>
+                <tr class="dont-validate">
                     <td colspan="7"><b class="pull-right">GRAND TOTAL</b></td>
                     <td colspan="2" data-bind="text: $parent.grand_total()"></td>
                 </tr>
@@ -153,18 +155,22 @@
                 <i class="icon-plus-sign"></i> Add New Row
             </button>
             <br><br>
+
             <div>
                 Description: <textarea data-bind="value: $root.description"></textarea>
             </div>
 
-            <input class="btn" type="submit" value="Cancel" data-bind="click: $root.save">
             {% if scenario == 'Update' %}
                 <a class="btn btn-danger" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>
             {% endif %}
-            <input class="btn" type="submit" value="Approve" data-bind="click: $root.approve">
+            {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
+                <input class="btn" type="submit" value="Approve"
+                       data-bind="click: $root.approve, visible: $root.id && $root.status() == 'Unapproved'">
+            {% endifusergroup %}
             <input class="btn" type="submit" value="Cancel" data-bind="click: $root.cancel">
             <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
-            <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save_and_continue">
+            <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save"
+                   data-continue="true">
 
         </div>
     </form>

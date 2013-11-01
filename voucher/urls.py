@@ -8,8 +8,6 @@ urlpatterns = patterns('',
                        url(r'^invoice/party/(?P<id>[0-9]+).json$', views.party_invoices, name='party_invoices'),
                        url(r'^invoice/(?P<invoice_no>[0-9]+)/delete/$', views.delete_invoice, name='delete_invoice'),
                        url(r'^invoice/save/$', views.save_invoice, name='save_invoice'),
-                       url(r'^invoice/save_and_continue/$', views.save_invoice_and_continue,
-                           name='save_invoice_and_continue'),
                        url(r'^invoice/approve/$', views.approve_invoice, name='approve_invoice'),
                        url(r'^invoice/cancel/$', views.cancel_invoice, name='cancel_invoice'),
 

@@ -14,7 +14,6 @@ from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, Jo
 from acubor.lib import invalid, save_model, all_empty_in_dict
 from ledger.models import delete_rows, Account, set_transactions, Party
 from voucher.filters import InvoiceFilter, PurchaseVoucherFilter
-from tax.models import TaxScheme
 from inventory.models import Item
 from voucher.templatetags.filters import handler
 
@@ -83,7 +82,7 @@ def save_invoice(request):
                       'description': params.get('description'),
                       'reference': params.get('reference'), 'date': params.get('date'),
                       'due_date': params.get('due_date'), 'tax': params.get('tax'),
-                      'currency_id': params.get('currency'), 'company': request.company,
+                      'currency_id': params.get('currency'), 'company': request.company, 'status': 'Unapproved',
                       'pending_amount': params.get('total_amount'), 'total_amount': params.get('total_amount')}
     # try:
     if params.get('id'):
@@ -104,9 +103,6 @@ def save_invoice(request):
     #     else:
     #         dct['error_message'] = 'Error in form data!'
     model = InvoiceParticular
-    cash_account = Account.objects.get(name='Cash Account', company=request.company)
-    sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
-    print params
     for index, row in enumerate(params.get('particulars').get('rows')):
         if invalid(row, ['item_id', 'unit_price', 'quantity']):
             continue
@@ -116,41 +112,51 @@ def save_invoice(request):
                   'unit_price': row.get('unit_price'), 'quantity': row.get('quantity'), 'discount': row.get('discount'),
                   'tax_scheme_id': row.get('tax_scheme'), 'invoice': invoice}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-        #sales-cr;tax-cr;cash-dr
-        #TODO reduce db query by sending tax rate from client
-        tax_percent = TaxScheme.objects.get(id=row.get('tax_scheme')).percent
-        wo_discount = float(row.get('quantity')) * float(row.get('unit_price'))
-        amt = wo_discount - ((float(row.get('discount')) * wo_discount) / 100)
-        if params.get('tax') == 'inclusive':
-            tax_amount = amt * (tax_percent / (100 + tax_percent))
-            net_amount = amt
-        elif params.get('tax') == 'exclusive':
-            tax_amount = amt * (tax_percent / 100)
-            net_amount = amt - tax_amount
-        elif params.get('tax') == 'no':
-            tax_amount = 0
-            net_amount = amt
-        sales_account = Item.objects.get(id=row.get('item_id')).sales_account
-        set_transactions(submodel, params.get('date'),
-                         ['dr', cash_account, amt],
-                         ['cr', sales_account, net_amount],
-                         ['cr', sales_tax_account, tax_amount],
-        )
         if not created:
             submodel = save_model(submodel, values)
         dct['rows'][index] = submodel.id
     delete_rows(params.get('particulars').get('deleted_rows'), model)
+    if params.get('continue'):
+        dct = {'redirect_to': str(reverse_lazy('new_invoice'))}
     return HttpResponse(json.dumps(dct), mimetype="application/json")
-
-
-@login_required
-def save_invoice_and_continue(request):
-    pass
 
 
 @group_required('Owner', 'SuperOwner', 'Supervisor')
 def approve_invoice(request):
-    pass
+    params = json.loads(request.body)
+    dct = {}
+    if params.get('id'):
+        voucher = Invoice.objects.get(id=params.get('id'))
+    else:
+        dct['error_message'] = 'Voucher needs to be saved before being approved!'
+        return HttpResponse(json.dumps(dct), mimetype="application/json")
+    cash_account = Account.objects.get(name='Cash Account', company=request.company)
+    sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
+    for row in voucher.particulars.all():
+        #print row
+        ##sales-cr;tax-cr;cash-dr
+        #TODO reduce db query by sending tax rate from client
+        tax_percent = row.tax_scheme.percent
+        wo_discount = row.quantity * row.unit_price
+        amt = wo_discount - ((row.discount * wo_discount) / 100)
+        if voucher.tax == 'inclusive':
+            tax_amount = amt * (tax_percent / (100 + tax_percent))
+            net_amount = amt
+        elif voucher.tax == 'exclusive':
+            tax_amount = amt * (tax_percent / 100)
+            net_amount = amt - tax_amount
+        elif voucher.tax == 'no':
+            tax_amount = 0
+            net_amount = amt
+        sales_account = row.item.sales_account
+        set_transactions(row, voucher.date,
+                         ['dr', cash_account, amt],
+                         ['cr', sales_account, net_amount],
+                         ['cr', sales_tax_account, tax_amount],
+        )
+    voucher.status = 'Approved'
+    voucher.save()
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
 @login_required
@@ -447,7 +453,7 @@ def approve_cash_receipt(request):
         dct['error_message'] = 'Voucher needs to be saved before being approved!'
         return HttpResponse(json.dumps(dct), mimetype="application/json")
         #set_transactions(voucher, params.get('receipt_on'),
-    #                         ['cr', Account.objects.get(id=params.get('total_payment')), row.get('cr_amount')],
+    #['cr', Account.objects.get(id=params.get('total_payment')), row.get('cr_amount')],
     #        )
     cash_account = Account.objects.get(name='Cash Account', company=request.company)
     discount_expenses_account = Account.objects.get(name='Discounting Expenses', company=request.company)
@@ -602,7 +608,7 @@ def save_fixed_asset(request):
     dct = {'rows1': {}, 'rows2': {}}
 
     voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'),
-                      'description': params.get('description'), 'company': request.company,
+                      'description': params.get('description'), 'company': request.company, 'status': 'Unapproved',
                       'from_account_id': params.get('from_account'), 'reference': params.get('reference')}
     if params.get('id'):
         voucher = FixedAsset.objects.get(id=params.get('id'))
@@ -638,7 +644,6 @@ def save_fixed_asset(request):
             submodel = save_model(submodel, values)
         dct['rows2'][index] = submodel.id
     delete_rows(params.get('additional_details').get('deleted_rows'), model)
-    voucher.status = 'Unapproved'
     if params.get('continue'):
         dct = {'redirect_to': str(reverse_lazy('create_fixed_asset'))}
     return HttpResponse(json.dumps(dct), mimetype="application/json")
