@@ -36,6 +36,7 @@ function WorkTimeVoucherVM(data) {
 
 
     self.date_changed = function () {
+
         if (!self.from_date() || !self.to_date())
             return;
         var the_date = new Date(self.from_date());
@@ -52,24 +53,6 @@ function WorkTimeVoucherVM(data) {
                 }
             }
             the_date.setDate(the_date.getDate() + 1);
-        }
-        for (var i = 0; i < self.days().length; i++) {
-            var day = self.days()[i];
-            var date1 = new Date(day.yyyy_mm_dd());
-            if (date1 < new Date(self.from_date()) || date1 > new Date(self.to_date())) {
-                self.days.remove(day);
-                for (var j = 0; j < self.rows().length; j++) {
-                    var row = self.rows()[j];
-                    for (var k = 0; k < row.work_days().length; k++) {
-                        var work_day = row.work_days()[k];
-                        var work_date = new Date(work_day.day.date_string);
-                        if (date1.getTime() == work_date.getTime()) {
-                            row.work_days.remove(work_day);
-                        }
-                    }
-                }
-
-            }
         }
 
         self.days(self.days().sort(function (a, b) {
@@ -89,6 +72,29 @@ function WorkTimeVoucherVM(data) {
             }
         }
 
+        var days_to_remove = [];
+        for (var i = 0; i < self.days().length; i++) {
+            var day = self.days()[i];
+            var date1 = new Date(day.yyyy_mm_dd());
+            if (date1 < new Date(self.from_date()) || date1 > new Date(self.to_date())) {
+                days_to_remove.push(day);
+//                self.days.remove(day);
+                for (var j = 0; j < self.rows().length; j++) {
+                    var row = self.rows()[j];
+                    for (var k = 0; k < row.work_days().length; k++) {
+                        var work_day = row.work_days()[k];
+                        var work_date = new Date(work_day.day.date_string);
+                        if (date1.getTime() == work_date.getTime()) {
+                            row.work_days.remove(work_day);
+                        }
+                    }
+                }
+            }
+        }
+
+        for (var i = 0; i < days_to_remove.length; i++) {
+            self.days.remove(days_to_remove[i]);
+        }
 
     }
 
