@@ -137,7 +137,7 @@ class VendorPayout(models.Model):
     paid = models.ForeignKey(Account)
     choices = [('new', 'New Purchase'), ('old', 'Old Bill Payment')]
     type = models.CharField(max_length=3, choices=choices, default='new')
-    day_journal = models.ForeignKey(DayJournal, related_name='vendor_payouts')
+    day_journal = models.ForeignKey(DayJournal, related_name='vendor_payout')
 
 
 class OtherPayout(models.Model):
@@ -146,4 +146,4 @@ class OtherPayout(models.Model):
     amount = models.FloatField()
     remarks = models.TextField()
     paid = models.ForeignKey(Account)
-    day_journal = models.ForeignKey(DayJournal, related_name='other_payouts')
+    day_journal = models.ForeignKey(DayJournal, related_name='other_payout')
