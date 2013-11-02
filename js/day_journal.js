@@ -6,12 +6,19 @@ function DayJournal(data) {
     for (var k in data)
         self[k] = data[k];
 
+    self.lotto_sales_dispenser_amount = ko.observable();
     if (data['lotto_sales_dispenser_amount']) {
-        self.lotto_sales_dispenser_amount = ko.observable();
         self.lotto_sales_dispenser_amount(data['lotto_sales_dispenser_amount']);
     }
-    else {
-        self.lotto_sales_dispenser_amount = ko.observable();
+
+    self.lotto_sales_register_amount = ko.observable();
+    if (data['lotto_sales_register_amount']) {
+        self.lotto_sales_register_amount(data['lotto_sales_register_amount']);
+    }
+
+    self.scratch_off_sales_register_amount = ko.observable();
+    if (data['scratch_off_sales_register_amount']) {
+        self.scratch_off_sales_register_amount(data['scratch_off_sales_register_amount']);
     }
 
     $.ajax({
@@ -40,6 +47,14 @@ function DayJournal(data) {
     }
 
     self.lotto_sales_dispenser_tax = ko.observable(parseFloat(self.account_by_name('Lotto Sales').tax_rate) * round2(parseFloat(self.lotto_sales_dispenser_amount())) / 100);
+
+    self.lotto_sales_register_tax = function () {
+        return parseFloat(self.account_by_name('Lotto Sales').tax_rate) * round2(parseFloat(self.lotto_sales_register_amount())) / 100;
+    }
+
+    self.scratch_off_sales_register_tax = function () {
+        return parseFloat(self.account_by_name('Scratch Off Sales').tax_rate) * round2(parseFloat(self.scratch_off_sales_register_amount())) / 100;
+    }
 
     self.lotto_changed = function (row) {
         var selected_account = $.grep(self.accounts, function (i) {
