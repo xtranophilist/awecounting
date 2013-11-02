@@ -91,6 +91,16 @@ function DayJournal(data) {
         return filtered_accounts;
     };
 
+    self.sales_sans_lotto = function () {
+        var sales_accounts =  self.accounts_by_category('Sales');
+        var accounts = [];
+        for (var i in sales_accounts){
+            if (sales_accounts[i].name!='Lotto Sales' && sales_accounts[i].name!='Scratch Off Sales')
+            accounts.push(sales_accounts[i]);
+        }
+        return accounts;
+    }
+
     self.inventory_accounts_by_category = function (category) {
         var filtered_accounts = [];
         for (var i in self.inventory_accounts) {
