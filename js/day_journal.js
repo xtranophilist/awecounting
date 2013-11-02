@@ -39,6 +39,15 @@ function DayJournal(data) {
         }
     });
 
+    $.ajax({
+        url: '/ledger/party/suppliers.json',
+        dataType: 'json',
+        async: false,
+        success: function (data) {
+            self.suppliers = data;
+        }
+    });
+
     self.account_by_name = function (name) {
         var account = $.grep(self.accounts, function (i) {
             return i.name == name;
@@ -148,6 +157,27 @@ function DayJournal(data) {
         return filtered_accounts;
     };
 
+    self.accounts_except_category = function (categories, is_or) {
+        var filtered_accounts = [];
+        for (var i in self.accounts) {
+            var account_categories = self.accounts[i].categories
+            if (typeof categories === 'string') {
+                if ($.inArray(categories, account_categories) == -1) {
+                    filtered_accounts.push(self.accounts[i]);
+                }
+            } else if (typeof is_or != 'undefined') {
+                if (!intersection(categories, account_categories).length) {
+                    filtered_accounts.push(self.accounts[i]);
+                }
+            } else {
+                if (!compare_arrays(categories, account_categories)) {
+                    filtered_accounts.push(self.accounts[i]);
+                }
+            }
+        }
+        return filtered_accounts;
+    };
+
     self.sales_sans_lotto = function () {
         var sales_accounts = self.accounts_by_category('Sales');
         var accounts = [];
@@ -167,11 +197,6 @@ function DayJournal(data) {
     self.scratch_off_sales_dispenser_tax = function () {
         return self.lotto_detail.get_total('sales') * self.account_by_name('Scratch Off Sales').tax_rate / 100;
     }
-
-//    self.scratch_off_sales_dispenser_tax = function () {
-//        var tax_rate = self.account_by_name('Lotto Sales');
-//        return self.lotto_sales_dispenser_amount * tax_rate / 100;
-//    }
 
     self.inventory_accounts_by_category = function (category) {
         var filtered_accounts = [];
@@ -263,6 +288,10 @@ function DayJournal(data) {
 
     self.lotto_detail = new TableViewModel(key_to_options('lotto_detail'), LottoDetailRow);
 
+    self.vendor_payout = new TableViewModel(key_to_options('vendor_payout'), VendorPayoutVM);
+
+    self.other_payout = new TableViewModel(key_to_options('other_payout'), OtherPayoutVM);
+
     self.summary_lotto = new SummaryLotto(self);
 
 }
@@ -317,10 +346,10 @@ function SummaryTaxRow(row) {
             if (isAN(this.tax()))
                 total += parseFloat(this.tax());
         });
-        $.each(root.credit_sales.rows(), function () {
-            if (isAN(this.tax()))
-                total += parseFloat(this.tax());
-        });
+//        $.each(root.credit_sales.rows(), function () {
+//            if (isAN(this.tax()))
+//                total += parseFloat(this.tax());
+//        });
         return rnum(total);
     }
 
@@ -424,29 +453,29 @@ function SummaryCashRow(row) {
             if (isAN(this.amount()))
                 total += parseFloat(this.amount());
         });
-        $.each(root.cash_receipt.rows(), function () {
-            if (isAN(this.amount()))
-                total += parseFloat(this.amount());
-        });
+//        $.each(root.cash_receipt.rows(), function () {
+//            if (isAN(this.amount()))
+//                total += parseFloat(this.amount());
+//        });
         $.each(root.summary_transfer.rows(), function () {
             if (isAN(this.cash()))
                 total += parseFloat(this.cash());
         });
-        if (isAN(root.summary_bank.rows()[0].withdrawal()))
-            total += parseFloat(root.summary_bank.rows()[0].withdrawal());
+//        if (isAN(root.summary_bank.rows()[0].withdrawal()))
+//            total += parseFloat(root.summary_bank.rows()[0].withdrawal());
         return round2(total);
     };
 
     self.outward = function (root) {
         var total = 0;
-        $.each(root.cash_purchase.rows(), function () {
-            if (isAN(this.amount()))
-                total += parseFloat(this.amount());
-        });
-        $.each(root.cash_payment.rows(), function () {
-            if (isAN(this.amount()))
-                total += parseFloat(this.amount());
-        });
+//        $.each(root.cash_purchase.rows(), function () {
+//            if (isAN(this.amount()))
+//                total += parseFloat(this.amount());
+//        });
+//        $.each(root.cash_payment.rows(), function () {
+//            if (isAN(this.amount()))
+//                total += parseFloat(this.amount());
+//        });
         $.each(root.card_sales.rows(), function () {
             if (isAN(this.amount()))
                 total += parseFloat(this.amount());
@@ -455,12 +484,12 @@ function SummaryCashRow(row) {
             if (isAN(this.amount()))
                 total += parseFloat(this.amount());
         });
-        $.each(root.cheque_purchase.rows(), function () {
-            if (isAN(this.net()))
-                total += parseFloat(this.net());
-        });
-        if (isAN(root.summary_bank.rows()[0].deposit()))
-            total += parseFloat(root.summary_bank.rows()[0].deposit());
+//        $.each(root.cheque_purchase.rows(), function () {
+//            if (isAN(this.net()))
+//                total += parseFloat(this.net());
+//        });
+//        if (isAN(root.summary_bank.rows()[0].deposit()))
+//            total += parseFloat(root.summary_bank.rows()[0].deposit());
         return round2(total);
     };
 
@@ -505,4 +534,39 @@ function SummaryLotto(root) {
     self.diff = function () {
         return round2(self.disp() - self.reg());
     };
+}
+
+function VendorPayoutVM(row) {
+    var self = this;
+
+    self.vendor = ko.observable();
+    self.amount = ko.observable();
+    self.purchase_ledger = ko.observable();
+    self.remarks = ko.observable();
+    self.paid = ko.observable();
+    self.type = ko.observable();
+
+    self.types = [
+        { name: 'New Purchase', id: 'new'},
+        { name: 'Old Bill Payment', id: 'old'}
+    ];
+
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
+    }
+}
+
+function OtherPayoutVM(row) {
+    var self = this;
+
+    self.paid_to = ko.observable();
+    self.amount = ko.observable();
+    self.remarks = ko.observable();
+    self.paid = ko.observable();
+
+    for (var k in row) {
+        if (row[k] != null)
+            self[k] = ko.observable(row[k]);
+    }
 }
