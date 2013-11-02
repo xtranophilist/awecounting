@@ -410,14 +410,15 @@ def save_vendor_payout(request):
     model = VendorPayout
     day_journal = get_journal(request)
     for index, row in enumerate(params.get('rows')):
-        print row
         invalid_attrs = invalid(row, ['vendor', 'amount', 'purchase_ledger', 'paid', 'type'])
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
 
-        values = {'sn': index + 1, 'vendor_id': row.get('vendor'), 'amount': row.get('amount'), 'purchase_ledger_id': row.get('purchase_ledger'),
-                  'paid_id': row.get('paid'), 'type': row.get('type'), 'remarks': row.get('remarks'), 'day_journal': day_journal}
+        values = {'sn': index + 1, 'vendor_id': row.get('vendor'), 'amount': row.get('amount'),
+                  'purchase_ledger_id': row.get('purchase_ledger'),
+                  'paid_id': row.get('paid'), 'type': row.get('type'), 'remarks': row.get('remarks'),
+                  'day_journal': day_journal}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
@@ -432,35 +433,14 @@ def save_other_payout(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = OtherPayout
     day_journal = get_journal(request)
-    cash_account = Account.objects.get(name='Cash Account', company=request.company)
-    sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
     for index, row in enumerate(params.get('rows')):
-        invalid_attrs = invalid(row, ['account_id', 'amount'])
+        invalid_attrs = invalid(row, ['paid_to', 'amount', 'paid'])
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
-        values = {'sn': index + 1, 'sales_ledger_id': row.get('account_id'), 'amount': row.get('amount'),
-                  'day_journal': day_journal}
+        values = {'sn': index + 1, 'paid_to_id': row.get('paid_to'), 'amount': row.get('amount'),
+                  'paid_id': row.get('paid'), 'day_journal': day_journal, 'remarks': row.get('remarks')}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-        if row.get('tax_rate') is None:
-            row['tax_rate'] = 0
-        tax_amount = float(row.get('tax_rate')) / 100 * float(row.get('amount'))
-        net_amount = float(row.get('amount')) - tax_amount
-
-        #sales-cr;tax-cr;cash-dr
-
-        if tax_amount == 0:
-            set_transactions(submodel, day_journal.date,
-                             ['dr', cash_account, row.get('amount')],
-                             ['cr', Account.objects.get(id=row.get('account_id')), net_amount],
-                             # ['cr', sales_tax_account, tax_amount],
-            )
-        else:
-            set_transactions(submodel, day_journal.date,
-                             ['dr', cash_account, row.get('amount')],
-                             ['cr', Account.objects.get(id=row.get('account_id')), net_amount],
-                             ['cr', sales_tax_account, tax_amount],
-            )
         if not created:
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
