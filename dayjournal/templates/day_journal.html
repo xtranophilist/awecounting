@@ -244,6 +244,35 @@
                 class="icon-save"></i> Save
         </button>
 
+        <table class="table table-bordered table-striped table-acubor table-sortable">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Amount</th>
+                <th>Tax</th>
+            </tr>
+            </thead>
+            <tr>
+                <th>Actual Sales</th>
+                <td data-bind="text: actual_sales_amount()"></td>
+                <td data-bind="text: actual_sales_tax()"></td>
+            </tr>
+            <tr>
+                <th>Sales shown by Register</th>
+                <td data-bind="text: register_sales_amount()"></td>
+                <td data-bind="text: register_sales_tax()"></td>
+            </tr>
+            <tr class="diff">
+                <th>Difference</th>
+                <td data-bind="text: diff_sales_amount()"></td>
+                <td data-bind="text: diff_sales_tax()"></td>
+            </tr>
+            <tbody>
+
+            </tbody>
+
+        </table>
+
     </div>
 
     <div id="card-sales" class="tab-pane">
