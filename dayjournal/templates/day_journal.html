@@ -460,9 +460,8 @@
                                         <span data-bind="text: $index()+1"> </span>
                                     </td>
                                     <td class="with_ip">
-                                        <input type="hidden" data-field="Supplier"
-                                               data-add-url="{% url 'create_party' %}?type=Supplier"
-                                               data-bind="value: vendor, select2: {data: {results: $root.suppliers}}, lookupKey: 'id'">
+                                        <input type="hidden"
+                                               data-bind="value: vendor, select2: {data: {results: $root.accounts_by_category('Suppliers')}}, lookupKey: 'id'">
                                     </td>
                                     <td data-bind="editableText: amount"></td>
                                     <td>
@@ -475,7 +474,7 @@
                                                data-bind="value: paid, select2: {data: {results: $root.accounts_by_category(['Cash Account', 'Bank Account', 'Cash Equivalent Account'], true)}}, lookupKey: 'id'">
                                     </td>
                                     <td>
-                                        <select data-bind="options: types, optionsText:'name', optionsValue: 'id'">
+                                        <select data-bind="options: types, optionsText:'name', optionsValue: 'id', value: type">
                                         </select>
                                     </td>
                                     <td>
@@ -523,7 +522,7 @@
                                     </td>
                                     <td class="with_ip">
                                         <input type="hidden"
-                                               data-bind="value: paid, select2: {data: {results: $root.accounts_except_category(['Sales', 'Purchase', 'Cash Account', 'Cash Equivalent Account', 'Bank Account', 'Suppliers'], true)}}, lookupKey: 'id'">
+                                               data-bind="value: paid_to, select2: {data: {results: $root.accounts_except_category(['Sales', 'Purchase', 'Cash Account', 'Cash Equivalent Account', 'Bank Account', 'Suppliers'], true)}}, lookupKey: 'id'">
                                     </td>
                                     <td data-bind="editableText: amount"></td>
                                     <td data-bind="editableText: remarks"></td>
