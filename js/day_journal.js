@@ -56,6 +56,30 @@ function DayJournal(data) {
         return parseFloat(self.account_by_name('Scratch Off Sales').tax_rate) * round2(parseFloat(self.scratch_off_sales_register_amount())) / 100;
     }
 
+    self.actual_sales_amount = function () {
+        return self.cash_sales.get_total('amount') + parseFloat(self.lotto_sales_dispenser_amount()) + self.lotto_detail.get_total('sales');
+    }
+
+    self.actual_sales_tax = function () {
+        return self.cash_sales.get_total('tax') + parseFloat(self.lotto_sales_dispenser_tax()) + self.scratch_off_sales_dispenser_tax();
+    }
+
+    self.register_sales_amount = function () {
+        return self.cash_sales.get_total('amount') + parseFloat(self.lotto_sales_register_amount()) + parseFloat(self.scratch_off_sales_register_amount());
+    }
+
+    self.register_sales_tax = function () {
+        return self.cash_sales.get_total('tax') + self.lotto_sales_register_tax() + self.scratch_off_sales_register_tax();
+    }
+
+    self.diff_sales_amount = function () {
+        return self.actual_sales_amount() - self.register_sales_amount();
+    }
+
+    self.diff_sales_tax = function () {
+        return self.actual_sales_tax() - self.register_sales_tax();
+    }
+
     self.lotto_changed = function (row) {
         var selected_account = $.grep(self.accounts, function (i) {
             return i.id == row.particular();
