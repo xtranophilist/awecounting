@@ -245,20 +245,6 @@ function DayJournal(data) {
 
     self.cash_sales = new TableViewModel(key_to_options('cash_sales'), CashSalesRow);
 
-    self.cash_purchase = new TableViewModel(key_to_options('cash_purchase'), CashRow);
-
-    self.cash_receipt = new TableViewModel(key_to_options('cash_receipt'), CashRow);
-
-    self.cash_payment = new TableViewModel(key_to_options('cash_payment'), CashRow);
-
-    self.credit_sales = new TableViewModel(key_to_options('credit_sales'), CreditSalesRow);
-
-    self.credit_purchase = new TableViewModel(key_to_options('credit_purchase'), CreditRow);
-
-    self.credit_income = new TableViewModel(key_to_options('credit_income'), CreditRow);
-
-    self.credit_expense = new TableViewModel(key_to_options('credit_expense'), CreditRow);
-
     self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), SummaryTaxRow);
     self.summary_sales_tax.rows()[0].register(self.sales_tax);
 
@@ -271,15 +257,6 @@ function DayJournal(data) {
     self.card_sales = new TableViewModel(key_to_options('card_sales'), CardSalesRow);
 
     self.cash_equivalent_sales = new TableViewModel(key_to_options('cash_equivalent_sales'), CashEquivalentSalesRow);
-
-    self.cheque_purchase = new TableViewModel(key_to_options('cheque_purchase'), ChequePurchaseRow);
-
-    self.summary_bank = new TableViewModel(key_to_options('summary_bank'), function () {
-    });
-    self.summary_bank.rows([
-        {'deposit': ko.observable(self.cash_deposit), 'withdrawal': ko.observable(self.cash_withdrawal)},
-        {'deposit': ko.observable(self.cheque_deposit)}
-    ]);
 
     self.summary_cash = new TableViewModel(key_to_options('summary_cash'), SummaryCashRow);
     self.summary_cash.rows()[0].actual(self.cash_actual);
@@ -313,19 +290,6 @@ function LottoDetailRow(row) {
     }
 }
 
-function CashRow(row) {
-    var self = this;
-
-    self.account_id = ko.observable();
-    self.amount = ko.observable();
-
-    for (var k in row) {
-        if (row[k] != null)
-            self[k] = ko.observable(row[k]);
-    }
-
-}
-
 function CashSalesRow(row) {
     var self = this;
 
@@ -334,38 +298,6 @@ function CashSalesRow(row) {
     self.amount = ko.observable();
     self.tax = function () {
         return round2(parseFloat(self.amount()) * parseFloat(self.tax_rate()) / 100);
-    }
-
-    for (var k in row) {
-        if (row[k] != null)
-            self[k] = ko.observable(row[k]);
-    }
-
-}
-
-function CreditRow(row) {
-    var self = this;
-
-    self.account_cr_id = ko.observable();
-    self.account_dr_id = ko.observable();
-    self.amount = ko.observable();
-
-    for (var k in row) {
-        if (row[k] != null)
-            self[k] = ko.observable(row[k]);
-    }
-
-}
-
-function CreditSalesRow(row) {
-    var self = this;
-
-    self.account_cr_id = ko.observable();
-    self.account_dr_id = ko.observable();
-    self.tax_rate = ko.observable();
-    self.amount = ko.observable();
-    self.tax = function () {
-        return rnum(parseFloat(self.amount()) * parseFloat(self.tax_rate()) / 100);
     }
 
     for (var k in row) {
@@ -467,23 +399,6 @@ function CashEquivalentSalesRow(row) {
 
     self.account = ko.observable();
     self.amount = ko.observable();
-
-    for (var k in row) {
-        if (row[k] != null)
-            self[k] = ko.observable(row[k]);
-    }
-
-}
-
-function ChequePurchaseRow(row) {
-    var self = this;
-
-    self.amount = ko.observable();
-    self.commission_in = ko.observable();
-
-    self.net = function () {
-        return rnum(empty_to_zero(self.amount()) - empty_to_zero(self.commission_in()));
-    }
 
     for (var k in row) {
         if (row[k] != null)
