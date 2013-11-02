@@ -47,10 +47,10 @@ def day_journal(request, journal_date=None):
 def get_journal(request):
     journal, created = DayJournal.objects.get_or_create(date=json.loads(request.body).get('day_journal_date'),
                                                         company=request.company, defaults={'sales_tax': 0,
-                                                                                                'cheque_deposit': 0,
-                                                                                                'cash_deposit': 0,
-                                                                                                'cash_withdrawal': 0,
-                                                                                                'cash_actual': 0})
+                                                                                           'cheque_deposit': 0,
+                                                                                           'cash_deposit': 0,
+                                                                                           'cash_withdrawal': 0,
+                                                                                           'cash_actual': 0})
     # if created:
     #     journal.save()
     return journal
@@ -613,10 +613,10 @@ def save_attachments(request):
     attachments = request.FILES.getlist('attachments')
     day_journal, created = DayJournal.objects.get_or_create(date=request.POST['day'],
                                                             company=request.company, defaults={'sales_tax': 0,
-                                                                                                    'cheque_deposit': 0,
-                                                                                                    'cash_deposit': 0,
-                                                                                                    'cash_withdrawal': 0,
-                                                                                                    'cash_actual': 0})
+                                                                                               'cheque_deposit': 0,
+                                                                                               'cash_deposit': 0,
+                                                                                               'cash_withdrawal': 0,
+                                                                                               'cash_actual': 0})
     lst = []
     for i, attachment in enumerate(attachments):
         attached = model(attachment=attachment, description=captions[i], day_journal=day_journal)
@@ -624,3 +624,13 @@ def save_attachments(request):
         lst.append(
             {'name': attachment.name, 'caption': captions[i], 'id': attached.id, 'link': attached.attachment.url})
     return HttpResponse(json.dumps(lst), mimetype="application/json")
+
+
+@login_required
+def save_lotto_sales_as_per_dispenser(request):
+    params = json.loads(request.body)
+    journal = get_journal(request)
+    if params.get('lotto_sales_dispenser_amount'):
+        journal.lotto_sales_dispenser_amount = params.get('lotto_sales_dispenser_amount')
+        journal.save()
+    return HttpResponse(json.dumps({'id': journal.id}), mimetype="application/json")

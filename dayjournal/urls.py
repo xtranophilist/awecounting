@@ -26,5 +26,7 @@ urlpatterns = patterns('',
                        url(r'^save/lotto_detail/$', views.save_lotto_detail, name='save_lotto_detail'),
                        url(r'^delete_attachment/$', views.delete_attachment, name='delete_attachment'),
                        url(r'^save_attachments/$', views.save_attachments, name='save_attachments'),
+                       url(r'^save_lotto_sales_as_per_dispenser/$', views.save_lotto_sales_as_per_dispenser,
+                           name='save_lotto_sales_as_per_dispenser'),
 )
 
