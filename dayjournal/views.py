@@ -632,5 +632,9 @@ def save_lotto_sales_as_per_dispenser(request):
     journal = get_journal(request)
     if params.get('lotto_sales_dispenser_amount'):
         journal.lotto_sales_dispenser_amount = params.get('lotto_sales_dispenser_amount')
-        journal.save()
+    if params.get('lotto_sales_register_amount'):
+        journal.lotto_sales_register_amount = params.get('lotto_sales_register_amount')
+    if params.get('scratch_off_sales_register_amount'):
+        journal.scratch_off_sales_register_amount = params.get('scratch_off_sales_register_amount')
+    journal.save()
     return HttpResponse(json.dumps({'id': journal.id}), mimetype="application/json")

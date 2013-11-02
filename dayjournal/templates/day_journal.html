@@ -219,15 +219,23 @@
             <tbody>
             <tr>
                 <th>Lotto Sales as per Dispenser</th>
-                {#                <td><input type="text" data-bind="value: lotto_sales_dispenser_amount"></td>#}
                 <td data-bind="editableText: lotto_sales_dispenser_amount" class="change-on-ready"></td>
                 <td data-bind="text: $root.lotto_sales_dispenser_tax()"></td>
-                {#                <td data-bind="text: lotto_sales_dispenser_tax()"></td>#}
             </tr>
             <tr>
                 <th>Scratch Off Sales as per Dispenser</th>
                 <td data-bind="text: $root.lotto_detail.get_total('sales')"></td>
                 <td data-bind="text: scratch_off_sales_dispenser_tax()"></td>
+            </tr>
+            <tr>
+                <th>Lotto Sales as per Register</th>
+                <td data-bind="editableText: lotto_sales_register_amount"></td>
+                <td data-bind="text: $root.lotto_sales_register_tax()"></td>
+            </tr>
+            <tr>
+                <th>Scratch Off Sales as per Register</th>
+                <td data-bind="editableText: scratch_off_sales_register_amount"></td>
+                <td data-bind="text: $root.scratch_off_sales_register_tax()"></td>
             </tr>
             </tbody>
         </table>

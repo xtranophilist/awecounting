@@ -13,6 +13,8 @@ class DayJournal(models.Model):
     cheque_deposit = models.FloatField()
     cash_actual = models.FloatField()
     lotto_sales_dispenser_amount = models.FloatField(default=0)
+    lotto_sales_register_amount = models.FloatField(default=0)
+    scratch_off_sales_register_amount = models.FloatField(default=0)
 
     def get_absolute_url(self):
         return '/day/' + str(self.date)
@@ -106,7 +108,6 @@ class CreditIncome(models.Model):
 
     def get_absolute_url(self):
         return '/day/' + str(self.day_journal.date) + '#credit-income'
-
 
 
 class SummaryTransfer(models.Model):
