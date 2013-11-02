@@ -138,19 +138,19 @@
     <ul class="nav nav-tabs" id="cash-tab">
         <li class="active">
             <a data-toggle="tab" href="#cash-sales">
-                Cash Sales
+                Sales
             </a>
         </li>
-        <li>
-            <a data-toggle="tab" href="#card-sales">
-                Card Sales
-            </a>
-        </li>
-        <li>
-            <a data-toggle="tab" href="#cash-eqv-sales">
-                Cash Equivalent Sales
-            </a>
-        </li>
+        {#        <li>#}
+        {#            <a data-toggle="tab" href="#card-sales">#}
+        {#                Card Sales#}
+        {#            </a>#}
+        {#        </li>#}
+        {#        <li>#}
+        {#            <a data-toggle="tab" href="#cash-eqv-sales">#}
+        {#                Cash Equivalent Sales#}
+        {#            </a>#}
+        {#        </li>#}
         <li>
             <a data-toggle="tab" href="#summary-transfer">
                 Transfers/Remittance
@@ -273,9 +273,8 @@
 
         </table>
 
-    </div>
+        <h3>Sales through Cards</h3>
 
-    <div id="card-sales" class="tab-pane">
         <div class="row-fluid" data-bind="with: card_sales">
             <table class="table table-bordered table-striped table-acubor table-sortable">
                 <thead>
@@ -306,9 +305,9 @@
                 <button class="btn btn-small" data-bind="click: reset">Reset</button>
             </div>
         </div>
-    </div>
 
-    <div id="cash-eqv-sales" class="tab-pane">
+        <h3>Sales through Others</h3>
+
         <div class="row-fluid" data-bind="with: cash_equivalent_sales">
             <table class="table table-bordered table-striped table-acubor table-sortable">
                 <thead>
@@ -352,7 +351,16 @@
                 <button class="btn btn-small" data-bind="click: reset">Reset</button>
             </div>
         </div>
+
     </div>
+
+    {#    <div id="card-sales" class="tab-pane">#}
+    {##}
+    {#    </div>#}
+{##}
+{#    <div id="cash-eqv-sales" class="tab-pane">#}
+{##}
+{#    </div>#}
 
     <div id="summary-transfer" class="tab-pane">
         <div class="row-fluid" data-bind="with: summary_transfer">
