@@ -610,3 +610,7 @@ td .select2-container {
 input.date-picker {
     background: transparent url(../images/calendar.png) center right no-repeat;
 }
+
+tr.diff td {
+    color: red;
+}
