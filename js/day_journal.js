@@ -39,15 +39,6 @@ function DayJournal(data) {
         }
     });
 
-    $.ajax({
-        url: '/ledger/party/suppliers.json',
-        dataType: 'json',
-        async: false,
-        success: function (data) {
-            self.suppliers = data;
-        }
-    });
-
     self.account_by_name = function (name) {
         var account = $.grep(self.accounts, function (i) {
             return i.name == name;
@@ -247,13 +238,13 @@ function DayJournal(data) {
             model.message('Saved!');
         else if (saved_size == 0) {
             model.message('No rows saved!');
-            model.status('error');
+            model.state('error');
         }
         else if (saved_size < rows.length) {
             var message = saved_size.toString() + ' row' + ((saved_size == 1) ? '' : 's') + ' saved! ';
             message += (rows.length - saved_size).toString() + ' row' + ((rows.length - saved_size == 1) ? ' is' : 's are') + ' incomplete!';
             model.message(message);
-            model.status('error');
+            model.state('error');
         }
     }
 
