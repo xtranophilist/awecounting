@@ -161,7 +161,12 @@ def approve_invoice(request):
 
 @login_required
 def cancel_invoice(request):
-    pass
+    r = save_invoice(request)
+    dct = json.loads(r.content)
+    obj = Invoice.objects.get(id=dct.get('id'))
+    obj.status = 'Cancelled'
+    obj.save()
+    return r
 
 
 @login_required
