@@ -93,8 +93,9 @@
                 }
             });
 
+            vm = new DayJournal({{ day_journal|jsonify }});
+            ko.applyBindings(vm);
 
-            ko.applyBindings(new DayJournal({{ day_journal|jsonify }}));
         });
     </script>
 {% endblock %}
@@ -105,6 +106,8 @@
 {% endblock %}
 
 {% block content %}
+
+    {{ day_journal }}
 
     <!-- Modal -->
     <div id="print-preview" class="modal hide fade do-print" tabindex="-1" role="dialog" aria-labelledby="modal-label"
@@ -130,210 +133,240 @@
         </a>
     </div>
     <div class="col-box-body">
-        <!-- Cash Tab -->
-        <div class="tabbable">
-            <ul class="nav nav-tabs" id="cash-tab">
-                <li class="active">
-                    <a data-toggle="tab" href="#cash-sales">
-                        Cash Sales
-                    </a>
-                </li>
-                <li>
-                    <a data-toggle="tab" href="#card-sales">
-                        Card Sales
-                    </a>
-                </li>
-                <li>
-                    <a data-toggle="tab" href="#cash-eqv-sales">
-                        Cash Equivalent Sales
-                    </a>
-                </li>
-                <li>
-                    <a data-toggle="tab" href="#summary-transfer">
-                        Transfers/Remittance
-                    </a>
-                </li>
-            </ul>
-            <div class="tab-content">
+    <!-- Cash Tab -->
+    <div class="tabbable">
+    <ul class="nav nav-tabs" id="cash-tab">
+        <li class="active">
+            <a data-toggle="tab" href="#cash-sales">
+                Cash Sales
+            </a>
+        </li>
+        <li>
+            <a data-toggle="tab" href="#card-sales">
+                Card Sales
+            </a>
+        </li>
+        <li>
+            <a data-toggle="tab" href="#cash-eqv-sales">
+                Cash Equivalent Sales
+            </a>
+        </li>
+        <li>
+            <a data-toggle="tab" href="#summary-transfer">
+                Transfers/Remittance
+            </a>
+        </li>
+    </ul>
+    <div class="tab-content">
 
-                <div id="cash-sales" class="tab-pane active">
-                    <div class="row-fluid" data-bind="with: cash_sales">
-                        <table class="table table-bordered table-striped table-acubor table-sortable">
-                            <thead>
-                            <tr>
-                                <th class="span1">SN</th>
-                                <th class="span2">Sales Ledger</th>
-                                <th class="span2">Amount</th>
-                                <th class="span2">Tax</th>
-                                <th class="span1"></th>
-                            </tr>
-                            </thead>
+    <div id="cash-sales" class="tab-pane active">
+        <div class="row-fluid" data-bind="with: cash_sales">
+            <table class="table table-bordered table-striped table-acubor table-sortable">
+                <thead>
+                <tr>
+                    <th class="span1">SN</th>
+                    <th class="span2">Sales Ledger</th>
+                    <th class="span2">Amount</th>
+                    <th class="span2">Tax</th>
+                    <th class="span1"></th>
+                </tr>
+                </thead>
 
-                            <tbody id="cash-sales">
-                            <!-- ko foreach: rows -->
-                            <tr data-bind="flash: true">
-                                <td>
-                                    <span data-bind="text: $index()+1"> </span>
-                                </td>
-                                <td class="with_ip">
-                                    <select class="span12"
-                                            data-bind="options: $root.sales_sans_lotto(), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.account_changed}"></select>
-                                </td>
-                                <td data-bind="editableText: amount, numeric: true"></td>
-                                <td data-bind="text: tax()"></td>
-                                <td align="center">
-                                    <button class="btn-none" data-bind="click: $parent.removeRow">
-                                        <i class="icon-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <!-- /ko -->
-                            </tbody>
-                        </table>
-                        <div data-bind="css: state()" class="pull-left">
+                <tbody id="cash-sales">
+                <!-- ko foreach: rows -->
+                <tr data-bind="flash: true">
+                    <td>
+                        <span data-bind="text: $index()+1"> </span>
+                    </td>
+                    <td class="with_ip">
+                        <select class="span12"
+                                data-bind="options: $root.sales_sans_lotto(), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.account_changed}"></select>
+                    </td>
+                    <td data-bind="editableText: amount, numeric: true"></td>
+                    <td data-bind="text: tax()"></td>
+                    <td align="center">
+                        <button class="btn-none" data-bind="click: $parent.removeRow">
+                            <i class="icon-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <!-- /ko -->
+                </tbody>
+            </table>
+            <div data-bind="css: state()" class="pull-left">
                                           <span data-bind="text: message()">
                                           </span>
-                        </div>
-                        <div class="pull-right">
-                            <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i> Add
-                                New Row
-                            </button>
-                            <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save
-                            </button>
-                            <button class="btn btn-small" data-bind="click: reset">Reset</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="card-sales" class="tab-pane">
-                    <div class="row-fluid" data-bind="with: card_sales">
-                        <table class="table table-bordered table-striped table-acubor table-sortable">
-                            <thead>
-                            <tr>
-                                <th class="span2">Amount</th>
-                                <th class="span2">Commission Out</th>
-                                <th class="span2">Net</th>
-                            </tr>
-                            </thead>
-
-                            <tbody id="card-sales">
-                            <!-- ko foreach: rows -->
-                            <tr>
-                                <td data-bind="editableText: amount"></td>
-                                <td data-bind="editableText: commission_out"></td>
-                                <td data-bind="text: net().toFixed(2)"></td>
-                            </tr>
-                            <!-- /ko -->
-                            </tbody>
-                        </table>
-                        <div data-bind="css: state()" class="pull-left">
-                                    <span data-bind="text: message()">
-                                    </span>
-                        </div>
-                        <div class="pull-right">
-                            <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save
-                            </button>
-                            <button class="btn btn-small" data-bind="click: reset">Reset</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="cash-eqv-sales" class="tab-pane">
-                    <div class="row-fluid" data-bind="with: cash_equivalent_sales">
-                        <table class="table table-bordered table-striped table-acubor table-sortable">
-                            <thead>
-                            <tr>
-                                <th>SN</th>
-                                <th>Particular</th>
-                                <th>Amount</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-
-                            <tbody id='cash-equivalent-sales'>
-                            <!-- ko foreach: rows -->
-                            <tr data-bind="flash: true">
-                                <td data-bind="text: $index()+1"></td>
-                                <td class="with_ip">
-                                    <select class="span12"
-                                            data-bind="options: $root.accounts_by_category('Cash Equivalent Account'), optionsText: 'name', optionsValue: 'id', value: account, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
-                                </td>
-                                <td data-bind="editableText: amount"></td>
-                                <td>
-                                    <button class="btn-none" data-bind="click: $parent.removeRow"><i
-                                            class="icon-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <!-- /ko -->
-                            </tbody>
-                        </table>
-                        <div data-bind="css: state()" class="pull-left">
-                                <span data-bind="text: message()">
-                                </span>
-                        </div>
-                        <div class="pull-right">
-                            <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i> Add
-                                New
-                                Row
-                            </button>
-                            <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save
-                            </button>
-                            <button class="btn btn-small" data-bind="click: reset">Reset</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div id="summary-transfer" class="tab-pane">
-                    <div class="row-fluid" data-bind="with: summary_transfer">
-                        <table class="table table-bordered table-striped table-acubor table-sortable">
-                            <thead>
-                            <tr>
-                                <th>SN</th>
-                                <th>Transfer Type</th>
-                                <th>Cash</th>
-                                <th>Cheque</th>
-                                <th>Card</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-                            <tbody id="summary-transfer">
-                            <!-- ko foreach: rows -->
-                            <tr data-bind="flash: true">
-                                <td data-bind="text: $index()+1"></td>
-                                <td class="with_ip">
-                                    <select class="span12"
-                                            data-bind="options: $root.accounts_by_category('Transfers/Remittances'), optionsText: 'name', optionsValue: 'id', value: transfer_type, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
-                                </td>
-                                <td data-bind="editableText: cash"></td>
-                                <td data-bind="editableText: cheque"></td>
-                                <td data-bind="editableText: card"></td>
-                                <td>
-                                    <button class="btn-none" data-bind="click: $parent.removeRow">
-                                        <i class="icon-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <!-- /ko -->
-                            </tbody>
-                        </table>
-                        <div data-bind="css: state()" class="pull-left">
-                                          <span data-bind="text: message()">
-                                          </span>
-                        </div>
-                        <div class="pull-right">
-                            <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i> Add
-                                New Row
-                            </button>
-                            <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save
-                            </button>
-                            <button class="btn btn-small" data-bind="click: reset">Reset</button>
-                        </div>
-                    </div>
-                </div>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i> Add
+                    New Row
+                </button>
+                <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save
+                </button>
+                <button class="btn btn-small" data-bind="click: reset">Reset</button>
             </div>
         </div>
-        <!-- EOF Cash Tab -->
+
+
+        <table class="table table-bordered table-striped table-acubor table-sortable">
+            <thead>
+            <tr>
+                <th></th>
+                <th>Amount</th>
+                <th>Tax</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th>Lotto Sales as per Dispenser</th>
+                {#                <td><input type="text" data-bind="value: lotto_sales_dispenser_amount"></td>#}
+                <td data-bind="editableText: lotto_sales_dispenser_amount" class="change-on-ready"></td>
+                <td data-bind="text: $root.lotto_sales_dispenser_tax()"></td>
+                {#                <td data-bind="text: lotto_sales_dispenser_tax()"></td>#}
+            </tr>
+            <tr>
+                <th>Scratch Off Sales as per Dispenser</th>
+                <td data-bind="text: $root.lotto_detail.get_total('sales')"></td>
+                <td data-bind="text: scratch_off_sales_dispenser_tax()"></td>
+            </tr>
+            </tbody>
+        </table>
+        <span id="lotto-sales-message"></span>
+        <button class="btn btn-small pull-right" data-bind="click: save_lotto_sales_as_per_dispenser"><i
+                class="icon-save"></i> Save
+        </button>
+
+    </div>
+
+    <div id="card-sales" class="tab-pane">
+        <div class="row-fluid" data-bind="with: card_sales">
+            <table class="table table-bordered table-striped table-acubor table-sortable">
+                <thead>
+                <tr>
+                    <th class="span2">Amount</th>
+                    <th class="span2">Commission Out</th>
+                    <th class="span2">Net</th>
+                </tr>
+                </thead>
+
+                <tbody id="card-sales">
+                <!-- ko foreach: rows -->
+                <tr>
+                    <td data-bind="editableText: amount"></td>
+                    <td data-bind="editableText: commission_out"></td>
+                    <td data-bind="text: net().toFixed(2)"></td>
+                </tr>
+                <!-- /ko -->
+                </tbody>
+            </table>
+            <div data-bind="css: state()" class="pull-left">
+                                    <span data-bind="text: message()">
+                                    </span>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save
+                </button>
+                <button class="btn btn-small" data-bind="click: reset">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cash-eqv-sales" class="tab-pane">
+        <div class="row-fluid" data-bind="with: cash_equivalent_sales">
+            <table class="table table-bordered table-striped table-acubor table-sortable">
+                <thead>
+                <tr>
+                    <th>SN</th>
+                    <th>Particular</th>
+                    <th>Amount</th>
+                    <th></th>
+                </tr>
+                </thead>
+
+                <tbody id='cash-equivalent-sales'>
+                <!-- ko foreach: rows -->
+                <tr data-bind="flash: true">
+                    <td data-bind="text: $index()+1"></td>
+                    <td class="with_ip">
+                        <select class="span12"
+                                data-bind="options: $root.accounts_by_category('Cash Equivalent Account'), optionsText: 'name', optionsValue: 'id', value: account, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
+                    </td>
+                    <td data-bind="editableText: amount"></td>
+                    <td>
+                        <button class="btn-none" data-bind="click: $parent.removeRow"><i
+                                class="icon-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <!-- /ko -->
+                </tbody>
+            </table>
+            <div data-bind="css: state()" class="pull-left">
+                                <span data-bind="text: message()">
+                                </span>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i> Add
+                    New
+                    Row
+                </button>
+                <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save
+                </button>
+                <button class="btn btn-small" data-bind="click: reset">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="summary-transfer" class="tab-pane">
+        <div class="row-fluid" data-bind="with: summary_transfer">
+            <table class="table table-bordered table-striped table-acubor table-sortable">
+                <thead>
+                <tr>
+                    <th>SN</th>
+                    <th>Transfer Type</th>
+                    <th>Cash</th>
+                    <th>Cheque</th>
+                    <th>Card</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody id="summary-transfer">
+                <!-- ko foreach: rows -->
+                <tr data-bind="flash: true">
+                    <td data-bind="text: $index()+1"></td>
+                    <td class="with_ip">
+                        <select class="span12"
+                                data-bind="options: $root.accounts_by_category('Transfers/Remittances'), optionsText: 'name', optionsValue: 'id', value: transfer_type, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
+                    </td>
+                    <td data-bind="editableText: cash"></td>
+                    <td data-bind="editableText: cheque"></td>
+                    <td data-bind="editableText: card"></td>
+                    <td>
+                        <button class="btn-none" data-bind="click: $parent.removeRow">
+                            <i class="icon-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                <!-- /ko -->
+                </tbody>
+            </table>
+            <div data-bind="css: state()" class="pull-left">
+                                          <span data-bind="text: message()">
+                                          </span>
+            </div>
+            <div class="pull-right">
+                <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i> Add
+                    New Row
+                </button>
+                <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save
+                </button>
+                <button class="btn btn-small" data-bind="click: reset">Reset</button>
+            </div>
+        </div>
+    </div>
+    </div>
+    </div>
+    <!-- EOF Cash Tab -->
     </div>
     </div>
     <br>
