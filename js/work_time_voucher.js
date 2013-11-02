@@ -28,6 +28,7 @@ function WorkTimeVoucherVM(data) {
     self.to_date = ko.observable();
     self.days = ko.observableArray();
     self.rows = ko.observableArray();
+    self.has_range = ko.observable(false);
 
     for (var k in data) {
         if (data[k])
@@ -35,10 +36,13 @@ function WorkTimeVoucherVM(data) {
     }
 
 
-    self.date_changed = function () {
 
+
+    self.date_changed = function () {
+        self.has_range(false);
         if (!self.from_date() || !self.to_date())
             return;
+        self.has_range(true);
         var the_date = new Date(self.from_date());
         while (the_date <= new Date(self.to_date())) {
             var new_date = new DateM(the_date);
@@ -111,6 +115,10 @@ function WorkTimeVoucherVM(data) {
     self.add_row = function () {
         self.rows.push(new WorkTimeVoucherRowVM({}, self.days()));
     };
+
+    if (self.rows().length==0){
+        self.add_row();
+    }
 
     self.remove_row = function (row) {
         self.rows.remove(row);
