@@ -8,18 +8,18 @@ from users.models import Company
 
 class Invoice(models.Model):
     tax_choices = [('inclusive', 'Tax Inclusive'), ('exclusive', 'Tax Exclusive'), ('no', 'No Tax')]
-    party = models.ForeignKey(Party, verbose_name=u'To')
-    date = models.DateField()
+    party = models.ForeignKey(Party, verbose_name=u'To', null=True, blank=True)
+    date = models.DateField(null=True, blank=True)
     due_date = models.DateField(null=True, blank=True)
     invoice_no = models.CharField(max_length=20)
     reference = models.CharField(max_length=100, null=True, blank=True)
-    currency = models.ForeignKey(Currency)
-    tax = models.CharField(max_length=10, choices=tax_choices, default='inclusive')
+    currency = models.ForeignKey(Currency, null=True, blank=True)
+    tax = models.CharField(max_length=10, choices=tax_choices, default='inclusive', null=True, blank=True)
     company = models.ForeignKey(Company)
     statuses = [('Cancelled', 'Cancelled'), ('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
     status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
-    pending_amount = models.FloatField()
-    total_amount = models.FloatField()
+    pending_amount = models.FloatField(null=True, blank=True)
+    total_amount = models.FloatField(null=True, blank=True)
     description = models.TextField(null=True, blank=True)
 
     class Meta:
