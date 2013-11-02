@@ -4,7 +4,6 @@ $(document).ready(function () {
     });
     vm = new GroupPayrollVoucherVM(ko_data);
     ko.applyBindings(vm);
-    $('.change-on-ready').trigger('change');
 });
 
 

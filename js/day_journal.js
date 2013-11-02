@@ -2,8 +2,17 @@ function DayJournal(data) {
     var self = this;
     self.sales_tax = ko.observable();
 
+
     for (var k in data)
         self[k] = data[k];
+
+    if (data['lotto_sales_dispenser_amount']) {
+        self.lotto_sales_dispenser_amount = ko.observable();
+        self.lotto_sales_dispenser_amount(data['lotto_sales_dispenser_amount']);
+    }
+    else {
+        self.lotto_sales_dispenser_amount = ko.observable();
+    }
 
     $.ajax({
         url: '/ledger/accounts/' + self.date + '.json',
@@ -22,6 +31,15 @@ function DayJournal(data) {
             self.inventory_accounts = data;
         }
     });
+
+    self.account_by_name = function (name) {
+        var account = $.grep(self.accounts, function (i) {
+            return i.name == name;
+        });
+        return account[0];
+    }
+
+    self.lotto_sales_dispenser_tax = ko.observable(parseFloat(self.account_by_name('Lotto Sales').tax_rate) * round2(parseFloat(self.lotto_sales_dispenser_amount())) / 100);
 
     self.lotto_changed = function (row) {
         var selected_account = $.grep(self.accounts, function (i) {
@@ -92,14 +110,29 @@ function DayJournal(data) {
     };
 
     self.sales_sans_lotto = function () {
-        var sales_accounts =  self.accounts_by_category('Sales');
+        var sales_accounts = self.accounts_by_category('Sales');
         var accounts = [];
-        for (var i in sales_accounts){
-            if (sales_accounts[i].name!='Lotto Sales' && sales_accounts[i].name!='Scratch Off Sales')
-            accounts.push(sales_accounts[i]);
+        for (var i in sales_accounts) {
+            if (sales_accounts[i].name != 'Lotto Sales' && sales_accounts[i].name != 'Scratch Off Sales')
+                accounts.push(sales_accounts[i]);
         }
         return accounts;
     }
+
+
+    self.lotto_sales_dispenser_amount.subscribe(function () {
+        var tax_rate = parseFloat(self.account_by_name('Lotto Sales').tax_rate);
+        self.lotto_sales_dispenser_tax(round2(parseFloat(self.lotto_sales_dispenser_amount()) * tax_rate / 100));
+    })
+
+    self.scratch_off_sales_dispenser_tax = function () {
+        return self.lotto_detail.get_total('sales') * self.account_by_name('Scratch Off Sales').tax_rate / 100;
+    }
+
+//    self.scratch_off_sales_dispenser_tax = function () {
+//        var tax_rate = self.account_by_name('Lotto Sales');
+//        return self.lotto_sales_dispenser_amount * tax_rate / 100;
+//    }
 
     self.inventory_accounts_by_category = function (category) {
         var filtered_accounts = [];
@@ -116,6 +149,24 @@ function DayJournal(data) {
         });
         return account[0];
     }
+
+    self.save_lotto_sales_as_per_dispenser = function () {
+        self.day_journal_date = self.date;
+        $.ajax({
+            type: "POST",
+            url: '/day/save_lotto_sales_as_per_dispenser/',
+            data: ko.toJSON(self),
+            success: function (msg) {
+                $('#lotto-sales-message').html('Saved!');
+                $('#lotto-sales-message').addClass('success');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                $('#lotto-sales-message').html('Saving Failed');
+                $('#lotto-sales-message').addClass('error');
+            }
+        });
+    }
+
 
     var validate = function (msg, rows, tr_wrapper_id) {
         var selection = $("#" + tr_wrapper_id + " > tr");

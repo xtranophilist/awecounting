@@ -40,6 +40,7 @@ function return_name(obj) {
 
 //Triggers on document-ready
 $(document).ready(function () {
+    $('.change-on-ready').trigger('change');
 
     $('.select2').each(function () {
         var element = this;
