@@ -126,3 +126,24 @@ class OtherAttachment(models.Model):
     attachment = models.FileField(upload_to='day_other_attachments/%Y/%m/%d')
     description = models.CharField(max_length=254)
     day_journal = models.ForeignKey(DayJournal, related_name='other_attachments')
+
+
+class VendorPayout(models.Model):
+    sn = models.IntegerField()
+    vendor = models.ForeignKey(Account, related_name="vendor_payouts")
+    amount = models.FloatField()
+    purchase_ledger = models.ForeignKey(Account, related_name='payouts')
+    remarks = models.TextField()
+    paid = models.ForeignKey(Account)
+    choices = [('new', 'New Purchase'), ('old', 'Old Bill Payment')]
+    type = models.CharField(max_length=3, choices=choices, default='new')
+    day_journal = models.ForeignKey(DayJournal, related_name='vendor_payouts')
+
+
+class OtherPayout(models.Model):
+    sn = models.IntegerField()
+    paid_to = models.ForeignKey(Account, related_name='paid_for')
+    amount = models.FloatField()
+    remarks = models.TextField()
+    paid = models.ForeignKey(Account)
+    day_journal = models.ForeignKey(DayJournal, related_name='other_payouts')
