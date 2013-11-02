@@ -65,6 +65,10 @@ function InvoiceViewModel(data) {
     self.message = ko.observable('');
     self.state = ko.observable('standby');
 
+    self.status = ko.observable(data['status']);
+
+    self.id = ko.observable(data['id']);
+
     self.party_address = ko.observable('');
 
     var invoice_options = {
@@ -86,6 +90,7 @@ function InvoiceViewModel(data) {
 //    };
 
     self.validate = function () {
+        self.message('');
         if (!self.party) {
             self.message('"To" field is required!')
             self.state('error');
@@ -98,18 +103,28 @@ function InvoiceViewModel(data) {
         if (!self.validate())
             return false;
         if (get_form(event).checkValidity()) {
+            if ($(get_target(event)).data('continue')) {
+                self.continue = true;
+            }
             $.ajax({
                 type: "POST",
                 url: '/voucher/invoice/save/',
                 data: ko.toJSON(self),
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
-                        $('#message').html(msg.error_message);
+                        self.message(msg.error_message);
                     }
                     else {
-                        $('#message').html('Saved!');
-                        if (msg.id)
-                            self.id = msg.id;
+                        self.message('Saved!');
+                        if (msg.id) {
+                            self.id(msg.id);
+                            self.status('Unapproved');
+                        }
+                        self.state('success');
+                        if (msg.redirect_to) {
+                            window.location = msg.redirect_to;
+                            return;
+                        }
                         $("#particulars-body > tr").each(function (i) {
                             $($("#particulars-body > tr")[i]).addClass('invalid-row');
                         });
@@ -117,6 +132,7 @@ function InvoiceViewModel(data) {
                             self.particulars.rows()[i].id = msg.rows[i];
                             $($("#particulars-body > tr")[i]).removeClass('invalid-row');
                         }
+
                     }
                 }
             });
@@ -135,19 +151,12 @@ function InvoiceViewModel(data) {
                 data: ko.toJSON(self),
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
-                        $('#message').html(msg.error_message);
+                        self.message(msg.error_message);
                     }
                     else {
-                        $('#message').html('Saved!');
-                        if (msg.id)
-                            self.id = msg.id;
-                        $("#particulars-body > tr").each(function (i) {
-                            $($("#particulars-body > tr")[i]).addClass('invalid-row');
-                        });
-                        for (var i in msg.rows) {
-                            self.particulars.rows()[i].id = msg.rows[i];
-                            $($("#particulars-body > tr")[i]).removeClass('invalid-row');
-                        }
+                        self.message('Approved!')
+                        self.status('Approved');
+                        self.state('success');
                     }
                 }
             });
@@ -157,34 +166,23 @@ function InvoiceViewModel(data) {
     }
 
     self.cancel = function (item, event) {
-        if (!self.validate())
-            return false;
-        if (get_form(event).checkValidity()) {
-            $.ajax({
-                type: "POST",
-                url: '/voucher/invoice/cancel/',
-                data: ko.toJSON(self),
-                success: function (msg) {
-                    if (typeof (msg.error_message) != 'undefined') {
-                        $('#message').html(msg.error_message);
-                    }
-                    else {
-                        $('#message').html('Saved!');
-                        if (msg.id)
-                            self.id = msg.id;
-                        $("#particulars-body > tr").each(function (i) {
-                            $($("#particulars-body > tr")[i]).addClass('invalid-row');
-                        });
-                        for (var i in msg.rows) {
-                            self.particulars.rows()[i].id = msg.rows[i];
-                            $($("#particulars-body > tr")[i]).removeClass('invalid-row');
-                        }
-                    }
+        $.ajax({
+            type: "POST",
+            url: '/voucher/invoice/cancel/',
+            data: ko.toJSON(self),
+            success: function (msg) {
+                if (typeof (msg.error_message) != 'undefined') {
+                    $('#message').html(msg.error_message);
                 }
-            });
-        }
-        else
-            return true;
+                else {
+                    self.message('Cancelled!');
+                    self.status('Cancelled');
+                    self.state('success');
+                    if (msg.id)
+                        self.id = msg.id;
+                }
+            }
+        });
     }
 
     self.save_and_continue = function (item, event) {
