@@ -17,19 +17,18 @@ appended_link_clicked = function (e) {
     get_target(e).parent().toggle();
     window.last_active_select = e.data[0];
     e.preventDefault();
-    var modal = bs_modal.create();
-    console.log(modal.attr('id'));
+    var the_modal = bs_modal.create();
     var url = $(this).attr('href');
     if (url.indexOf('#') == 0) {
         $(url).modal('open');
     } else {
         var old_forms = $('form');
         $.get(url,function (data) {
-            modal.html(data).modal();
+            the_modal.html(data).modal();
         }).success(function () {
                 var new_forms = $('form').not(old_forms).get();
                 $(new_forms).submit({url: url}, override_form);
-                modal.on('shown', function () {
+                the_modal.on('shown', function () {
                     $('input:text:visible:first', this).focus();
                 });
                 apply_select2();
@@ -98,7 +97,7 @@ apply_select2 = function () {
 
 override_form = function (event) {
     var $form = $(this);
-    var $target = $('#modal');
+    var $target = $('#modal' + $('.modal').length);
     var action = $form.attr('action');
     if (typeof action == 'undefined') {
         action = event.data.url;
