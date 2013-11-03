@@ -96,7 +96,6 @@ override_form = function (event) {
         action = event.data.url;
     }
 
-
     $.ajax({
         type: $form.attr('method'),
         url: action,
@@ -104,6 +103,7 @@ override_form = function (event) {
 
         success: function (data, status) {
             $target.html(data);
+            $target.find('form').submit({url: action}, override_form);
         }
     });
 
@@ -111,7 +111,6 @@ override_form = function (event) {
 }
 
 on_form_submit = function (event) {
-    alert('1');
     var $form = $(this);
     var $target = $($form.attr('data-target'));
 
