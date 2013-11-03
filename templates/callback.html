@@ -1,9 +1,13 @@
 {% load filters %}
 <script>
+    console.log('hey');
     var obj = {{ obj|jsonify }};
-    $('#modal').modal('hide');
+    $('#modal' + $('.modal').length).modal('hide');
     el = $(window.last_active_select);
     var matches = el.data('bind').match(/\{results: \$root\.([a-z_]+)\}/);
+    console.log(obj);
+    obj.name = obj.text
+    console.log(matches);
     if (matches) {
         var match = matches[1];
         vm[match].push(obj);
