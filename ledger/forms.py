@@ -1,4 +1,5 @@
 from django import forms
+from django.core.urlresolvers import reverse_lazy
 from mptt.forms import TreeNodeChoiceField
 
 from acubor.lib import KOModelForm
@@ -8,6 +9,10 @@ from models import Account, Category, Party
 
 class AccountForm(KOModelForm):
     category = TreeNodeChoiceField(queryset=Category.objects.all())
+    category = forms.ModelChoiceField(Category.objects.all(), empty_label=None,
+                                      widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Category',
+                                                                 'data-add-url': reverse_lazy(
+                                                                     'create_category')}))
 
     def __init__(self, *args, **kwargs):
         self.company = kwargs.pop('company', None)

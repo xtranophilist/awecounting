@@ -14,10 +14,48 @@
 {% endblock %}
 
 {% block content %}
+
+    {{ form.errors }}
+
     <form method="post">
         {% csrf_token %}
 
-        {{ form.as_p }}
+        <p>
+            {{ form.code.label_tag }}
+            {{ form.code }}
+            {{ form.code.errors }}
+        </p>
+
+        <p>
+            {{ form.name.label_tag }}
+            {{ form.name }}
+            {{ form.name.errors }}
+        </p>
+
+        <p>
+            {{ form.category.label_tag }}
+            {{ form.category }}
+            {{ form.category.errors }}
+        </p>
+
+        <p>
+            {{ form.tax_rate.label_tag }}
+            {{ form.tax_rate }}
+            {{ form.tax_rate.errors }}
+        </p>
+
+        <p>
+            {{ form.opening_dr.label_tag }}
+            {{ form.opening_dr }}
+            {{ form.opening_dr.errors }}
+        </p>
+
+        <p>
+            {{ form.opening_cr.label_tag }}
+            {{ form.opening_cr }}
+            {{ form.opening_cr.errors }}
+        </p>
+
 
         <div class="row">
             <div class="span12">
@@ -26,7 +64,6 @@
                     <a href="{% url 'delete_account' form.instance.id %}" class="btn btn-danger"/>Delete</a>
                 {% endif %}
             </div>
-
         </div>
 
 

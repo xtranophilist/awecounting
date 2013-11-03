@@ -14,7 +14,7 @@
 
     <h1>{{ scenario }} Blog Entry</h1>
     <br>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post">
         {% csrf_token %}
         {{ form.as_p }}
         <br>

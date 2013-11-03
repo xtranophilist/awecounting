@@ -39,6 +39,7 @@ def suppliers_as_json(request):
     objs_data = PartySerializer(objs).data
     return HttpResponse(json.dumps(objs_data), mimetype="application/json")
 
+
 @login_required
 def payheads_as_json(request):
     objs = Account.objects.filter(company=request.company, category__name='Pay Head')
@@ -58,7 +59,6 @@ def account_form(request, id=None):
     if request.POST:
         form = AccountForm(data=request.POST, instance=account, company=request.company, scenario=scenario)
         if form.is_valid():
-
             opening_dr = form.cleaned_data.get('opening_dr')
             opening_cr = form.cleaned_data.get('opening_cr')
             item = form.save(commit=False)
@@ -135,6 +135,8 @@ def create_category(request):
             category = form.save(commit=False)
             category.company = request.company
             category.save()
+            if request.is_ajax():
+                return render(request, 'callback.html', {'obj': {'id': category.id, 'text': str(category)}})
             return redirect('/ledger/categories/')
     else:
         form = CategoryForm(instance=category, company=request.company)
@@ -231,6 +233,7 @@ def cash_and_vendors(request):
         company=request.company)
     objs_data = CashVendorSerializer(objs).data
     return HttpResponse(json.dumps(objs_data), mimetype="application/json")
+
 
 @login_required
 def fixed_assets(request):
