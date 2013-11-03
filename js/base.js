@@ -29,6 +29,7 @@ appended_link_clicked = function (e) {
                 $('#modal').on('shown', function () {
                     $('input:text:visible:first', this).focus();
                 });
+                apply_select2();
             });
     }
     return false;
@@ -42,6 +43,31 @@ function return_name(obj) {
 $(document).ready(function () {
     $('.change-on-ready').trigger('change');
 
+    apply_select2();
+
+    $('.btn-danger').click(function (e) {
+        if (confirm('Are you sure you want to delete?')) {
+            return true;
+        } else return false;
+    });
+
+
+//    $('#modal').on('shown',function () {
+//        $('#modal').off('wheel.modal mousewheel.modal');
+//        $('body').on('wheel.modal mousewheel.modal', function () {
+//            return false;
+//        });
+//    }).on('hidden', function () {
+//            $('body').off('wheel.modal mousewheel.modal');
+//        });
+    $('.col-box a').click(function (e) {
+        e.preventDefault();
+        $(this).parent('.col-box-header').siblings('.col-box-body').slideToggle();
+        $(this).find('.status-handle').toggleClass('icon-chevron-down');
+    });
+});
+
+apply_select2 = function(){
     $('.select2').each(function () {
         var element = this;
         var drop_class = 'drop-' + $(element).attr('name')
@@ -65,28 +91,7 @@ $(document).ready(function () {
 
 
     });
-
-    $('.btn-danger').click(function (e) {
-        if (confirm('Are you sure you want to delete?')) {
-            return true;
-        } else return false;
-    });
-
-
-//    $('#modal').on('shown',function () {
-//        $('#modal').off('wheel.modal mousewheel.modal');
-//        $('body').on('wheel.modal mousewheel.modal', function () {
-//            return false;
-//        });
-//    }).on('hidden', function () {
-//            $('body').off('wheel.modal mousewheel.modal');
-//        });
-    $('.col-box a').click(function (e) {
-        e.preventDefault();
-        $(this).parent('.col-box-header').siblings('.col-box-body').slideToggle();
-        $(this).find('.status-handle').toggleClass('icon-chevron-down');
-    });
-});
+}
 
 override_form = function (event) {
     var $form = $(this);
