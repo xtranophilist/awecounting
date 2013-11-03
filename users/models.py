@@ -135,6 +135,14 @@ def create_default(company):
     Category(name='Deposits Made', parent=assets, company=company).save()
     Category(name='Employee', parent=assets, company=company).save()
 
+    employee_deductions = Category(name='Employee Deductions', parent=assets, company=company)
+    employee_deductions.save()
+    Account(name='Advances', category=employee_deductions, code='2-0010', company=company).save()
+    Account(name='Loans', category=employee_deductions, code='2-0011', company=company).save()
+    Account(name='Payroll Taxes', category=employee_deductions, code='2-0012', company=company).save()
+    Account(name='Employees\' Contribution to Retirement Fund', category=employee_deductions, code='2-0013', company=company).save()
+    Account(name='Compulsory Deductions', category=employee_deductions, code='2-0014', company=company).save()
+
     liabilities = Category(name='Liabilities', company=company)
     liabilities.save()
     account_payables = Category(name='Account Payables', parent=liabilities, company=company)
