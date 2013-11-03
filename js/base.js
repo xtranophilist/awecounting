@@ -73,14 +73,14 @@ $(document).ready(function () {
     });
 
 
-    $('#modal').on('shown',function () {
-        $('#modal').off('wheel.modal mousewheel.modal');
-        $('body').on('wheel.modal mousewheel.modal', function () {
-            return false;
-        });
-    }).on('hidden', function () {
-            $('body').off('wheel.modal mousewheel.modal');
-        });
+//    $('#modal').on('shown',function () {
+//        $('#modal').off('wheel.modal mousewheel.modal');
+//        $('body').on('wheel.modal mousewheel.modal', function () {
+//            return false;
+//        });
+//    }).on('hidden', function () {
+//            $('body').off('wheel.modal mousewheel.modal');
+//        });
     $('.col-box a').click(function (e) {
         e.preventDefault();
         $(this).parent('.col-box-header').siblings('.col-box-body').slideToggle();
@@ -102,7 +102,9 @@ override_form = function (event) {
         data: $form.serialize(),
 
         success: function (data, status) {
+            //write the reply
             $target.html(data);
+            //form sent by callback is also overwritten to submit via ajax
             $target.find('form').submit({url: action}, override_form);
         }
     });
