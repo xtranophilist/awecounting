@@ -67,7 +67,7 @@ $(document).ready(function () {
     });
 });
 
-apply_select2 = function(){
+apply_select2 = function () {
     $('.select2').each(function () {
         var element = this;
         var drop_class = 'drop-' + $(element).attr('name')
@@ -422,4 +422,25 @@ function get_weekday(date) {
 function hms_to_s(t) { // h:m:s
     var a = t.split(/\D+/);
     return (a[0] * 60 + +a[1]) * 60 + +a[2]
+}
+
+bs_alert = function () {
+}
+bs_alert.warning = function (message) {
+    $('#alert_placeholder').html('<div class="alert"><a class="close" data-dismiss="alert">×</a><span>' + message + '</span></div>')
+}
+bs_alert.error = function (message) {
+    $('#alert_placeholder').html('<div class="alert alert-error"><a class="close" data-dismiss="alert">×</a><span>' + message + '</span></div>')
+}
+
+bs_alert.success = function (message) {
+    $('#alert_placeholder').html('<div class="alert alert-success"><a class="close" data-dismiss="alert">×</a><span>' + message + '</span></div>')
+}
+
+bs_alert.info = function (message) {
+    $('#alert_placeholder').html('<div class="alert alert-info"><a class="close" data-dismiss="alert">×</a><span>' + message + '</span></div>')
+}
+
+bs_alert.clear = function(){
+    $('#alert_placeholder').html('');
 }
