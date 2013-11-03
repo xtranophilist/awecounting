@@ -2,6 +2,7 @@ function init_select2(element, callback) {
     if ($(element).data('add-url')) {
         var drop_class = '.drop-' + $(element).data('field').toLowerCase().replace(/ /g, '-');
         $(drop_class).find('.appended-link').remove();
+
         jQuery('<a/>', {
             class: 'appended-link',
             href: $(element).data('add-url'),
@@ -16,17 +17,19 @@ appended_link_clicked = function (e) {
     get_target(e).parent().toggle();
     window.last_active_select = e.data[0];
     e.preventDefault();
+    var modal = bs_modal.create();
+    console.log(modal.attr('id'));
     var url = $(this).attr('href');
     if (url.indexOf('#') == 0) {
         $(url).modal('open');
     } else {
         var old_forms = $('form');
         $.get(url,function (data) {
-            $('#modal').html(data).modal();
+            modal.html(data).modal();
         }).success(function () {
                 var new_forms = $('form').not(old_forms).get();
                 $(new_forms).submit({url: url}, override_form);
-                $('#modal').on('shown', function () {
+                modal.on('shown', function () {
                     $('input:text:visible:first', this).focus();
                 });
                 apply_select2();
@@ -426,6 +429,7 @@ function hms_to_s(t) { // h:m:s
 
 bs_alert = function () {
 }
+
 bs_alert.warning = function (message) {
     $('#alert_placeholder').html('<div class="alert"><a class="close" data-dismiss="alert">×</a><span>' + message + '</span></div>')
 }
@@ -441,6 +445,17 @@ bs_alert.info = function (message) {
     $('#alert_placeholder').html('<div class="alert alert-info"><a class="close" data-dismiss="alert">×</a><span>' + message + '</span></div>')
 }
 
-bs_alert.clear = function(){
+bs_alert.clear = function () {
     $('#alert_placeholder').html('');
+}
+
+bs_modal = function () {
+}
+
+bs_modal.create = function () {
+    var el = jQuery('<div/>', {
+        id: 'modal' + ($('.modal').length + 1),
+        class: 'modal hide fade'
+    }).appendTo('body');
+    return el;
 }
