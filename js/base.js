@@ -31,7 +31,10 @@ appended_link_clicked = function (e) {
                 the_modal.on('shown', function () {
                     $('input:text:visible:first', this).focus();
                 });
-                apply_select2();
+                $(new_forms).each(function (form) {
+                    apply_select2(new_forms[form]);
+                });
+
             });
     }
     return false;
@@ -69,8 +72,14 @@ $(document).ready(function () {
     });
 });
 
-apply_select2 = function () {
-    $('.select2').each(function () {
+apply_select2 = function (form) {
+    if (typeof form != 'undefined') {
+        var selection = $(form).find('.select2')
+    }
+    else {
+        var selection = $('.select2');
+    }
+    selection.each(function () {
         var element = this;
         var drop_class = 'drop-' + $(element).attr('name')
         var options_dict = {'dropdownCssClass': drop_class, 'dropdownAutoWidth': true, 'width': 'resolve'}
