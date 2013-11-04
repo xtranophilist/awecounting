@@ -53,7 +53,7 @@
                 <td data-bind="enum: {values: ['Dr', 'Cr']}, editableText: type"></td>
                 <td class="with_ip">
                     {# <select data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: dr_account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first', allowClear: true}"></select>#}
-                    <input type="hidden" data-field="Account" data-add-url="{% url 'create_account' %}"
+                    <input type="hidden" data-field="Account" data-add-url="{% url 'create_account' %}" data-add-to="accounts"
                            data-bind="value: account, select2: {data: {results: $root.accounts_except_category(['Sales', 'Purchase'], true)}}, lookupKey: 'id'">
                 </td>
                 <td data-bind="editableText: description"></td>

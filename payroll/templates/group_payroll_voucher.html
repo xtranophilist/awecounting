@@ -78,7 +78,7 @@
                     <td data-bind="editableText: payroll_tax"></td>
                     <td data-bind="text: net()"></td>
                     <td>
-                        <input type="hidden"
+                        <input type="hidden" data-field="Account" data-add-url="{% url 'create_account' %}"
                                data-bind="value: pay_head, select2: {data: {results: $root.accounts}}, lookupKey: 'id'">
                     </td>
                     <td>

@@ -77,7 +77,7 @@ def account_form(request, id=None):
                     set_transactions(item, date.today(),
                                      ['dr', obd, form.cleaned_data['opening_cr']])
             if request.is_ajax():
-                return render(request, 'callback.html', {'obj': {'id': item.id, 'text': str(item)}})
+                return render(request, 'callback.html', {'obj': AccountSerializer(item).data})
             return redirect('/ledger/')
     else:
         form = AccountForm(instance=account, company=request.company, scenario=scenario)
@@ -136,7 +136,7 @@ def create_category(request):
             category.company = request.company
             category.save()
             if request.is_ajax():
-                return render(request, 'callback.html', {'obj': {'id': category.id, 'text': str(category)}})
+                return render(request, 'callback.html', {'obj': {'id': category.id, 'name': str(category)}})
             return redirect('/ledger/categories/')
     else:
         form = CategoryForm(instance=category, company=request.company)

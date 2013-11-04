@@ -14,7 +14,7 @@ class AccountSerializer(serializers.ModelSerializer):
     class Meta:
         model = Account
         # exclude = ['code', 'company', 'parent', 'current_balance']
-        fields = ['id', 'name', 'categories', 'opening', 'tax_rate', 'text']
+        fields = ['id', 'name', 'categories', 'opening', 'tax_rate']
         # fields = ['id', 'name', 'categories', 'tax_rate']
 
     def __init__(self, *args, **kwargs):

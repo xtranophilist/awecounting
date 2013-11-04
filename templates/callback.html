@@ -1,6 +1,5 @@
 {% load filters %}
 <script>
-    console.log('hey');
     var obj = {{ obj|jsonify }};
     $('#modal' + $('.modal').length).modal('hide');
     el = $(window.last_active_select);
@@ -17,7 +16,7 @@
         el.trigger('change');
     }
     else {
-        el.append("<option value='" + obj.id + "'>" + obj.text + "</option>")
+        el.append("<option value='" + obj.id + "'>" + obj.name + "</option>")
         el.trigger('change');
         el.select2('val', obj.id);
     }
