@@ -291,11 +291,28 @@ function DayJournal(data) {
         }
     }
 
-
     self.summary_cash = new TableViewModel(key_to_options('summary_cash'), SummaryCashRow);
     self.summary_cash.rows()[0].actual(self.cash_actual);
 
-    self.lotto_detail = new TableViewModel(key_to_options('lotto_detail'), LottoDetailRow);
+    var lotto_detail_options = key_to_options('lotto_detail');
+    lotto_detail_options.auto_add_first = false;
+    self.lotto_detail = new TableViewModel(lotto_detail_options, LottoDetailRow);
+    if (self.lotto_detail.hasNoRows()) {
+        $.ajax({
+            url: '/day/last_lotto_detail/' + self.date + '.json',
+            dataType: 'json',
+            async: false,
+            success: function (data) {
+                self.last_lotto_detail = data;
+            }
+        });
+        if (self.last_lotto_detail) {
+            for (var i in self.last_lotto_detail) {
+                var detail = self.last_lotto_detail[i];
+                self.lotto_detail.rows.push(new LottoDetailRow({'rate': detail.rate, 'pack_count': detail.pack_count, 'day_open': detail.day_close}))
+            }
+        }
+    }
 
     self.vendor_payout = new TableViewModel(key_to_options('vendor_payout'), VendorPayoutVM);
 
