@@ -259,7 +259,16 @@ function DayJournal(data) {
         };
     }
 
-    self.cash_sales = new TableViewModel(key_to_options('cash_sales'), CashSalesRow);
+    var cash_sales_options = key_to_options('cash_sales');
+    cash_sales_options.auto_add_first = false;
+    self.cash_sales = new TableViewModel(cash_sales_options, CashSalesRow);
+    if (self.cash_sales.hasNoRows()) {
+        var accounts = self.sales_sans_lotto();
+        for (var i in accounts) {
+            self.cash_sales.rows.push(new CashSalesRow({'account_id': accounts[i].id}))
+        }
+    }
+
 
     self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), SummaryTaxRow);
     self.summary_sales_tax.rows()[0].register(self.sales_tax);
