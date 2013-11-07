@@ -10,7 +10,7 @@ from dayjournal.models import DayJournal, CashSales, CardSales, LottoDetail, Ban
 from ledger.models import Account, set_transactions, delete_rows
 from inventory.models import InventoryAccount
 from inventory.models import set_transactions as set_inventory_transactions
-from dayjournal.serializers import DayJournalSerializer
+from dayjournal.serializers import DayJournalSerializer, LottoDetailSerializer
 from acubor.lib import invalid, save_model, all_empty, add
 
 
@@ -445,4 +445,12 @@ def save_other_payout(request):
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+@login_required
+def last_lotto_detail(request, journal_date):
+    last_journal = DayJournal.objects.filter(date__lt=journal_date, lotto_detail__isnull=False).order_by('-date')[0];
+    lotto_detail = last_journal.lotto_detail.all()
+    dct = LottoDetailSerializer(lotto_detail).data
     return HttpResponse(json.dumps(dct), mimetype="application/json")
