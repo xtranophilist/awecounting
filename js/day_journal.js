@@ -281,7 +281,16 @@ function DayJournal(data) {
 
     self.card_sales = new TableViewModel(key_to_options('card_sales'), CardSalesRow);
 
-    self.cash_equivalent_sales = new TableViewModel(key_to_options('cash_equivalent_sales'), CashEquivalentSalesRow);
+    var cash_equivalent_sales_options = key_to_options('cash_equivalent_sales');
+    cash_equivalent_sales_options.auto_add_first = false;
+    self.cash_equivalent_sales = new TableViewModel(cash_equivalent_sales_options, CashEquivalentSalesRow);
+    if (self.cash_equivalent_sales.hasNoRows()) {
+        var accounts = self.accounts_by_category('Cash Equivalent Account')
+        for (var i in accounts) {
+            self.cash_equivalent_sales.rows.push(new CashEquivalentSalesRow({'account': accounts[i].id}))
+        }
+    }
+
 
     self.summary_cash = new TableViewModel(key_to_options('summary_cash'), SummaryCashRow);
     self.summary_cash.rows()[0].actual(self.cash_actual);
