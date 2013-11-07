@@ -49,35 +49,35 @@ function DayJournal(data) {
     self.lotto_sales_dispenser_tax = ko.observable(parseFloat(self.account_by_name('Lotto Sales').tax_rate) * round2(parseFloat(self.lotto_sales_dispenser_amount())) / 100);
 
     self.lotto_sales_register_tax = function () {
-        return parseFloat(self.account_by_name('Lotto Sales').tax_rate) * round2(parseFloat(self.lotto_sales_register_amount())) / 100;
+        return rnum(parseFloat(self.account_by_name('Lotto Sales').tax_rate) * round2(parseFloat(self.lotto_sales_register_amount())) / 100);
     }
 
     self.scratch_off_sales_register_tax = function () {
-        return parseFloat(self.account_by_name('Scratch Off Sales').tax_rate) * round2(parseFloat(self.scratch_off_sales_register_amount())) / 100;
+        return rnum(parseFloat(self.account_by_name('Scratch Off Sales').tax_rate) * round2(parseFloat(self.scratch_off_sales_register_amount())) / 100);
     }
 
     self.actual_sales_amount = function () {
-        return self.cash_sales.get_total('amount') + parseFloat(self.lotto_sales_dispenser_amount()) + self.lotto_detail.get_total('sales');
+        return rnum(self.cash_sales.get_total('amount') + parseFloat(self.lotto_sales_dispenser_amount()) + self.lotto_detail.get_total('sales'));
     }
 
     self.actual_sales_tax = function () {
-        return self.cash_sales.get_total('tax') + parseFloat(self.lotto_sales_dispenser_tax()) + self.scratch_off_sales_dispenser_tax();
+        return rnum(self.cash_sales.get_total('tax') + parseFloat(self.lotto_sales_dispenser_tax()) + self.scratch_off_sales_dispenser_tax());
     }
 
     self.register_sales_amount = function () {
-        return self.cash_sales.get_total('amount') + parseFloat(self.lotto_sales_register_amount()) + parseFloat(self.scratch_off_sales_register_amount());
+        return rnum(self.cash_sales.get_total('amount') + parseFloat(self.lotto_sales_register_amount()) + parseFloat(self.scratch_off_sales_register_amount()));
     }
 
     self.register_sales_tax = function () {
-        return self.cash_sales.get_total('tax') + self.lotto_sales_register_tax() + self.scratch_off_sales_register_tax();
+        return rnum(self.cash_sales.get_total('tax') + self.lotto_sales_register_tax() + self.scratch_off_sales_register_tax());
     }
 
     self.diff_sales_amount = function () {
-        return self.actual_sales_amount() - self.register_sales_amount();
+        return rnum(self.actual_sales_amount() - self.register_sales_amount());
     }
 
     self.diff_sales_tax = function () {
-        return self.actual_sales_tax() - self.register_sales_tax();
+        return rnum(self.actual_sales_tax() - self.register_sales_tax());
     }
 
     self.lotto_changed = function (row) {
@@ -182,11 +182,11 @@ function DayJournal(data) {
 
     self.lotto_sales_dispenser_amount.subscribe(function () {
         var tax_rate = parseFloat(self.account_by_name('Lotto Sales').tax_rate);
-        self.lotto_sales_dispenser_tax(round2(parseFloat(self.lotto_sales_dispenser_amount()) * tax_rate / 100));
+        self.lotto_sales_dispenser_tax(rnum(parseFloat(self.lotto_sales_dispenser_amount()) * tax_rate / 100));
     })
 
     self.scratch_off_sales_dispenser_tax = function () {
-        return self.lotto_detail.get_total('sales') * self.account_by_name('Scratch Off Sales').tax_rate / 100;
+        return rnum(self.lotto_detail.get_total('sales') * self.account_by_name('Scratch Off Sales').tax_rate / 100);
     }
 
     self.inventory_accounts_by_category = function (category) {
