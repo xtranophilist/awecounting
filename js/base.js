@@ -371,11 +371,13 @@ function TableViewModel(options, row_model) {
         self.get_total = function (field) {
             var total = 0;
             self.rows().forEach(function (i) {
-                var f = i[field];
-                if (typeof f != 'function')
-                    throw new Error(field + ' isn\'t a property of row model ' + row_model.name + '!')
-                if (isAN(parseFloat(f())))
-                    total += parseFloat(f());
+                if (i) {
+                    var f = i[field];
+                    if (typeof f != 'function')
+                        throw new Error(field + ' isn\'t a property of row model ' + row_model.name + '!')
+                    if (isAN(parseFloat(f())))
+                        total += parseFloat(f());
+                }
             });
             return total;
         }
