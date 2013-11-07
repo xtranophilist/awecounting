@@ -15,7 +15,7 @@ function init_select2(element, callback) {
 
 appended_link_clicked = function (e) {
     get_target(e).parent().toggle();
-    if (!window.last_active_select){
+    if (!window.last_active_select) {
         window.last_active_select = new Array();
     }
     window.last_active_select.push(e.data[0]);
@@ -313,6 +313,7 @@ function TableViewModel(options, row_model) {
 
     var self = this;
 
+
     if (typeof(options.properties) != 'undefined') {
         /** @namespace options.properties */
         for (var k in options.properties)
@@ -353,7 +354,11 @@ function TableViewModel(options, row_model) {
             self.deleted_rows.push(row);
         };
 
-        if (self.hasNoRows()) {
+        var auto_add_first = true;
+        if (typeof options.auto_add_first != 'undefined')
+            auto_add_first = options.auto_add_first
+
+        if (auto_add_first && self.hasNoRows()) {
             self.addRow();
         }
 
