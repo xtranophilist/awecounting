@@ -15,7 +15,10 @@ function init_select2(element, callback) {
 
 appended_link_clicked = function (e) {
     get_target(e).parent().toggle();
-    window.last_active_select = e.data[0];
+    if (!window.last_active_select){
+        window.last_active_select = new Array();
+    }
+    window.last_active_select.push(e.data[0]);
     e.preventDefault();
     var the_modal = bs_modal.create();
     var url = $(this).attr('href');
