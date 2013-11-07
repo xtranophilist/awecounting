@@ -4,8 +4,7 @@
     var no_of_modals = $('.modal').length;
     $('#modal' + $('.modal').length).modal('hide');
     $('#modal' + $('.modal').length).remove();
-
-    el = $(window.last_active_select);
+    el = $(window.last_active_select.pop());
     var matches = el.data('bind').match(/\{results: \$root\.([a-z_]+)\}/);
     if (el.data('add-to')) {
         vm[el.data('add-to')].push(obj);
