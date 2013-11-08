@@ -3,8 +3,11 @@ from users.models import Company
 from ledger.models import Account
 from inventory.models import InventoryAccount
 
+from acubor.lib import get_next_voucher_no
+
 
 class DayJournal(models.Model):
+    voucher_no = models.IntegerField(unique=True)
     date = models.DateField()
     company = models.ForeignKey(Company)
     sales_tax = models.FloatField()
@@ -15,6 +18,11 @@ class DayJournal(models.Model):
     lotto_sales_dispenser_amount = models.FloatField(default=0)
     lotto_sales_register_amount = models.FloatField(default=0)
     scratch_off_sales_register_amount = models.FloatField(default=0)
+
+    def __init__(self, *args, **kwargs):
+        super(DayJournal, self).__init__(*args, **kwargs)
+        if not self.pk and not self.voucher_no:
+            self.voucher_no = get_next_voucher_no(DayJournal)
 
     def get_absolute_url(self):
         return '/day/' + str(self.date)
