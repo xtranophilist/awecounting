@@ -22,7 +22,7 @@ class DayJournal(models.Model):
     def __init__(self, *args, **kwargs):
         super(DayJournal, self).__init__(*args, **kwargs)
         if not self.pk and not self.voucher_no:
-            self.voucher_no = get_next_voucher_no(DayJournal)
+            self.voucher_no = get_next_voucher_no(DayJournal, self.company)
 
     def get_absolute_url(self):
         return '/day/' + str(self.date)
