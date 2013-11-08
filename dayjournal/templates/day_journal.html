@@ -194,7 +194,7 @@
                 </tbody>
             </table>
             <div data-bind="css: state()" class="pull-left">
-                                          <span data-bind="text: message()">
+                                          <span data-bind="text: message(), css: state()">
                                           </span>
             </div>
             <div class="pull-right">
@@ -295,8 +295,8 @@
                 <!-- /ko -->
                 </tbody>
             </table>
-            <div data-bind="css: state()" class="pull-left">
-                                    <span data-bind="text: message()">
+            <div data-bind="css: state" class="pull-left">
+                                    <span data-bind="text: message(), css: state">
                                     </span>
             </div>
             <div class="pull-right">

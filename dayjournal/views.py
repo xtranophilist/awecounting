@@ -44,17 +44,23 @@ def day_journal(request, journal_date=None):
 @login_required
 def get_journal(request):
     params = json.loads(request.body)
-    journal, created = DayJournal.objects.get_or_create(date=params.get('day_journal_date'),
-                                                        company=request.company, defaults={'sales_tax': 0,
-                                                                                           'voucher_no': params.get(
-                                                                                               'voucher_no'),
-                                                                                           'cheque_deposit': 0,
-                                                                                           'cash_deposit': 0,
-                                                                                           'cash_withdrawal': 0,
-                                                                                           'cash_actual': 0})
+    try:
+        journal, created = DayJournal.objects.get_or_create(date=params.get('day_journal_date'),
+                                                            company=request.company, defaults={'sales_tax': 0,
+                                                                                               'voucher_no': params.get(
+                                                                                                   'voucher_no'),
+                                                                                               'cheque_deposit': 0,
+                                                                                               'cash_deposit': 0,
+                                                                                               'cash_withdrawal': 0,
+                                                                                               'cash_actual': 0})
+    except Exception as e:
+        return {'error': 'Voucher No. already exists!'}
     if not created:
         journal.voucher_no = params.get('voucher_no')
-        journal.save()
+        try:
+            journal.save()
+        except Exception as e:
+            return {'error': 'Voucher No. already exists!'}
     return journal
 
 
@@ -64,6 +70,8 @@ def save_cash_sales(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashSales
     day_journal = get_journal(request)
+    if type(day_journal) == dict:
+        return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
     cash_account = Account.objects.get(name='Cash Account', company=request.company)
     sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
     for index, row in enumerate(params.get('rows')):
@@ -110,6 +118,8 @@ def save_summary_sales_tax(request):
             dct['invalid_attributes'][index] = invalid_attrs
             continue
         day_journal = get_journal(request)
+        if type(day_journal) == dict:
+            return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
         try:
             day_journal.sales_tax = row.get('register')
             day_journal.save()
@@ -123,6 +133,8 @@ def save_summary_sales_tax(request):
 def save_summary_cash(request):
     params = json.loads(request.body)
     day_journal = get_journal(request)
+    if type(day_journal) == dict:
+        return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
     day_journal.cash_actual = params.get('rows')[0].get('actual')
     day_journal.save()
     # dct = {'invalid_attributes': {}, 'saved': {}}
@@ -147,6 +159,8 @@ def save_summary_transfer(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = SummaryTransfer
     day_journal = get_journal(request)
+    if type(day_journal) == dict:
+        return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
     cash_account = Account.objects.get(name='Cash Account', company=request.company)
     card_account = Account.objects.get(name='Card Account', company=request.company)
     cheque_account = Account.objects.get(name='Cheque Account', company=request.company)
@@ -156,7 +170,6 @@ def save_summary_transfer(request):
         for attr in ['cash', 'cheque', 'card']:
             if row.get(attr) is None or row.get(attr) == '':
                 row[attr] = None
-        day_journal = get_journal(request)
         values = {'sn': index + 1, 'transfer_type_id': row.get('transfer_type'), 'cash': row.get('cash'),
                   'card': row.get('card'), 'cheque': row.get('cheque'), 'day_journal': day_journal}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
@@ -184,6 +197,8 @@ def save_summary_inventory(request, fuel=False):
     else:
         model = SummaryInventory
     day_journal = get_journal(request)
+    if type(day_journal) == dict:
+        return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_id', 'purchase', 'sales', 'actual'])
         if invalid_attrs:
@@ -222,6 +237,8 @@ def save_lotto_detail(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = LottoDetail
     day_journal = get_journal(request)
+    if type(day_journal) == dict:
+        return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['rate', 'pack_count', 'day_open', 'day_close', 'addition'])
         if invalid_attrs:
@@ -244,6 +261,8 @@ def save_card_sales(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CardSales
     day_journal = get_journal(request)
+    if type(day_journal) == dict:
+        return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
     card_account = Account.objects.get(name='Card Account', company=request.company)
     cash_account = Account.objects.get(name='Cash Account', company=request.company)
     commission_out_account = Account.objects.get(name='Commission Out', company=request.company)
@@ -275,6 +294,8 @@ def save_cash_equivalent_sales(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = CashEquivalentSales
     day_journal = get_journal(request)
+    if type(day_journal) == dict:
+        return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
     cash_account = Account.objects.get(name='Cash Account', company=request.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['amount', 'account'])
@@ -300,6 +321,8 @@ def save_summary_bank(request):
     params = json.loads(request.body)
     dct = {'invalid_attributes': {}, 'saved': {}}
     day_journal = get_journal(request)
+    if type(day_journal) == dict:
+        return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
     cheque_account = Account.objects.get(name='Cheque Account', company=request.company)
     cash_account = Account.objects.get(name='Cash Account', company=request.company)
     bank_account = Account.objects.get(name='Bank Account', company=request.company)
@@ -397,6 +420,8 @@ def save_attachments(request):
 def save_lotto_sales_as_per_dispenser(request):
     params = json.loads(request.body)
     journal = get_journal(request)
+    if type(journal) == dict:
+        return HttpResponse(json.dumps({'error_message': journal['error']}), mimetype="application/json")
     if params.get('lotto_sales_dispenser_amount'):
         journal.lotto_sales_dispenser_amount = params.get('lotto_sales_dispenser_amount')
     if params.get('lotto_sales_register_amount'):
@@ -413,6 +438,8 @@ def save_vendor_payout(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = VendorPayout
     day_journal = get_journal(request)
+    if type(day_journal) == dict:
+        return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['vendor', 'amount', 'purchase_ledger', 'paid', 'type'])
         if invalid_attrs:
@@ -437,6 +464,8 @@ def save_other_payout(request):
     dct = {'invalid_attributes': {}, 'saved': {}}
     model = OtherPayout
     day_journal = get_journal(request)
+    if type(day_journal) == dict:
+        return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['paid_to', 'amount', 'paid'])
         if invalid_attrs:
