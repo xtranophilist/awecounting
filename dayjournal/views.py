@@ -46,12 +46,15 @@ def get_journal(request):
     params = json.loads(request.body)
     journal, created = DayJournal.objects.get_or_create(date=params.get('day_journal_date'),
                                                         company=request.company, defaults={'sales_tax': 0,
+                                                                                           'voucher_no': params.get(
+                                                                                               'voucher_no'),
                                                                                            'cheque_deposit': 0,
                                                                                            'cash_deposit': 0,
                                                                                            'cash_withdrawal': 0,
                                                                                            'cash_actual': 0})
-    # if created:
-    #     journal.save()
+    if not created:
+        journal.voucher_no = params.get('voucher_no')
+        journal.save()
     return journal
 
 

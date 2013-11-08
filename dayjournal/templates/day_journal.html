@@ -107,8 +107,6 @@
 
 {% block content %}
 
-    {{ day_journal }}
-
     <!-- Modal -->
     <div id="print-preview" class="modal hide fade do-print" tabindex="-1" role="dialog" aria-labelledby="modal-label"
          aria-hidden="true">
@@ -124,6 +122,8 @@
             <a href="javascript:window.print();" class="btn btn-primary">Print</a>
         </div>
     </div>
+
+    Voucher No.: <input type="text" data-bind="value: voucher_no">
 
     <div class="no-print page-journal">
     <div class="col-box">
