@@ -182,7 +182,7 @@
                         <select class="span12"
                                 data-bind="options: $root.sales_sans_lotto(), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.account_changed}"></select>
                     </td>
-                    <td data-bind="editableText: amount, eval: amount"></td>
+                    <td data-bind="editableText: amount, numeric: true"></td>
                     <td data-bind="text: tax()"></td>
                     <td align="center">
                         <button class="btn-none" data-bind="click: $parent.removeRow">
