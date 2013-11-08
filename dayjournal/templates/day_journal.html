@@ -183,7 +183,7 @@
                                 data-bind="options: $root.sales_sans_lotto(), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.account_changed}"></select>
                     </td>
                     <td data-bind="editableText: amount, numeric: true"></td>
-                    <td data-bind="text: tax()"></td>
+                    <td data-bind="text: tax"></td>
                     <td align="center">
                         <button class="btn-none" data-bind="click: $parent.removeRow">
                             <i class="icon-trash"></i>
@@ -460,7 +460,9 @@
                                         <span data-bind="text: $index()+1"> </span>
                                     </td>
                                     <td class="with_ip">
-                                        <input type="hidden"
+                                        {#                                        <input type="hidden"#}
+                                        {#                                               data-bind="value: vendor, select2: {data: {results: $root.accounts_by_category('Suppliers')}}">#}
+                                        <input type="hidden" data-field="Account"
                                                data-bind="value: vendor, select2: {data: {results: $root.accounts_by_category('Suppliers')}}, lookupKey: 'id'">
                                     </td>
                                     <td data-bind="editableText: amount"></td>
