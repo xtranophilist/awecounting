@@ -364,9 +364,11 @@ function CashSalesRow(row) {
     self.account_id = ko.observable();
     self.tax_rate = ko.observable();
     self.amount = ko.observable();
-    self.tax = function () {
-        return round2(parseFloat(self.amount()) * parseFloat(self.tax_rate()) / 100);
-    }
+    self.tax= ko.observable();
+
+    self.amount.subscribe(function(){
+       self.tax(rnum(parseFloat(self.amount()) * parseFloat(vm.account_by_id(self.account_id()).tax_rate) / 100));
+    });
 
     for (var k in row) {
         if (row[k] != null)
