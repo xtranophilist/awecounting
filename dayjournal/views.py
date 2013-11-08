@@ -43,7 +43,8 @@ def day_journal(request, journal_date=None):
 
 @login_required
 def get_journal(request):
-    journal, created = DayJournal.objects.get_or_create(date=json.loads(request.body).get('day_journal_date'),
+    params = json.loads(request.body)
+    journal, created = DayJournal.objects.get_or_create(date=params.get('day_journal_date'),
                                                         company=request.company, defaults={'sales_tax': 0,
                                                                                            'cheque_deposit': 0,
                                                                                            'cash_deposit': 0,
@@ -450,7 +451,11 @@ def save_other_payout(request):
 
 @login_required
 def last_lotto_detail(request, journal_date):
-    last_journal = DayJournal.objects.filter(date__lt=journal_date, lotto_detail__isnull=False).order_by('-date')[0];
-    lotto_detail = last_journal.lotto_detail.all()
-    dct = LottoDetailSerializer(lotto_detail).data
-    return HttpResponse(json.dumps(dct), mimetype="application/json")
+    try:
+        last_journal = DayJournal.objects.filter(date__lt=journal_date, lotto_detail__isnull=False).order_by('-date')[
+            0];
+        lotto_detail = last_journal.lotto_detail.all()
+        dct = LottoDetailSerializer(lotto_detail).data
+        return HttpResponse(json.dumps(dct), mimetype="application/json")
+    except IndexError:
+        return HttpResponse(json.dumps({}), mimetype="application/json")
