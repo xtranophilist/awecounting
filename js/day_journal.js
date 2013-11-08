@@ -3,8 +3,14 @@ function DayJournal(data) {
     self.sales_tax = ko.observable();
 
 
+
     for (var k in data)
         self[k] = data[k];
+
+    self.voucher_no = ko.observable();
+    if (data['voucher_no']) {
+        self.voucher_no(data['voucher_no']);
+    }
 
     self.lotto_sales_dispenser_amount = ko.observable();
     if (data['lotto_sales_dispenser_amount']) {
@@ -252,7 +258,7 @@ function DayJournal(data) {
         return {
             rows: data[key],
             save_to_url: '/day/save/' + key + '/',
-            properties: {day_journal_date: self.date},
+            properties: {day_journal_date: self.date, voucher_no: self.voucher_no},
             onSaveSuccess: function (msg, rows) {
                 validate(msg, rows, key.toDash());
             }
