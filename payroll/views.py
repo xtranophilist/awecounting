@@ -99,8 +99,8 @@ def employee_form(request, id=None):
             obj = form.save(commit=False)
             obj.company = request.company
             obj.save()
-            #if request.is_ajax():
-            #    return render(request, 'callback.html', {'obj': TaxSchemeSerializer(obj).data})
+            if request.is_ajax():
+                return render(request, 'callback.html', {'obj': EmployeeSerializer(obj).data})
             return redirect(reverse_lazy('list_employees'))
     else:
         form = EmployeeForm(instance=obj)

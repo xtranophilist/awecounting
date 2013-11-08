@@ -79,7 +79,7 @@
                 <!-- ko foreach: rows -->
                 <tr>
                     <td>
-                        <input type="hidden"
+                        <input type="hidden" data-field="Employee" data-add-url="{% url 'create_employee' %}"
                                data-bind="value: employee, select2: {data: {results: $root.employees}}, lookupKey: 'id'">
                     </td>
                     <!-- ko foreach: work_days -->
