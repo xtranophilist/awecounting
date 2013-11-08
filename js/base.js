@@ -393,10 +393,10 @@ function TableViewModel(options, row_model) {
                 data: ko.toJSON(self),
                 success: function (msg) {
                     self.message('Saved!');
+                    self.state('success');
                     if (typeof(options.onSaveSuccess) != 'undefined') {
                         options.onSaveSuccess(msg, self.rows());
                     }
-                    self.state('success');
                     self.deleted_rows = [];
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {

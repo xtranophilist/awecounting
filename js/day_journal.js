@@ -1,7 +1,7 @@
 function DayJournal(data) {
     var self = this;
     self.sales_tax = ko.observable();
-
+    self.state = ko.observable();
 
 
     for (var k in data)
@@ -239,18 +239,25 @@ function DayJournal(data) {
             $(selection[i]).removeClass('invalid-row');
         }
         var model = self[tr_wrapper_id.toUnderscore()];
-        var saved_size = Object.size(msg['saved']);
-        if (saved_size == rows.length)
-            model.message('Saved!');
-        else if (saved_size == 0) {
-            model.message('No rows saved!');
+        if (typeof (msg.error_message) != 'undefined') {
+            model.message(msg.error_message);
+            console.log('hey')
             model.state('error');
         }
-        else if (saved_size < rows.length) {
-            var message = saved_size.toString() + ' row' + ((saved_size == 1) ? '' : 's') + ' saved! ';
-            message += (rows.length - saved_size).toString() + ' row' + ((rows.length - saved_size == 1) ? ' is' : 's are') + ' incomplete!';
-            model.message(message);
-            model.state('error');
+        else {
+            var saved_size = Object.size(msg['saved']);
+            if (saved_size == rows.length)
+                model.message('Saved!');
+            else if (saved_size == 0) {
+                model.message('No rows saved!');
+                model.state('error');
+            }
+            else if (saved_size < rows.length) {
+                var message = saved_size.toString() + ' row' + ((saved_size == 1) ? '' : 's') + ' saved! ';
+                message += (rows.length - saved_size).toString() + ' row' + ((rows.length - saved_size == 1) ? ' is' : 's are') + ' incomplete!';
+                model.message(message);
+                model.state('error');
+            }
         }
     }
 
