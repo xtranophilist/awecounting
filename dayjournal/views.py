@@ -123,19 +123,6 @@ def save_summary_cash(request):
     day_journal.cash_actual = params.get('rows')[0].get('actual')
     day_journal.status = 'Unapproved'
     day_journal.save()
-    # dct = {'invalid_attributes': {}, 'saved': {}}
-    # for index, row in enumerate(params.get('rows')):
-    #     invalid_attrs = invalid(row, ['register'])
-    #     if invalid_attrs:
-    #         dct['invalid_attributes'][index] = invalid_attrs
-    #         continue
-    #     day_journal = get_journal(request)
-    #     try:
-    #         day_journal.sales_tax = row.get('register')
-    #         day_journal.save()
-    #         dct['saved'][0] = day_journal.id
-    #     except:
-    #         pass
     return HttpResponse(json.dumps({'saved': {'0': 1}}), mimetype="application/json")
 
 
@@ -255,9 +242,6 @@ def save_card_sales(request):
     day_journal = get_journal(request)
     if type(day_journal) == dict:
         return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
-    card_account = Account.objects.get(name='Card Account', company=request.company)
-    cash_account = Account.objects.get(name='Cash Account', company=request.company)
-    commission_out_account = Account.objects.get(name='Commission Out', company=request.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['amount', 'commission_out'])
         if invalid_attrs:
@@ -268,13 +252,6 @@ def save_card_sales(request):
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
-
-        net_amount = float(row.get('amount')) - float(row.get('commission_out'))
-        set_transactions(submodel, day_journal.date,
-                         ['dr', card_account, net_amount],
-                         ['dr', commission_out_account, row.get('commission_out')],
-                         ['cr', cash_account, row.get('amount')],
-        )
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
     day_journal.status = 'Unapproved'
@@ -290,7 +267,6 @@ def save_cash_equivalent_sales(request):
     day_journal = get_journal(request)
     if type(day_journal) == dict:
         return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
-    cash_account = Account.objects.get(name='Cash Account', company=request.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['amount', 'account'])
         if invalid_attrs:
@@ -301,73 +277,8 @@ def save_cash_equivalent_sales(request):
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
-        set_transactions(submodel, day_journal.date,
-                         ['dr', Account.objects.get(id=row.get('account')), row.get('amount')],
-                         ['cr', cash_account, row.get('amount')],
-        )
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
-    day_journal.status = 'Unapproved'
-    day_journal.save()
-    return HttpResponse(json.dumps(dct), mimetype="application/json")
-
-
-@login_required
-def save_summary_bank(request):
-    params = json.loads(request.body)
-    dct = {'invalid_attributes': {}, 'saved': {}}
-    day_journal = get_journal(request)
-    if type(day_journal) == dict:
-        return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
-    cheque_account = Account.objects.get(name='Cheque Account', company=request.company)
-    cash_account = Account.objects.get(name='Cash Account', company=request.company)
-    bank_account = Account.objects.get(name='Bank Account', company=request.company)
-    invalid_attrs = invalid(params.get('rows')[0], ['deposit', 'withdrawal'])
-    bank_amount = 0
-    cash_amount = 0
-    cheque_amount = 0
-    if invalid_attrs:
-        dct['invalid_attributes'][0] = invalid_attrs
-    else:
-        day_journal.cash_deposit = params.get('rows')[0].get('deposit')
-        day_journal.cash_withdrawal = params.get('rows')[0].get('withdrawal')
-        bank_amount += float(params.get('rows')[0].get('deposit'))
-        cash_amount -= float(params.get('rows')[0].get('deposit'))
-        bank_amount -= float(params.get('rows')[0].get('withdrawal'))
-        cash_amount += float(params.get('rows')[0].get('withdrawal'))
-        # set_transactions(day_journal, day_journal.date,
-        #                  ['dr', bank_account, params.get('rows')[0].get('deposit')],
-        #                  ['cr', cash_account, params.get('rows')[0].get('deposit')],
-        # )
-        # set_transactions(day_journal, day_journal.date,
-        #                  ['cr', bank_account, params.get('rows')[0].get('withdrawal')],
-        #                  ['dr', cash_account, params.get('rows')[0].get('withdrawal')],
-        # )
-        dct['saved'][0] = 0
-    invalid_attrs = invalid(params.get('rows')[1], ['deposit'])
-    if invalid_attrs:
-        dct['invalid_attributes'][1] = invalid_attrs
-    else:
-        day_journal.cheque_deposit = params.get('rows')[1].get('deposit')
-        # set_transactions(day_journal, day_journal.date,
-        #                  ['dr', bank_account, params.get('rows')[1].get('deposit')],
-        #                  ['cr', cheque_account, params.get('rows')[1].get('deposit')],
-        # )
-        bank_amount += float(params.get('rows')[1].get('deposit'))
-        cheque_amount -= float(params.get('rows')[1].get('deposit'))
-        dct['saved'][1] = 1
-        if cash_amount < 0:
-            set_transactions(day_journal, day_journal.date, ['cr', cash_account, (-1 * cash_amount)])
-        else:
-            set_transactions(day_journal, day_journal.date, ['dr', cash_account, cash_amount])
-        if bank_amount < 0:
-            set_transactions(day_journal, day_journal.date, ['cr', bank_account, (-1 * bank_amount)])
-        else:
-            set_transactions(day_journal, day_journal.date, ['dr', bank_account, bank_amount])
-        if cheque_amount < 0:
-            set_transactions(day_journal, day_journal.date, ['cr', cheque_account, (-1 * cheque_amount)])
-        else:
-            set_transactions(day_journal, day_journal.date, ['dr', cheque_account, cheque_amount])
     day_journal.status = 'Unapproved'
     day_journal.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
