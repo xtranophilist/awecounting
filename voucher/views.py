@@ -12,7 +12,7 @@ from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, Purchase
     JournalVoucherRow, CashReceipt, CashReceiptRow, CashPayment, CashPaymentRow, FixedAsset, FixedAssetRow, AdditionalDetail
 from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, JournalVoucherSerializer, CashReceiptSerializer, CashPaymentSerializer, FixedAssetSerializer
 from acubor.lib import invalid, save_model, all_empty_in_dict
-from ledger.models import delete_rows, Account, set_transactions, Party
+from ledger.models import delete_rows, Account, set_transactions, Party, Category
 from voucher.filters import InvoiceFilter, PurchaseVoucherFilter
 from inventory.models import Item
 from voucher.templatetags.filters import handler
@@ -603,7 +603,9 @@ def fixed_asset(request, id=None):
         voucher = FixedAsset(date=date.today())
         scenario = 'Create'
     data = FixedAssetSerializer(voucher).data
-    return render(request, 'fixed_asset.html', {'scenario': scenario, 'data': data})
+    fixed_asset_category = Category.objects.get(name='Fixed Assets', company=request.company)
+    return render(request, 'fixed_asset.html',
+                  {'scenario': scenario, 'data': data, 'fixed_asset_category': fixed_asset_category})
 
 
 @login_required

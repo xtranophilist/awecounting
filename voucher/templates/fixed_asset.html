@@ -12,8 +12,7 @@
     <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
     <script src="{{ STATIC_URL }}js/fixed_asset.js"></script>
     <script>
-        ko_data =
-        {{ data|jsonify }}
+        ko_data = {{ data|jsonify }}
     </script>
 {% endblock %}
 
@@ -82,7 +81,7 @@
                 <tr>
                     <td class="with_ip">
                         <input type="hidden" data-field="Asset Ledger"
-                               data-add-url="{% url 'create_account' %}?category_id=199"
+                               data-add-url="{% url 'create_account' %}?category_id={{ fixed_asset_category.id }}"
                                data-bind="value: asset_ledger, select2: {data: {results: $root.fixed_assets}}, lookupKey: 'id'">
                     </td>
                     <td data-bind="editableText: description"></td>

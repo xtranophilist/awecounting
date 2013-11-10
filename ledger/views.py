@@ -217,8 +217,7 @@ def party_form(request, id=None):
             redirect('/ledger/parties')
     else:
         form = PartyForm(instance=party)
-        for query in request.GET:
-            form.fields[query].widget = form.fields[query].hidden_widget()
+        form.hide_field(request)
     if request.is_ajax():
         base_template = 'modal.html'
     else:
