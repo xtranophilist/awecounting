@@ -312,7 +312,7 @@
                     <td data-bind="text: $index()+1"></td>
                     <td class="with_ip">
                         <select class="span12"
-                                data-bind="options: $root.accounts_by_category('Transfers/Remittances'), optionsText: 'name', optionsValue: 'id', value: transfer_type, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
+                                data-bind="options: $root.accounts, optionsText: 'name', optionsValue: 'id', value: transfer_type, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
                     </td>
                     <td data-bind="editableText: cash"></td>
                     <td data-bind="editableText: cheque"></td>

@@ -148,14 +148,6 @@ def save_summary_transfer(request):
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if not created:
             submodel = save_model(submodel, values)
-            # Cash - Dr	; Cheque - Dr	; Bill-payment - Cr; Card - Dr
-        set_transactions(submodel, day_journal.date,
-                         ['dr', cash_account, row.get('cash')],
-                         ['dr', card_account, row.get('card')],
-                         ['dr', cheque_account, row.get('cheque')],
-                         ['cr', Account.objects.get(id=row.get('transfer_type')),
-                          add(row.get('cash'), row.get('card'), row.get('cheque'))],
-        )
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
     day_journal.status = 'Unapproved'
@@ -416,6 +408,8 @@ def approve(request):
     except DayJournal.DoesNotExist:
         dct['error_message'] = 'Day Journal needs to be saved before being approved!'
         return HttpResponse(json.dumps(dct), mimetype="application/json")
+    cash_account = Account.objects.get(name='Cash Account', company=request.company)
+    card_account = Account.objects.get(name='Card Account', company=request.company)
     total_amount = 0
     total_tax = 0
     for cash_sale in journal.cash_sales.all():
@@ -471,7 +465,7 @@ def approve(request):
                          ['dr', Account.objects.get(name='Commission Out', company=request.company), commission_out],
         )
         set_transactions(journal, journal.date,
-                         ['dr', Account.objects.get(name='Card Account', company=request.company), net],
+                         ['dr', card_account, net],
         )
         non_cash += card_sale.amount
 
@@ -482,8 +476,18 @@ def approve(request):
         non_cash += cash_equivalent_sale.amount
 
     set_transactions(journal, journal.date,
-                     ['dr', Account.objects.get(name='Cash Account', company=request.company), total_amount - non_cash],
+                     ['dr', cash_account, total_amount - non_cash],
     )
+
+    for row in journal.summary_transfer:
+        # Cash - Dr	; Cheque - Dr	; Bill-payment - Cr; Card - Dr
+        set_transactions(row, journal.date,
+                         ['dr', cash_account, row.cash],
+                         ['dr', card_account, row.card],
+                         ['dr', Account.objects.get(name='Cheque Account', company=request.company), row.cheque],
+                         ['cr', Account.objects.get(id=row.transfer_type), add(row.cash, row.card, row.cheque)],
+        )
+
 
 
 
