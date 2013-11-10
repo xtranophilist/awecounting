@@ -73,8 +73,6 @@ def save_cash_sales(request):
     day_journal = get_journal(request)
     if type(day_journal) == dict:
         return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
-        #cash_account = Account.objects.get(name='Cash Account', company=request.company)
-    #sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_id', 'amount'])
         if invalid_attrs:
@@ -85,23 +83,6 @@ def save_cash_sales(request):
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if row.get('tax_rate') is None:
             row['tax_rate'] = 0
-            #tax_amount = float(row.get('tax_rate')) / 100 * float(row.get('amount'))
-        #net_amount = float(row.get('amount')) - tax_amount
-
-        #sales-cr;tax-cr;cash-dr
-
-        #if tax_amount == 0:
-        #    set_transactions(submodel, day_journal.date,
-        #                     ['dr', cash_account, row.get('amount')],
-        #                     ['cr', Account.objects.get(id=row.get('account_id')), net_amount],
-        #                     # ['cr', sales_tax_account, tax_amount],
-        #    )
-        #else:
-        #    set_transactions(submodel, day_journal.date,
-        #                     ['dr', cash_account, row.get('amount')],
-        #                     ['cr', Account.objects.get(id=row.get('account_id')), net_amount],
-        #                     ['cr', sales_tax_account, tax_amount],
-        #    )
         if not created:
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
