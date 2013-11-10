@@ -1,8 +1,87 @@
+$(document).ready(function () {
+    vm = new DayJournal(ko_data);
+    ko.applyBindings(vm);
+
+    if (window.location.hash != "") {
+        $('a[href="' + window.location.hash + '"]').click();
+    }
+    $(document).on("click", ".delete-attachment", function (e) {
+        e.preventDefault();
+        var $this = $(this);
+        if (confirm("Are you sure you want to delete this attachment?")) {
+            var uri = build_attachment_url($this.data("type"), $this.data('id'));
+            $.post(uri.url, uri.params)
+                .done(function (res) {
+                    if (res.success) {
+                        $this.parent('.span3').fadeOut(300, function () {
+                            $(this).remove();
+                        });
+                    } else {
+                        alert("There has been error while processing your request. Please try again!");
+                    }
+                });
+        } else {
+            return false;
+        }
+    });
+
+    function build_attachment_url(type, id) {
+        return {url: "/day/delete_attachment/", params: {type: type, id: id}};
+    }
+
+    $('.add_file').click(function () {
+        var _parent = $(this).parent('p');
+        var clone = _parent.siblings('.attach_file_field:last').clone();
+        clone.find('input').val("");
+        _parent.before(clone);
+    });
+
+    $('.attachment-form').submit(function (e) {
+        e.preventDefault();
+        if (window.FormData) {
+            var file_ips = $(this).find('input[type="file"]');
+            var text_ips = $(this).find('.captions');
+            var formdata = new FormData();
+            $.each(text_ips, function () {
+                formdata.append("captions", this.value);
+            });
+            $.each(file_ips, function () {
+                formdata.append("attachments", this.files[0]);
+            });
+            var $this = $(this);
+            var type = $this.data("type");
+            formdata.append("type", type);
+            formdata.append("day", $('#attachment_tabbable').data("journal-day"));
+            $.ajax({
+                url: "/day/save_attachments/",
+                type: "POST",
+                data: formdata,
+                processData: false,
+                contentType: false,
+                success: function (res) {
+                    var str = "";
+                    $.each(res, function () {
+                        str += '<div class="span3"> <a target="_blank" href="' + this.link + '">' + this.caption + '</a><button class="close delete-attachment" data-type="' + type + '" data-id="' + this.id + '"><span class="icon-trash"></span></button></div>';
+                    });
+                    $this.find('.row-fluid').append(str);
+                    $this.find('.attach_file_field').find("input").val("").end().not(':first').remove();
+                },
+                error: function () {
+                    alert("There has been error while processing your request. Please try again!");
+                }
+            });
+
+        } else {
+            alert("Your browser is too old. Please upgrade to modern browsers like Chrome or Firefox.")
+        }
+    });
+
+});
+
 function DayJournal(data) {
     var self = this;
     self.sales_tax = ko.observable();
     self.state = ko.observable();
-
 
     for (var k in data)
         self[k] = data[k];
@@ -10,6 +89,11 @@ function DayJournal(data) {
     self.voucher_no = ko.observable();
     if (data['voucher_no']) {
         self.voucher_no(data['voucher_no']);
+    }
+
+    self.status = ko.observable();
+    if (data['status']) {
+        self.status(data['status']);
     }
 
     self.lotto_sales_dispenser_amount = ko.observable();
@@ -241,13 +325,14 @@ function DayJournal(data) {
         var model = self[tr_wrapper_id.toUnderscore()];
         if (typeof (msg.error_message) != 'undefined') {
             model.message(msg.error_message);
-            console.log('hey')
             model.state('error');
         }
         else {
             var saved_size = Object.size(msg['saved']);
-            if (saved_size == rows.length)
+            if (saved_size == rows.length) {
                 model.message('Saved!');
+                self.status('Unapproved');
+            }
             else if (saved_size == 0) {
                 model.message('No rows saved!');
                 model.state('error');
@@ -257,6 +342,7 @@ function DayJournal(data) {
                 message += (rows.length - saved_size).toString() + ' row' + ((rows.length - saved_size == 1) ? ' is' : 's are') + ' incomplete!';
                 model.message(message);
                 model.state('error');
+                self.status('Unapproved');
             }
         }
     }
@@ -333,6 +419,32 @@ function DayJournal(data) {
 
     self.summary_lotto = new SummaryLotto(self);
 
+    self.approve = function () {
+        $.ajax({
+            type: "POST",
+            url: '/day/approve/',
+            data: ko.toJSON(self),
+            success: function (msg) {
+                if (typeof (msg.error_message) != 'undefined') {
+                    bs_alert.error(msg.error_message);
+                }
+                else {
+                    bs_alert.success('Approved!')
+//                    self.status('Approved');
+                    self.state('success');
+                }
+//                console.log(msg);
+//                $('#lotto-sales-message').html('Saved!');
+//                $('#lotto-sales-message').addClass('success');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                console.log(XMLHttpRequest);
+//                $('#lotto-sales-message').html('Saving Failed');
+//                $('#lotto-sales-message').addClass('error');
+            }
+        });
+    }
+
 }
 
 function LottoDetailRow(row) {
@@ -349,7 +461,7 @@ function LottoDetailRow(row) {
         if (day_close == 0) {
             day_close = self.pack_count();
         }
-        return round2(((self.pack_count() * self.addition()) + (day_close - self.day_open())) * self.rate());
+        return rnum(((self.pack_count() * self.addition()) + (day_close - self.day_open())) * self.rate());
     }
 
     for (var k in row) {
@@ -364,11 +476,19 @@ function CashSalesRow(row) {
     self.account_id = ko.observable();
     self.tax_rate = ko.observable();
     self.amount = ko.observable();
-    self.tax= ko.observable();
+//    self.tax = ko.observable(rnum(parseFloat(self.amount()) * parseFloat(vm.account_by_id(self.account_id()).tax_rate) / 100));
+//    self.tax = ko.observable();
 
-    self.amount.subscribe(function(){
-       self.tax(rnum(parseFloat(self.amount()) * parseFloat(vm.account_by_id(self.account_id()).tax_rate) / 100));
-    });
+//    self.amount.subscribe(function () {
+//        self.tax(rnum(parseFloat(self.amount()) * parseFloat(vm.account_by_id(self.account_id()).tax_rate) / 100));
+//    });
+
+    self.tax = function () {
+        if (self.account_id()) {
+            return rnum(parseFloat(self.amount()) * parseFloat(vm.account_by_id(self.account_id()).tax_rate) / 100);
+        }
+        return '';
+    }
 
     for (var k in row) {
         if (row[k] != null)
