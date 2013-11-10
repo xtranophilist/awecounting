@@ -4,6 +4,7 @@ $(document).ready(function () {
     });
     vm = new GroupPayrollVoucherVM(ko_data);
     ko.applyBindings(vm);
+    $('.change-on-ready').trigger('change');
 });
 
 
@@ -72,6 +73,7 @@ function GroupPayrollVoucherVM(data) {
                     }
                     else {
                         self.message('Saved!');
+                        self.status('Unapproved');
                         self.state('success');
                         if (msg.id)
                             self.id(msg.id);
@@ -93,6 +95,26 @@ function GroupPayrollVoucherVM(data) {
             return true;
     }
 
+    self.approve = function (item, event) {
+            $.ajax({
+                type: "POST",
+                url: '/payroll/group-voucher/approve/',
+                data: ko.toJSON(self),
+                success: function (msg) {
+                    if (typeof (msg.error_message) != 'undefined') {
+                        self.message(msg.error_message);
+                        self.state('error');
+                    }
+                    else {
+                        self.message('Approved!');
+                        self.state('success');
+                        self.status('Approved');
+                        if (msg.id)
+                            self.id(msg.id);
+                    }
+                }
+            });
+    }
 }
 
 function GroupPayrollVoucherRowVM(data) {
