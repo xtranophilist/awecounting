@@ -66,6 +66,14 @@ class KOModelForm(forms.ModelForm):
                 field.widget.attrs['required'] = 'required'
             field.widget.attrs['data-bind'] = 'value: ' + name
 
+    def hide_field(self, request):
+        for query in request.GET:
+                if query[-3:] == '_id':
+                    query = query[:-3]
+                self.fields[query].widget = self.fields[query].hidden_widget()
+                self.fields[query].label = ''
+        return self
+
 
 def invalid(row, required_fields):
     invalid_attrs = []
@@ -145,3 +153,5 @@ def get_next_voucher_no(cls, company):
         return max_voucher_no + 1
     else:
         return 1
+
+

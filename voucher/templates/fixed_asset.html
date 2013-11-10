@@ -82,7 +82,7 @@
                 <tr>
                     <td class="with_ip">
                         <input type="hidden" data-field="Asset Ledger"
-                               data-add-url="{% url 'create_inventory_item' %}"
+                               data-add-url="{% url 'create_account' %}?category_id=199"
                                data-bind="value: asset_ledger, select2: {data: {results: $root.fixed_assets}}, lookupKey: 'id'">
                     </td>
                     <td data-bind="editableText: description"></td>

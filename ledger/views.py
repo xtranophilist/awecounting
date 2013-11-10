@@ -56,6 +56,8 @@ def account_form(request, id=None):
     else:
         account = Account()
         scenario = 'Create'
+    for query in request.GET:
+        setattr(account, query, request.GET[query])
     if request.POST:
         form = AccountForm(data=request.POST, instance=account, company=request.company, scenario=scenario)
         if form.is_valid():
@@ -81,6 +83,7 @@ def account_form(request, id=None):
             return redirect('/ledger/')
     else:
         form = AccountForm(instance=account, company=request.company, scenario=scenario)
+        form.hide_field(request)
     if request.is_ajax():
         base_template = 'modal.html'
     else:
