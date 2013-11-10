@@ -614,3 +614,7 @@ input.date-picker {
 tr.diff td {
     color: red;
 }
+
+.fixed-width-td td input{
+    width: 2.8em !important;
+}
