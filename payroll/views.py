@@ -391,6 +391,46 @@ def save_individual_payroll_voucher(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
+@group_required('SuperOwner', 'Owner', 'Supervisor')
+def approve_individual_payroll_voucher(request):
+    params = json.loads(request.body)
+    dct = {}
+    if params.get('id'):
+        voucher = IndividualPayroll.objects.get(id=params.get('id'))
+    else:
+        dct['error_message'] = 'Voucher needs to be saved before being approved!'
+        return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+    total_inclusion = 0
+    for row in voucher.inclusions.all():
+        set_transactions(row, voucher.date,
+                         ['dr', row.particular, row.amount]
+        )
+        total_inclusion += row.amount
+
+    total_exclusion = 0
+    for row in voucher.deductions.all():
+        set_transactions(row, voucher.date,
+                         ['cr', row.particular, row.amount]
+        )
+        total_exclusion += row.amount
+
+    diff = total_inclusion - total_exclusion
+
+    if diff > 0:
+        set_transactions(voucher, voucher.date,
+                         ['cr', voucher.employee.account, diff]
+        )
+    elif diff < 0:
+        set_transactions(voucher, voucher.date,
+                         ['dr', voucher.employee.account, diff * (-1)]
+        )
+    voucher.employee.set_paid()
+    voucher.status = 'Approved'
+    voucher.save()
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
 @login_required
 def delete_individual_payroll_voucher(request, id):
     obj = get_object_or_404(GroupPayroll, id=id, company=request.company)

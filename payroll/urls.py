@@ -46,6 +46,8 @@ urlpatterns = patterns('',
                            name='update_individual_payroll_voucher'),
                        url(r'^individual-voucher/save/$', views.save_individual_payroll_voucher,
                            name='save_individual_payroll_voucher'),
+                       url(r'^individual-voucher/approve/$', views.approve_individual_payroll_voucher,
+                           name='approve_individual_payroll_voucher'),
                        url(r'^individual-voucher/delete/(?P<id>[0-9]+)/$', views.delete_individual_payroll_voucher,
                            name='delete_individual_payroll_voucher'),
 )
