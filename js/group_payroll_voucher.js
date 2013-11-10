@@ -73,10 +73,11 @@ function GroupPayrollVoucherVM(data) {
                     }
                     else {
                         self.message('Saved!');
-                        self.status('Unapproved');
                         self.state('success');
-                        if (msg.id)
+                        if (msg.id){
                             self.id(msg.id);
+                            self.status('Unapproved');
+                        }
                         $("#table-body > tr").each(function (i) {
                             $($("#table-body > tr")[i]).addClass('invalid-row');
                         });

@@ -142,6 +142,27 @@ function IndividualPayrollVoucherVM(data) {
             return true;
     }
 
+    self.approve = function (item, event) {
+            $.ajax({
+                type: "POST",
+                url: '/payroll/individual-voucher/approve/',
+                data: ko.toJSON(self),
+                success: function (msg) {
+                    if (typeof (msg.error_message) != 'undefined') {
+                        self.message(msg.error_message);
+                        self.state('error');
+                    }
+                    else {
+                        self.message('Approved!');
+                        self.state('success');
+                        self.status('Approved');
+                        if (msg.id)
+                            self.id(msg.id);
+                    }
+                }
+            });
+    }
+
 }
 
 function IndividualPayrollVoucherRowVM(data) {
