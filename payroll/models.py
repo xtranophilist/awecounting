@@ -34,7 +34,7 @@ class Employee(models.Model):
     address = models.TextField(null=True, blank=True)
     tax_id = models.CharField(max_length=100, null=True, blank=True)
     designation = models.CharField(max_length=100, null=True, blank=True)
-    account = models.OneToOneField(Account)
+    account = models.OneToOneField(Account, null=True)
     company = models.ForeignKey(Company)
 
     def get_unpaid_days(self):
@@ -61,8 +61,8 @@ class Employee(models.Model):
 
     def save(self, *args, **kwargs):
         if self.pk is None:
-            dummy_account = Account.objects.all()[:1][0]
-            self.account = dummy_account
+            #dummy_account = Account.objects.all()[:1][0]
+            #self.account = dummy_account
             super(Employee, self).save(*args, **kwargs)
             account = Account(code='13-0001-' + str(self.id), name=self.name)
             account.company = self.company
