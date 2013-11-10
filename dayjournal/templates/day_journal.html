@@ -16,86 +16,10 @@
     <script src="{{ STATIC_URL }}js/vendors/knockout.js"></script>
     <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
     <script src="{{ STATIC_URL }}js/day_journal.js"></script>
+    {% load filters %}
     <script type="text/javascript">
+        ko_data = {{ day_journal|jsonify }};
         $(document).ready(function () {
-            {% load filters %}
-            if (window.location.hash != "") {
-                $('a[href="' + window.location.hash + '"]').click();
-            }
-            $(document).on("click", ".delete-attachment", function (e) {
-                e.preventDefault();
-                var $this = $(this);
-                if (confirm("Are you sure you want to delete this attachment?")) {
-                    var uri = build_attachment_url($this.data("type"), $this.data('id'));
-                    $.post(uri.url, uri.params)
-                            .done(function (res) {
-                                if (res.success) {
-                                    $this.parent('.span3').fadeOut(300, function () {
-                                        $(this).remove();
-                                    });
-                                } else {
-                                    alert("There has been error while processing your request. Please try again!");
-                                }
-                            });
-                } else {
-                    return false;
-                }
-            });
-
-            function build_attachment_url(type, id) {
-                return {url: "/day/delete_attachment/", params: {type: type, id: id}};
-            }
-
-            $('.add_file').click(function () {
-                var _parent = $(this).parent('p');
-                var clone = _parent.siblings('.attach_file_field:last').clone();
-                clone.find('input').val("");
-                _parent.before(clone);
-            });
-
-            $('.attachment-form').submit(function (e) {
-                e.preventDefault();
-                if (window.FormData) {
-                    var file_ips = $(this).find('input[type="file"]');
-                    var text_ips = $(this).find('.captions');
-                    var formdata = new FormData();
-                    $.each(text_ips, function () {
-                        formdata.append("captions", this.value);
-                    });
-                    $.each(file_ips, function () {
-                        formdata.append("attachments", this.files[0]);
-                    });
-                    var $this = $(this);
-                    var type = $this.data("type");
-                    formdata.append("type", type);
-                    formdata.append("day", $('#attachment_tabbable').data("journal-day"));
-                    $.ajax({
-                        url: "/day/save_attachments/",
-                        type: "POST",
-                        data: formdata,
-                        processData: false,
-                        contentType: false,
-                        success: function (res) {
-                            var str = "";
-                            $.each(res, function () {
-                                str += '<div class="span3"> <a target="_blank" href="' + this.link + '">' + this.caption + '</a><button class="close delete-attachment" data-type="' + type + '" data-id="' + this.id + '"><span class="icon-trash"></span></button></div>';
-                            });
-                            $this.find('.row-fluid').append(str);
-                            $this.find('.attach_file_field').find("input").val("").end().not(':first').remove();
-                        },
-                        error: function () {
-                            alert("There has been error while processing your request. Please try again!");
-                        }
-                    });
-
-                } else {
-                    alert("Your browser is too old. Please upgrade to modern browsers like Chrome or Firefox.")
-                }
-            });
-
-            vm = new DayJournal({{ day_journal|jsonify }});
-            ko.applyBindings(vm);
-
         });
     </script>
 {% endblock %}
@@ -124,6 +48,13 @@
     </div>
 
     Voucher No.: <input type="text" data-bind="value: voucher_no">
+
+    {{ day_journal }}
+
+    {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
+        <input class="btn" type="submit" value="Approve"
+               data-bind="click: $root.approve, visible: $root.status() == 'Unapproved'">
+    {% endifusergroup %}
 
     <div class="no-print page-journal">
     <div class="col-box">
@@ -182,8 +113,8 @@
                         <select class="span12"
                                 data-bind="options: $root.sales_sans_lotto(), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.account_changed}"></select>
                     </td>
-                    <td data-bind="editableText: amount, numeric: true"></td>
-                    <td data-bind="text: tax"></td>
+                    <td class="change-on-ready" data-bind="editableText: amount, numeric: true"></td>
+                    <td data-bind="text: tax()"></td>
                     <td align="center">
                         <button class="btn-none" data-bind="click: $parent.removeRow">
                             <i class="icon-trash"></i>

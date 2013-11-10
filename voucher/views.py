@@ -286,7 +286,6 @@ def save_journal_voucher(request):
                   'journal_voucher': voucher}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if row.get('type') == 'Dr':
-            print 'dr'
             set_transactions(submodel, params.get('date'),
                              ['dr', Account.objects.get(id=row.get('account')), row.get('dr_amount')],
             )
@@ -557,7 +556,7 @@ def save_cash_payment(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
-@group_required('SuperOwner', 'Owner', "supervisor")
+@group_required('SuperOwner', 'Owner', "Supervisor")
 def approve_cash_payment(request):
     params = json.loads(request.body)
     dct = {}

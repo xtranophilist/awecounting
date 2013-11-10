@@ -4,6 +4,7 @@ import views
 urlpatterns = patterns('',
                        url(r'^$', views.day_journal, name='new_day_journal'),
                        url(r'^journals/$', views.all_day_journals, name='all_day_journals'),
+                       url(r'^approve/$', views.approve, name='approve_day_journal'),
                        url(r'^(?P<journal_date>\d{4}-\d{2}-\d{2})/$', views.day_journal, name='view_day_journal'),
                        url(r'^save/cash_sales/$', views.save_cash_sales, name='save_cash_sales'),
                        url(r'^save/summary_cash/$', views.save_summary_cash, name='save_summary_cash'),

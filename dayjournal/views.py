@@ -12,6 +12,7 @@ from inventory.models import InventoryAccount
 from inventory.models import set_transactions as set_inventory_transactions
 from dayjournal.serializers import DayJournalSerializer, LottoDetailSerializer
 from acubor.lib import invalid, save_model, all_empty, add
+from users.models import group_required
 
 
 @login_required
@@ -72,8 +73,8 @@ def save_cash_sales(request):
     day_journal = get_journal(request)
     if type(day_journal) == dict:
         return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
-    cash_account = Account.objects.get(name='Cash Account', company=request.company)
-    sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
+        #cash_account = Account.objects.get(name='Cash Account', company=request.company)
+    #sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['account_id', 'amount'])
         if invalid_attrs:
@@ -84,27 +85,29 @@ def save_cash_sales(request):
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         if row.get('tax_rate') is None:
             row['tax_rate'] = 0
-        tax_amount = float(row.get('tax_rate')) / 100 * float(row.get('amount'))
-        net_amount = float(row.get('amount')) - tax_amount
+            #tax_amount = float(row.get('tax_rate')) / 100 * float(row.get('amount'))
+        #net_amount = float(row.get('amount')) - tax_amount
 
         #sales-cr;tax-cr;cash-dr
 
-        if tax_amount == 0:
-            set_transactions(submodel, day_journal.date,
-                             ['dr', cash_account, row.get('amount')],
-                             ['cr', Account.objects.get(id=row.get('account_id')), net_amount],
-                             # ['cr', sales_tax_account, tax_amount],
-            )
-        else:
-            set_transactions(submodel, day_journal.date,
-                             ['dr', cash_account, row.get('amount')],
-                             ['cr', Account.objects.get(id=row.get('account_id')), net_amount],
-                             ['cr', sales_tax_account, tax_amount],
-            )
+        #if tax_amount == 0:
+        #    set_transactions(submodel, day_journal.date,
+        #                     ['dr', cash_account, row.get('amount')],
+        #                     ['cr', Account.objects.get(id=row.get('account_id')), net_amount],
+        #                     # ['cr', sales_tax_account, tax_amount],
+        #    )
+        #else:
+        #    set_transactions(submodel, day_journal.date,
+        #                     ['dr', cash_account, row.get('amount')],
+        #                     ['cr', Account.objects.get(id=row.get('account_id')), net_amount],
+        #                     ['cr', sales_tax_account, tax_amount],
+        #    )
         if not created:
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
+    day_journal.status = 'Unapproved'
+    day_journal.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
@@ -122,6 +125,7 @@ def save_summary_sales_tax(request):
             return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
         try:
             day_journal.sales_tax = row.get('register')
+            day_journal.status = 'Unapproved'
             day_journal.save()
             dct['saved'][0] = day_journal.id
         except:
@@ -136,6 +140,7 @@ def save_summary_cash(request):
     if type(day_journal) == dict:
         return HttpResponse(json.dumps({'error_message': day_journal['error']}), mimetype="application/json")
     day_journal.cash_actual = params.get('rows')[0].get('actual')
+    day_journal.status = 'Unapproved'
     day_journal.save()
     # dct = {'invalid_attributes': {}, 'saved': {}}
     # for index, row in enumerate(params.get('rows')):
@@ -185,6 +190,8 @@ def save_summary_transfer(request):
         )
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
+    day_journal.status = 'Unapproved'
+    day_journal.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
@@ -223,6 +230,8 @@ def save_summary_inventory(request, fuel=False):
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
+    day_journal.status = 'Unapproved'
+    day_journal.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
@@ -252,6 +261,8 @@ def save_lotto_detail(request):
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
+    day_journal.status = 'Unapproved'
+    day_journal.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
@@ -285,6 +296,8 @@ def save_card_sales(request):
         )
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
+    day_journal.status = 'Unapproved'
+    day_journal.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
@@ -313,6 +326,8 @@ def save_cash_equivalent_sales(request):
         )
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
+    day_journal.status = 'Unapproved'
+    day_journal.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
@@ -372,6 +387,7 @@ def save_summary_bank(request):
             set_transactions(day_journal, day_journal.date, ['cr', cheque_account, (-1 * cheque_amount)])
         else:
             set_transactions(day_journal, day_journal.date, ['dr', cheque_account, cheque_amount])
+    day_journal.status = 'Unapproved'
     day_journal.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
@@ -428,6 +444,8 @@ def save_lotto_sales_as_per_dispenser(request):
         journal.lotto_sales_register_amount = params.get('lotto_sales_register_amount')
     if params.get('scratch_off_sales_register_amount'):
         journal.scratch_off_sales_register_amount = params.get('scratch_off_sales_register_amount')
+    journal.status = 'Unapproved'
+    journal.save()
     journal.save()
     return HttpResponse(json.dumps({'id': journal.id}), mimetype="application/json")
 
@@ -455,6 +473,8 @@ def save_vendor_payout(request):
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
+    day_journal.status = 'Unapproved'
+    day_journal.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
@@ -478,6 +498,8 @@ def save_other_payout(request):
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
+    day_journal.status = 'Unapproved'
+    day_journal.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
@@ -491,3 +513,88 @@ def last_lotto_detail(request, journal_date):
         return HttpResponse(json.dumps(dct), mimetype="application/json")
     except IndexError:
         return HttpResponse(json.dumps({}), mimetype="application/json")
+
+
+@group_required('SuperOwner', 'Owner', 'Supervisor')
+def approve(request):
+    params = json.loads(request.body)
+    dct = {}
+    try:
+        journal = DayJournal.objects.get(date=params.get('date'))
+    except DayJournal.DoesNotExist:
+        dct['error_message'] = 'Day Journal needs to be saved before being approved!'
+        return HttpResponse(json.dumps(dct), mimetype="application/json")
+    total_amount = 0
+    total_tax = 0
+    for cash_sale in journal.cash_sales.all():
+        tax_rate = cash_sale.sales_ledger.tax_rate or 0
+        tax_amount = cash_sale.amount * tax_rate / 100
+        net_amount = cash_sale.amount - tax_amount
+        set_transactions(journal, journal.date,
+                         ['cr', cash_sale.sales_ledger, net_amount],
+        )
+        total_amount += cash_sale.amount
+        total_tax += tax_amount
+    if journal.lotto_sales_dispenser_amount is None or journal.lotto_sales_dispenser_amount == 0:
+        lotto_amount = journal.lotto_sales_register_amount
+    else:
+        lotto_amount = journal.lotto_sales_dispenser_amount
+    total_amount += lotto_amount
+    lotto_sales_ledger = Account.objects.get(name='Lotto Sales', company=request.company)
+    lotto_tax_rate = lotto_sales_ledger.tax_rate
+    lotto_tax = lotto_amount * lotto_tax_rate / 100
+    net_lotto_amount = lotto_amount - lotto_tax
+    total_tax += lotto_tax
+    set_transactions(journal, journal.date,
+                     ['cr', lotto_sales_ledger, net_lotto_amount],
+    )
+    scratch_off_total = 0
+    for scratch_off in journal.lotto_detail.all():
+        day_close = scratch_off.day_close
+        if day_close == 0:
+            day_close = scratch_off.pack_count
+        sales = (scratch_off.pack_count * scratch_off.addition + (day_close - scratch_off.day_open)) * scratch_off.rate
+        scratch_off_total += sales
+    if scratch_off_total == 0:
+        scratch_off_total = journal.scratch_off_sales_register_amount
+    total_amount += scratch_off_total
+    scratch_off_ledger = Account.objects.get(name='Scratch Off Sales', company=request.company)
+    scratch_off_tax_rate = scratch_off_ledger.tax_rate
+    scratch_off_tax = scratch_off_total * scratch_off_tax_rate / 100
+    net_scratch_off_amount = scratch_off_total - scratch_off_tax
+    total_tax += scratch_off_tax
+    set_transactions(journal, journal.date,
+                     ['cr', scratch_off_ledger, net_scratch_off_amount],
+    )
+
+    set_transactions(journal, journal.date,
+                     ['cr', Account.objects.get(name='Sales Tax', company=request.company), total_tax],
+    )
+
+    non_cash = 0
+    for card_sale in journal.card_sales.all():
+        commission_out = card_sale.commission_out or 0
+        net = card_sale.amount - commission_out
+        set_transactions(journal, journal.date,
+                         ['dr', Account.objects.get(name='Commission Out', company=request.company), commission_out],
+        )
+        set_transactions(journal, journal.date,
+                         ['dr', Account.objects.get(name='Card Account', company=request.company), net],
+        )
+        non_cash += card_sale.amount
+
+    for cash_equivalent_sale in journal.cash_equivalent_sales.all():
+        set_transactions(journal, journal.date,
+                         ['dr', cash_equivalent_sale.account, cash_equivalent_sale.amount],
+        )
+        non_cash += cash_equivalent_sale.amount
+
+    set_transactions(journal, journal.date,
+                     ['dr', Account.objects.get(name='Cash Account', company=request.company), total_amount - non_cash],
+    )
+
+
+
+    #journal.status = 'Approved'
+    #journal.save()
+    return HttpResponse(json.dumps(dct), mimetype="application/json")

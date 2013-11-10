@@ -18,6 +18,8 @@ class DayJournal(models.Model):
     lotto_sales_dispenser_amount = models.FloatField(default=0)
     lotto_sales_register_amount = models.FloatField(default=0)
     scratch_off_sales_register_amount = models.FloatField(default=0)
+    statuses = [('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
+    status = models.CharField(max_length=10, choices=statuses, default='Approved')
 
     def __init__(self, *args, **kwargs):
         super(DayJournal, self).__init__(*args, **kwargs)
@@ -99,6 +101,7 @@ class InventoryFuel(models.Model):
         return '/day/' + str(self.day_journal.date) + '#inventory-fuel'
 
 
+#Name changed to Scratch Off
 class LottoDetail(models.Model):
     sn = models.IntegerField()
     rate = models.FloatField()
