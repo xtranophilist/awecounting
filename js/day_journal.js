@@ -147,11 +147,19 @@ function DayJournal(data) {
     }
 
     self.actual_sales_amount = function () {
-        return rnum(self.cash_sales.get_total('amount') + parseFloat(self.lotto_sales_dispenser_amount()) + self.lotto_detail.get_total('sales'));
+        var total_scratch = self.lotto_detail.get_total('sales')
+        if (total_scratch == 0) {
+            total_scratch = self.scratch_off_sales_register_amount();
+        }
+        return rnum(self.cash_sales.get_total('amount') + parseFloat(self.lotto_sales_dispenser_amount()) + total_scratch);
     }
 
     self.actual_sales_tax = function () {
-        return rnum(self.cash_sales.get_total('tax') + parseFloat(self.lotto_sales_dispenser_tax()) + self.scratch_off_sales_dispenser_tax());
+        var scratch_off_tax = self.scratch_off_sales_dispenser_tax();
+        if (scratch_off_tax == 0) {
+            scratch_off_tax = self.scratch_off_sales_register_tax();
+        }
+        return rnum(self.cash_sales.get_total('tax') + parseFloat(self.lotto_sales_dispenser_tax()) + scratch_off_tax);
     }
 
     self.register_sales_amount = function () {
@@ -610,21 +618,17 @@ function SummaryCashRow(row) {
 
     self.inward = function (root) {
         var total = 0;
-        $.each(root.cash_sales.rows(), function () {
-            if (isAN(this.amount()))
-                total += parseFloat(this.amount());
-        });
-//        $.each(root.cash_receipt.rows(), function () {
-//            if (isAN(this.amount()))
-//                total += parseFloat(this.amount());
-//        });
+        total += root.actual_sales_amount();
+
         $.each(root.summary_transfer.rows(), function () {
             if (isAN(this.cash()))
                 total += parseFloat(this.cash());
         });
-//        if (isAN(root.summary_bank.rows()[0].withdrawal()))
-//            total += parseFloat(root.summary_bank.rows()[0].withdrawal());
-        return round2(total);
+        if (root.card_sales.rows()[0].amount()) {
+            total -= parseFloat(root.card_sales.rows()[0].amount());
+        }
+        total -= root.cash_equivalent_sales.get_total('amount');
+        return rnum(total);
     };
 
     self.outward = function (root) {
