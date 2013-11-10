@@ -488,6 +488,25 @@ def approve(request):
                          ['cr', Account.objects.get(id=row.transfer_type), add(row.cash, row.card, row.cheque)],
         )
 
+    for row in journal.vendor_payout:
+        if row.type == 'new':
+            set_transactions(row, journal.date,
+                             ['dr', row.purchase_ledger, row.amount],
+                             ['cr', row.paid, row.amount],
+            )
+        else:
+            set_transactions(row, journal.date,
+                             ['dr', row.vendor, row.amount],
+                             ['cr', row.paid, row.amount],
+            )
+
+    for row in journal.other_payout:
+        set_transactions(row, journal.date,
+                         ['dr', row.paid_to, row.amount],
+                         ['cr', row.paid, row.amount],
+        )
+
+
 
 
 
