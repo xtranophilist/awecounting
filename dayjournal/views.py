@@ -28,7 +28,7 @@ def day_journal(request, journal_date=None):
     try:
         day_journal = DayJournal.objects.get(date=journal_date, company=request.company)
     except DayJournal.DoesNotExist:
-        day_journal = DayJournal(date=journal_date, company=request.company, sales_tax=0, cheque_deposit=0,
+        day_journal = DayJournal(date=journal_date, company=request.company, cheque_deposit=0,
                                  cash_deposit=0, cash_withdrawal=0, cash_actual=0)
     day_journal_data = DayJournalSerializer(day_journal).data
     base_template = 'dashboard.html'
@@ -47,8 +47,7 @@ def get_journal(request):
     params = json.loads(request.body)
     try:
         journal, created = DayJournal.objects.get_or_create(date=params.get('day_journal_date'),
-                                                            company=request.company, defaults={'sales_tax': 0,
-                                                                                               'voucher_no': params.get(
+                                                            company=request.company, defaults={'voucher_no': params.get(
                                                                                                    'voucher_no'),
                                                                                                'cheque_deposit': 0,
                                                                                                'cash_deposit': 0,
@@ -302,8 +301,7 @@ def save_attachments(request):
     captions = request.POST.getlist('captions')
     attachments = request.FILES.getlist('attachments')
     day_journal, created = DayJournal.objects.get_or_create(date=request.POST['day'],
-                                                            company=request.company, defaults={'sales_tax': 0,
-                                                                                               'cheque_deposit': 0,
+                                                            company=request.company, defaults={'cheque_deposit': 0,
                                                                                                'cash_deposit': 0,
                                                                                                'cash_withdrawal': 0,
                                                                                                'cash_actual': 0})

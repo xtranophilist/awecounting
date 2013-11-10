@@ -10,7 +10,6 @@ class DayJournal(models.Model):
     voucher_no = models.IntegerField(unique=True)
     date = models.DateField()
     company = models.ForeignKey(Company)
-    sales_tax = models.FloatField()
     cash_deposit = models.FloatField()
     cash_withdrawal = models.FloatField()
     cheque_deposit = models.FloatField()

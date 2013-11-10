@@ -266,6 +266,10 @@
                     </td>
                 </tr>
                 <!-- /ko -->
+                <tr>
+                    <td colspan="2"><b>TOTAL</b></td>
+                    <td colspan="2" data-bind="text: get_total('amount')"></td>
+                </tr>
                 </tbody>
             </table>
             <div data-bind="css: state()" class="pull-left">
@@ -403,7 +407,7 @@
                                     </td>
                                     <td data-bind="editableText: remarks"></td>
                                     <td>
-                                        <input type="hidden"
+                                        <input type="hidden" data-field="Account"
                                                data-bind="value: paid, select2: {data: {results: $root.accounts_by_category(['Cash Account', 'Bank Account', 'Cash Equivalent Account'], true)}}, lookupKey: 'id'">
                                     </td>
                                     <td>
@@ -460,7 +464,7 @@
                                     <td data-bind="editableText: amount"></td>
                                     <td data-bind="editableText: remarks"></td>
                                     <td>
-                                        <input type="hidden"
+                                        <input type="hidden" data-field="Account"
                                                data-bind="value: paid, select2: {data: {results: $root.accounts_by_category(['Cash Account', 'Bank Account', 'Cash Equivalent Account'], true)}}, lookupKey: 'id'">
                                     </td>
                                     <td>
@@ -702,19 +706,6 @@
                     Summary Cash
                 </a>
             </li>
-
-            <li>
-                <a data-toggle="tab" href="#summary-sales-tax">
-                    Summary Sales Tax
-                </a>
-            </li>
-
-            <li>
-                <a data-toggle="tab" href="#summary-lotto">
-                    Summary Scratch Off
-                </a>
-            </li>
-
         </ul>
         <div class="tab-content">
 
@@ -748,55 +739,6 @@
                     </div>
                 </div>
             </div>
-
-            <div id="summary-sales-tax" class="tab-pane">
-                <div class="row-fluid" data-bind="with: summary_sales_tax">
-                    <table class="table table-bordered table-striped table-acubor table-sortable">
-                        <thead>
-                        <tr>
-                            <th class="span2">Register</th>
-                            <th class="span2">Accounts</th>
-                            <th class="span2">Difference</th>
-                        </tr>
-                        </thead>
-                        <tbody id="summary-sales-tax">
-                        <!-- ko foreach: rows -->
-                        <tr data-bind="flash: true">
-                            <td data-bind="editableText: register"></td>
-                            <td data-bind="text: accounts($root)"></td>
-                            <td data-bind="text: difference($root).toFixed(2)"></td>
-                        </tr>
-                        <!-- /ko -->
-                        </tbody>
-                    </table>
-                    <div data-bind="css: state()" class="pull-left"><span data-bind="text: message()"></span></div>
-                    <div class="pull-right">
-                        <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save</button>
-                    </div>
-                </div>
-            </div>
-
-            <div id="summary-lotto" class="tab-pane">
-                <div class="row-fluid">
-                    <table class="table table-bordered table-striped table-acubor table-sortable">
-                        <thead>
-                        <tr>
-                            <th>Disp.</th>
-                            <th>Reg.</th>
-                            <th>Diff</th>
-                        </tr>
-                        </thead>
-                        <tbody data-bind="with: summary_lotto">
-                        <tr>
-                            <td data-bind="text: disp()"></td>
-                            <td data-bind="text: reg()"></td>
-                            <td data-bind="text: diff()"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
 
         </div>
     </div>
