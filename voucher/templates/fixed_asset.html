@@ -12,7 +12,8 @@
     <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
     <script src="{{ STATIC_URL }}js/fixed_asset.js"></script>
     <script>
-        ko_data = {{ data|jsonify }}
+        ko_data =
+        {{ data|jsonify }}
     </script>
 {% endblock %}
 
@@ -32,7 +33,8 @@
 
             <div class="span6">
                 From:<br/>
-                <input type="hidden"
+                <input type="hidden" data-field="Fixed Asset Vendor" data-add-url="{% url 'create_vendor_account' %}"
+                       class="change-on-ready"
                        data-bind="value: from_account, select2: {data: {results: $root.from_accounts}},  event: {change: $root.account_changed}, lookupKey: 'id'">
             </div>
 
@@ -151,13 +153,13 @@
         <div>
 
             {% if scenario == 'Update' %}
-{#                TODO#}
+                {#                TODO#}
                 {#                    <a class="btn delete-warn" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>#}
             {% endif %}
             <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
             {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
-                    <input class="btn" type="submit" value="Approve"
-                           data-bind="click: $root.approve, visible: $root.id && $root.status() == 'Unapproved'">
+                <input class="btn" type="submit" value="Approve"
+                       data-bind="click: $root.approve, visible: $root.id && $root.status() == 'Unapproved'">
             {% endifusergroup %}
 
             <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save"

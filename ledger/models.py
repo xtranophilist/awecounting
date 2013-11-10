@@ -259,8 +259,9 @@ class Party(models.Model):
                 self.supplier_account = None
         elif self.type == 'Supplier':
             if not self.supplier_account:
-                account.category = Category.objects.get(name='Suppliers')
+                account.category = Category.objects.get(name='Suppliers', company=self.company)
                 account.code = 'S' + str(self.id)
+                account.save()
                 self.supplier_account = account
             if self.customer_account:
                 self.customer_account.delete()
@@ -268,14 +269,14 @@ class Party(models.Model):
         else:
             if not self.customer_account:
                 account.name += ' (Receivable)'
-                account.category = Category.objects.get(name='Customers')
+                account.category = Category.objects.get(name='Customers', company=self.company)
                 account.code = 'C' + str(self.id)
                 account.save()
                 self.customer_account = account
             if not self.supplier_account:
                 account2 = Account(name=self.name + ' (Payable)')
                 account2.company = self.company
-                account2.category = Category.objects.get(name='Suppliers')
+                account2.category = Category.objects.get(name='Suppliers', company=self.company)
                 account2.code = 'S' + str(self.id)
                 account2.save()
                 self.supplier_account = account2

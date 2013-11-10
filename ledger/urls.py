@@ -18,6 +18,7 @@ urlpatterns = patterns('',
                        url(r'^party/(?P<id>[0-9]+)/delete$', views.delete_party, name='delete_party'),
                        url(r'^party/customers.json$', views.customers_as_json, name='customers_as_json'),
                        url(r'^party/suppliers.json$', views.suppliers_as_json, name='suppliers_as_json'),
+                       url(r'^party/vendor/create/$', views.create_vendor_account, name='create_vendor_account'),
 
                        url(r'^payheads.json$', views.payheads_as_json, name='suppliers_as_json'),
 

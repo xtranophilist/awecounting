@@ -242,3 +242,34 @@ def fixed_assets(request):
     objs = Account.objects.filter(category__name='Fixed Assets', company=request.company)
     objs_data = AccountSerializer(objs).data
     return HttpResponse(json.dumps(objs_data), mimetype="application/json")
+
+@login_required
+def create_vendor_account(request):
+    scenario = 'Create'
+    party = Party()
+    party.type = 'Supplier'
+    for query in request.GET:
+        setattr(party, query, request.GET[query])
+    if request.POST:
+        form = PartyForm(data=request.POST, instance=party)
+        if form.is_valid():
+            party = form.save(commit=False)
+            party.company = request.company
+            party.save()
+            if request.is_ajax():
+                return render(request, 'callback.html', {'obj': CashVendorSerializer(party.supplier_account).data})
+            redirect('/ledger/parties')
+    else:
+        form = PartyForm(instance=party)
+        form.fields['type'].widget = form.fields['type'].hidden_widget()
+        form.fields['type'].label = ''
+        form.hide_field(request)
+    if request.is_ajax():
+        base_template = 'modal.html'
+    else:
+        base_template = 'dashboard.html'
+    return render(request, 'party_form.html', {
+        'form': form,
+        'scenario': scenario,
+        'base_template': base_template,
+    })
