@@ -4,6 +4,7 @@ $(document).ready(function () {
     });
     vm = new FixedAssetVM(ko_data);
     ko.applyBindings(vm);
+    $('.change-on-ready').trigger('change');
 });
 
 
@@ -135,6 +136,7 @@ function FixedAssetVM(data) {
                     else {
                         self.message('Approved!');
                         self.state('success');
+                        self.status('Approved');
                         if (msg.id)
                             self.id(msg.id);
                     }

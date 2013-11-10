@@ -49,7 +49,6 @@ function return_name(obj) {
 
 //Triggers on document-ready
 $(document).ready(function () {
-    $('.change-on-ready').trigger('change');
 
     apply_select2();
 
@@ -58,6 +57,8 @@ $(document).ready(function () {
             return true;
         } else return false;
     });
+
+    $('.change-on-ready').trigger('change');
 
 
 //    $('#modal').on('shown',function () {
