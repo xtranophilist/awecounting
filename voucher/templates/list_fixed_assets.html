@@ -35,7 +35,7 @@
                 <td><a href="{% url 'update_fixed_asset' item.id %}">{{ item.voucher_no }}</a></td>
                 <td>{{ item.date }}</td>
                 <td>
-                    {{ item.from_account }}
+                    {{ item.from_account|linkify }}
                 </td>
                 <td>
                     {{ item.reference }}

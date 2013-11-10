@@ -119,6 +119,10 @@ def dr_or_cr(val):
 
 
 @register.filter
+def linkify(obj):
+    return mark_safe('<a href="'+obj.get_absolute_url()+'">'+str(obj)+'</a>')
+
+@register.filter
 def remove_account(transactions, account):
     return [transaction for transaction in transactions if
             transaction.account.id != account.id]
