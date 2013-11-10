@@ -65,8 +65,9 @@
 
                 <tr>
                     <td>
-                        <input type="hidden" class="change-on-ready"
-                               data-bind="value: employee, select2: {data: {results: $root.employees}}, event: {change: $root.employee_changed}, lookupKey: 'id'">
+                        <input type="hidden" data-field="Employee" data-add-url="{% url 'create_employee' %}"
+                               class="change-on-ready"
+                               data-bind="value: employee, select2: {data: {results: $root.employees}}, lookupKey: 'id', event: {change: $root.employee_changed}">
                     </td>
                     <td data-bind="text: present_days"></td>
                     <td data-bind="text: present_hours"></td>
@@ -88,7 +89,7 @@
                     </td>
                 </tr>
                 <!-- /ko -->
-                <tr>
+                <tr class="dont-validate">
                     <td><b>TOTAL</b></td>
                     <td data-bind="text: get_total('present_days')"></td>
                     <td data-bind="text: get_total('present_hours')"></td>
@@ -109,6 +110,10 @@
         {% if scenario == 'Update' %}
             {#            <a class="btn delete-warn" href="{% url 'delete_attendance_vouchers' data.id %}">Delete</a>#}
         {% endif %}
+        {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
+            <input class="btn" type="submit" value="Approve"
+                   data-bind="click: $root.approve, visible: $root.id() && $root.status() == 'Unapproved'">
+        {% endifusergroup %}
         <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
         <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save"
                data-continue="true">

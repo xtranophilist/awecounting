@@ -11,6 +11,7 @@ from payroll.serializers import EntrySerializer, AttendanceVoucherSerializer, Em
 from acubor.lib import save_model, invalid
 from ledger.models import delete_rows, set_transactions, Account
 from payroll.forms import EmployeeForm
+from users.models import group_required
 
 
 @login_required
@@ -301,8 +302,34 @@ def save_group_payroll_voucher(request):
             submodel = save_model(submodel, values)
         dct['rows'][index] = submodel.id
     delete_rows(params.get('table_vm').get('deleted_rows'), model)
+    voucher.status = 'Unapproved'
+    voucher.save()
     if params.get('continue'):
         dct = {'redirect_to': str(reverse_lazy('create_group_payroll_voucher'))}
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+@group_required('SuperOwner', 'Owner', 'Supervisor')
+def approve_group_payroll_voucher(request):
+    params = json.loads(request.body)
+    dct = {}
+    if params.get('id'):
+        voucher = GroupPayroll.objects.get(id=params.get('id'))
+    else:
+        dct['error_message'] = 'Voucher needs to be saved before being approved!'
+        return HttpResponse(json.dumps(dct), mimetype="application/json")
+    payroll_tax = Account.objects.get(name='Payroll Tax', company=request.company)
+    for row in voucher.rows.all():
+        amount = row.rate_day * row.employee.get_unpaid_days() + row.rate_hour * row.employee.get_unpaid_hours() + row.rate_ot_hour * row.employee.get_unpaid_ot_hours()
+        net_amount = amount - row.payroll_tax
+        set_transactions(row, voucher.date,
+                         ['dr', row.pay_head, amount],
+                         ['cr', payroll_tax, row.payroll_tax],
+                         ['cr', row.employee.account, net_amount]
+        )
+        row.employee.set_paid()
+    voucher.status = 'Approved'
+    voucher.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 

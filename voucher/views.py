@@ -556,7 +556,7 @@ def save_cash_payment(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
-@group_required('SuperOwner', 'Owner', "Supervisor")
+@group_required('SuperOwner', 'Owner', 'Supervisor')
 def approve_cash_payment(request):
     params = json.loads(request.body)
     dct = {}

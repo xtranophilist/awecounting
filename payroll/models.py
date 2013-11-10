@@ -37,6 +37,18 @@ class Employee(models.Model):
     account = models.OneToOneField(Account, null=True)
     company = models.ForeignKey(Company)
 
+    def set_paid(self):
+        attendance_vouchers = AttendanceVoucher.objects.filter(employee=self, paid=False)
+        for voucher in attendance_vouchers:
+            voucher.paid = True
+            voucher.save()
+        work_time_voucher_rows = WorkTimeVoucherRow.objects.filter(employee=self, paid=False)
+        for row in work_time_voucher_rows:
+            row.paid = True
+            row.save()
+
+
+
     def get_unpaid_days(self):
         total = 0
         attendance_vouchers = AttendanceVoucher.objects.filter(employee=self, paid=False)
@@ -130,7 +142,11 @@ class WorkDay(models.Model):
         return hm
 
     def work_minutes(self):
-        return (self.out_time.hour - self.in_time.hour) * 60 + self.out_time.minute - self.in_time.minute
+        in_hour = self.in_time.hour
+        out_hour = self.out_time.hour
+        if in_hour > out_hour:
+            out_hour += 24
+        return (out_hour - in_hour) * 60 + self.out_time.minute - self.in_time.minute
 
 
 class GroupPayroll(models.Model):
