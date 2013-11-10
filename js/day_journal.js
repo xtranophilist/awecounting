@@ -641,21 +641,45 @@ function SummaryCashRow(row) {
 //            if (isAN(this.amount()))
 //                total += parseFloat(this.amount());
 //        });
-        $.each(root.card_sales.rows(), function () {
-            if (isAN(this.amount()))
-                total += parseFloat(this.amount());
-        });
-        $.each(root.cash_equivalent_sales.rows(), function () {
-            if (isAN(this.amount()))
-                total += parseFloat(this.amount());
-        });
+//        $.each(root.card_sales.rows(), function () {
+//            if (isAN(this.amount()))
+//                total += parseFloat(this.amount());
+//        });
+//        $.each(root.cash_equivalent_sales.rows(), function () {
+//            if (isAN(this.amount()))
+//                total += parseFloat(this.amount());
+//        });
 //        $.each(root.cheque_purchase.rows(), function () {
 //            if (isAN(this.net()))
 //                total += parseFloat(this.net());
 //        });
 //        if (isAN(root.summary_bank.rows()[0].deposit()))
 //            total += parseFloat(root.summary_bank.rows()[0].deposit());
-        return round2(total);
+        $.each(root.vendor_payout.rows(), function () {
+            if (isAN(this.amount()) && this.paid()) {
+                var account = root.account_by_id(this.paid());
+                for (var i in account.categories) {
+                    var category = account.categories[i];
+                    if (category == 'Cash Account') {
+                        total += parseFloat(this.amount());
+                    }
+                }
+            }
+        });
+
+        $.each(root.other_payout.rows(), function () {
+            if (isAN(this.amount()) && this.paid()) {
+                var account = root.account_by_id(this.paid());
+                for (var i in account.categories) {
+                    var category = account.categories[i];
+                    if (category == 'Cash Account') {
+                        total += parseFloat(this.amount());
+                    }
+                }
+            }
+        });
+
+        return rnum(total);
     };
 
     self.closing = function (root) {
