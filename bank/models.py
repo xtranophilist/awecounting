@@ -29,10 +29,11 @@ class ChequeDeposit(models.Model):
     bank_account = models.ForeignKey(Account, related_name='cheque_deposits')
     clearing_date = models.DateField(null=True, blank=True)
     benefactor = models.ForeignKey(Account)
+    deposited_by = models.CharField(max_length=254, blank=True, null=True)
     attachment = models.FileField(upload_to='cheque_deposits/%Y/%m/%d', blank=True, null=True)
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)
-    deposited_by = models.CharField(max_length=254, blank=True, null=True)
+
 
     def get_absolute_url(self):
         return '/bank/cheque-deposit/' + str(self.id)
@@ -62,10 +63,11 @@ class BankCashDeposit(models.Model):
     bank_account = models.ForeignKey(Account, related_name='cash_deposits')
     benefactor = models.ForeignKey(Account)
     amount = models.FloatField()
+    deposited_by = models.CharField(max_length=254, blank=True, null=True)
     attachment = models.FileField(upload_to='bank_cash_deposits/%Y/%m/%d', blank=True, null=True)
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)
-    deposited_by = models.CharField(max_length=254, blank=True, null=True)
+
 
     def get_absolute_url(self):
         return '/bank/cash-deposit/' + str(self.id)
