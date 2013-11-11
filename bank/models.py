@@ -1,6 +1,7 @@
 from django.db import models
 from ledger.models import Account
 from users.models import Company
+from acubor.lib import get_next_voucher_no
 
 
 class BankAccount(models.Model):
@@ -25,6 +26,7 @@ class BankAccount(models.Model):
 
 
 class ChequeDeposit(models.Model):
+    voucher_no = models.IntegerField()
     date = models.DateField()
     bank_account = models.ForeignKey(Account, related_name='cheque_deposits')
     clearing_date = models.DateField(null=True, blank=True)
@@ -33,13 +35,22 @@ class ChequeDeposit(models.Model):
     attachment = models.FileField(upload_to='cheque_deposits/%Y/%m/%d', blank=True, null=True)
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)
+    statuses = [('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
+    status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
 
+    def __init__(self, *args, **kwargs):
+        super(ChequeDeposit, self).__init__(*args, **kwargs)
+        if not self.pk and not self.voucher_no:
+            self.voucher_no = get_next_voucher_no(ChequeDeposit, self.company)
 
     def get_absolute_url(self):
         return '/bank/cheque-deposit/' + str(self.id)
 
     def get_voucher_no(self):
         return self.id
+
+    class Meta:
+        unique_together = ('voucher_no', 'company')
 
 
 class ChequeDepositRow(models.Model):
@@ -59,6 +70,7 @@ class ChequeDepositRow(models.Model):
 
 
 class BankCashDeposit(models.Model):
+    voucher_no = models.IntegerField()
     date = models.DateField()
     bank_account = models.ForeignKey(Account, related_name='cash_deposits')
     benefactor = models.ForeignKey(Account)
@@ -67,13 +79,22 @@ class BankCashDeposit(models.Model):
     attachment = models.FileField(upload_to='bank_cash_deposits/%Y/%m/%d', blank=True, null=True)
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)
+    statuses = [('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
+    status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
 
+    def __init__(self, *args, **kwargs):
+        super(BankCashDeposit, self).__init__(*args, **kwargs)
+        if not self.pk and not self.voucher_no:
+            self.voucher_no = get_next_voucher_no(BankCashDeposit, self.company)
 
     def get_absolute_url(self):
         return '/bank/cash-deposit/' + str(self.id)
 
     def get_voucher_no(self):
         return self.id
+
+    class Meta:
+        unique_together = ('voucher_no', 'company')
 
 
 class ChequePayment(models.Model):
@@ -85,6 +106,8 @@ class ChequePayment(models.Model):
     attachment = models.FileField(upload_to='cheque_payments/%Y/%m/%d', blank=True, null=True)
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)
+    statuses = [('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
+    status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
 
     def get_absolute_url(self):
         return '/bank/cheque-payment/' + str(self.id)
@@ -102,6 +125,8 @@ class ElectronicFundTransferOut(models.Model):
     attachment = models.FileField(upload_to='electronic_fund_transfer_out/%Y/%m/%d', blank=True, null=True)
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)
+    statuses = [('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
+    status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
 
     def get_absolute_url(self):
         return '/bank/electronic-fund-transfer-out/' + str(self.id)
@@ -111,6 +136,7 @@ class ElectronicFundTransferOut(models.Model):
 
 
 class ElectronicFundTransferIn(models.Model):
+    voucher_no = models.IntegerField()
     date = models.DateField()
     bank_account = models.ForeignKey(Account, related_name='electronic_fund_transfer_in')
     clearing_date = models.DateField(null=True, blank=True)
@@ -118,12 +144,22 @@ class ElectronicFundTransferIn(models.Model):
     attachment = models.FileField(upload_to='electronic_fund_transfer_in/%Y/%m/%d', blank=True, null=True)
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)
+    statuses = [('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
+    status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
+
+    def __init__(self, *args, **kwargs):
+        super(ElectronicFundTransferIn, self).__init__(*args, **kwargs)
+        if not self.pk and not self.voucher_no:
+            self.voucher_no = get_next_voucher_no(ElectronicFundTransferIn, self.company)
 
     def get_absolute_url(self):
         return '/bank/electronic-fund-transfer-in/' + str(self.id)
 
     def get_voucher_no(self):
         return self.id
+
+    class Meta:
+        unique_together = ('voucher_no', 'company')
 
 
 class ElectronicFundTransferInRow(models.Model):
