@@ -414,9 +414,14 @@ function DayJournal(data) {
             }
         });
         if (self.last_lotto_detail) {
+            if (Object.size(self.last_lotto_detail)){
             for (var i in self.last_lotto_detail) {
                 var detail = self.last_lotto_detail[i];
                 self.lotto_detail.rows.push(new LottoDetailRow({'rate': detail.rate, 'pack_count': detail.pack_count, 'day_open': detail.day_close}))
+            }
+            }
+            else{
+                self.lotto_detail.addRow(new LottoDetailRow());
             }
         }
     }
