@@ -32,6 +32,7 @@ class ChequeDeposit(models.Model):
     attachment = models.FileField(upload_to='cheque_deposits/%Y/%m/%d', blank=True, null=True)
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)
+    deposited_by = models.TextField(blank=True, null=True)
 
     def get_absolute_url(self):
         return '/bank/cheque-deposit/' + str(self.id)
@@ -64,6 +65,7 @@ class BankCashDeposit(models.Model):
     attachment = models.FileField(upload_to='bank_cash_deposits/%Y/%m/%d', blank=True, null=True)
     narration = models.TextField(null=True, blank=True)
     company = models.ForeignKey(Company)
+    deposited_by = models.TextField(blank=True, null=True)
 
     def get_absolute_url(self):
         return '/bank/cash-deposit/' + str(self.id)
