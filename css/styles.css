@@ -618,3 +618,77 @@ tr.diff td {
 .fixed-width-td td input{
     width: 2.8em !important;
 }
+.nav-list > li > a{
+    background: #f4f4f4;
+}
+.nav-list > li:hover{
+    border-left: 0
+}
+.nav-list > li > a:hover{
+    background: #ddd;
+    border-left: 0;
+}
+.nav-list > li.open > a{
+    background-color:  #B1B1B1;
+        color: #fff;
+
+}
+.nav-list > li.open > a > .arrow{
+    color: #fff
+}
+.nav-list > li{
+    border-top: 1px solid #FFFFFF;
+    border-bottom: 1px solid #D1D1D1;
+}
+.nav-list > li .submenu{
+    background-color: #E6E6E6;
+}
+.nav-list > li .submenu .submenu{
+    background-color: rgb(209, 209, 209);
+    border-top: 0;
+}
+.nav-list > li .submenu .open .dropdown-toggle{
+    background: #d3d3d3;
+    background: -moz-linear-gradient(top,  #d3d3d3 0%, #eaeaea 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#d3d3d3), color-stop(100%,#eaeaea));
+    background: -webkit-linear-gradient(top,  #d3d3d3 0%,#eaeaea 100%);
+    background: -o-linear-gradient(top,  #d3d3d3 0%,#eaeaea 100%);
+    background: -ms-linear-gradient(top,  #d3d3d3 0%,#eaeaea 100%);
+    background: linear-gradient(to bottom,  #d3d3d3 0%,#eaeaea 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d3d3d3', endColorstr='#eaeaea',GradientType=0 );
+    color: #1963aa;
+}
+.nav-list > li .submenu .open .dropdown-toggle .arrow{
+    color: #1963aa;
+}
+.nav-list > li .submenu > li > a{
+    border-top: 1px solid #F0F0F0;
+    border-bottom: 1px solid #B6B6B6;
+}
+.nav-list > li .submenu > li:first-child > a{
+    border-top: 0;
+}
+.nav-list  li  .submenu  .submenu  li{
+    margin-left: 10px;
+}
+table select{
+    height: auto;
+    margin-bottom: 0;
+}
+.attach_file_field{
+    background: #dadada;
+    padding: 6px;
+    margin-bottom: 1px;
+}
+.col_3_form .control-group{
+    margin-bottom: 10px;
+    width: 30%;
+    text-align: left;
+    color: #000;
+}
+.col_3_form .controls{
+    text-align: left;
+}
+.col_3_form .controls{
+    padding-left: 0;
+}

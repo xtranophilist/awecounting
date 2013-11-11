@@ -29,11 +29,18 @@ $(document).ready(function () {
         return {url: "/day/delete_attachment/", params: {type: type, id: id}};
     }
 
+    var add_file_view = $('.attach_file_field').first();
+
     $('.add_file').click(function () {
         var _parent = $(this).parent('p');
-        var clone = _parent.siblings('.attach_file_field:last').clone();
+        var clone = add_file_view.clone();
+        clone.append('<button type="button" class="btn btn-danger pull-right remove-file-attach">X</button>')
         clone.find('input').val("");
         _parent.before(clone);
+    });
+
+    $(document).on('click', '.remove-file-attach', function(){
+        $(this).parent('.attach_file_field').slideUp(400, function(){$(this).remove()});
     });
 
     $('.attachment-form').submit(function (e) {
