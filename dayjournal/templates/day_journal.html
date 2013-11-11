@@ -142,7 +142,7 @@
             <button class="btn btn-small" data-bind="click: reset">Reset</button>
         </div>
     </div>
-
+    <br>
 
     <table class="table table-bordered table-striped table-acubor table-sortable">
         <thead>
@@ -179,7 +179,7 @@
     <button class="btn btn-small pull-right" data-bind="click: save_lotto_sales_as_per_dispenser"><i
             class="icon-save"></i> Save
     </button>
-
+    <br><br>
     <table class="table table-bordered table-striped table-acubor table-sortable">
         <thead>
         <tr>
@@ -412,12 +412,12 @@
                                                data-bind="value: vendor, select2: {data: {results: $root.accounts_by_category('Suppliers')}}, lookupKey: 'id'">
                                     </td>
                                     <td data-bind="editableText: amount"></td>
-                                    <td>
+                                    <td class="with_ip">
                                         <input type="hidden" data-field="Account"
                                                data-bind="value: purchase_ledger, select2: {data: {results: $root.accounts_by_category('Purchase')}}, lookupKey: 'id'">
                                     </td>
                                     <td data-bind="editableText: remarks"></td>
-                                    <td>
+                                    <td class="with_ip">
                                         <input type="hidden" data-field="Account"
                                                data-bind="value: paid, select2: {data: {results: $root.accounts_by_category(['Cash Account', 'Bank Account', 'Cash Equivalent Account'], true)}}, lookupKey: 'id'">
                                     </td>
@@ -478,7 +478,7 @@
                                     </td>
                                     <td data-bind="editableText: amount"></td>
                                     <td data-bind="editableText: remarks"></td>
-                                    <td>
+                                    <td class="with_ip">
                                         <input type="hidden" data-field="Account"
                                                data-bind="value: paid, select2: {data: {results: $root.accounts_by_category(['Cash Account', 'Bank Account', 'Cash Equivalent Account'], true)}}, lookupKey: 'id'">
                                     </td>
@@ -808,7 +808,8 @@
                             <input type="text" name="captions" required class="captions">
                         </label>
                     </div>
-                    <p><input type="button" class="btn add_file" value="Add Another File"/> <input type="submit"
+
+                    <p><br><input type="button" class="btn add_file" value="Add Another File"/> <input type="submit"
                                                                                                    value="Save"
                                                                                                    class="btn"/></p>
                 </form>

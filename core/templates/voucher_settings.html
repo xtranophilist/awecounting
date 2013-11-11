@@ -19,7 +19,7 @@
 
 {% block content %}
 
-    <form method="post" action="">{% csrf_token %}
+    <form method="post" action="" id="voucher_settings" class="col_3_form">{% csrf_token %}
 
 {#        <fieldset id="contact_details">#}
 {#            <legend>General</legend>#}
@@ -37,9 +37,17 @@
 {#            </ul>#}
 {#        </fieldset>#}
 
-                {{ form.as_p }}
-
-        <input type="submit" value="Submit" class="btn"/>
+		{% for field in form %}
+		  <div class="control-group">
+		      <label class="control-label">{{ field.label }}</label>
+		      <div class="controls">{{ field }}
+		          {% if field.help_text %}
+		              <p class="help-inline"><small>{{ field.help_text }}</small></p>
+		          {% endif %}
+		      </div>
+		  </div>
+      {% endfor %}
+      <p><input type="submit" value="Submit" class="btn"/></p>
     </form>
 
 {% endblock %}
