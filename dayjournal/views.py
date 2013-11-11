@@ -54,6 +54,8 @@ def get_journal(request):
                                                                                                'cash_withdrawal': 0,
                                                                                                'cash_actual': 0})
     except Exception as e:
+        #import pdb
+        #pdb.set_trace()
         return {'error': 'Voucher No. already exists!'}
     if not created:
         journal.voucher_no = params.get('voucher_no')

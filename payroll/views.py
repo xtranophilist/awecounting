@@ -351,7 +351,6 @@ def individual_payroll_voucher(request, id=None):
 def save_individual_payroll_voucher(request):
     params = json.loads(request.body)
     dct = {'rows1': {}, 'rows2': {}}
-
     voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'),
                       'employee_id': params.get('employee'), 'company': request.company, }
     if params.get('id'):
