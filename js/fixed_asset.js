@@ -58,7 +58,9 @@ function FixedAssetVM(data) {
         var selected_obj = $.grep(self.from_accounts, function (i) {
             return i.id == vm.from_account();
         })[0];
-        self.party_address(selected_obj.address);
+        if (selected_obj) {
+            self.party_address(selected_obj.address);
+        }
     }
 
     self.validate = function () {
