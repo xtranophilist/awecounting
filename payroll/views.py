@@ -17,12 +17,12 @@ from users.models import group_required
 @login_required
 def entry(request, id=None):
     if id:
-        entry = get_object_or_404(Entry, id=id, company=request.company)
+        the_entry = get_object_or_404(Entry, id=id, company=request.company)
         scenario = 'Update'
     else:
-        entry = Entry()
+        the_entry = Entry()
         scenario = 'Create'
-    data = EntrySerializer(entry).data
+    data = EntrySerializer(the_entry).data
     return render(request, 'entry.html', {'data': data, 'scenario': scenario})
 
 
@@ -34,8 +34,8 @@ def list_payroll_entries(request):
 
 @login_required
 def delete_payroll_entry(request, id):
-    object = get_object_or_404(Entry, id=id, company=request.company)
-    object.delete()
+    obj = get_object_or_404(Entry, id=id, company=request.company)
+    obj.delete()
     return redirect('/payroll/entries/')
 
 
@@ -47,13 +47,13 @@ def save_entry(request):
         'company': request.company, 'entry_no': params.get('entry_no')
     }
     if params.get('id'):
-        entry = Entry.objects.get(id=params.get('id'))
+        the_entry = Entry.objects.get(id=params.get('id'))
     else:
-        entry = Entry()
+        the_entry = Entry()
         # if not created:
     if params.get('rows') != [{}] or params.get('deleted_rows') != []:
-        entry = save_model(entry, values)
-        dct['id'] = entry.id
+        the_entry = save_model(the_entry, values)
+        dct['id'] = the_entry.id
     model = EntryRow
     payroll_tax_account = Account.objects.get(name='Payroll Tax', company=request.company)
     for index, row in enumerate(params.get('rows')):
@@ -63,7 +63,7 @@ def save_entry(request):
             row['tax'] = 0
         values = {'sn': index + 1, 'employee_id': row.get('account_id'), 'pay_heading_id': row.get('pay_heading'),
                   'tax': row.get('tax'), 'remarks': row.get('remarks'), 'hours': row.get('hours'),
-                  'amount': row.get('amount'), 'entry': entry}
+                  'amount': row.get('amount'), 'entry': the_entry}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
         net_amount = float(row.get('amount')) - float(row.get('tax'))
         set_transactions(submodel, submodel.created,
@@ -195,11 +195,6 @@ def work_time_voucher(request, id=None):
 @login_required
 def save_work_time_voucher(request):
     params = json.loads(request.body)
-    #import pprint
-    #pp = pprint.PrettyPrinter(indent=4)
-    #pp.pprint(params)
-    #import pdb
-    #pdb.set_trace()
     dct = {'rows': {}}
     values = {
         'company': request.company, 'voucher_no': params.get('voucher_no'), 'date': params.get('date'),
@@ -386,6 +381,7 @@ def save_individual_payroll_voucher(request):
         dct['rows2'][index] = submodel.id
     delete_rows(params.get('deductions').get('deleted_rows'), model)
     voucher.status = 'Unapproved'
+    voucher.save()
     if params.get('continue'):
         dct = {'redirect_to': str(reverse_lazy('create_individual_payroll_voucher'))}
     return HttpResponse(json.dumps(dct), mimetype="application/json")
