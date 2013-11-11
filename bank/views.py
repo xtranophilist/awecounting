@@ -136,7 +136,7 @@ def cheque_deposit(request, id=None):
         receipt = get_object_or_404(ChequeDeposit, id=id, company=request.company)
         scenario = 'Update'
     else:
-        receipt = ChequeDeposit(date=date.today())
+        receipt = ChequeDeposit(date=date.today(), company=request.company)
         scenario = 'New'
     if request.POST:
         form = ChequeDepositForm(request.POST, request.FILES, instance=receipt, company=request.company)
@@ -146,7 +146,9 @@ def cheque_deposit(request, id=None):
             if 'attachment' in request.FILES:
                 receipt.attachment = request.FILES['attachment']
             receipt.save()
-        if id or form.is_valid():
+        import pdb
+        pdb.set_trace()
+        if form.is_valid():
             particulars = json.loads(request.POST['particulars'])
             model = ChequeDepositRow
             bank_account = Account.objects.get(id=request.POST.get('bank_account'))
@@ -167,7 +169,8 @@ def cheque_deposit(request, id=None):
                     submodel = save_model(submodel, values)
             delete_rows(particulars.get('deleted_rows'), model)
             return redirect('/bank/cheque-deposits/')
-    form = ChequeDepositForm(instance=receipt, company=request.company)
+    else:
+        form = ChequeDepositForm(instance=receipt, company=request.company)
     receipt_data = ChequeDepositSerializer(receipt).data
     return render(request, 'cheque_deposit.html', {'form': form, 'data': receipt_data, 'scenario': scenario})
 

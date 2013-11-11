@@ -7,7 +7,7 @@ from acubor.lib import get_next_voucher_no
 
 
 class DayJournal(models.Model):
-    voucher_no = models.IntegerField(unique=True)
+    voucher_no = models.IntegerField()
     date = models.DateField()
     company = models.ForeignKey(Company)
     cash_deposit = models.FloatField()
@@ -33,6 +33,7 @@ class DayJournal(models.Model):
 
     class Meta:
         db_table = 'day_journal'
+        unique_together = ('voucher_no', 'company')
 
 
 class CashSales(models.Model):

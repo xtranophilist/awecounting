@@ -27,8 +27,44 @@
 
 {% block content %}
 
+    {{ data }}
+
+    {{ form.non_field_errors }}
+
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+
+
+        <div class="row-fluid">
+
+            <span class="span6">
+            {{ form.voucher_no.label_tag }}
+            {{ form.voucher_no }}
+            {{ form.voucher_no.errors }}
+            </span>
+
+            <span class="span6">
+            {{ form.date.label_tag }}
+            {{ form.date }}
+            {{ form.date.errors }}
+            </span>
+        </div>
+
+        <div class="row-fluid">
+
+            <span class="span6">
+            {{ form.deposited_by.label_tag }}
+            {{ form.deposited_by }}
+            {{ form.deposited_by.errors }}
+            </span>
+
+            <span class="span6">
+            {{ form.clearing_date.label_tag }}
+            {{ form.clearing_date }}
+            {{ form.clearing_date.errors }}
+            </span>
+        </div>
+
 
         <div class="row-fluid">
 
@@ -44,26 +80,6 @@
             {{ form.benefactor.errors }}
             </span>
         </div>
-        <br/>
-
-        <div class="row-fluid">
-
-            <span class="span6">
-            {{ form.date.label_tag }}
-            {{ form.date }}
-            {{ form.date.errors }}
-            </span>
-
-            <span class="span6">
-            {{ form.clearing_date.label_tag }}
-            {{ form.clearing_date }}
-            {{ form.clearing_date.errors }}
-            </span>
-        </div>
-
-        {{ form.deposited_by.label_tag }}
-        {{ form.deposited_by }}
-        {{ form.deposited_by.errors }}
 
         <br/>
 

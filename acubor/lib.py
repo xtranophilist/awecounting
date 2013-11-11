@@ -147,7 +147,6 @@ def add(*args):
 
 def get_next_voucher_no(cls, company):
     from django.db.models import Max
-
     max_voucher_no = cls.objects.filter(company=company).aggregate(Max('voucher_no'))['voucher_no__max']
     if max_voucher_no:
         return max_voucher_no + 1
