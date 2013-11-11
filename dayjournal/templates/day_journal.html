@@ -402,7 +402,7 @@
                                     </td>
                                     <td data-bind="editableText: amount"></td>
                                     <td>
-                                        <input type="hidden"
+                                        <input type="hidden" data-field="Account"
                                                data-bind="value: purchase_ledger, select2: {data: {results: $root.accounts_by_category('Purchase')}}, lookupKey: 'id'">
                                     </td>
                                     <td data-bind="editableText: remarks"></td>
@@ -458,7 +458,7 @@
                                         <span data-bind="text: $index()+1"> </span>
                                     </td>
                                     <td class="with_ip">
-                                        <input type="hidden"
+                                        <input type="hidden" data-field="Account"
                                                data-bind="value: paid_to, select2: {data: {results: $root.accounts_except_category(['Sales', 'Purchase', 'Cash Account', 'Cash Equivalent Account', 'Bank Account', 'Suppliers'], true)}}, lookupKey: 'id'">
                                     </td>
                                     <td data-bind="editableText: amount"></td>
