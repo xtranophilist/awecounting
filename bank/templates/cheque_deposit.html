@@ -13,10 +13,12 @@
     <script src="{{ STATIC_URL }}js/vendors/knockout.js"></script>
     <script src="{{ STATIC_URL }}js/ko_lib.js"></script>
     <script src="{{ STATIC_URL }}js/bank.js"></script>
+    {% load filters %}
     <script>
         $(document).ready(function () {
-            {% load filters %}
-            ko.applyBindings(new ChequeReceiptViewModel({{data|jsonify}}));
+            var ko_data = {{data|jsonify}}
+            vm = new ChequeReceiptViewModel(ko_data);
+            ko.applyBindings(vm);
         });
     </script>
 {% endblock %}
@@ -26,8 +28,6 @@
 {% endblock %}
 
 {% block content %}
-
-    {{ data }}
 
     {{ form.non_field_errors }}
 
@@ -157,6 +157,10 @@
         <br/>
 
         <button type="submit" class="btn">Save</button>
+        {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
+            <input class="btn" type="submit" value="Approve"
+                   data-bind="click: $root.approve, visible: $root.id() && $root.status() == 'Unapproved'">
+        {% endifusergroup %}
         {% if scenario == 'Update' %}
             <a class="btn btn-danger" href="{% url 'delete_cheque_deposit' form.instance.id %}">Delete!</a>
         {% endif %}

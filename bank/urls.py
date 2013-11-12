@@ -17,6 +17,7 @@ urlpatterns = patterns('',
                        url(r'^cheque-deposit/(?P<id>[0-9]+)$', views.cheque_deposit, name='update_cheque_deposit'),
                        url(r'^cheque-deposit/delete/(?P<id>[0-9]+)$', views.delete_cheque_deposit,
                            name='delete_cheque_deposit'),
+                       url(r'^cheque-deposit/approve/$', views.approve_cheque_deposit, name='approve_cheque_deposit'),
 
 
                        url(r'^cash-deposits/$', views.list_cash_deposits, name='list_cash_deposits'),

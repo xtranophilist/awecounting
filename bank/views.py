@@ -1,6 +1,7 @@
 from datetime import date
 import json
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
 from bank.models import BankAccount, ChequeDeposit, ChequeDepositRow, BankCashDeposit, ChequePayment, ElectronicFundTransferIn, ElectronicFundTransferInRow, ElectronicFundTransferOut
@@ -10,6 +11,7 @@ from bank.serializers import ChequeDepositSerializer, ElectronicFundTransferInSe
 from bank.filters import ChequeDepositFilter, CashDepositFilter, ChequePaymentFilter, ElectronicFundTransferInFilter, ElectronicFundTransferOutFilter
 from ledger.models import set_transactions, Account, delete_rows, JournalEntry
 from ledger.serializers import AccountSerializer
+from users.models import group_required
 
 
 @login_required
@@ -149,8 +151,7 @@ def cheque_deposit(request, id=None):
             receipt.save()
             particulars = json.loads(request.POST['particulars'])
             model = ChequeDepositRow
-            bank_account = Account.objects.get(id=request.POST.get('bank_account'))
-            benefactor = Account.objects.get(id=request.POST.get('benefactor'))
+
             for index, row in enumerate(particulars.get('rows')):
                 if invalid(row, ['amount']):
                     continue
@@ -159,18 +160,37 @@ def cheque_deposit(request, id=None):
                           'drawee_bank': row.get('drawee_bank'), 'drawee_bank_address': row.get('drawee_bank_address'),
                           'amount': row.get('amount'), 'cheque_deposit': receipt}
                 submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-                set_transactions(submodel, request.POST.get('date'),
-                                 ['dr', bank_account, row.get('amount')],
-                                 ['cr', benefactor, row.get('amount')],
-                )
                 if not created:
                     submodel = save_model(submodel, values)
             delete_rows(particulars.get('deleted_rows'), model)
+            receipt.status = 'Unapproved'
+            receipt.save()
             return redirect('/bank/cheque-deposits/')
     else:
         form = ChequeDepositForm(instance=receipt, company=request.company)
     receipt_data = ChequeDepositSerializer(receipt).data
     return render(request, 'cheque_deposit.html', {'form': form, 'data': receipt_data, 'scenario': scenario})
+
+
+@group_required('SuperOwner', 'Owner', 'Supervisor')
+def approve_cheque_deposit(request):
+    params = json.loads(request.body)
+    dct = {}
+    if params.get('id'):
+        voucher = ChequeDeposit.objects.get(id=params.get('id'))
+    else:
+        dct['error_message'] = 'Voucher needs to be saved before being approved!'
+        return HttpResponse(json.dumps(dct), mimetype="application/json")
+    bank_account = Account.objects.get(id=params.get('bank_account'))
+    benefactor = Account.objects.get(id=params.get('benefactor'))
+    for row in voucher.rows.all():
+        set_transactions(row, request.POST.get('date'),
+                         ['dr', bank_account, row.amount],
+                         ['cr', benefactor, row.amount],
+        )
+    voucher.status = 'Approved'
+    voucher.save()
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
 @login_required
