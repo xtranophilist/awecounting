@@ -35,13 +35,12 @@ class ChequeDepositForm(KOModelForm):
         self.fields['benefactor'].queryset = Account.objects.filter(company=self.company)
 
     def clean_voucher_no(self):
-        existing = ChequeDeposit.objects.filter(voucher_no=self.cleaned_data['voucher_no'], company=self.company)
-        import pdb
-        pdb.set_trace()
-        if existing.exists():
-            raise forms.ValidationError("The voucher no. " + str(
-                self.cleaned_data['voucher_no']) + " is already in use. Suggested no. has been provided.")
-        else:
+        try:
+            existing = ChequeDeposit.objects.get(voucher_no=self.cleaned_data['voucher_no'], company=self.company)
+            if self.instance.id is not existing.id:
+                raise forms.ValidationError("The voucher no. " + str(
+                    self.cleaned_data['voucher_no']) + " is already in use. Suggested no. has been provided.")
+        except ChequeDeposit.DoesNotExist:
             return self.cleaned_data['voucher_no']
 
     class Meta:

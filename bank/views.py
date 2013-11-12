@@ -146,9 +146,6 @@ def cheque_deposit(request, id=None):
             if 'attachment' in request.FILES:
                 receipt.attachment = request.FILES['attachment']
             receipt.save()
-        import pdb
-        pdb.set_trace()
-        if form.is_valid():
             particulars = json.loads(request.POST['particulars'])
             model = ChequeDepositRow
             bank_account = Account.objects.get(id=request.POST.get('bank_account'))
