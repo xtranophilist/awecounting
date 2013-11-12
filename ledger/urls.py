@@ -2,7 +2,7 @@ from django.conf.urls import patterns, url
 import views
 
 urlpatterns = patterns('',
-                       url(r'^accounts/json/$', views.accounts_as_json, name='accounts_as_json'),
+                       url(r'^accounts.json$', views.accounts_as_json, name='accounts_as_json'),
                        url(r'^$', views.list_accounts, name='list_account'),
                        url(r'^create/$', views.account_form, name='create_account'),
                        url(r'^(?P<id>[0-9]+)/update/$', views.account_form, name='update_account'),
