@@ -402,7 +402,7 @@ def approve(request):
     params = json.loads(request.body)
     dct = {}
     try:
-        journal = DayJournal.objects.get(date=params.get('date'))
+        journal = DayJournal.objects.get(date=params.get('date'), company=request.company)
     except DayJournal.DoesNotExist:
         dct['error_message'] = 'Day Journal needs to be saved before being approved!'
         return HttpResponse(json.dumps(dct), mimetype="application/json")
