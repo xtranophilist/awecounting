@@ -1,4 +1,5 @@
 from django.db import models
+from acubor.lib import zero_for_none
 from ledger.models import Account
 from users.models import Company
 
@@ -53,7 +54,7 @@ class Employee(models.Model):
         total = 0
         attendance_vouchers = AttendanceVoucher.objects.filter(employee=self, paid=False)
         for voucher in attendance_vouchers:
-            total += voucher.total_present_days()
+            total += zero_for_none(voucher.total_present_days())
         return total
 
     def get_unpaid_hours(self):
@@ -61,14 +62,14 @@ class Employee(models.Model):
         work_time_voucher_rows = WorkTimeVoucherRow.objects.filter(employee=self, paid=False)
         for row in work_time_voucher_rows:
             for work_day in row.work_days.all():
-                total += work_day.work_minutes()
+                total += zero_for_none(work_day.work_minutes())
         return round(float(total) / 60, 2)
 
     def get_unpaid_ot_hours(self):
         total = 0
         attendance_vouchers = AttendanceVoucher.objects.filter(employee=self, paid=False)
         for voucher in attendance_vouchers:
-            total += voucher.total_ot_hours
+            total += zero_for_none(voucher.total_ot_hours)
         return total
 
     def save(self, *args, **kwargs):
