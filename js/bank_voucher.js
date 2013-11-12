@@ -5,7 +5,7 @@ function BankVoucher(data) {
         self[k] = data[k];
 
     $.ajax({
-        url: '/ledger/accounts/json/',
+        url: '/ledger/accounts.json/',
         dataType: 'json',
         async: false,
         success: function (data) {
