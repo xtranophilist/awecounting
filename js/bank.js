@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $(document).on("click", ".date-picker", function() {
+    $(document).on("click", ".date-picker", function () {
         $(this).datepicker('show');
     });
 });
@@ -20,6 +20,28 @@ function ChequeReceiptViewModel(data) {
                 total += parseFloat(this.amount());
         });
         return rnum(total);
+    }
+
+    self.approve = function (item, event) {
+            $.ajax({
+                type: "POST",
+                url: '/bank/cheque-deposit/approve/',
+                data: ko.toJSON(self),
+                success: function (msg) {
+                    if (typeof (msg.error_message) != 'undefined') {
+                        self.message(msg.error_message);
+                        self.state('error');
+                    }
+                    else {
+//                        self.message('Approved!');
+                        bs_alert.success('Approved!');
+//                        self.state('success');
+                        self.status('Approved');
+                        if (msg.id)
+                            self.id(msg.id);
+                    }
+                }
+            });
     }
 
 
