@@ -96,14 +96,24 @@ class BankCashDepositForm(KOModelForm):
     )
 
     def __init__(self, *args, **kwargs):
-        company = kwargs.pop('company', None)
+        self.company = kwargs.pop('company', None)
         super(BankCashDepositForm, self).__init__(*args, **kwargs)
-        self.fields['bank_account'].queryset = Account.objects.filter(company=company, category__name='Bank Account')
-        self.fields['benefactor'].queryset = Account.objects.filter(company=company)
+        self.fields['bank_account'].queryset = Account.objects.filter(company=self.company, category__name='Bank Account')
+        self.fields['benefactor'].queryset = Account.objects.filter(company=self.company)
+
+    def clean_voucher_no(self):
+        try:
+            existing = BankCashDeposit.objects.get(voucher_no=self.cleaned_data['voucher_no'], company=self.company)
+            if self.instance.id is not existing.id:
+                raise forms.ValidationError("The voucher no. " + str(
+                    self.cleaned_data['voucher_no']) + " is already in use.")
+            return self.cleaned_data['voucher_no']
+        except BankCashDeposit.DoesNotExist:
+            return self.cleaned_data['voucher_no']
 
     class Meta:
         model = BankCashDeposit
-        exclude = ['company']
+        exclude = ['company', 'status']
 
 
 class ChequePaymentForm(KOModelForm):

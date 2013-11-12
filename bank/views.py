@@ -149,10 +149,10 @@ def cheque_deposit(request, id=None):
             receipt.company = request.company
             if 'attachment' in request.FILES:
                 receipt.attachment = request.FILES['attachment']
+            receipt.status = 'Unapproved'
             receipt.save()
             particulars = json.loads(request.POST['particulars'])
             model = ChequeDepositRow
-
             for index, row in enumerate(particulars.get('rows')):
                 if invalid(row, ['amount']):
                     continue
@@ -164,13 +164,41 @@ def cheque_deposit(request, id=None):
                 if not created:
                     submodel = save_model(submodel, values)
             delete_rows(particulars.get('deleted_rows'), model)
-            receipt.status = 'Unapproved'
-            receipt.save()
             return redirect(reverse_lazy('update_cheque_deposit', kwargs={'id': receipt.id}))
+            #else: #do not suggest voucher number
+            #    receipt.voucher_no = form['voucher_no'].value()
     else:
         form = ChequeDepositForm(instance=receipt, company=request.company)
     receipt_data = ChequeDepositSerializer(receipt).data
     return render(request, 'cheque_deposit.html', {'form': form, 'data': receipt_data, 'scenario': scenario})
+
+
+@login_required
+def cash_deposit(request, id=None):
+    if id:
+        receipt = get_object_or_404(BankCashDeposit, id=id, company=request.company)
+        scenario = 'Update'
+    else:
+        receipt = BankCashDeposit(date=date.today(), company=request.company)
+        scenario = 'New'
+    if request.POST:
+        form = BankCashDepositForm(request.POST, initial={'voucher_no': 20}, instance=receipt, company=request.company)
+        if form.is_valid():
+            receipt = form.save(commit=False)
+            receipt.company = request.company
+            if 'attachment' in request.FILES:
+                receipt.attachment = request.FILES['attachment']
+            receipt.save()
+            bank_account = Account.objects.get(id=request.POST.get('bank_account'))
+            benefactor = Account.objects.get(id=request.POST.get('benefactor'))
+            set_transactions(receipt, request.POST.get('date'),
+                             ['dr', bank_account, request.POST.get('amount')],
+                             ['cr', benefactor, request.POST.get('amount')],
+            )
+            return redirect('/bank/cash-deposits/')
+    else:
+        form = BankCashDepositForm(instance=receipt, company=request.company)
+    return render(request, 'cash_deposit.html', {'form': form, 'scenario': scenario})
 
 
 @group_required('SuperOwner', 'Owner', 'Supervisor')
@@ -235,35 +263,6 @@ def electronic_fund_transfer_in(request, id=None):
     receipt_data = ElectronicFundTransferInSerializer(receipt).data
     return render(request, 'electronic_fund_transfer_in.html',
                   {'form': form, 'data': receipt_data, 'scenario': scenario})
-
-
-@login_required
-def cash_deposit(request, id=None):
-    if id:
-        receipt = get_object_or_404(BankCashDeposit, id=id, company=request.company)
-        scenario = 'Update'
-    else:
-        receipt = BankCashDeposit(date=date.today())
-        scenario = 'New'
-    if request.POST:
-        form = BankCashDepositForm(request.POST, request.FILES, instance=receipt, company=request.company)
-
-        if form.is_valid():
-            receipt = form.save(commit=False)
-            receipt.company = request.company
-            if 'attachment' in request.FILES:
-                receipt.attachment = request.FILES['attachment']
-            receipt.save()
-            bank_account = Account.objects.get(id=request.POST.get('bank_account'))
-            benefactor = Account.objects.get(id=request.POST.get('benefactor'))
-            set_transactions(receipt, request.POST.get('date'),
-                             ['dr', bank_account, request.POST.get('amount')],
-                             ['cr', benefactor, request.POST.get('amount')],
-            )
-            return redirect('/bank/cash-deposits/')
-    else:
-        form = BankCashDepositForm(instance=receipt, company=request.company)
-    return render(request, 'cash_deposit.html', {'form': form, 'scenario': scenario})
 
 
 @login_required
