@@ -94,8 +94,10 @@
                 <!-- ko foreach:rows -->
                 <tr>
                     <td>
-                        <input type="hidden" data-field="Inclusions"
-                               data-bind="value: account, select2: {data: {results: $root.accounts}}, lookupKey: 'id'">
+                        <input type="hidden" data-field="Pay Head"
+                               data-add-url="{% url 'create_account' %}?category_id={{ pay_head.id }}"
+                               data-add-to="accounts"
+                               data-bind="value: account, select2: {data: {results:  $root.accounts_by_category('Pay Head')}}, lookupKey: 'id'">
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td>
@@ -131,8 +133,10 @@
                 <!-- ko foreach:rows -->
                 <tr>
                     <td>
-                        <input type="hidden"  data-field="Deductions"
-                               data-bind="value: account, select2: {data: {results: $root.accounts}}, lookupKey: 'id'">
+                        <input type="hidden" data-field="Deductions"
+                               data-add-url="{% url 'create_account' %}?category_id={{ employee_deductions.id }}"
+                               data-add-to="accounts"
+                               data-bind="value: account, select2: {data: {results: $root.accounts_by_category('Employee Deductions')}}, lookupKey: 'id'">
                     </td>
                     <td data-bind="editableText: amount"></td>
                     <td>
