@@ -49,8 +49,6 @@
 
     Voucher No.: <input type="text" data-bind="value: voucher_no">
 
-    {{ day_journal }}
-
     {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
         <input class="btn" type="submit" value="Approve"
                data-bind="click: $root.approve, visible: $root.status() == 'Unapproved'">
