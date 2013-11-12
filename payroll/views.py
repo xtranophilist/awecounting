@@ -9,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from payroll.models import Entry, EntryRow, Employee, AttendanceVoucher, WorkTimeVoucher, WorkTimeVoucherRow, WorkDay, GroupPayroll, GroupPayrollRow, IndividualPayroll, Inclusion, Deduction
 from payroll.serializers import EntrySerializer, AttendanceVoucherSerializer, EmployeeSerializer, WorkTimeVoucherSerializer, GroupPayrollSerializer, IndividualPayrollSerializer
 from acubor.lib import save_model, invalid
-from ledger.models import delete_rows, set_transactions, Account
+from ledger.models import delete_rows, set_transactions, Account, Category
 from payroll.forms import EmployeeForm
 from users.models import group_required
 
@@ -344,7 +344,9 @@ def individual_payroll_voucher(request, id=None):
         voucher = IndividualPayroll(date=date.today())
         scenario = 'Create'
     data = IndividualPayrollSerializer(voucher).data
-    return render(request, 'individual_payroll_voucher.html', {'scenario': scenario, 'data': data})
+    employee_deductions = Category.objects.get(name='Employee Deductions', company=request.company)
+    pay_head = Category.objects.get(name='Pay Head', company=request.company)
+    return render(request, 'individual_payroll_voucher.html', {'scenario': scenario, 'data': data, 'employee_deductions': employee_deductions, 'pay_head': pay_head})
 
 
 @login_required
