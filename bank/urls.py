@@ -10,8 +10,6 @@ urlpatterns = patterns('',
 
                        url(r'^book/(?P<id>[0-9]+)$', views.bank_book, name='bank_book'),
 
-
-
                        url(r'^cheque-deposits/$', views.list_cheque_deposits, name='list_cheque_deposits'),
                        url(r'^cheque-deposit/$', views.cheque_deposit, name='new_cheque_deposit'),
                        url(r'^cheque-deposit/(?P<id>[0-9]+)$', views.cheque_deposit, name='update_cheque_deposit'),
@@ -25,7 +23,6 @@ urlpatterns = patterns('',
                        url(r'^cash-deposit/(?P<id>[0-9]+)$', views.cash_deposit, name='update_cash_deposit'),
                        url(r'^cash-deposit/delete/(?P<id>[0-9]+)$', views.delete_cash_deposit,
                            name='delete_cash_deposit'),
-
 
                        url(r'^cheque-payments/$', views.list_cheque_payments, name='list_cheque_payments'),
                        url(r'^cheque-payment/$', views.cheque_payment, name='new_cheque_payment'),

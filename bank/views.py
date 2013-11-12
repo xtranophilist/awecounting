@@ -175,6 +175,8 @@ def cheque_deposit(request, id=None):
 
 @login_required
 def cash_deposit(request, id=None):
+    import pdb
+    pdb.set_trace()
     if id:
         receipt = get_object_or_404(BankCashDeposit, id=id, company=request.company)
         scenario = 'Update'

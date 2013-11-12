@@ -406,17 +406,17 @@
                                     <td class="with_ip">
                                         {#                                        <input type="hidden"#}
                                         {#                                               data-bind="value: vendor, select2: {data: {results: $root.accounts_by_category('Suppliers')}}">#}
-                                        <input type="hidden" data-field="Account"
+                                        <input type="hidden" data-field="Vendor" data-add-url="{% url 'create_vendor_account' %}" data-add-to="accounts"
                                                data-bind="value: vendor, select2: {data: {results: $root.accounts_by_category('Suppliers')}}, lookupKey: 'id'">
                                     </td>
                                     <td data-bind="editableText: amount"></td>
                                     <td class="with_ip">
-                                        <input type="hidden" data-field="Account"
+                                        <input type="hidden" data-field="Purchase Ledger" data-add-url="{% url 'create_account' %}?category_id={{ purchase_category.id }}" data-add-to="accounts"
                                                data-bind="value: purchase_ledger, select2: {data: {results: $root.accounts_by_category('Purchase')}}, lookupKey: 'id'">
                                     </td>
                                     <td data-bind="editableText: remarks"></td>
                                     <td class="with_ip">
-                                        <input type="hidden" data-field="Account"
+                                        <input type="hidden" data-field="Account" data-add-url="{% url 'create_account' %}" data-add-to="accounts"
                                                data-bind="value: paid, select2: {data: {results: $root.accounts_by_category(['Cash Account', 'Bank Account', 'Cash Equivalent Account'], true)}}, lookupKey: 'id'">
                                     </td>
                                     <td>
@@ -471,13 +471,13 @@
                                         <span data-bind="text: $index()+1"> </span>
                                     </td>
                                     <td class="with_ip">
-                                        <input type="hidden" data-field="Account"
+                                        <input type="hidden" data-field="Account" data-add-url="{% url 'create_account' %}" data-add-to="accounts"
                                                data-bind="value: paid_to, select2: {data: {results: $root.accounts_except_category(['Sales', 'Purchase', 'Cash Account', 'Cash Equivalent Account', 'Bank Account', 'Suppliers'], true)}}, lookupKey: 'id'">
                                     </td>
                                     <td data-bind="editableText: amount"></td>
                                     <td data-bind="editableText: remarks"></td>
                                     <td class="with_ip">
-                                        <input type="hidden" data-field="Account"
+                                        <input type="hidden" data-field="Account" data-add-url="{% url 'create_account' %}" data-add-to="accounts"
                                                data-bind="value: paid, select2: {data: {results: $root.accounts_by_category(['Cash Account', 'Bank Account', 'Cash Equivalent Account'], true)}}, lookupKey: 'id'">
                                     </td>
                                     <td>

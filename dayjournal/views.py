@@ -7,7 +7,7 @@ from django.http import HttpResponse
 
 from dayjournal.models import DayJournal, CashSales, CardSales, LottoDetail, BankAttachment, OtherAttachment, \
     CashEquivalentSales, SummaryInventory, SummaryTransfer, InventoryFuel, SalesAttachment, PurchaseAttachment, VendorPayout, OtherPayout
-from ledger.models import Account, set_transactions, delete_rows
+from ledger.models import Account, set_transactions, delete_rows, Category
 from inventory.models import InventoryAccount
 from inventory.models import set_transactions as set_inventory_transactions
 from dayjournal.serializers import DayJournalSerializer, LottoDetailSerializer
@@ -39,6 +39,7 @@ def day_journal(request, journal_date=None):
         'purchase_attachments': day_journal.purchase_attachments.all(),
         'bank_attachments': day_journal.bank_attachments.all(),
         'other_attachments': day_journal.other_attachments.all(),
+        'purchase_category': Category.objects.get(name='Purchase', company=request.company)
     })
 
 

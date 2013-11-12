@@ -10,6 +10,8 @@
     <li><a href="{% url "new_cash_deposit" %}">Cash Deposit</a></li>
 {% endblock %}
 
+{% load filters %}
+
 {% block extra-head %}
     <script>
         $(document).ready(function () {
@@ -29,10 +31,14 @@
 
         {{ form.as_p }}
 
-        <button type="submit" class="btn">Save</button>
+        <input class="btn" type="submit" value="Save" name="action">
         {% if scenario == 'Update' %}
+            {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
+                <input class="btn" type="submit" value="Approve" name="action">
+            {% endifusergroup %}
             <a class="btn btn-danger" href="{% url 'delete_cash_deposit' form.instance.id %}">Delete!</a>
         {% endif %}
+
     </form>
 
 
