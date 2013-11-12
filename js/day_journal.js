@@ -39,8 +39,10 @@ $(document).ready(function () {
         _parent.before(clone);
     });
 
-    $(document).on('click', '.remove-file-attach', function(){
-        $(this).parent('.attach_file_field').slideUp(400, function(){$(this).remove()});
+    $(document).on('click', '.remove-file-attach', function () {
+        $(this).parent('.attach_file_field').slideUp(400, function () {
+            $(this).remove()
+        });
     });
 
     $('.attachment-form').submit(function (e) {
@@ -104,18 +106,18 @@ function DayJournal(data) {
     }
 
     self.lotto_sales_dispenser_amount = ko.observable();
-    if (data['lotto_sales_dispenser_amount']) {
-        self.lotto_sales_dispenser_amount(data['lotto_sales_dispenser_amount']);
+    if (isAN(data['lotto_sales_dispenser_amount'])) {
+        self.lotto_sales_dispenser_amount(parseFloat(data['lotto_sales_dispenser_amount']));
     }
 
     self.lotto_sales_register_amount = ko.observable();
     if (data['lotto_sales_register_amount']) {
-        self.lotto_sales_register_amount(data['lotto_sales_register_amount']);
+        self.lotto_sales_register_amount(parseFloat(data['lotto_sales_register_amount']));
     }
 
     self.scratch_off_sales_register_amount = ko.observable();
     if (data['scratch_off_sales_register_amount']) {
-        self.scratch_off_sales_register_amount(data['scratch_off_sales_register_amount']);
+        self.scratch_off_sales_register_amount(parseFloat(data['scratch_off_sales_register_amount']));
     }
 
     $.ajax({
@@ -155,10 +157,10 @@ function DayJournal(data) {
 
     self.actual_sales_amount = function () {
         var total_scratch = self.lotto_detail.get_total('sales')
-        if (total_scratch == 0) {
+        if (total_scratch == 0 && self.scratch_off_sales_register_amount()) {
             total_scratch = self.scratch_off_sales_register_amount();
         }
-        return rnum(self.cash_sales.get_total('amount') + parseFloat(self.lotto_sales_dispenser_amount()) + total_scratch);
+        return rnum(self.cash_sales.get_total('amount') + empty_to_zero(self.lotto_sales_dispenser_amount()) + total_scratch);
     }
 
     self.actual_sales_tax = function () {
@@ -420,17 +422,17 @@ function DayJournal(data) {
                 self.last_lotto_detail = data;
             }
         });
-        self.last_lotto_detail = self.last_lotto_detail.sort(function(a, b){
+        self.last_lotto_detail = self.last_lotto_detail.sort(function (a, b) {
             return a.sn - b.sn;
         })
         if (self.last_lotto_detail) {
-            if (Object.size(self.last_lotto_detail)){
-            for (var i in self.last_lotto_detail) {
-                var detail = self.last_lotto_detail[i];
-                self.lotto_detail.rows.push(new LottoDetailRow({'rate': detail.rate, 'pack_count': detail.pack_count, 'day_open': detail.day_close, 'day_close': detail.day_close}))
+            if (Object.size(self.last_lotto_detail)) {
+                for (var i in self.last_lotto_detail) {
+                    var detail = self.last_lotto_detail[i];
+                    self.lotto_detail.rows.push(new LottoDetailRow({'rate': detail.rate, 'pack_count': detail.pack_count, 'day_open': detail.day_close, 'day_close': detail.day_close}))
+                }
             }
-            }
-            else{
+            else {
                 self.lotto_detail.addRow(new LottoDetailRow());
             }
         }
@@ -456,7 +458,6 @@ function DayJournal(data) {
 //                    self.status('Approved');
                     self.state('success');
                 }
-//                console.log(msg);
 //                $('#lotto-sales-message').html('Saved!');
 //                $('#lotto-sales-message').addClass('success');
             },

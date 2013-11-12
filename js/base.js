@@ -212,7 +212,7 @@ function empty_or_undefined(o) {
 function empty_to_zero(o) {
     if (o == '' || typeof o == 'undefined')
         return 0;
-    return o;
+    return parseFloat(o);
 }
 
 function round2(n) {
