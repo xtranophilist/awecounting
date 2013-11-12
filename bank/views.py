@@ -9,6 +9,7 @@ from acubor.lib import invalid, save_model
 from bank.serializers import ChequeDepositSerializer, ElectronicFundTransferInSerializer
 from bank.filters import ChequeDepositFilter, CashDepositFilter, ChequePaymentFilter, ElectronicFundTransferInFilter, ElectronicFundTransferOutFilter
 from ledger.models import set_transactions, Account, delete_rows, JournalEntry
+from ledger.serializers import AccountSerializer
 
 
 @login_required
@@ -115,7 +116,7 @@ def bank_account_form(request, id=None):
             item.company = request.company
             item.save()
             if request.is_ajax():
-                return render(request, 'callback.html', {'obj': {'id': item.account.id, 'text': str(item)}})
+                return render(request, 'callback.html', {'obj': AccountSerializer(item.account).data})
             return redirect('/bank/accounts/')
     else:
         form = BankAccountForm(instance=bank_account)

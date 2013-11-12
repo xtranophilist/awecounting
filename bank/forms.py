@@ -14,9 +14,12 @@ class BankAccountForm(KOModelForm):
 
 class ChequeDepositForm(KOModelForm):
     bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
-                                          widget=forms.Select(attrs={'class': 'select2'}), label='Beneficiary Account')
+                                          widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Bank Account',
+                                                                   'data-add-url': reverse_lazy('create_bank_account')}), label='Beneficiary Account')
     benefactor = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
-                                        widget=forms.Select(attrs={'class': 'select2'}), label='Benefactor (Given By)')
+                                        widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Benefactor',
+                                                                   'data-add-url': reverse_lazy('create_account')}),
+                                        label='Benefactor (Given By)')
     date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
     clearing_date = forms.DateField(
         widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}), required=False)
@@ -40,6 +43,7 @@ class ChequeDepositForm(KOModelForm):
             if self.instance.id is not existing.id:
                 raise forms.ValidationError("The voucher no. " + str(
                     self.cleaned_data['voucher_no']) + " is already in use. Suggested no. has been provided.")
+            return self.cleaned_data['voucher_no']
         except ChequeDeposit.DoesNotExist:
             return self.cleaned_data['voucher_no']
 
