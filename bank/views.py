@@ -1,6 +1,7 @@
 from datetime import date
 import json
 from django.contrib.auth.decorators import login_required
+from django.core.urlresolvers import reverse_lazy
 from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 
@@ -165,7 +166,7 @@ def cheque_deposit(request, id=None):
             delete_rows(particulars.get('deleted_rows'), model)
             receipt.status = 'Unapproved'
             receipt.save()
-            return redirect('/bank/cheque-deposits/')
+            return redirect(reverse_lazy('update_cheque_deposit', kwargs={'id': receipt.id}))
     else:
         form = ChequeDepositForm(instance=receipt, company=request.company)
     receipt_data = ChequeDepositSerializer(receipt).data
@@ -184,7 +185,7 @@ def approve_cheque_deposit(request):
     bank_account = Account.objects.get(id=params.get('bank_account'))
     benefactor = Account.objects.get(id=params.get('benefactor'))
     for row in voucher.rows.all():
-        set_transactions(row, request.POST.get('date'),
+        set_transactions(row, params.get('date'),
                          ['dr', bank_account, row.amount],
                          ['cr', benefactor, row.amount],
         )
