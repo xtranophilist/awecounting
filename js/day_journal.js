@@ -158,7 +158,7 @@ function DayJournal(data) {
     self.actual_sales_amount = function () {
         var total_scratch = self.lotto_detail.get_total('sales')
         if (total_scratch == 0 && self.scratch_off_sales_register_amount()) {
-            total_scratch = self.scratch_off_sales_register_amount();
+            total_scratch = empty_to_zero(self.scratch_off_sales_register_amount());
         }
         return rnum(self.cash_sales.get_total('amount') + empty_to_zero(self.lotto_sales_dispenser_amount()) + total_scratch);
     }

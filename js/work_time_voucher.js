@@ -136,7 +136,7 @@ function WorkTimeVoucherVM(data) {
                         $('#message').html(msg.error_message);
                     }
                     else {
-                        $('#message').html('Saved!');
+                        bs_alert.success('Saved!');
                         if (msg.id)
                             self.id = msg.id;
                         $("#work-time-table > tr").each(function (i) {
