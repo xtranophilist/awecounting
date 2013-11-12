@@ -29,43 +29,43 @@ def list_bank_accounts(request):
 
 @login_required
 def delete_bank_account(request, id):
-    object = get_object_or_404(BankAccount, id=id, company=request.company)
-    object.delete()
+    obj = get_object_or_404(BankAccount, id=id, company=request.company)
+    obj.delete()
     return redirect('/bank/accounts/')
 
 
 @login_required
 def delete_cheque_deposit(request, id):
-    object = get_object_or_404(ChequeDeposit, id=id, company=request.company)
-    object.delete()
+    obj = get_object_or_404(ChequeDeposit, id=id, company=request.company)
+    obj.delete()
     return redirect('/bank/cheque-deposits/')
 
 
 @login_required
 def delete_electronic_fund_transfer_in(request, id):
-    object = get_object_or_404(ElectronicFundTransferIn, id=id, company=request.company)
-    object.delete()
+    obj = get_object_or_404(ElectronicFundTransferIn, id=id, company=request.company)
+    obj.delete()
     return redirect('/bank/electronic-fund-transfers-in/')
 
 
 @login_required
 def delete_cash_deposit(request, id):
-    object = get_object_or_404(BankCashDeposit, id=id, company=request.company)
-    object.delete()
+    obj = get_object_or_404(BankCashDeposit, id=id, company=request.company)
+    obj.delete()
     return redirect('/bank/cash-deposits/')
 
 
 @login_required
 def delete_cheque_payment(request, id):
-    object = get_object_or_404(ChequePayment, id=id, company=request.company)
-    object.delete()
+    obj = get_object_or_404(ChequePayment, id=id, company=request.company)
+    obj.delete()
     return redirect('/bank/cheque-payments/')
 
 
 @login_required
 def delete_electronic_fund_transfer_out(request, id):
-    object = get_object_or_404(ElectronicFundTransferOut, id=id, company=request.company)
-    object.delete()
+    obj = get_object_or_404(ElectronicFundTransferOut, id=id, company=request.company)
+    obj.delete()
     return redirect('/bank/electronic-fund-transfers-out/')
 
 
