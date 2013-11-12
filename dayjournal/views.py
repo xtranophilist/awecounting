@@ -11,7 +11,7 @@ from ledger.models import Account, set_transactions, delete_rows
 from inventory.models import InventoryAccount
 from inventory.models import set_transactions as set_inventory_transactions
 from dayjournal.serializers import DayJournalSerializer, LottoDetailSerializer
-from acubor.lib import invalid, save_model, all_empty, add
+from acubor.lib import invalid, save_model, all_empty, add, zero_for_none
 from users.models import group_required
 
 
@@ -54,8 +54,6 @@ def get_journal(request):
                                                                                                'cash_withdrawal': 0,
                                                                                                'cash_actual': 0})
     except Exception as e:
-        #import pdb
-        #pdb.set_trace()
         return {'error': 'Voucher No. already exists!'}
     if not created:
         journal.voucher_no = params.get('voucher_no')
@@ -414,7 +412,7 @@ def approve(request):
     total_tax = 0
     for cash_sale in journal.cash_sales.all():
         tax_rate = cash_sale.sales_ledger.tax_rate or 0
-        tax_amount = cash_sale.amount * tax_rate / 100
+        tax_amount = cash_sale.amount * zero_for_none(tax_rate) / 100
         net_amount = cash_sale.amount - tax_amount
         set_transactions(journal, journal.date,
                          ['cr', cash_sale.sales_ledger, net_amount],
@@ -428,7 +426,7 @@ def approve(request):
     total_amount += lotto_amount
     lotto_sales_ledger = Account.objects.get(name='Lotto Sales', company=request.company)
     lotto_tax_rate = lotto_sales_ledger.tax_rate
-    lotto_tax = lotto_amount * lotto_tax_rate / 100
+    lotto_tax = lotto_amount * zero_for_none(lotto_tax_rate) / 100
     net_lotto_amount = lotto_amount - lotto_tax
     total_tax += lotto_tax
     set_transactions(journal, journal.date,
@@ -439,14 +437,14 @@ def approve(request):
         day_close = scratch_off.day_close
         if day_close == 0:
             day_close = scratch_off.pack_count
-        sales = (scratch_off.pack_count * scratch_off.addition + (day_close - scratch_off.day_open)) * scratch_off.rate
+        sales = (scratch_off.pack_count * zero_for_none(scratch_off.addition) + (day_close - scratch_off.day_open)) * zero_for_none(scratch_off.rate)
         scratch_off_total += sales
     if scratch_off_total == 0:
         scratch_off_total = journal.scratch_off_sales_register_amount
     total_amount += scratch_off_total
     scratch_off_ledger = Account.objects.get(name='Scratch Off Sales', company=request.company)
     scratch_off_tax_rate = scratch_off_ledger.tax_rate
-    scratch_off_tax = scratch_off_total * scratch_off_tax_rate / 100
+    scratch_off_tax = scratch_off_total * zero_for_none(scratch_off_tax_rate) / 100
     net_scratch_off_amount = scratch_off_total - scratch_off_tax
     total_tax += scratch_off_tax
     set_transactions(journal, journal.date,
@@ -479,7 +477,7 @@ def approve(request):
                      ['dr', cash_account, total_amount - non_cash],
     )
 
-    for row in journal.summary_transfer:
+    for row in journal.summary_transfer.all():
         # Cash - Dr	; Cheque - Dr	; Bill-payment - Cr; Card - Dr
         set_transactions(row, journal.date,
                          ['dr', cash_account, row.cash],
@@ -488,7 +486,7 @@ def approve(request):
                          ['cr', Account.objects.get(id=row.transfer_type), add(row.cash, row.card, row.cheque)],
         )
 
-    for row in journal.vendor_payout:
+    for row in journal.vendor_payout.all():
         if row.type == 'new':
             set_transactions(row, journal.date,
                              ['dr', row.purchase_ledger, row.amount],
@@ -500,7 +498,7 @@ def approve(request):
                              ['cr', row.paid, row.amount],
             )
 
-    for row in journal.other_payout:
+    for row in journal.other_payout.all():
         set_transactions(row, journal.date,
                          ['dr', row.paid_to, row.amount],
                          ['cr', row.paid, row.amount],
