@@ -154,3 +154,9 @@ def get_next_voucher_no(cls, company):
         return 1
 
 
+def empty_to_zero(o):
+    if o == '':
+        return 0
+    if o is None:
+        return 0
+    return o

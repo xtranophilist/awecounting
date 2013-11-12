@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 
 from payroll.models import Entry, EntryRow, Employee, AttendanceVoucher, WorkTimeVoucher, WorkTimeVoucherRow, WorkDay, GroupPayroll, GroupPayrollRow, IndividualPayroll, Inclusion, Deduction
 from payroll.serializers import EntrySerializer, AttendanceVoucherSerializer, EmployeeSerializer, WorkTimeVoucherSerializer, GroupPayrollSerializer, IndividualPayrollSerializer
-from acubor.lib import save_model, invalid
+from acubor.lib import save_model, invalid, empty_to_zero
 from ledger.models import delete_rows, set_transactions, Account, Category
 from payroll.forms import EmployeeForm
 from users.models import group_required
@@ -279,20 +279,14 @@ def save_group_payroll_voucher(request):
     for index, row in enumerate(params.get('table_vm').get('rows')):
         if invalid(row, ['employee', 'pay_head']):
             continue
-        values = {'employee_id': row.get('employee'), 'rate_day': row.get('rate_day'),
-                  'rate_hour': row.get('rate_hour'), 'rate_ot_hour': row.get('rate_ot_hour'),
+        rate_day = empty_to_zero(row.get('rate_day'))
+        rate_hour = empty_to_zero(row.get('rate_hour'))
+        rate_ot_hour = empty_to_zero(row.get('rate_ot_hour'))
+        values = {'employee_id': row.get('employee'), 'rate_day': rate_day,
+                  'rate_hour': rate_hour, 'rate_ot_hour': rate_ot_hour,
                   'payroll_tax': row.get('payroll_tax'), 'pay_head_id': row.get('pay_head'),
                   'group_payroll': voucher}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-        #if row.get('type') == 'Dr':
-        #    print 'dr'
-        #    set_transactions(submodel, params.get('date'),
-        #                     ['dr', Account.objects.get(id=row.get('account')), row.get('dr_amount')],
-        #    )
-        #else:
-        #    set_transactions(submodel, params.get('date'),
-        #                     ['cr', Account.objects.get(id=row.get('account')), row.get('cr_amount')],
-        #    )
         if not created:
             submodel = save_model(submodel, values)
         dct['rows'][index] = submodel.id
