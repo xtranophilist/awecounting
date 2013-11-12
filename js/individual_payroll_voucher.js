@@ -20,8 +20,17 @@ function IndividualPayrollVoucherVM(data) {
         }
     });
 
+//    $.ajax({
+//        url: '/ledger/payheads.json',
+//        dataType: 'json',
+//        async: false,
+//        success: function (data) {
+//            self.payheads = data;
+//        }
+//    });
+
     $.ajax({
-        url: '/ledger/payheads.json',
+        url: '/ledger/accounts/json',
         dataType: 'json',
         async: false,
         success: function (data) {
@@ -69,6 +78,27 @@ function IndividualPayrollVoucherVM(data) {
     self.total = function () {
         return self.day_amount() + self.hour_amount() + self.ot_hour_amount();
     }
+
+    self.accounts_by_category = function (categories, is_or) {
+        var filtered_accounts = [];
+        for (var i in self.accounts) {
+            var account_categories = self.accounts[i].categories
+            if (typeof categories === 'string') {
+                if ($.inArray(categories, account_categories) !== -1) {
+                    filtered_accounts.push(self.accounts[i]);
+                }
+            } else if (typeof is_or != 'undefined') {
+                if (intersection(categories, account_categories).length) {
+                    filtered_accounts.push(self.accounts[i]);
+                }
+            } else {
+                if (compare_arrays(categories, account_categories)) {
+                    filtered_accounts.push(self.accounts[i]);
+                }
+            }
+        }
+        return filtered_accounts;
+    };
 
 
     for (var k in data) {
