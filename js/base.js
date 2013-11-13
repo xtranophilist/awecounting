@@ -478,3 +478,9 @@ bs_modal.create = function () {
     }).appendTo('body');
     return el;
 }
+
+function rq(b){
+    var a = function(query) {query.callback({results: b});}
+    return a;
+
+}
