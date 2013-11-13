@@ -7,13 +7,19 @@
     el = $(window.last_active_select.pop());
     var matches = el.data('bind').match(/\{results: \$root\.([a-z_]+)\}/);
     if (el.data('add-to')) {
-        vm[el.data('add-to')].push(obj);
+        if (typeof vm[el.data('add-to')] == 'function')
+            vm[el.data('add-to')]().push(obj);
+        else
+            vm[el.data('add-to')].push(obj);
         el.select2('data', obj);
         el.trigger('change');
     }
     else if (matches) {
         var match = matches[1];
-        vm[match].push(obj);
+        if (typeof vm[match] == 'function')
+            vm[match]().push(obj);
+        else
+            vm[match].push(obj);
         el.select2('data', obj);
         el.trigger('change');
     }
