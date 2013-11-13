@@ -91,8 +91,9 @@ ko.bindingHandlers.select2 = {
             allBindings = allBindingsAccessor(),
             lookupKey = allBindings.lookupKey;
         obj['dropdownAutoWidth'] = true;
+        var len = $('.select-drop-klass').length;
         if ($(element).data('field')) {
-            obj['dropdownCssClass'] = 'drop-' + $(element).data('field').toLowerCase().replace(/ /g, '-');
+            obj['dropdownCssClass'] = 'select-drop-klass unique-drop' + len;
             if (typeof obj['formatSelection'] == 'undefined')
                 obj['formatSelection'] = return_name;
             if (typeof obj['formatResult'] == 'undefined')
@@ -100,6 +101,8 @@ ko.bindingHandlers.select2 = {
             if (typeof obj['initSelection'] == 'undefined')
                 obj['initSelection'] = init_select2;
         }
+
+        $(element).attr('data-counter', len);
 
         //results for query callback as source binding, if available
         if (allBindings.source) {
