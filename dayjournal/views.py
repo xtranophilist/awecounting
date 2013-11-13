@@ -392,10 +392,10 @@ def last_lotto_detail(request, journal_date):
         last_journal = DayJournal.objects.filter(date__lt=journal_date, lotto_detail__isnull=False).order_by('-date')[
             0];
         lotto_detail = last_journal.lotto_detail.all()
-        dct = LottoDetailSerializer(lotto_detail).data
-        return HttpResponse(json.dumps(dct), mimetype="application/json")
+        lst = LottoDetailSerializer(lotto_detail).data
+        return HttpResponse(json.dumps(lst), mimetype="application/json")
     except IndexError:
-        return HttpResponse(json.dumps({}), mimetype="application/json")
+        return HttpResponse(json.dumps([]), mimetype="application/json")
 
 
 @group_required('SuperOwner', 'Owner', 'Supervisor')
