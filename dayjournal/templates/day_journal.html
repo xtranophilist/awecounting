@@ -533,199 +533,215 @@
         </a>
     </div>
     <div class="col-box-body">
-        <!-- Inventory Tabs -->
-        <div class="tabbable">
-            <ul class="nav nav-tabs" id="inventory_tab">
-                <li class="active">
-                    <a data-toggle="tab" href="#inventory-fuel-tab">
-                        Fuel
-                    </a>
-                </li>
+    <!-- Inventory Tabs -->
+    <div class="tabbable">
+    <ul class="nav nav-tabs" id="inventory_tab">
+        <li class="active">
+            <a data-toggle="tab" href="#inventory-fuel-tab">
+                Fuel
+            </a>
+        </li>
 
-                <li>
-                    <a data-toggle="tab" href="#summary-invent">
-                        Other Inventories
-                    </a>
-                </li>
+        <li>
+            <a data-toggle="tab" href="#summary-invent">
+                Other Inventories
+            </a>
+        </li>
 
-                <li>
-                    <a data-toggle="tab" href="#lotto-detail">
-                        Scratch Off
-                    </a>
-                </li>
+        <li>
+            <a data-toggle="tab" href="#lotto-detail">
+                Scratch Off
+            </a>
+        </li>
 
-            </ul>
-            <div class="tab-content">
+    </ul>
+    <div class="tab-content">
 
-                <div id="inventory-fuel-tab" class="tab-pane active">
-                    <div class="row-fluid" data-bind="with: inventory_fuel">
-                        <table class="table table-bordered table-striped table-acubor table-sortable">
-                            <thead>
-                            <tr>
-                                <th>SN</th>
-                                <th>Particulars</th>
-                                <th>Opening</th>
-                                <th>Purchase</th>
-                                <th>Sales</th>
-                                <th>Closing</th>
-                                <th>Actual</th>
-                                <th>Difference</th>
-                                <th></th>
-                            </tr>
-                            </thead>
+        <div id="inventory-fuel-tab" class="tab-pane active">
+            <div class="row-fluid" data-bind="with: inventory_fuel">
+                <table class="table table-bordered table-striped table-acubor table-sortable">
+                    <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Particulars</th>
+                        <th>Opening</th>
+                        <th>Purchase</th>
+                        <th>Sales</th>
+                        <th>Closing</th>
+                        <th>Actual</th>
+                        <th>Difference</th>
+                        <th></th>
+                    </tr>
+                    </thead>
 
-                            <tbody id="inventory-fuel">
+                    <tbody id="inventory-fuel">
 
-                            <!-- ko foreach: rows -->
-                            <tr data-bind="flash: true">
-                                <td data-bind="text: $index()+1"></td>
-                                <td class="with_ip">
-                                    <select class="span12"
-                                            data-bind="options: $root.inventory_accounts_by_category('Fuel'), optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.inventory_account_changed}"></select>
-                                </td>
-                                <td data-bind="text: opening()"></td>
-                                <td data-bind="editableText: purchase, numeric: true"></td>
-                                <td data-bind="editableText: sales, numeric: true"></td>
-                                <td data-bind="text: closing()"></td>
-                                <td data-bind="editableText: actual, numeric: true"></td>
-                                <td data-bind="text: difference()"></td>
-                                <td>
-                                    <button class="btn-none" data-bind="click: $parent.removeRow"><i
-                                            class="icon-trash"></i></button>
-                                </td>
-                            </tr>
-                            <!-- /ko -->
-                            </tbody>
-                        </table>
-                        <div data-bind="css: state()" class="pull-left">
+                    <!-- ko foreach: rows -->
+                    <tr data-bind="flash: true">
+                        <td data-bind="text: $index()+1"></td>
+                        <td class="with_ip">
+                            <select class="span12"
+                                    data-bind="options: $root.inventory_accounts_by_category('Fuel'), optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.inventory_account_changed}"></select>
+                        </td>
+                        <td data-bind="text: opening()"></td>
+                        <td data-bind="editableText: purchase, numeric: true"></td>
+                        <td data-bind="editableText: sales, numeric: true"></td>
+                        <td data-bind="text: closing()"></td>
+                        <td data-bind="editableText: actual, numeric: true"></td>
+                        <td data-bind="text: difference()"></td>
+                        <td>
+                            <button class="btn-none" data-bind="click: $parent.removeRow"><i
+                                    class="icon-trash"></i></button>
+                        </td>
+                    </tr>
+                    <!-- /ko -->
+                    </tbody>
+                </table>
+                <div data-bind="css: state()" class="pull-left">
                                         <span data-bind="text: message()">
                                         </span>
-                        </div>
-                        <div class="pull-right">
-                            <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i>
-                                Add New Row
-                            </button>
-                            <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save
-                            </button>
-                            <button class="btn btn-small" data-bind="click: reset">Reset</button>
-                        </div>
-                    </div>
                 </div>
-
-                <div id="summary-invent" class="tab-pane">
-                    <div class="row-fluid" data-bind="with: summary_inventory">
-                        <table class="table table-bordered table-striped table-acubor table-sortable">
-                            <thead>
-                            <tr>
-                                <th>SN</th>
-                                <th>Particulars</th>
-                                <th>Opening</th>
-                                <th>Purchase</th>
-                                <th>Sales</th>
-                                <th>Closing</th>
-                                <th>Actual</th>
-                                <th>Difference</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-
-                            <tbody id="summary-inventory">
-
-                            <!-- ko foreach: rows -->
-                            <tr data-bind="flash: true">
-                                <td data-bind="text: $index()+1"></td>
-                                <td class="with_ip">
-                                    <select class="span12"
-                                            data-bind="options: $root.inventory_accounts, optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.inventory_account_changed}"></select>
-                                </td>
-                                <td data-bind="text: opening()"></td>
-                                <td data-bind="editableText: purchase, numeric: true"></td>
-                                <td data-bind="editableText: sales, numeric: true"></td>
-                                <td data-bind="text: closing()"></td>
-                                <td data-bind="editableText: actual, numeric: true"></td>
-                                <td data-bind="text: difference()"></td>
-                                <td>
-                                    <button class="btn-none" data-bind="click: $parent.removeRow"><i
-                                            class="icon-trash"></i></button>
-                                </td>
-                            </tr>
-                            <!-- /ko -->
-                            </tbody>
-                        </table>
-                        <div data-bind="css: state()" class="pull-left">
-                                        <span data-bind="text: message()">
-                                        </span>
-                        </div>
-                        <div class="pull-right">
-                            <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i>
-                                Add New
-                                Row
-                            </button>
-                            <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save
-                            </button>
-                            <button class="btn btn-small" data-bind="click: reset">Reset</button>
-                        </div>
-                    </div>
+                <div class="pull-right">
+                    <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i>
+                        Add New Row
+                    </button>
+                    <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save
+                    </button>
+                    <button class="btn btn-small" data-bind="click: reset">Reset</button>
                 </div>
-
-                <div id="lotto-detail" class="tab-pane">
-                    <div class="row-fluid myscroll" data-bind="with: lotto_detail">
-                        <table class="table table-bordered table-striped table-acubor table-sortable">
-                            <thead>
-                            <tr>
-                                <th>SN</th>
-                                <th>Rate (in $)</th>
-                                <th>Pack Count</th>
-                                <th>Day Open</th>
-                                <th>Day Close</th>
-                                <th>Addition</th>
-                                <th>Sales ($)</th>
-                                <th></th>
-                            </tr>
-                            </thead>
-
-                            <tbody id="lotto-detail">
-                            <!-- ko foreach: rows -->
-                            <tr data-bind="flash: true">
-                                <td data-bind="text: $index()+1"></td>
-                                <td data-bind="editableText: rate, numeric: true"></td>
-                                <td data-bind="editableText: pack_count, numeric: true"></td>
-                                <td data-bind="editableText: day_open, numeric: true"></td>
-                                <td data-bind="editableText: day_close, numeric: true"></td>
-                                <td data-bind="editableText: addition, numeric: true"></td>
-                                <td data-bind="text: sales()"></td>
-                                <td>
-                                    <button class="btn-none" data-bind="click: $parent.removeRow"><i
-                                            class="icon-trash"></i></button>
-                                </td>
-                            </tr>
-                            <!-- /ko -->
-                            <tr class="dont-validate">
-                                <td colspan="6"><b>TOTAL</b></td>
-                                <td colspan="3" data-bind="text: get_total('sales')"></td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <div data-bind="css: state()" class="pull-left">
-                                        <span data-bind="text: message()">
-                                        </span>
-                        </div>
-                        <div class="pull-right">
-                            <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i>
-                                Add New
-                                Row
-                            </button>
-                            <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save
-                            </button>
-                            <button class="btn btn-small" data-bind="click: reset">Reset</button>
-                        </div>
-                    </div>
-                </div>
-
-
             </div>
         </div>
-        <!-- EOF Inventory Tabs -->
+
+        <div id="summary-invent" class="tab-pane">
+            <div class="row-fluid" data-bind="with: summary_inventory">
+                <table class="table table-bordered table-striped table-acubor table-sortable">
+                    <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Particulars</th>
+                        <th>Opening</th>
+                        <th>Purchase</th>
+                        <th>Sales</th>
+                        <th>Closing</th>
+                        <th>Actual</th>
+                        <th>Difference</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="summary-inventory">
+
+                    <!-- ko foreach: rows -->
+                    <tr data-bind="flash: true">
+                        <td data-bind="text: $index()+1"></td>
+                        <td class="with_ip">
+                            <select class="span12"
+                                    data-bind="options: $root.inventory_accounts, optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.inventory_account_changed}"></select>
+                        </td>
+                        <td data-bind="text: opening()"></td>
+                        <td data-bind="editableText: purchase, numeric: true"></td>
+                        <td data-bind="editableText: sales, numeric: true"></td>
+                        <td data-bind="text: closing()"></td>
+                        <td data-bind="editableText: actual, numeric: true"></td>
+                        <td data-bind="text: difference()"></td>
+                        <td>
+                            <button class="btn-none" data-bind="click: $parent.removeRow"><i
+                                    class="icon-trash"></i></button>
+                        </td>
+                    </tr>
+                    <!-- /ko -->
+                    </tbody>
+                </table>
+                <div data-bind="css: state()" class="pull-left">
+                                        <span data-bind="text: message()">
+                                        </span>
+                </div>
+                <div class="pull-right">
+                    <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i>
+                        Add New
+                        Row
+                    </button>
+                    <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save
+                    </button>
+                    <button class="btn btn-small" data-bind="click: reset">Reset</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="lotto-detail" class="tab-pane">
+            <div class="row-fluid myscroll" data-bind="with: lotto_detail">
+                <table id="lotto_fixed_header" class="table table-bordered table-striped table-acubor table-sortable"
+                       style="position: absolute; top: 0; width: 1126px">
+                    <thead>
+                    <tr>
+                        <th width="6%">SN</th>
+                        <th width="12%">Rate (in $)</th>
+                        <th width="20%">Pack Count</th>
+                        <th width="12%">Day Open</th>
+                        <th width="12%">Day Close</th>
+                        <th width="12%">Addition</th>
+                        <th width="20%">Sales ($)</th>
+                        <th width="6%"></th>
+                    </tr>
+                    </thead>
+                </table>
+                <table width="1125" id="lotto_table_full"
+                       class="table table-bordered table-striped table-acubor table-sortable">
+                    <thead>
+                    <tr>
+                        <th width="6%">SN</th>
+                        <th width="12%">Rate (in $)</th>
+                        <th width="20%">Pack Count</th>
+                        <th width="12%">Day Open</th>
+                        <th width="12%">Day Close</th>
+                        <th width="12%">Addition</th>
+                        <th width="20%">Sales ($)</th>
+                        <th width="6%"></th>
+                    </tr>
+                    </thead>
+
+                    <tbody id="lotto-detail">
+                    <!-- ko foreach: rows -->
+                    <tr data-bind="flash: true">
+                        <td data-bind="text: $index()+1"></td>
+                        <td data-bind="editableText: rate, numeric: true"></td>
+                        <td data-bind="editableText: pack_count, numeric: true"></td>
+                        <td data-bind="editableText: day_open, numeric: true"></td>
+                        <td data-bind="editableText: day_close, numeric: true"></td>
+                        <td data-bind="editableText: addition, numeric: true"></td>
+                        <td data-bind="text: sales()"></td>
+                        <td>
+                            <button class="btn-none" data-bind="click: $parent.removeRow"><i
+                                    class="icon-trash"></i></button>
+                        </td>
+                    </tr>
+                    <!-- /ko -->
+                    <tr class="dont-validate">
+                        <td colspan="6"><b>TOTAL</b></td>
+                        <td colspan="3" data-bind="text: get_total('sales')"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div data-bind="css: state()" class="pull-left">
+
+                                        <span data-bind="text: message()">
+                                        </span>
+                </div>
+                <div class="pull-right">
+                    <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i>
+                        Add New
+                        Row
+                    </button>
+                    <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save
+                    </button>
+                    <button class="btn btn-small" data-bind="click: reset">Reset</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    </div>
+    <!-- EOF Inventory Tabs -->
     </div>
     </div>
 
