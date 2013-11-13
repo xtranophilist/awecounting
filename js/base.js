@@ -1,15 +1,15 @@
 function init_select2(element, callback) {
     if ($(element).data('add-url')) {
-        var drop_class = '.drop-' + $(element).data('field').toLowerCase().replace(/ /g, '-');
-        $(drop_class).find('.appended-link').remove();
-
-        jQuery('<a/>', {
+        var drop_el = $('.unique-drop' + $(element).data('counter'));
+        var append_link = jQuery('<a/>', {
             class: 'appended-link',
             href: $(element).data('add-url'),
             title: 'Add New ' + $(element).data('field'),
             text: 'Add New ' + $(element).data('field'),
             'data-toggle': 'modal'
-        }).appendTo(drop_class).on('click', [element], appended_link_clicked);
+        });
+        append_link.appendTo(drop_el).on('click', [$(element)], appended_link_clicked);
+
     }
 }
 
@@ -19,6 +19,8 @@ appended_link_clicked = function (e) {
         window.last_active_select = new Array();
     }
     window.last_active_select.push(e.data[0]);
+
+//    console.log(e.data[0]);
     e.preventDefault();
     var the_modal = bs_modal.create();
     var url = $(this).attr('href');
@@ -479,8 +481,11 @@ bs_modal.create = function () {
     return el;
 }
 
-function rq(b){
-    var a = function(query) {query.callback({results: b});}
+function rq(b) {
+    var a = function (query) {
+        query.callback({results: b});
+    }
+//    function(query) {query.callback({results: $root.accounts});
     return a;
 
 }
