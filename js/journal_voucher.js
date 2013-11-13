@@ -4,7 +4,6 @@ $(document).ready(function () {
     ko.applyBindings(vm);
 });
 
-
 function JournalVoucher(data) {
     var self = this;
 
@@ -14,13 +13,34 @@ function JournalVoucher(data) {
         self[k] = data[k];
 
     $.ajax({
-        url: '/ledger/accounts.json/',
+        url: '/ledger/accounts.json',
         dataType: 'json',
         async: false,
         success: function (data) {
             self.accounts = data;
         }
     });
+
+    self.accounts_except_category = function (categories, is_or) {
+        var filtered_accounts = [];
+        for (var i in self.accounts) {
+            var account_categories = self.accounts[i].categories;
+            if (typeof categories === 'string') {
+                if ($.inArray(categories, account_categories) == -1) {
+                    filtered_accounts.push(self.accounts[i]);
+                }
+            } else if (typeof is_or != 'undefined') {
+                if (!intersection(categories, account_categories).length) {
+                    filtered_accounts.push(self.accounts[i]);
+                }
+            } else {
+                if (!compare_arrays(categories, account_categories)) {
+                    filtered_accounts.push(self.accounts[i]);
+                }
+            }
+        }
+        return filtered_accounts;
+    };
 
     var validate = function (msg, rows, tr_wrapper_id) {
         var selection = $("#" + tr_wrapper_id + " > tr");
@@ -59,27 +79,6 @@ function JournalVoucher(data) {
     }
 
     self.journal_voucher = new TableViewModel(key_to_options('journal_voucher'), JournalVoucherRow);
-
-    self.accounts_except_category = function (categories, is_or) {
-        var filtered_accounts = [];
-        for (var i in self.accounts) {
-            var account_categories = self.accounts[i].categories
-            if (typeof categories === 'string') {
-                if ($.inArray(categories, account_categories) == -1) {
-                    filtered_accounts.push(self.accounts[i]);
-                }
-            } else if (typeof is_or != 'undefined') {
-                if (!intersection(categories, account_categories).length) {
-                    filtered_accounts.push(self.accounts[i]);
-                }
-            } else {
-                if (!compare_arrays(categories, account_categories)) {
-                    filtered_accounts.push(self.accounts[i]);
-                }
-            }
-        }
-        return filtered_accounts;
-    };
 
     self.journal_voucher.cr_total = function () {
         var total = 0.00;
