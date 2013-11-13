@@ -84,6 +84,7 @@ ko.bindingHandlers.textPercent = {
     }
 }
 
+
 ko.bindingHandlers.select2 = {
     init: function (element, valueAccessor, allBindingsAccessor) {
         var obj = valueAccessor(),
@@ -98,6 +99,13 @@ ko.bindingHandlers.select2 = {
                 obj['formatResult'] = return_name;
             if (typeof obj['initSelection'] == 'undefined')
                 obj['initSelection'] = init_select2;
+        }
+
+        //results for query callback as source binding, if available
+        if (allBindings.source) {
+            obj.query = function (query) {
+                query.callback({results: allBindings.source});
+            };
         }
         $(element).select2(obj);
         if (lookupKey) {
@@ -114,6 +122,7 @@ ko.bindingHandlers.select2 = {
     update: function (element, valueAccessor, allBindingsAccessor) {
         var allBindings = allBindingsAccessor(),
             value = ko.utils.unwrapObservable(allBindings.value || allBindings.selectedOptions);
+
         if (value) {
             $(element).select2('val', value);
         }
