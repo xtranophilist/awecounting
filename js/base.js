@@ -16,9 +16,7 @@ function init_select2(element, callback) {
             var appended_link = jQuery('<a/>', {
                 id: 'appended-link' + $(element).data('counter'),
                 class: 'appended-link',
-                href: $(element).data('add-url'),
-                title: 'Add New ' + $(element).data('field'),
-                text: 'Add New ' + $(element).data('field'),
+                href: $(element).data('url'),
                 title: 'Add New ' + name,
                 text: 'Add New ' + name,
                 'data-toggle': 'modal'
@@ -120,14 +118,14 @@ apply_select2 = function (form) {
         if ($(element).hasClass('placehold'))
             options_dict['placeholderOption'] = 'first';
         $(element).select2(options_dict);
-        if ($(element).data('add-url')) {
-            if ($(element).data('field'))
-                var field_name = $(element).data('field');
+        if ($(element).data('url')) {
+            if ($(element).data('name'))
+                var field_name = $(element).data('name');
             else
                 var field_name = $(element).attr('name').replace(/_/g, ' ').toTitleCase();
             jQuery('<a/>', {
                 class: 'appended-link',
-                href: $(element).data('add-url'),
+                href: $(element).data('url'),
                 title: 'Add New ' + field_name,
                 text: 'Add New ' + field_name,
                 'data-toggle': 'modal'
