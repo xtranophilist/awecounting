@@ -40,7 +40,8 @@ def day_journal(request, journal_date=None):
         'bank_attachments': day_journal.bank_attachments.all(),
         'other_attachments': day_journal.other_attachments.all(),
         'purchase_category': Category.objects.get(name='Purchase', company=request.company),
-        'sales_category': Category.objects.get(name='Sales', company=request.company)
+        'sales_category': Category.objects.get(name='Sales', company=request.company),
+        'transfer_category': Category.objects.get(name='Transfer and Remittance', company=request.company)
     })
 
 
