@@ -337,7 +337,8 @@
                     <td colspan="2"><b>TOTAL</b></td>
                     <td data-bind="text: get_total('cash')"></td>
                     <td data-bind="text: get_total('cheque')"></td>
-                    <td colspan="2" data-bind="text: get_total('card')"></td>
+                    <td data-bind="text: get_total('card')"></td>
+                    <td><b>∑ = </b><span data-bind="text: total()"></span></td>
                 </tr>
                 </tbody>
             </table>
