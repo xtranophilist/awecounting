@@ -1,5 +1,16 @@
 function init_select2(element, callback) {
-    if ($(element).data('add-url')) {
+    if ($(element).data('url')) {
+        if ($(element).data('name')){
+            var name = $(element).data('name');
+        } else {
+            var matches = $(element).data('bind').match(/value: ([a-z_1-9]+)/);
+            if (matches){
+                var name = matches[1].replace(/_/g," ").toTitleCase();
+
+            }else{
+                var name = 'Object';
+            }
+        }
         var drop_el = $('.unique-drop' + $(element).data('counter'));
         if (!$('#appended-link' + $(element).data('counter')).length) {
             var appended_link = jQuery('<a/>', {
@@ -8,6 +19,8 @@ function init_select2(element, callback) {
                 href: $(element).data('add-url'),
                 title: 'Add New ' + $(element).data('field'),
                 text: 'Add New ' + $(element).data('field'),
+                title: 'Add New ' + name,
+                text: 'Add New ' + name,
                 'data-toggle': 'modal'
             });
             appended_link.appendTo(drop_el).on('click', [$(element)], appended_link_clicked);
