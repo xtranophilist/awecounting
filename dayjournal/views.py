@@ -39,7 +39,8 @@ def day_journal(request, journal_date=None):
         'purchase_attachments': day_journal.purchase_attachments.all(),
         'bank_attachments': day_journal.bank_attachments.all(),
         'other_attachments': day_journal.other_attachments.all(),
-        'purchase_category': Category.objects.get(name='Purchase', company=request.company)
+        'purchase_category': Category.objects.get(name='Purchase', company=request.company),
+        'sales_category': Category.objects.get(name='Sales', company=request.company)
     })
 
 
