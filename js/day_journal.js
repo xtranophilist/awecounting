@@ -120,6 +120,16 @@ function DayJournal(data) {
         self.scratch_off_sales_register_amount(parseFloat(data['scratch_off_sales_register_amount']));
     }
 
+    self.register_sales_amount = ko.observable();
+    if (data['register_sales_amount']) {
+        self.register_sales_amount(parseFloat(data['register_sales_amount']));
+    }
+
+    self.register_sales_tax = ko.observable();
+    if (data['register_sales_tax']) {
+        self.register_sales_tax(parseFloat(data['register_sales_tax']));
+    }
+
     $.ajax({
         url: '/ledger/accounts/' + self.date + '.json',
         dataType: 'json',
@@ -145,7 +155,7 @@ function DayJournal(data) {
         return account[0];
     }
 
-    self.lotto_sales_dispenser_tax = ko.observable(parseFloat(self.account_by_name('Lotto Sales').tax_rate) * round2(parseFloat(self.lotto_sales_dispenser_amount())) / 100);
+    self.lotto_sales_dispenser_tax = ko.observable(parseFloat(self.account_by_name('Lotto Sales').tax_rate) * empty_to_zero(self.lotto_sales_dispenser_amount()) / 100);
 
     self.lotto_sales_register_tax = function () {
         return rnum(parseFloat(self.account_by_name('Lotto Sales').tax_rate) * round2(parseFloat(self.lotto_sales_register_amount())) / 100);
@@ -160,7 +170,7 @@ function DayJournal(data) {
         if (total_scratch == 0 && self.scratch_off_sales_register_amount()) {
             total_scratch = empty_to_zero(self.scratch_off_sales_register_amount());
         }
-        return rnum(self.cash_sales.get_total('amount') + empty_to_zero(self.lotto_sales_dispenser_amount()) + total_scratch);
+        return rnum(self.cash_sales.get_total('amount') + empty_to_zero(self.lotto_sales_dispenser_amount()) + total_scratch + self.summary_transfer.total());
     }
 
     self.actual_sales_tax = function () {
@@ -171,13 +181,13 @@ function DayJournal(data) {
         return rnum(self.cash_sales.get_total('tax') + parseFloat(self.lotto_sales_dispenser_tax()) + scratch_off_tax);
     }
 
-    self.register_sales_amount = function () {
-        return rnum(self.cash_sales.get_total('amount') + parseFloat(self.lotto_sales_register_amount()) + parseFloat(self.scratch_off_sales_register_amount()));
-    }
-
-    self.register_sales_tax = function () {
-        return rnum(self.cash_sales.get_total('tax') + self.lotto_sales_register_tax() + self.scratch_off_sales_register_tax());
-    }
+//    self.register_sales_amount = function () {
+//        return rnum(self.cash_sales.get_total('amount') + parseFloat(self.lotto_sales_register_amount()) + parseFloat(self.scratch_off_sales_register_amount()));
+//    }
+//
+//    self.register_sales_tax = function () {
+//        return rnum(self.cash_sales.get_total('tax') + self.lotto_sales_register_tax() + self.scratch_off_sales_register_tax());
+//    }
 
     self.diff_sales_amount = function () {
         return rnum(self.actual_sales_amount() - self.register_sales_amount());
@@ -321,10 +331,29 @@ function DayJournal(data) {
             success: function (msg) {
                 $('#lotto-sales-message').html('Saved!');
                 $('#lotto-sales-message').addClass('success');
+                self.status('Unapproved');
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 $('#lotto-sales-message').html('Saving Failed');
                 $('#lotto-sales-message').addClass('error');
+            }
+        });
+    }
+
+    self.save_sales_register = function () {
+        self.day_journal_date = self.date;
+        $.ajax({
+            type: "POST",
+            url: '/day/save_sales_register/',
+            data: ko.toJSON(self),
+            success: function (msg) {
+                $('#sales-register-message').html('Saved!');
+                $('#sales-register-message').addClass('success');
+                self.status('Unapproved');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                $('#sales-register-message').html('Saving Failed');
+                $('#sales-register-message').addClass('error');
             }
         });
     }
@@ -385,11 +414,22 @@ function DayJournal(data) {
         }
     }
 
+    var summary_transfer_options = key_to_options('summary_transfer');
+    summary_transfer_options.auto_add_first = false;
+    self.summary_transfer = new TableViewModel(summary_transfer_options, SummaryTransferRow);
+    if (self.summary_transfer.hasNoRows()) {
+        var accounts = self.accounts_by_category('Transfer and Remittance');
+        for (var i in accounts) {
+            self.summary_transfer.rows.push(new SummaryTransferRow({'transfer_type': accounts[i].id}))
+        }
+    }
+
+    self.summary_transfer.total = function () {
+        return self.summary_transfer.get_total('cash') + self.summary_transfer.get_total('card') + self.summary_transfer.get_total('cheque');
+    }
 
     self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), SummaryTaxRow);
     self.summary_sales_tax.rows()[0].register(self.sales_tax);
-
-    self.summary_transfer = new TableViewModel(key_to_options('summary_transfer'), SummaryTransferRow);
 
     self.summary_inventory = new TableViewModel(key_to_options('summary_inventory'), InventoryRow);
 
@@ -455,7 +495,7 @@ function DayJournal(data) {
                 }
                 else {
                     bs_alert.success('Approved!')
-//                    self.status('Approved');
+                    self.status('Approved');
                     self.state('success');
                 }
 //                $('#lotto-sales-message').html('Saved!');
