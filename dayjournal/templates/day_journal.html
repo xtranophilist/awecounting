@@ -429,7 +429,7 @@
                                                data-add-url="{% url 'create_account' %}" data-add-to="accounts"
                                                data-bind="value: paid, select2: {data: {results: $root.accounts_by_category(['Cash Account', 'Bank Account', 'Cash Equivalent Account'], true)}}, lookupKey: 'id'">
                                     </td>
-                                    <td>
+                                    <td class="with_ip">
                                         <select data-bind="options: types, optionsText:'name', optionsValue: 'id', value: type">
                                         </select>
                                     </td>
