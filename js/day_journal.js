@@ -120,6 +120,16 @@ function DayJournal(data) {
         self.scratch_off_sales_register_amount(parseFloat(data['scratch_off_sales_register_amount']));
     }
 
+    self.register_sales_amount = ko.observable();
+    if (data['register_sales_amount']) {
+        self.register_sales_amount(parseFloat(data['register_sales_amount']));
+    }
+
+    self.register_sales_tax = ko.observable();
+    if (data['register_sales_tax']) {
+        self.register_sales_tax(parseFloat(data['register_sales_tax']));
+    }
+
     $.ajax({
         url: '/ledger/accounts/' + self.date + '.json',
         dataType: 'json',
@@ -171,13 +181,13 @@ function DayJournal(data) {
         return rnum(self.cash_sales.get_total('tax') + parseFloat(self.lotto_sales_dispenser_tax()) + scratch_off_tax);
     }
 
-    self.register_sales_amount = function () {
-        return rnum(self.cash_sales.get_total('amount') + parseFloat(self.lotto_sales_register_amount()) + parseFloat(self.scratch_off_sales_register_amount()));
-    }
-
-    self.register_sales_tax = function () {
-        return rnum(self.cash_sales.get_total('tax') + self.lotto_sales_register_tax() + self.scratch_off_sales_register_tax());
-    }
+//    self.register_sales_amount = function () {
+//        return rnum(self.cash_sales.get_total('amount') + parseFloat(self.lotto_sales_register_amount()) + parseFloat(self.scratch_off_sales_register_amount()));
+//    }
+//
+//    self.register_sales_tax = function () {
+//        return rnum(self.cash_sales.get_total('tax') + self.lotto_sales_register_tax() + self.scratch_off_sales_register_tax());
+//    }
 
     self.diff_sales_amount = function () {
         return rnum(self.actual_sales_amount() - self.register_sales_amount());
@@ -325,6 +335,23 @@ function DayJournal(data) {
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 $('#lotto-sales-message').html('Saving Failed');
                 $('#lotto-sales-message').addClass('error');
+            }
+        });
+    }
+
+    self.save_sales_register = function () {
+        self.day_journal_date = self.date;
+        $.ajax({
+            type: "POST",
+            url: '/day/save_sales_register/',
+            data: ko.toJSON(self),
+            success: function (msg) {
+                $('#sales-register-message').html('Saved!');
+                $('#sales-register-message').addClass('success');
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                $('#sales-register-message').html('Saving Failed');
+                $('#sales-register-message').addClass('error');
             }
         });
     }
