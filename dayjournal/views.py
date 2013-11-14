@@ -331,6 +331,19 @@ def save_lotto_sales_as_per_dispenser(request):
         journal.scratch_off_sales_register_amount = params.get('scratch_off_sales_register_amount')
     journal.status = 'Unapproved'
     journal.save()
+    return HttpResponse(json.dumps({'id': journal.id}), mimetype="application/json")
+
+@login_required
+def save_sales_register(request):
+    params = json.loads(request.body)
+    journal = get_journal(request)
+    if type(journal) == dict:
+        return HttpResponse(json.dumps({'error_message': journal['error']}), mimetype="application/json")
+    if params.get('register_sales_amount'):
+        journal.register_sales_amount = params.get('register_sales_amount')
+    if params.get('register_sales_tax'):
+        journal.register_sales_tax = params.get('register_sales_tax')
+    journal.status = 'Unapproved'
     journal.save()
     return HttpResponse(json.dumps({'id': journal.id}), mimetype="application/json")
 

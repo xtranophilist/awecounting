@@ -24,5 +24,6 @@ urlpatterns = patterns('',
                        url(r'^save/other_payout/$', views.save_other_payout, name='save_other_payout'),
                        url(r'^last_lotto_detail/(?P<journal_date>\d{4}-\d{2}-\d{2}).json$', views.last_lotto_detail,
                            name='last_lotto_detail'),
+                       url(r'^save_sales_register/$', views.save_sales_register, name='save_sales_register'),
 )
 

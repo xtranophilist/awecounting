@@ -110,7 +110,8 @@
                 <td class="with_ip">
                     {#                    <select class="span12"#}
                     {#                            data-bind="options: $root.sales_sans_lotto(), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.account_changed}"></select>#}
-                    <input type="hidden" data-url="{% url 'create_account' %}?category_id={{ sales_category.id }}" data-to="accounts" data-name="Sales Ledger"
+                    <input type="hidden" data-url="{% url 'create_account' %}?category_id={{ sales_category.id }}"
+                           data-to="accounts" data-name="Sales Ledger"
                            data-bind="value: account_id, select2: $root.sales_sans_lotto()">
                 </td>
                 <td class="change-on-ready" data-bind="editableText: amount, numeric: true"></td>
@@ -195,8 +196,8 @@
         </tr>
         <tr>
             <th>Sales shown by Register</th>
-            <td data-bind="text: register_sales_amount()"></td>
-            <td data-bind="text: register_sales_tax()"></td>
+            <td data-bind="editableText: register_sales_amount"></td>
+            <td data-bind="editableText: register_sales_tax"></td>
         </tr>
         <tr class="diff">
             <th>Difference</th>
@@ -208,6 +209,12 @@
         </tbody>
 
     </table>
+
+    <span id="sales-register-message"></span>
+
+    <button class="btn btn-small pull-right" data-bind="click: save_sales_register"><i
+            class="icon-save"></i> Save
+    </button>
 
     <h3>Sales through Cards</h3>
 
@@ -320,7 +327,9 @@
                 <tr data-bind="flash: true">
                     <td data-bind="text: $index()+1"></td>
                     <td class="with_ip">
-                        <input type="hidden" data-url="{% url 'create_account' %}?category_id={{ transfer_category.id }}" data-to="accounts"
+                        <input type="hidden"
+                               data-url="{% url 'create_account' %}?category_id={{ transfer_category.id }}"
+                               data-to="accounts"
                                data-bind="value: transfer_type, select2: $root.accounts_by_category('Transfer and Remittance')">
                     </td>
                     <td data-bind="editableText: cash"></td>
