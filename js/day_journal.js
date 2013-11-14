@@ -170,7 +170,7 @@ function DayJournal(data) {
         if (total_scratch == 0 && self.scratch_off_sales_register_amount()) {
             total_scratch = empty_to_zero(self.scratch_off_sales_register_amount());
         }
-        return rnum(self.cash_sales.get_total('amount') + empty_to_zero(self.lotto_sales_dispenser_amount()) + total_scratch);
+        return rnum(self.cash_sales.get_total('amount') + empty_to_zero(self.lotto_sales_dispenser_amount()) + total_scratch + self.summary_transfer.total());
     }
 
     self.actual_sales_tax = function () {
