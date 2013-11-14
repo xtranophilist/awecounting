@@ -1,13 +1,13 @@
 function init_select2(element, callback) {
     if ($(element).data('url')) {
-        if ($(element).data('name')){
+        if ($(element).data('name')) {
             var name = $(element).data('name');
         } else {
             var matches = $(element).data('bind').match(/value: ([a-z_1-9]+)/);
-            if (matches){
-                var name = matches[1].replace(/_/g," ").toTitleCase();
+            if (matches) {
+                var name = matches[1].replace(/_id/, '').replace(/_/g, ' ').toTitleCase();
 
-            }else{
+            } else {
                 var name = 'Object';
             }
         }
