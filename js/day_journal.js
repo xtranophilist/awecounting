@@ -395,7 +395,9 @@ function DayJournal(data) {
         }
     }
 
-//    self.summary_transfer = new TableViewModel(key_to_options('summary_transfer'), SummaryTransferRow);
+    self.summary_transfer.total = function () {
+        return self.summary_transfer.get_total('cash') + self.summary_transfer.get_total('card') + self.summary_transfer.get_total('cheque');
+    }
 
     self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), SummaryTaxRow);
     self.summary_sales_tax.rows()[0].register(self.sales_tax);
