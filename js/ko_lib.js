@@ -117,9 +117,10 @@ ko.bindingHandlers.select2 = {
             options['dropdownCssClass'] = 'select-drop-klass unique-drop' + len;
         $(element).attr('data-counter', len);
 
-        var results = [];
+
 
         options.query = function (query) {
+            var results = [];
             var data = source();
             for (var i in data) {
                 if (strip_diacritics('' + data[i].name).toUpperCase().indexOf(strip_diacritics('' + query.term).toUpperCase()) >= 0) {
