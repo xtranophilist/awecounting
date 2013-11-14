@@ -53,9 +53,8 @@
                 <td data-bind="enum: {values: ['Dr', 'Cr']}, editableText: type"></td>
                 <td class="with_ip">
                     <input type="hidden" data-field="Account" data-add-url="{% url 'create_account' %}"
-                           data-add-to="accounts" data-bind="value: account, select2:{
-                           query: rq($root.accounts_except_category(['Sales', 'Purchase'], true))
-                           }">
+                           data-add-to="accounts"
+                           data-bind="value: account, select2:{}, source: $root.accounts_except_category(['Sales', 'Purchase'], true)">
                 </td>
                 <td data-bind="editableText: description"></td>
                 <td data-bind="editableText: dr_amount, numeric: true, disable_content_editable: is_cr(), on_tab: $root.add_row"></td>
