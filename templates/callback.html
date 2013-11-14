@@ -7,15 +7,13 @@
     el = $(window.last_active_select.pop());
 
     var matches = el.data('bind').match(/\{results: \$root\.([a-z_]+)\}/);
-    if (el.data('add-to')) {
-{#        if (typeof vm[el.data('add-to')] == 'function')#}
-{#            vm[el.data('add-to')]().push(obj);#}
-{#        else#}
-        vm[el.data('add-to')].push(obj);
+    if (el.data('to')) {
+        {#        if (typeof vm[el.data('add-to')] == 'function')#}
+        {#            vm[el.data('add-to')]().push(obj);#}
+        {#        else#}
+        vm[el.data('to')].push(obj);
         el.select2('data', obj);
-{#        console.log(el);#}
-{#        console.log(obj);#}
-        el.trigger('change');
+        $('.select2-offscreen').trigger('change');
     }
     else if (matches) {
         var match = matches[1];

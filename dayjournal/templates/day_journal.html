@@ -108,8 +108,11 @@
                     <span data-bind="text: $index()+1"> </span>
                 </td>
                 <td class="with_ip">
-                    <select class="span12"
-                            data-bind="options: $root.sales_sans_lotto(), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.account_changed}"></select>
+                    {#                    <select class="span12"#}
+                    {#                            data-bind="options: $root.sales_sans_lotto(), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.account_changed}"></select>#}
+                    <input type="hidden" data-url="{% url 'create_account' %}?category_id={{ sales_category.id }}"
+                           data-to="accounts" data-name="Sales Ledger"
+                           data-bind="value: account_id, select2: $root.sales_sans_lotto()">
                 </td>
                 <td class="change-on-ready" data-bind="editableText: amount, numeric: true"></td>
                 <td data-bind="text: tax()"></td>
@@ -193,8 +196,8 @@
         </tr>
         <tr>
             <th>Sales shown by Register</th>
-            <td data-bind="text: register_sales_amount()"></td>
-            <td data-bind="text: register_sales_tax()"></td>
+            <td data-bind="editableText: register_sales_amount"></td>
+            <td data-bind="editableText: register_sales_tax"></td>
         </tr>
         <tr class="diff">
             <th>Difference</th>
@@ -206,6 +209,12 @@
         </tbody>
 
     </table>
+
+    <span id="sales-register-message"></span>
+
+    <button class="btn btn-small pull-right" data-bind="click: save_sales_register"><i
+            class="icon-save"></i> Save
+    </button>
 
     <h3>Sales through Cards</h3>
 
@@ -258,8 +267,8 @@
             <tr data-bind="flash: true">
                 <td data-bind="text: $index()+1"></td>
                 <td class="with_ip">
-                    <select class="span12"
-                            data-bind="options: $root.accounts_by_category('Cash Equivalent Account'), optionsText: 'name', optionsValue: 'id', value: account, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}"></select>
+                    <input type="hidden" data-url="{% url 'create_account' %}" data-to="accounts"
+                           data-bind="value: account, select2: $root.accounts_by_category('Cash Equivalent Account')">
                 </td>
                 <td data-bind="editableText: amount"></td>
                 <td>
@@ -318,14 +327,10 @@
                 <tr data-bind="flash: true">
                     <td data-bind="text: $index()+1"></td>
                     <td class="with_ip">
-                        {#                        <input type="hidden" data-field="Account" data-add-url="{% url 'create_account' %}"#}
-                        {#                           data-add-to="accounts" data-bind="value: transfer_type, select2:{#}
-                        {#                           query: function(query) {query.callback({results: $root.accounts});}#}
-                        {#                           }">#}
-                        <input type="hidden" data-field="Account" data-add-url="{% url 'create_account' %}"
-                               data-add-to="accounts" data-bind="value: transfer_type, select2:{
-                           query: rq($root.accounts)
-                           }">
+                        <input type="hidden"
+                               data-url="{% url 'create_account' %}?category_id={{ transfer_category.id }}"
+                               data-to="accounts"
+                               data-bind="value: transfer_type, select2: $root.accounts_by_category('Transfer and Remittance')">
                     </td>
                     <td data-bind="editableText: cash"></td>
                     <td data-bind="editableText: cheque"></td>
@@ -341,7 +346,8 @@
                     <td colspan="2"><b>TOTAL</b></td>
                     <td data-bind="text: get_total('cash')"></td>
                     <td data-bind="text: get_total('cheque')"></td>
-                    <td colspan="2" data-bind="text: get_total('card')"></td>
+                    <td data-bind="text: get_total('card')"></td>
+                    <td><b>∑ = </b><span data-bind="text: total()"></span></td>
                 </tr>
                 </tbody>
             </table>
@@ -410,24 +416,21 @@
                                         <span data-bind="text: $index()+1"> </span>
                                     </td>
                                     <td class="with_ip">
-                                        {#                                        <input type="hidden"#}
-                                        {#                                               data-bind="value: vendor, select2: {data: {results: $root.accounts_by_category('Suppliers')}}">#}
-                                        <input type="hidden" data-field="Vendor"
-                                               data-add-url="{% url 'create_vendor_account' %}" data-add-to="accounts"
-                                               data-bind="value: vendor, select2: {data: {results: $root.accounts_by_category('Suppliers')}}, lookupKey: 'id'">
+                                        <input type="hidden" data-url="{% url 'create_vendor_account' %}"
+                                               data-to="accounts"
+                                               data-bind="value: vendor, select2: $root.accounts_by_category('Suppliers')">
                                     </td>
                                     <td data-bind="editableText: amount"></td>
                                     <td class="with_ip">
-                                        <input type="hidden" data-field="Purchase Ledger"
-                                               data-add-url="{% url 'create_account' %}?category_id={{ purchase_category.id }}"
-                                               data-add-to="accounts"
-                                               data-bind="value: purchase_ledger, select2: {data: {results: $root.accounts_by_category('Purchase')}}, lookupKey: 'id'">
+                                        <input type="hidden"
+                                               data-url="{% url 'create_account' %}?category_id={{ purchase_category.id }}"
+                                               data-to="accounts"
+                                               data-bind="value: purchase_ledger, select2: $root.accounts_by_category('Purchase')">
                                     </td>
                                     <td data-bind="editableText: remarks"></td>
                                     <td class="with_ip">
-                                        <input type="hidden" data-field="Account"
-                                               data-add-url="{% url 'create_account' %}" data-add-to="accounts"
-                                               data-bind="value: paid, select2: {data: {results: $root.accounts_by_category(['Cash Account', 'Bank Account', 'Cash Equivalent Account'], true)}}, lookupKey: 'id'">
+                                        <input type="hidden" data-url="{% url 'create_account' %}" data-to="accounts"
+                                               data-bind="value: paid, select2: $root.accounts_by_category(['Cash Account', 'Bank Account', 'Cash Equivalent Account'], true)">
                                     </td>
                                     <td class="with_ip">
                                         <select data-bind="options: types, optionsText:'name', optionsValue: 'id', value: type">
@@ -481,16 +484,14 @@
                                         <span data-bind="text: $index()+1"> </span>
                                     </td>
                                     <td class="with_ip">
-                                        <input type="hidden" data-field="Account"
-                                               data-add-url="{% url 'create_account' %}" data-add-to="accounts"
-                                               data-bind="value: paid_to, select2: {data: {results: $root.accounts_except_category(['Sales', 'Purchase', 'Cash Account', 'Cash Equivalent Account', 'Bank Account', 'Suppliers'], true)}}, lookupKey: 'id'">
+                                        <input type="hidden" data-url="{% url 'create_account' %}" data-to="accounts"
+                                               data-bind="value: paid_to, select2: $root.accounts_except_category(['Sales', 'Purchase', 'Cash Account', 'Cash Equivalent Account', 'Bank Account', 'Suppliers'], true)">
                                     </td>
                                     <td data-bind="editableText: amount"></td>
                                     <td data-bind="editableText: remarks"></td>
                                     <td class="with_ip">
-                                        <input type="hidden" data-field="Account"
-                                               data-add-url="{% url 'create_account' %}" data-add-to="accounts"
-                                               data-bind="value: paid, select2: {data: {results: $root.accounts_by_category(['Cash Account', 'Bank Account', 'Cash Equivalent Account'], true)}}, lookupKey: 'id'">
+                                        <input type="hidden" data-url="{% url 'create_account' %}" data-to="accounts"
+                                               data-bind="value: paid, select2: $root.accounts_by_category(['Cash Account', 'Bank Account', 'Cash Equivalent Account'], true)">
                                     </td>
                                     <td>
                                         <button class="btn-none" data-bind="click: $parent.removeRow">
@@ -580,8 +581,8 @@
                     <tr data-bind="flash: true">
                         <td data-bind="text: $index()+1"></td>
                         <td class="with_ip">
-                            <select class="span12"
-                                    data-bind="options: $root.inventory_accounts_by_category('Fuel'), optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.inventory_account_changed}"></select>
+                            <input type="hidden"
+                                   data-bind="paid: account_id, select2: $root.inventory_accounts_by_category('Fuel')">
                         </td>
                         <td data-bind="text: opening()"></td>
                         <td data-bind="editableText: purchase, numeric: true"></td>
@@ -635,8 +636,8 @@
                     <tr data-bind="flash: true">
                         <td data-bind="text: $index()+1"></td>
                         <td class="with_ip">
-                            <select class="span12"
-                                    data-bind="options: $root.inventory_accounts, optionsText: 'name', optionsCaption: 'Choose one...', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.inventory_account_changed}"></select>
+                            <input type="hidden"
+                                   data-bind="paid: account_id, select2: $root.inventory_accounts">
                         </td>
                         <td data-bind="text: opening()"></td>
                         <td data-bind="editableText: purchase, numeric: true"></td>

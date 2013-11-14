@@ -41,6 +41,7 @@ class PartySerializer(serializers.ModelSerializer):
 class CashVendorSerializer(serializers.ModelSerializer):
     category = serializers.Field(source='category.name')
     address = serializers.SerializerMethodField('get_address')
+    categories = serializers.Field()
 
     def get_address(self, obj):
         if obj.category.name == 'Suppliers':
@@ -49,4 +50,4 @@ class CashVendorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Account
-        fields = ['id', 'name', 'category', 'address']
+        fields = ['id', 'name', 'category', 'address', 'categories']
