@@ -514,3 +514,29 @@ function rq(b) {
     return a;
 
 }
+// tab updates url hash and dom respects the hash in url
+$(document).ready(function () {
+    $('.nav-tabs li a').click(function(){   window.location.hash=$(this).attr('href')   });
+    if(window.location.hash){
+        var curr_hash = window.location.hash;
+        var el = $(curr_hash);
+        var to_href = $('a[href="'+curr_hash+'"]').filter(function() {
+            return $(this).data('toggle')=='tab';
+          });
+        if(!$('a[href="'+curr_hash+'"]').filter(function() {
+            return $(this).data('toggle')=='tab';
+          }).is(':visible'))
+        {
+            var in_col_box = el.parents('.col-box-body');
+            if(in_col_box.length > 0){
+                in_col_box.slideDown();
+                to_href = in_col_box.siblings('.col-box-header')
+            }
+        }
+        $('html, body').stop().animate({
+                'scrollTop': to_href.offset().top
+            }, 900, 'swing');
+
+        to_href.tab('show');
+    }
+});
