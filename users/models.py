@@ -140,7 +140,8 @@ def create_default(company):
     Account(name='Advances', category=employee_deductions, code='2-0010', company=company).save()
     Account(name='Loans', category=employee_deductions, code='2-0011', company=company).save()
     Account(name='Payroll Taxes', category=employee_deductions, code='2-0012', company=company).save()
-    Account(name='Employees\' Contribution to Retirement Fund', category=employee_deductions, code='2-0013', company=company).save()
+    Account(name='Employees\' Contribution to Retirement Fund', category=employee_deductions, code='2-0013',
+            company=company).save()
     Account(name='Compulsory Deductions', category=employee_deductions, code='2-0014', company=company).save()
 
     liabilities = Category(name='Liabilities', company=company)
@@ -180,8 +181,16 @@ def create_default(company):
     Account(name='Sales', category=sales, code='4-0008', company=company).save()
     Account(name='Scratch Off Sales', category=sales, code='4-0009', company=company).save()
     Account(name='Lotto Sales', category=sales, code='4-0010', company=company).save()
-    Account(name='Moneygram Sales', category=sales, code='4-0011', company=company).save()
-    Category(name='Direct Income', parent=income, company=company).save()
+    #Account(name='Moneygram Sales', category=sales, code='4-0011', company=company).save()
+
+    direct_income = Category(name='Direct Income', parent=income, company=company)
+    direct_income.save()
+    transfer_remittance = Category(name='Transfer and Remittance', parent=direct_income, company=company)
+    transfer_remittance.save()
+    Account(name='MoneyGram', category=transfer_remittance, code='4-0011', company=company).save()
+    Account(name='Money Order', category=transfer_remittance, code='4-0013', company=company).save()
+    Account(name='Bill Payments', category=transfer_remittance, code='4-0014', company=company).save()
+
     indirect_income = Category(name='Indirect Income', parent=income, company=company)
     indirect_income.save()
     Account(name='Commission In', category=indirect_income, code='6-0001', company=company).save()
