@@ -51,7 +51,7 @@ def get_journal(request):
     try:
         journal, created = DayJournal.objects.get_or_create(date=params.get('day_journal_date'),
                                                             company=request.company, defaults={'voucher_no': params.get(
-                                                                                                   'voucher_no'),
+                'voucher_no'),
                                                                                                'cheque_deposit': 0,
                                                                                                'cash_deposit': 0,
                                                                                                'cash_withdrawal': 0,
@@ -333,6 +333,7 @@ def save_lotto_sales_as_per_dispenser(request):
     journal.save()
     return HttpResponse(json.dumps({'id': journal.id}), mimetype="application/json")
 
+
 @login_required
 def save_sales_register(request):
     params = json.loads(request.body)
@@ -453,7 +454,8 @@ def approve(request):
         day_close = scratch_off.day_close
         if day_close == 0:
             day_close = scratch_off.pack_count
-        sales = (scratch_off.pack_count * zero_for_none(scratch_off.addition) + (day_close - scratch_off.day_open)) * zero_for_none(scratch_off.rate)
+        sales = (scratch_off.pack_count * zero_for_none(scratch_off.addition) + (
+            day_close - scratch_off.day_open)) * zero_for_none(scratch_off.rate)
         scratch_off_total += sales
     if scratch_off_total == 0:
         scratch_off_total = journal.scratch_off_sales_register_amount
@@ -496,10 +498,12 @@ def approve(request):
     for row in journal.summary_transfer.all():
         # Cash - Dr	; Cheque - Dr	; Bill-payment - Cr; Card - Dr
         set_transactions(row, journal.date,
-                         ['dr', cash_account, row.cash],
-                         ['dr', card_account, row.card],
-                         ['dr', Account.objects.get(name='Cheque Account', company=request.company), row.cheque],
-                         ['cr', Account.objects.get(id=row.transfer_type), add(row.cash, row.card, row.cheque)],
+                         ['dr', cash_account, zero_for_none(row.cash)],
+                         ['dr', card_account, zero_for_none(row.card)],
+                         ['dr', Account.objects.get(name='Cheque Account', company=request.company),
+                          zero_for_none(row.cheque)],
+                         ['cr', row.transfer_type,
+                          add(zero_for_none(row.cash), zero_for_none(row.card), zero_for_none(row.cheque))],
         )
 
     for row in journal.vendor_payout.all():
