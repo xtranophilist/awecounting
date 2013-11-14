@@ -331,6 +331,7 @@ function DayJournal(data) {
             success: function (msg) {
                 $('#lotto-sales-message').html('Saved!');
                 $('#lotto-sales-message').addClass('success');
+                self.status('Unapproved');
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 $('#lotto-sales-message').html('Saving Failed');
@@ -348,6 +349,7 @@ function DayJournal(data) {
             success: function (msg) {
                 $('#sales-register-message').html('Saved!');
                 $('#sales-register-message').addClass('success');
+                self.status('Unapproved');
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
                 $('#sales-register-message').html('Saving Failed');
@@ -493,7 +495,7 @@ function DayJournal(data) {
                 }
                 else {
                     bs_alert.success('Approved!')
-//                    self.status('Approved');
+                    self.status('Approved');
                     self.state('success');
                 }
 //                $('#lotto-sales-message').html('Saved!');

@@ -210,7 +210,6 @@ function intersection(arr1, arr2) {
 
     for (var i in arr1) {
         var element = arr1[i];
-
         if (arr2.indexOf(element) > -1) {
             temp.push(element);
         }
