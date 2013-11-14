@@ -101,13 +101,23 @@ ko.bindingHandlers.select2 = {
             if (typeof obj['initSelection'] == 'undefined')
                 obj['initSelection'] = init_select2;
         }
+        if (typeof obj['formatSelection'] == 'undefined')
+            obj['formatSelection'] = return_name;
+        if (typeof obj['formatResult'] == 'undefined')
+            obj['formatResult'] = return_name;
 
         $(element).attr('data-counter', len);
 
-        //results for query callback as source binding, if available
         if (allBindings.source) {
             obj.query = function (query) {
-                query.callback({results: allBindings.source});
+                var data = allBindingsAccessor().source;
+                var results = [];
+                for (var i in data) {
+                    if (strip_diacritics('' + data[i].name).toUpperCase().indexOf(strip_diacritics('' + query.term).toUpperCase()) >= 0) {
+                        results.push(data[i]);
+                    }
+                }
+                query.callback({results: results});
             };
         }
         $(element).select2(obj);
