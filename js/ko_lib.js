@@ -89,7 +89,7 @@ ko.bindingHandlers.select2 = {
     init: function (element, valueAccessor, allBindingsAccessor) {
         var obj = valueAccessor(),
             allBindings = allBindingsAccessor(),
-            lookupKey = allBindings.lookupKey;
+            lookupKey = allBindings.lookupKey || 'id';
         obj['dropdownAutoWidth'] = true;
         var len = $('.select-drop-klass').length;
         if ($(element).data('field')) {
@@ -108,10 +108,11 @@ ko.bindingHandlers.select2 = {
 
         $(element).attr('data-counter', len);
 
+        var results = [];
+
         if (allBindings.source) {
             obj.query = function (query) {
                 var data = allBindingsAccessor().source;
-                var results = [];
                 for (var i in data) {
                     if (strip_diacritics('' + data[i].name).toUpperCase().indexOf(strip_diacritics('' + query.term).toUpperCase()) >= 0) {
                         results.push(data[i]);
@@ -120,10 +121,12 @@ ko.bindingHandlers.select2 = {
                 query.callback({results: results});
             };
         }
+
         $(element).select2(obj);
-        if (lookupKey) {
+
+        if (allBindings.source) {
             var value = ko.utils.unwrapObservable(allBindings.value);
-            $(element).select2('data', ko.utils.arrayFirst(obj.data.results, function (item) {
+            $(element).select2('data', ko.utils.arrayFirst(allBindingsAccessor().source, function (item) {
                 return item[lookupKey] === value;
             }));
         }
@@ -141,24 +144,6 @@ ko.bindingHandlers.select2 = {
         }
     }
 };
-
-//ko.bindingHandlers.select2 = {
-//    init: function(element, valueAccessor, allBindingsAccessor) {
-//        $(element).select2(valueAccessor());
-//
-//        ko.utils.domNodeDisposal.addDisposeCallback(element, function() {
-//            $(element).select2('destroy');
-//        });
-//    },
-//    update: function(element, valueAccessor, allBindingsAccessor) {
-//        var allBindings = allBindingsAccessor(),
-//            value = ko.utils.unwrapObservable(allBindings.value || allBindings.selectedOptions);
-//        if (value) {
-//            $(element).select2('val', value);
-//        }
-//    }
-//};
-
 
 ko.bindingHandlers.typeahead = {
     init: function (element, valueAccessor) {
