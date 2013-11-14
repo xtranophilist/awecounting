@@ -385,11 +385,20 @@ function DayJournal(data) {
         }
     }
 
+    var summary_transfer_options = key_to_options('summary_transfer');
+    summary_transfer_options.auto_add_first = false;
+    self.summary_transfer = new TableViewModel(summary_transfer_options, SummaryTransferRow);
+    if (self.summary_transfer.hasNoRows()) {
+        var accounts = self.accounts_by_category('Transfer and Remittance');
+        for (var i in accounts) {
+            self.summary_transfer.rows.push(new SummaryTransferRow({'transfer_type': accounts[i].id}))
+        }
+    }
+
+//    self.summary_transfer = new TableViewModel(key_to_options('summary_transfer'), SummaryTransferRow);
 
     self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), SummaryTaxRow);
     self.summary_sales_tax.rows()[0].register(self.sales_tax);
-
-    self.summary_transfer = new TableViewModel(key_to_options('summary_transfer'), SummaryTransferRow);
 
     self.summary_inventory = new TableViewModel(key_to_options('summary_inventory'), InventoryRow);
 
