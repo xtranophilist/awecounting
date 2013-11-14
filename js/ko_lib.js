@@ -87,49 +87,54 @@ ko.bindingHandlers.textPercent = {
 
 ko.bindingHandlers.select2 = {
     init: function (element, valueAccessor, allBindingsAccessor) {
-        var obj = valueAccessor(),
-            allBindings = allBindingsAccessor(),
-            lookupKey = allBindings.lookupKey || 'id';
-        obj['dropdownAutoWidth'] = true;
-        var len = $('.select-drop-klass').length;
-        if ($(element).data('field')) {
-            obj['dropdownCssClass'] = 'select-drop-klass unique-drop' + len;
-            if (typeof obj['formatSelection'] == 'undefined')
-                obj['formatSelection'] = return_name;
-            if (typeof obj['formatResult'] == 'undefined')
-                obj['formatResult'] = return_name;
-            if (typeof obj['initSelection'] == 'undefined')
-                obj['initSelection'] = init_select2;
-        }
-        if (typeof obj['formatSelection'] == 'undefined')
-            obj['formatSelection'] = return_name;
-        if (typeof obj['formatResult'] == 'undefined')
-            obj['formatResult'] = return_name;
+        var value = valueAccessor();
+        var allBindings = allBindingsAccessor();
 
+        if (value.constructor == Array) {
+            var source = valueAccessor;
+            var options = {};
+        } else if (allBindings.source) {
+            var options = value;
+            var source = function () {
+                return allBindingsAccessor().source;
+            }
+        }
+
+        var lookupKey = allBindings.lookupKey || 'id';
+
+//        TODO: test if source()[0] has name but not text
+        if (typeof options['formatSelection'] == 'undefined')
+            options['formatSelection'] = return_name;
+        if (typeof options['formatResult'] == 'undefined')
+            options['formatResult'] = return_name;
+        if (typeof options['dropdownAutoWidth'] == 'undefined')
+            options['dropdownAutoWidth'] = true;
+        if (typeof options['initSelection'] == 'undefined')
+                options['initSelection'] = init_select2;
+
+        var len = $('.select-drop-klass').length;
+        if (typeof options['dropdownCssClass'] == 'undefined')
+            options['dropdownCssClass'] = 'select-drop-klass unique-drop' + len;
         $(element).attr('data-counter', len);
 
         var results = [];
 
-        if (allBindings.source) {
-            obj.query = function (query) {
-                var data = allBindingsAccessor().source;
-                for (var i in data) {
-                    if (strip_diacritics('' + data[i].name).toUpperCase().indexOf(strip_diacritics('' + query.term).toUpperCase()) >= 0) {
-                        results.push(data[i]);
-                    }
+        options.query = function (query) {
+            var data = source();
+            for (var i in data) {
+                if (strip_diacritics('' + data[i].name).toUpperCase().indexOf(strip_diacritics('' + query.term).toUpperCase()) >= 0) {
+                    results.push(data[i]);
                 }
-                query.callback({results: results});
-            };
-        }
+            }
+            query.callback({results: results});
+        };
 
-        $(element).select2(obj);
+        $(element).select2(options);
 
-        if (allBindings.source) {
-            var value = ko.utils.unwrapObservable(allBindings.value);
-            $(element).select2('data', ko.utils.arrayFirst(allBindingsAccessor().source, function (item) {
-                return item[lookupKey] === value;
-            }));
-        }
+        var value = ko.utils.unwrapObservable(allBindings.value);
+        $(element).select2('data', ko.utils.arrayFirst(source(), function (item) {
+            return item[lookupKey] === value;
+        }));
 
         ko.utils.domNodeDisposal.addDisposeCallback(element, function () {
             $(element).select2('destroy');

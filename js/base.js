@@ -21,7 +21,6 @@ appended_link_clicked = function (e) {
         window.last_active_select = new Array();
     }
     window.last_active_select.push(e.data[0]);
-
     e.preventDefault();
     var the_modal = bs_modal.create();
     var url = $(this).attr('href');
