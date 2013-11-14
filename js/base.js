@@ -1,15 +1,17 @@
 function init_select2(element, callback) {
     if ($(element).data('add-url')) {
         var drop_el = $('.unique-drop' + $(element).data('counter'));
-        var append_link = jQuery('<a/>', {
-            class: 'appended-link',
-            href: $(element).data('add-url'),
-            title: 'Add New ' + $(element).data('field'),
-            text: 'Add New ' + $(element).data('field'),
-            'data-toggle': 'modal'
-        });
-        append_link.appendTo(drop_el).on('click', [$(element)], appended_link_clicked);
-
+        if (!$('#appended-link' + $(element).data('counter')).length) {
+            var appended_link = jQuery('<a/>', {
+                id: 'appended-link' + $(element).data('counter'),
+                class: 'appended-link',
+                href: $(element).data('add-url'),
+                title: 'Add New ' + $(element).data('field'),
+                text: 'Add New ' + $(element).data('field'),
+                'data-toggle': 'modal'
+            });
+            appended_link.appendTo(drop_el).on('click', [$(element)], appended_link_clicked);
+        }
     }
 }
 
