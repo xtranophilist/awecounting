@@ -605,9 +605,8 @@
                     <tr data-bind="flash: true">
                         <td data-bind="text: $index()+1"></td>
                         <td class="with_ip">
-                            <input type="hidden" data-name="Fuel and Gas Item"
+                            <input type="hidden" data-name="Fuel and Gas Item" data-to="inventory_accounts"
                                    data-url="{% url 'create_inventory_item_returning_account' %}?category_id={{ fuel_and_gas.id }}"
-                                   data-to="inventory_accounts"
                                    data-bind="value: account_id, select2: $root.inventory_accounts_by_category('Fuel and Gas')">
                         </td>
                         <td data-bind="text: opening()"></td>
@@ -662,7 +661,8 @@
                     <tr data-bind="flash: true">
                         <td data-bind="text: $index()+1"></td>
                         <td class="with_ip">
-                            <input type="hidden"
+                            <input type="hidden" data-name="Inventory Item" data-to="inventory_accounts"
+                                   data-url="{% url 'create_inventory_item_returning_account' %}"
                                    data-bind="value: account_id, select2: $root.inventory_accounts">
                         </td>
                         <td data-bind="text: opening()"></td>
