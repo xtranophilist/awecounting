@@ -165,8 +165,15 @@ function DayJournal(data) {
         return rnum(parseFloat(self.account_by_name('Scratch Off Sales').tax_rate) * round2(parseFloat(self.scratch_off_sales_register_amount())) / 100);
     }
 
+    self.scratch_off_total = function () {
+        if (isAN(self.lotto_detail.scratch_off_sales_manual()))
+            return parseFloat(self.lotto_detail.scratch_off_sales_manual());
+        else
+            return self.lotto_detail.get_total('sales');
+    }
+
     self.actual_sales_amount = function () {
-        var total_scratch = self.lotto_detail.get_total('sales')
+        var total_scratch = self.scratch_off_total();
         if (total_scratch == 0 && self.scratch_off_sales_register_amount()) {
             total_scratch = empty_to_zero(self.scratch_off_sales_register_amount());
         }
@@ -303,7 +310,7 @@ function DayJournal(data) {
     })
 
     self.scratch_off_sales_dispenser_tax = function () {
-        return rnum(self.lotto_detail.get_total('sales') * self.account_by_name('Scratch Off Sales').tax_rate / 100);
+        return rnum(self.scratch_off_total() * self.account_by_name('Scratch Off Sales').tax_rate / 100);
     }
 
     self.inventory_accounts_by_category = function (category) {
