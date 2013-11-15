@@ -68,3 +68,13 @@ body, article {
     display: inline-block !important;
     opacity: 1;
 }
+
+br.page-break {
+    page-break-after: always;
+}
+
+/*.modal-body, .print-preview, #page-content, #main-content, #main-container, body {*/
+    /*float: none;*/
+    /*display: block;*/
+    /*border: none;*/
+/*}*/
