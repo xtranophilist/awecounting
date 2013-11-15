@@ -387,6 +387,44 @@
     </div>
 
     <br class="page-break">
+
+    <div class="row-fluid" data-bind="with: lotto_detail, visible: lotto_detail.has_real_rows('rate')">
+        <h2>Scratch Off</h2>
+        <table class="table table-bordered table-acubor">
+            <thead>
+            <tr>
+                <th width="6%">SN</th>
+                <th width="12%">Rate (in $)</th>
+                <th width="20%">Pack Count</th>
+                <th width="12%">Day Open</th>
+                <th width="12%">Day Close</th>
+                <th width="12%">Addition</th>
+                <th width="20%">Sales ($)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <!-- ko foreach: rows -->
+            <tr data-bind="flash: true">
+                <td data-bind="text: $index()+1"></td>
+                <td data-bind="text: rate()"></td>
+                <td data-bind="text: pack_count()"></td>
+                <td data-bind="text: day_open()"></td>
+                <td data-bind="text: day_close()"></td>
+                <td data-bind="text: addition()"></td>
+                <td data-bind="text: sales()"></td>
+            </tr>
+            <!-- /ko -->
+            <tr class="dont-validate">
+                <td colspan="6"><b>TOTAL</b></td>
+                <td colspan="3" data-bind="text: get_total('sales')"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div data-bind="visible: scratch_off_sales_manual()"><b>Manual</b>: <span
+                data-bind="text: scratch_off_sales_manual()"></span>
+        </div>
+    </div>
+
     </div>
     <div class="modal-footer no-print">
         <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
