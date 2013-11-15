@@ -137,7 +137,7 @@
                            data-to="accounts" data-name="Sales Ledger"
                            data-bind="value: account_id, select2: $root.sales_sans_lotto()">
                 </td>
-                <td class="change-on-ready" data-bind="editableText: amount, numeric: true"></td>
+                <td class="change-on-ready" data-bind="editableText: amount, eval: amount"></td>
                 <td data-bind="text: tax()"></td>
                 <td align="center">
                     <button class="btn-none" data-bind="click: $parent.removeRow">
@@ -179,7 +179,8 @@
         <tbody>
         <tr>
             <th>Lotto Sales as per Dispenser</th>
-            <td data-bind="editableText: lotto_sales_dispenser_amount" class="change-on-ready"></td>
+            <td data-bind="editableText: lotto_sales_dispenser_amount, eval:lotto_sales_dispenser_amount"
+                class="change-on-ready"></td>
             <td data-bind="text: $root.lotto_sales_dispenser_tax()"></td>
         </tr>
         <tr>
@@ -190,12 +191,12 @@
         </tr>
         <tr>
             <th>Lotto Sales as per Register</th>
-            <td data-bind="editableText: lotto_sales_register_amount"></td>
+            <td data-bind="editableText: lotto_sales_register_amount, eval: lotto_sales_register_amount"></td>
             <td data-bind="text: $root.lotto_sales_register_tax()"></td>
         </tr>
         <tr>
             <th>Scratch Off Sales as per Register</th>
-            <td data-bind="editableText: scratch_off_sales_register_amount"></td>
+            <td data-bind="editableText: scratch_off_sales_register_amount, eval: scratch_off_sales_register_amount"></td>
             <td data-bind="text: $root.scratch_off_sales_register_tax()"></td>
         </tr>
         </tbody>
@@ -220,8 +221,8 @@
         </tr>
         <tr>
             <th>Sales shown by Register</th>
-            <td data-bind="editableText: register_sales_amount"></td>
-            <td data-bind="editableText: register_sales_tax"></td>
+            <td data-bind="editableText: register_sales_amount, eval: register_sales_amount"></td>
+            <td data-bind="editableText: register_sales_tax, eval: register_sales_tax"></td>
         </tr>
         <tr class="diff">
             <th>Difference</th>
@@ -236,8 +237,8 @@
 
     <span id="sales-register-message"></span>
 
-    <button class="btn btn-small pull-right" data-bind="click: save_sales_register"><i
-            class="icon-save"></i> Save
+    <button class="btn btn-small pull-right" data-bind="click: save_sales_register">
+        <i class="icon-save"></i> Save
     </button>
 
     <h3>Sales through Cards</h3>
@@ -255,8 +256,8 @@
             <tbody id="card-sales">
             <!-- ko foreach: rows -->
             <tr>
-                <td data-bind="editableText: amount"></td>
-                <td data-bind="editableText: commission_out"></td>
+                <td data-bind="editableText: amount, eval: amount"></td>
+                <td data-bind="editableText: commission_out, eval: commission_out"></td>
                 <td data-bind="text: net().toFixed(2)"></td>
             </tr>
             <!-- /ko -->
@@ -294,7 +295,7 @@
                     <input type="hidden" data-url="{% url 'create_account' %}" data-to="accounts"
                            data-bind="value: account, select2: $root.accounts_by_category('Cash Equivalent Account')">
                 </td>
-                <td data-bind="editableText: amount"></td>
+                <td data-bind="editableText: amount, eval: amount"></td>
                 <td>
                     <button class="btn-none" data-bind="click: $parent.removeRow"><i
                             class="icon-trash"></i>
@@ -313,9 +314,8 @@
                                 </span>
         </div>
         <div class="pull-right">
-            <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i> Add
-                New
-                Row
+            <button class="btn btn-small" data-bind="click: addRow"><i class="icon-plus-sign"></i>
+                Add New Row
             </button>
             <button class="btn btn-small" data-bind="click: save"><i class="icon-save"></i> Save
             </button>
@@ -356,9 +356,9 @@
                                data-to="accounts"
                                data-bind="value: transfer_type, select2: $root.accounts_by_category('Transfer and Remittance')">
                     </td>
-                    <td data-bind="editableText: cash"></td>
-                    <td data-bind="editableText: cheque"></td>
-                    <td data-bind="editableText: card"></td>
+                    <td data-bind="editableText: cash, eval: cash"></td>
+                    <td data-bind="editableText: cheque, eval: cheque"></td>
+                    <td data-bind="editableText: card, eval: card"></td>
                     <td>
                         <button class="btn-none" data-bind="click: $parent.removeRow">
                             <i class="icon-trash"></i>
@@ -444,7 +444,7 @@
                                                data-to="accounts"
                                                data-bind="value: vendor, select2: $root.accounts_by_category('Suppliers')">
                                     </td>
-                                    <td data-bind="editableText: amount"></td>
+                                    <td data-bind="editableText: amount, eval: amount"></td>
                                     <td class="with_ip">
                                         <input type="hidden"
                                                data-url="{% url 'create_account' %}?category_id={{ purchase_category.id }}"
@@ -511,7 +511,7 @@
                                         <input type="hidden" data-url="{% url 'create_account' %}" data-to="accounts"
                                                data-bind="value: paid_to, select2: $root.accounts_except_category(['Sales', 'Purchase', 'Cash Account', 'Cash Equivalent Account', 'Bank Account', 'Suppliers'], true)">
                                     </td>
-                                    <td data-bind="editableText: amount"></td>
+                                    <td data-bind="editableText: amount, eval: amount"></td>
                                     <td data-bind="editableText: remarks"></td>
                                     <td class="with_ip">
                                         <input type="hidden" data-url="{% url 'create_account' %}" data-to="accounts"
@@ -610,10 +610,10 @@
                                    data-bind="value: account_id, select2: $root.inventory_accounts_by_category('Fuel and Gas')">
                         </td>
                         <td data-bind="text: opening()"></td>
-                        <td data-bind="editableText: purchase, numeric: true"></td>
-                        <td data-bind="editableText: sales, numeric: true"></td>
+                        <td data-bind="editableText: purchase, eval: purchase"></td>
+                        <td data-bind="editableText: sales, eval: sales"></td>
                         <td data-bind="text: closing()"></td>
-                        <td data-bind="editableText: actual, numeric: true"></td>
+                        <td data-bind="editableText: actual, eval: actual"></td>
                         <td data-bind="text: difference()"></td>
                         <td>
                             <button class="btn-none" data-bind="click: $parent.removeRow"><i
@@ -666,10 +666,10 @@
                                    data-bind="value: account_id, select2: $root.inventory_accounts">
                         </td>
                         <td data-bind="text: opening()"></td>
-                        <td data-bind="editableText: purchase, numeric: true"></td>
-                        <td data-bind="editableText: sales, numeric: true"></td>
+                        <td data-bind="editableText: purchase, eval: purchase"></td>
+                        <td data-bind="editableText: sales, eval: sales"></td>
                         <td data-bind="text: closing()"></td>
-                        <td data-bind="editableText: actual, numeric: true"></td>
+                        <td data-bind="editableText: actual, eval: actual"></td>
                         <td data-bind="text: difference()"></td>
                         <td>
                             <button class="btn-none" data-bind="click: $parent.removeRow"><i
@@ -731,11 +731,11 @@
                     <!-- ko foreach: rows -->
                     <tr data-bind="flash: true">
                         <td data-bind="text: $index()+1"></td>
-                        <td data-bind="editableText: rate, numeric: true"></td>
-                        <td data-bind="editableText: pack_count, numeric: true"></td>
-                        <td data-bind="editableText: day_open, numeric: true"></td>
-                        <td data-bind="editableText: day_close, numeric: true"></td>
-                        <td data-bind="editableText: addition, numeric: true"></td>
+                        <td data-bind="editableText: rate, eval: rate"></td>
+                        <td data-bind="editableText: pack_count, eval: pack_count"></td>
+                        <td data-bind="editableText: day_open, eval: day_open"></td>
+                        <td data-bind="editableText: day_close, eval: day_close"></td>
+                        <td data-bind="editableText: addition, eval: addition"></td>
                         <td data-bind="text: sales()"></td>
                         <td>
                             <button class="btn-none" data-bind="click: $parent.removeRow"><i
@@ -806,7 +806,7 @@
                             <td data-bind="text: rows()[0].inward($root)"></td>
                             <td data-bind="text: rows()[0].outward($root)"></td>
                             <td data-bind="text: rows()[0].closing($root)"></td>
-                            <td data-bind="editableText: rows()[0].actual"></td>
+                            <td data-bind="editableText: rows()[0].actual, eval: rows()[0].actual"></td>
                             <td data-bind="text: rows()[0].difference($root)"></td>
                         </tr>
                         </tbody>
