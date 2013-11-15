@@ -66,6 +66,12 @@ class PartyForm(KOModelForm):
 
 
 class CategoryForm(KOModelForm):
+    parent = TreeNodeChoiceField(Category.objects.all(), empty_label=None,
+                                   widget=forms.Select(attrs={'class': 'select2', 'data-name': 'Category',
+                                                              'data-url': reverse_lazy(
+                                                                  'create_category')}))
+
+
     def __init__(self, *args, **kwargs):
         self.company = kwargs.pop('company', None)
         super(CategoryForm, self).__init__(*args, **kwargs)
