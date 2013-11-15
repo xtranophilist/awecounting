@@ -63,6 +63,142 @@
         </div>
         <div class="modal-body">
             <p>Under Construction</p>
+
+            <h2>Sales</h2>
+
+            <div class="row-fluid" data-bind="with: cash_sales">
+                <table class="table table-bordered table-acubor">
+                    <thead>
+                    <tr>
+                        <th class="span1">SN</th>
+                        <th class="span2">Sales Ledger</th>
+                        <th class="span2">Amount</th>
+                        <th class="span2">Tax</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <!-- ko foreach: rows -->
+                    <!-- ko if:account_id -->
+                    <tr data-bind="flash: true">
+                        <td>
+                            <span data-bind="text: $index()+1"> </span>
+                        </td>
+                        <td data-bind="text: $root.account_by_id(account_id()).name">
+                        </td>
+                        <td class="change-on-ready" data-bind="text: amount"></td>
+                        <td data-bind="text: tax()"></td>
+
+                    </tr>
+                    <!-- /ko -->
+                    <!-- /ko -->
+                    <tr class="dont-validate">
+                        <td colspan="2"><b>TOTAL</b></td>
+                        <td data-bind="text: get_total('amount')"></td>
+                        <td colspan="2" data-bind="text: get_total('tax')"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Lotto/Scratch-Off Sales</h2>
+            <table class="table table-bordered table-acubor">
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Amount</th>
+                    <th>Tax</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <th>Lotto Sales as per Dispenser</th>
+                    <td data-bind="text: lotto_sales_dispenser_amount()"
+                        class="change-on-ready"></td>
+                    <td data-bind="text: $root.lotto_sales_dispenser_tax()"></td>
+                </tr>
+                <tr>
+                    <th>Scratch Off Sales as per Dispenser</th>
+                    <td data-bind="text: $root.scratch_off_total()"></td>
+                    <td data-bind="text: scratch_off_sales_dispenser_tax()"></td>
+                </tr>
+                <tr>
+                    <th>Lotto Sales as per Register</th>
+                    <td data-bind="text: lotto_sales_register_amount()"></td>
+                    <td data-bind="text: $root.lotto_sales_register_tax()"></td>
+                </tr>
+                <tr>
+                    <th>Scratch Off Sales as per Register</th>
+                    <td data-bind="text: scratch_off_sales_register_amount()"></td>
+                    <td data-bind="text: $root.scratch_off_sales_register_tax()"></td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h2>Transfer/Remittance</h2>
+
+            <div class="row-fluid" data-bind="with: summary_transfer">
+                <table class="table table-bordered table-acubor">
+                    <thead>
+                    <tr>
+                        <th>SN</th>
+                        <th>Transfer Type</th>
+                        <th>Cash</th>
+                        <th>Cheque</th>
+                        <th>Card</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <!-- ko foreach: rows -->
+                    <tr data-bind="flash: true">
+                        <td data-bind="text: $index()+1"></td>
+                        <td data-bind="text: $root.account_by_id(transfer_type()).name">
+                        </td>
+                        <td data-bind="text: cash()"></td>
+                        <td data-bind="text: cheque()"></td>
+                        <td data-bind="text: card()"></td>
+                    </tr>
+                    <!-- /ko -->
+                    <tr class="dont-validate">
+                        <td colspan="2"><b>TOTAL</b> (<b>∑ = </b><span data-bind="text: total()"></span>)</td>
+                        <td data-bind="text: get_total('cash')"></td>
+                        <td data-bind="text: get_total('cheque')"></td>
+                        <td data-bind="text: get_total('card')"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2>Sales Summary</h2>
+            <table class="table table-bordered table-striped table-acubor table-sortable">
+        <thead>
+        <tr>
+            <th></th>
+            <th>Amount</th>
+            <th>Tax</th>
+        </tr>
+        </thead>
+        <tr>
+            <th>Actual Sales</th>
+            <td data-bind="text: actual_sales_amount()"></td>
+            <td data-bind="text: actual_sales_tax()"></td>
+        </tr>
+        <tr>
+            <th>Sales shown by Register</th>
+            <td data-bind="text: register_sales_amount()"></td>
+            <td data-bind="text: register_sales_tax()"></td>
+        </tr>
+        <tr class="diff">
+            <th>Difference</th>
+            <td data-bind="text: diff_sales_amount()"></td>
+            <td data-bind="text: diff_sales_tax()"></td>
+        </tr>
+        <tbody>
+
+        </tbody>
+
+    </table>
+
             <br class="page-break">
         </div>
         <div class="modal-footer no-print">
