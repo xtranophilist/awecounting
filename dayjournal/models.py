@@ -21,6 +21,7 @@ class DayJournal(models.Model):
     status = models.CharField(max_length=10, choices=statuses, default='Approved')
     register_sales_amount = models.FloatField(default=0)
     register_sales_tax = models.FloatField(default=0)
+    scratch_off_sales_manual = models.FloatField(blank=True, null=True)
 
     def __init__(self, *args, **kwargs):
         super(DayJournal, self).__init__(*args, **kwargs)

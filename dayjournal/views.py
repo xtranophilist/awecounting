@@ -224,6 +224,10 @@ def save_lotto_detail(request):
             submodel = save_model(submodel, values)
         dct['saved'][index] = submodel.id
     delete_rows(params.get('deleted_rows'), model)
+    scratch_off_sales_manual = params.get('scratch_off_sales_manual')
+    if scratch_off_sales_manual == '':
+        scratch_off_sales_manual = None
+    day_journal.scratch_off_sales_manual = scratch_off_sales_manual
     day_journal.status = 'Unapproved'
     day_journal.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
