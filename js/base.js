@@ -113,26 +113,29 @@ apply_select2 = function (form) {
     }
     selection.each(function () {
         var element = this;
-        var drop_class = 'drop-' + $(element).attr('name')
+        var len = $('.select-drop-klass').length;
+        var drop_class = 'select-drop-klass unique-drop' + len;
+        $(element).attr('data-counter', len);
         var options_dict = {'dropdownCssClass': drop_class, 'dropdownAutoWidth': true, 'width': 'resolve'}
         if ($(element).hasClass('placehold'))
             options_dict['placeholderOption'] = 'first';
         $(element).select2(options_dict);
         if ($(element).data('url')) {
-            if ($(element).data('name'))
-                var field_name = $(element).data('name');
-            else
-                var field_name = $(element).attr('name').replace(/_/g, ' ').toTitleCase();
-            jQuery('<a/>', {
-                class: 'appended-link',
-                href: $(element).data('url'),
-                title: 'Add New ' + field_name,
-                text: 'Add New ' + field_name,
-                'data-toggle': 'modal'
-            }).appendTo('.' + drop_class).on('click', [element], appended_link_clicked);
+            if (!$('#appended-link' + $(element).data('counter')).length) {
+                if ($(element).data('name'))
+                    var field_name = $(element).data('name');
+                else
+                    var field_name = $(element).attr('name').replace(/_/g, ' ').toTitleCase();
+                jQuery('<a/>', {
+                    class: 'appended-link',
+                    id: 'appended-link' + $(element).data('counter'),
+                    href: $(element).data('url'),
+                    title: 'Add New ' + field_name,
+                    text: 'Add New ' + field_name,
+                    'data-toggle': 'modal'
+                }).appendTo($('.unique-drop' + len)).on('click', [element], appended_link_clicked);
+            }
         }
-
-
     });
 }
 
