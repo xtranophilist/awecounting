@@ -414,6 +414,23 @@ function TableViewModel(options, row_model) {
         }
     }
 
+    self.has_real_rows = function (check_by) {
+        if (self.rows().length > 1)
+            return true;
+        if (self.rows().length == 0)
+            return false;
+        if (typeof check_by != 'undefined' && self.rows().length == 1) {
+
+            if (typeof self.rows()[0][check_by] == 'function')
+                var field = self.rows()[0][check_by]()
+            else
+                var field = self.rows()[0][check_by]
+            if (field)
+                return true;
+        }
+        return false;
+    }
+
     if (typeof(options.save_to_url) != 'undefined') {
         self.save = function (model, e) {
             self.state('waiting');
