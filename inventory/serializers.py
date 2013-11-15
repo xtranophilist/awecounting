@@ -2,7 +2,7 @@ from datetime import date
 
 from rest_framework import serializers
 
-from models import Item, InventoryAccount
+from models import Item, InventoryAccount, Category
 from tax.serializers import TaxSchemeSerializer
 from ledger.serializers import AccountSerializer
 
@@ -42,3 +42,8 @@ class InventoryAccountSerializer(serializers.ModelSerializer):
             return obj.item.sales_price
         except:
             return None
+
+
+class InventoryCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category

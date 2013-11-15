@@ -5,7 +5,7 @@ from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 
 from models import Item, InventoryAccount, Category
-from serializers import ItemSerializer, InventoryAccountSerializer
+from serializers import ItemSerializer, InventoryAccountSerializer, InventoryCategorySerializer
 from forms import ItemForm, CategoryForm
 from inventory.filters import InventoryItemFilter
 
@@ -124,6 +124,8 @@ def create_category(request):
             category = form.save(commit=False)
             category.company = request.company
             category.save()
+            if request.is_ajax():
+                return render(request, 'callback.html', {'obj': InventoryCategorySerializer(category).data})
             return redirect('/inventory/categories/')
     else:
         form = CategoryForm(instance=category, company=request.company)
