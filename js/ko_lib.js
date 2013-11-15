@@ -192,7 +192,8 @@ ko.bindingHandlers.eval = {
         if (typeof value == 'undefined')
             return;
         try {
-            value = calculate_percent(value);
+            if (value.indexOf('%') > 0)
+                value = calculate_percent(value);
             var val = eval(value);
             $(element).text(val);
             var observable = valueAccessor();
@@ -206,6 +207,7 @@ ko.bindingHandlers.eval = {
 
 calculate_percent = function (str) {
     str = str.toString();
+    str = str.replace(/ /g, '');
     str = str.replace(/([0-9]+)([\+\-\*\/]{1})([0-9]+)%/, function (s, n1, o, n2) {
         var n1 = parseFloat(n1);
         var n2 = parseFloat(n2);
