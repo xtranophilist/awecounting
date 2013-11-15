@@ -698,10 +698,10 @@ function SummaryCashRow(row) {
         var total = 0;
         total += root.actual_sales_amount();
 
-        $.each(root.summary_transfer.rows(), function () {
-            if (isAN(this.cash()))
-                total += parseFloat(this.cash());
-        });
+//        $.each(root.summary_transfer.rows(), function () {
+//            if (isAN(this.cash()))
+//                total += parseFloat(this.cash());
+//        });
         if (root.card_sales.rows()[0].amount()) {
             total -= parseFloat(root.card_sales.rows()[0].amount());
         }
