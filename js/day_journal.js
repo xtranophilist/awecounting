@@ -806,7 +806,7 @@ function VendorPayoutVM(row) {
         { name: 'New Purchase', id: 'new'},
         { name: 'Old Bill Payment', id: 'old'},
         { name: 'Account Settlement', id: 'settlement'},
-        { name: 'Advance Payment', id: 'advance'}
+        { name: 'Advance Payment', id: 'payment'}
     ];
 
     for (var k in row) {
