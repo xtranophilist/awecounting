@@ -1,14 +1,33 @@
 from django import forms
+from django.core.urlresolvers import reverse_lazy
 from mptt.forms import TreeNodeChoiceField
 
 from acubor.lib import KOModelForm
 from models import Item, Category
-from ledger.models import Account
+from ledger.models import Account, Category as AccountCategory
 from tax.models import TaxScheme
 
 
 class ItemForm(KOModelForm):
-    category = TreeNodeChoiceField(queryset=Category.objects.all(), required=False)
+    category = TreeNodeChoiceField(Category.objects.all(), empty_label=None,
+                                   widget=forms.Select(attrs={'class': 'select2', 'data-name': 'Category',
+                                                              'data-url': reverse_lazy(
+                                                                  'create_inventory_category')}))
+    purchase_tax_scheme = forms.ModelChoiceField(TaxScheme.objects.all(), empty_label=None,
+                                                 widget=forms.Select(
+                                                     attrs={'class': 'select2', 'data-name': 'Tax Scheme',
+                                                            'data-url': reverse_lazy('create_tax_scheme')}))
+    sales_tax_scheme = forms.ModelChoiceField(TaxScheme.objects.all(), empty_label=None,
+                                              widget=forms.Select(
+                                                  attrs={'class': 'select2', 'data-name': 'Tax Scheme',
+                                                         'data-url': reverse_lazy('create_tax_scheme')}))
+    purchase_account = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
+                                              widget=forms.Select(
+                                                  attrs={'class': 'select2', 'data-name': 'Purchase Account'}))
+    sales_account = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
+                                           widget=forms.Select(
+                                               attrs={'class': 'select2', 'data-name': 'Sales Account'}))
+
 
     def __init__(self, *args, **kwargs):
         company = kwargs.pop('company', None)
@@ -18,6 +37,11 @@ class ItemForm(KOModelForm):
         self.fields['sales_account'].queryset = Account.objects.filter(company=company, category__name='Sales')
         self.fields['sales_tax_scheme'].queryset = TaxScheme.objects.filter(company=company)
         self.fields['category'].queryset = Category.objects.filter(company=company)
+        self.fields['purchase_account'].widget.attrs['data-url'] = reverse_lazy(
+            'create_account') + '?category_id=' + str(AccountCategory.objects.get(name='Purchase', company=company).id)
+        self.fields['sales_account'].widget.attrs['data-url'] = reverse_lazy(
+            'create_account') + '?category_id=' + str(AccountCategory.objects.get(name='Sales', company=company).id)
+
 
     class Meta:
         model = Item
