@@ -333,6 +333,13 @@ function DayJournal(data) {
         return account[0];
     }
 
+    self.inventory_account_by_id = function (id) {
+        var account = $.grep(self.inventory_accounts, function (i) {
+            return i.id == id;
+        });
+        return account[0];
+    }
+
     self.save_lotto_sales_as_per_dispenser = function () {
         self.day_journal_date = self.date;
         $.ajax({
