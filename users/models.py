@@ -179,8 +179,8 @@ def create_default(company):
     Account(name='Non Tax Sales', category=sales, code='4-0006', company=company).save()
     Account(name='Telephone PP Card Sales', category=sales, tax_rate=10.25, code='4-0007', company=company).save()
     Account(name='Sales', category=sales, tax_rate=8.25, code='4-0008', company=company).save()
-    Account(name='Scratch Off Sales', category=sales, code='4-0009', company=company).save()
-    Account(name='Lotto Sales', category=sales, code='4-0010', company=company).save()
+    Account(name='Scratch Off Sales', category=sales, tax_rate=0.0, code='4-0009', company=company).save()
+    Account(name='Lotto Sales', category=sales, tax_rate=0.0, code='4-0010', company=company).save()
     #Account(name='Moneygram Sales', category=sales, code='4-0011', company=company).save()
 
     direct_income = Category(name='Direct Income', parent=income, company=company)
