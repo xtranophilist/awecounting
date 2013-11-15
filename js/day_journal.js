@@ -188,6 +188,10 @@ function DayJournal(data) {
         return rnum(self.cash_sales.get_total('tax') + parseFloat(self.lotto_sales_dispenser_tax()) + scratch_off_tax);
     }
 
+    self.sales_summary_cash = function () {
+        return self.actual_sales_amount() - empty_to_zero(self.card_sales.rows()[0].amount()) - self.cash_equivalent_sales.get_total('amount');
+    }
+
 //    self.register_sales_amount = function () {
 //        return rnum(self.cash_sales.get_total('amount') + parseFloat(self.lotto_sales_register_amount()) + parseFloat(self.scratch_off_sales_register_amount()));
 //    }
