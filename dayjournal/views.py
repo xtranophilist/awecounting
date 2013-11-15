@@ -367,7 +367,8 @@ def save_vendor_payout(request):
         if row.get('type') == 'new':
             if not invalid_attrs:
                 invalid_attrs = []
-            invalid_attrs.append(invalid(row, ['purchase_ledger'])[0])
+            if invalid(row, ['purchase_ledger']):
+                invalid_attrs.append(invalid(row, ['purchase_ledger'])[0])
         if invalid_attrs:
             dct['invalid_attributes'][index] = invalid_attrs
             continue
