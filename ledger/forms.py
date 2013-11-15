@@ -9,8 +9,8 @@ from models import Account, Category, Party
 
 class AccountForm(KOModelForm):
     category = TreeNodeChoiceField(Category.objects.all(), empty_label=None,
-                                   widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Category',
-                                                              'data-add-url': reverse_lazy(
+                                   widget=forms.Select(attrs={'class': 'select2', 'data-name': 'Category',
+                                                              'data-url': reverse_lazy(
                                                                   'create_category')}))
 
     def __init__(self, *args, **kwargs):
