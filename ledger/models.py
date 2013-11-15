@@ -28,7 +28,7 @@ class Category(MPTTModel):
 
 
 class Account(models.Model):
-    code = models.CharField(max_length=10)
+    code = models.CharField(max_length=10, blank=True, null=True)
     name = models.CharField(max_length=100)
     company = models.ForeignKey(Company)
     current_dr = models.FloatField(null=True, blank=True)

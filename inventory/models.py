@@ -30,7 +30,7 @@ class Category(MPTTModel):
 
 
 class InventoryAccount(models.Model):
-    code = models.CharField(max_length=10)
+    code = models.CharField(max_length=10, blank=True, null=True)
     name = models.CharField(max_length=100)
     company = models.ForeignKey(Company)
     current_dr = models.FloatField(null=True, blank=True)
@@ -112,7 +112,7 @@ class InventoryAccount(models.Model):
 
 
 class Item(models.Model):
-    code = models.CharField(max_length=10)
+    code = models.CharField(max_length=10, blank=True, null=True)
     name = models.CharField(max_length=254)
     description = models.TextField(blank=True, null=True)
     purchase_price = models.FloatField(blank=True, null=True)
