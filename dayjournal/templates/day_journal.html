@@ -20,24 +20,24 @@
     <script type="text/javascript">
         ko_data = {{ day_journal|jsonify }};
         $(document).ready(function () {
-            $('.tab-trigger').on('click', function(){
+            $('.tab-trigger').on('click', function () {
                 var open_id = $(this).data('open-id');
                 var target = $(this).attr('href');
-                var ahref = $('a[href="'+target+'"]').filter(function() {
-                    return $(this).data('toggle')=='tab';
-                  });
+                var ahref = $('a[href="' + target + '"]').filter(function () {
+                    return $(this).data('toggle') == 'tab';
+                });
                 var col_head = false;
                 var el = ahref;
-                if(open_id){
-                    col_body = $('#'+open_id).find('.col-box-body');
-                    if(col_body.length > 0){
+                if (open_id) {
+                    col_body = $('#' + open_id).find('.col-box-body');
+                    if (col_body.length > 0) {
                         col_body.slideDown();
                         el = col_body.siblings('.col-box-header');
                     }
                 }
                 $('html, body').stop().animate({
-                        'scrollTop': el.offset().top
-                    }, 900, 'swing',function () {
+                    'scrollTop': el.offset().top
+                }, 900, 'swing', function () {
                     window.location.hash = target;
                 });
                 $(ahref).tab('show');
@@ -183,7 +183,8 @@
             <td data-bind="text: $root.lotto_sales_dispenser_tax()"></td>
         </tr>
         <tr>
-            <th>Scratch Off Sales as per Dispenser <a href="#lotto-detail" class="tab-trigger" data-open-id="inventory_col_box">[Enter Sales Detail]</a></th>
+            <th>Scratch Off Sales as per Dispenser <a href="#lotto-detail" class="tab-trigger"
+                                                      data-open-id="inventory_col_box">[Enter Sales Detail]</a></th>
             <td data-bind="text: $root.lotto_detail.get_total('sales')"></td>
             <td data-bind="text: scratch_off_sales_dispenser_tax()"></td>
         </tr>
@@ -604,8 +605,10 @@
                     <tr data-bind="flash: true">
                         <td data-bind="text: $index()+1"></td>
                         <td class="with_ip">
-                            <input type="hidden"
-                                   data-bind="paid: account_id, select2: $root.inventory_accounts_by_category('Fuel')">
+                            <input type="hidden" data-name="Fuel and Gas Item"
+                                   data-url="{% url 'create_inventory_item_returning_account' %}?category_id={{ fuel_and_gas.id }}"
+                                   data-to="inventory_accounts"
+                                   data-bind="value: account_id, select2: $root.inventory_accounts_by_category('Fuel and Gas')">
                         </td>
                         <td data-bind="text: opening()"></td>
                         <td data-bind="editableText: purchase, numeric: true"></td>
@@ -660,7 +663,7 @@
                         <td data-bind="text: $index()+1"></td>
                         <td class="with_ip">
                             <input type="hidden"
-                                   data-bind="paid: account_id, select2: $root.inventory_accounts">
+                                   data-bind="value: account_id, select2: $root.inventory_accounts">
                         </td>
                         <td data-bind="text: opening()"></td>
                         <td data-bind="editableText: purchase, numeric: true"></td>

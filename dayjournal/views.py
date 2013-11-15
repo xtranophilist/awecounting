@@ -8,7 +8,7 @@ from django.http import HttpResponse
 from dayjournal.models import DayJournal, CashSales, CardSales, LottoDetail, BankAttachment, OtherAttachment, \
     CashEquivalentSales, SummaryInventory, SummaryTransfer, InventoryFuel, SalesAttachment, PurchaseAttachment, VendorPayout, OtherPayout
 from ledger.models import Account, set_transactions, delete_rows, Category
-from inventory.models import InventoryAccount
+from inventory.models import InventoryAccount, Category as InventoryCategory
 from inventory.models import set_transactions as set_inventory_transactions
 from dayjournal.serializers import DayJournalSerializer, LottoDetailSerializer
 from acubor.lib import invalid, save_model, all_empty, add, zero_for_none
@@ -41,7 +41,8 @@ def day_journal(request, journal_date=None):
         'other_attachments': day_journal.other_attachments.all(),
         'purchase_category': Category.objects.get(name='Purchase', company=request.company),
         'sales_category': Category.objects.get(name='Sales', company=request.company),
-        'transfer_category': Category.objects.get(name='Transfer and Remittance', company=request.company)
+        'transfer_category': Category.objects.get(name='Transfer and Remittance', company=request.company),
+        'fuel_and_gas': InventoryCategory.objects.get(name='Fuel and Gas', company=request.company)
     })
 
 
