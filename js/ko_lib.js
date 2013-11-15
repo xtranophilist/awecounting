@@ -110,13 +110,12 @@ ko.bindingHandlers.select2 = {
         if (typeof options['dropdownAutoWidth'] == 'undefined')
             options['dropdownAutoWidth'] = true;
         if (typeof options['initSelection'] == 'undefined')
-                options['initSelection'] = init_select2;
+            options['initSelection'] = init_select2;
 
         var len = $('.select-drop-klass').length;
         if (typeof options['dropdownCssClass'] == 'undefined')
             options['dropdownCssClass'] = 'select-drop-klass unique-drop' + len;
         $(element).attr('data-counter', len);
-
 
 
         options.query = function (query) {
@@ -190,6 +189,8 @@ ko.bindingHandlers.eval = {
     },
     update: function (element, valueAccessor) {
         var value = ko.utils.unwrapObservable(valueAccessor());
+        if (typeof value == 'undefined')
+            return;
         try {
             value = calculate_percent(value);
             var val = eval(value);
