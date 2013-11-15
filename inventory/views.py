@@ -3,11 +3,13 @@ import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
+from ledger.models import Account
 
 from models import Item, InventoryAccount, Category
 from serializers import ItemSerializer, InventoryAccountSerializer, InventoryCategorySerializer
 from forms import ItemForm, CategoryForm
 from inventory.filters import InventoryItemFilter
+from tax.models import TaxScheme
 
 
 @login_required
@@ -30,7 +32,10 @@ def item_form(request, id=None):
         item = get_object_or_404(Item, id=id, company=request.company)
         scenario = 'Update'
     else:
-        item = Item()
+        item = Item(purchase_account=Account.objects.get(name='Purchase', company=request.company),
+                    sales_account=Account.objects.get(name='Sales', company=request.company),
+                    purchase_tax_scheme=TaxScheme.objects.get(name='No Tax', company=request.company),
+                    sales_tax_scheme=TaxScheme.objects.get(name='No Tax', company=request.company))
         scenario = 'Create'
     if request.POST:
         form = ItemForm(data=request.POST, instance=item, company=request.company)
