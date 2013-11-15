@@ -155,7 +155,7 @@ function DayJournal(data) {
         return account[0];
     }
 
-    self.lotto_sales_dispenser_tax = ko.observable(parseFloat(empty_to_zero(self.account_by_name('Lotto Sales').tax_rate)) * empty_to_zero(self.lotto_sales_dispenser_amount()) / 100);
+    self.lotto_sales_dispenser_tax = ko.observable(empty_to zero(parseFloat(self.account_by_name('Lotto Sales').tax_rate)) * empty_to_zero(self.lotto_sales_dispenser_amount()) / 100);
 
     self.lotto_sales_register_tax = function () {
         return rnum(parseFloat(self.account_by_name('Lotto Sales').tax_rate) * round2(parseFloat(self.lotto_sales_register_amount())) / 100);
