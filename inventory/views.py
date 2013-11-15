@@ -55,9 +55,43 @@ def item_form(request, id=None):
 
 
 @login_required
+def create_item(request):
+    """
+    @param request:
+    @param id:
+    @return: JSON for account for added Inventory Item
+    """
+    item = Item()
+    scenario = 'Create'
+    for query in request.GET:
+        setattr(item, query, request.GET[query])
+    if request.POST:
+        form = ItemForm(data=request.POST, instance=item, company=request.company)
+        if form.is_valid():
+            item = form.save(commit=False)
+            item.company = request.company
+            item.save()
+            if request.is_ajax():
+                return render(request, 'callback.html', {'obj': InventoryAccountSerializer(item.account).data})
+            return redirect('/inventory/items/')
+    else:
+        form = ItemForm(instance=item, company=request.company)
+        form.hide_field(request)
+    if request.is_ajax():
+        base_template = 'modal.html'
+    else:
+        base_template = 'dashboard.html'
+    return render(request, 'item_form.html', {
+        'scenario': scenario,
+        'form': form,
+        'base_template': base_template,
+    })
+
+
+@login_required
 def delete_inventory_item(request, id):
-    object = get_object_or_404(Item, id=id, company=request.company)
-    object.delete()
+    obj = get_object_or_404(Item, id=id, company=request.company)
+    obj.delete()
     return redirect('/inventory/items/')
 
 

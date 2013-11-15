@@ -5,6 +5,7 @@ urlpatterns = patterns('',
                        url(r'^items/$', views.list_all_items, name='list_all_items'),
                        url(r'^create/$', views.item_form, name='create_inventory_item'),
                        url(r'^item/delete/(?P<id>[0-9]+)$', views.delete_inventory_item, name='delete_inventory_item'),
+                       url(r'^create_item/$', views.create_item, name='create_inventory_item_returning_account'),
 
                        url(r'^items/json/$', views.items_as_json, name='items_as_json'),
                        url(r'^accounts.json$', views.accounts_as_json, name='accounts_as_json'),

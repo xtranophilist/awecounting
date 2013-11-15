@@ -7,7 +7,6 @@ from django.shortcuts import redirect
 from acubor import settings
 
 
-
 class UserManager(BaseUserManager):
     def create_user(self, username, email, password=None, full_name='', identifier=None):
         if not email:
@@ -245,9 +244,8 @@ def create_default(company):
             code='0-0001').save()
 
     from inventory.models import Category as InventoryCategory
+
     InventoryCategory(name='Fuel and Gas', company=company).save()
-
-
 
     from core.models import CompanySetting, VoucherSetting
 
