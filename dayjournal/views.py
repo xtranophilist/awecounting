@@ -365,7 +365,7 @@ def save_vendor_payout(request):
     for index, row in enumerate(params.get('rows')):
         invalid_attrs = invalid(row, ['vendor', 'amount', 'paid', 'type'])
         if row.get('type') == 'new':
-            if invalid_attrs == False:
+            if not invalid_attrs:
                 invalid_attrs = []
             invalid_attrs.append(invalid(row, ['purchase_ledger'])[0])
         if invalid_attrs:
