@@ -804,7 +804,9 @@ function VendorPayoutVM(row) {
 
     self.types = [
         { name: 'New Purchase', id: 'new'},
-        { name: 'Old Bill Payment', id: 'old'}
+        { name: 'Old Bill Payment', id: 'old'},
+        { name: 'Account Settlement', id: 'settlement'},
+        { name: 'Advance Payment', id: 'advance'}
     ];
 
     for (var k in row) {
