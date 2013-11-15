@@ -254,6 +254,11 @@ def create_default(company):
     voucher_setting = VoucherSetting(company=company)
     voucher_setting.save()
 
+    from tax.models import TaxScheme
+    TaxScheme(name='No Tax', percent=0, company=company).save()
+    TaxScheme(name='Sales Tax @ 10.25%', percent=10.25, company=company).save()
+    TaxScheme(name='Sales Tax @ 8.25%', percent=10.25, company=company).save()
+
 
 class Role(models.Model):
     user = models.ForeignKey(User, related_name='roles')
