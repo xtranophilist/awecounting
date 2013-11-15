@@ -32,9 +32,9 @@
 
             <div class="span3">
                 {{ form.party.label_tag }}
-                <input type="hidden" data-field="Customer"
+                <input type="hidden" data-name="Customer"
                        data-add-url="{% url 'create_party' %}"
-                       data-bind="value: party, select2: {data: {results: $root.customers}},  event: {change: $root.customer_changed}, lookupKey: 'id'">
+                       data-bind="value: party, select2: $root.customers, event: {change: $root.customer_changed}">
                 <span class="print-only" data-bind="text: party_address()"></span>
             </div>
 
@@ -110,9 +110,9 @@
                         <span class="wid-pad pull-left" data-bind="text: $index()+1"> </span>
                     </td>
                     <td class="with_ip">
-                        <input type="hidden" data-field="Item"
-                               data-add-url="{% url 'create_inventory_item' %}"
-                               data-bind="value: item_id, select2: {data: {results: $root.items}},  event: {change: $root.itemChanged}, lookupKey: 'id'">
+                        <input type="hidden" data-name="Item"
+                               data-url="{% url 'create_inventory_item' %}"
+                               data-bind="value: item_id, select2: $root.items, event: {change: $root.itemChanged}">
                     </td>
                     <td data-bind="editableText: description">
                     </td>
@@ -123,9 +123,8 @@
                     <td data-bind="editableText: discount, numeric: true">
                     </td>
                     <td class="with_ip">
-                        <input type="hidden" data-add-url="{% url 'create_tax_scheme' %}" data-field="Tax Scheme"
-                               class="span12 item-selector"
-                               data-bind="value: tax_scheme, select2: {data: {results: $root.tax_schemes}}, lookupKey: 'id'">
+                        <input type="hidden" data-url="{% url 'create_tax_scheme' %}" data-name="Tax Scheme"
+                               data-bind="value: tax_scheme, select2: $root.tax_schemes">
                     </td>
                     <td data-bind="text: amount()">
                     </td>
