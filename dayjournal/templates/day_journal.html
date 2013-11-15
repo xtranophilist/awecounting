@@ -171,33 +171,61 @@
 
             <h2>Sales Summary</h2>
             <table class="table table-bordered table-striped table-acubor table-sortable">
-        <thead>
-        <tr>
-            <th></th>
-            <th>Amount</th>
-            <th>Tax</th>
-        </tr>
-        </thead>
-        <tr>
-            <th>Actual Sales</th>
-            <td data-bind="text: actual_sales_amount()"></td>
-            <td data-bind="text: actual_sales_tax()"></td>
-        </tr>
-        <tr>
-            <th>Sales shown by Register</th>
-            <td data-bind="text: register_sales_amount()"></td>
-            <td data-bind="text: register_sales_tax()"></td>
-        </tr>
-        <tr class="diff">
-            <th>Difference</th>
-            <td data-bind="text: diff_sales_amount()"></td>
-            <td data-bind="text: diff_sales_tax()"></td>
-        </tr>
-        <tbody>
+                <thead>
+                <tr>
+                    <th></th>
+                    <th>Amount</th>
+                    <th>Tax</th>
+                </tr>
+                </thead>
+                <tr>
+                    <th>Actual Sales</th>
+                    <td data-bind="text: actual_sales_amount()"></td>
+                    <td data-bind="text: actual_sales_tax()"></td>
+                </tr>
+                <tr>
+                    <th>Sales shown by Register</th>
+                    <td data-bind="text: register_sales_amount()"></td>
+                    <td data-bind="text: register_sales_tax()"></td>
+                </tr>
+                <tr class="diff">
+                    <th>Difference</th>
+                    <td data-bind="text: diff_sales_amount()"></td>
+                    <td data-bind="text: diff_sales_tax()"></td>
+                </tr>
+                <tbody>
 
-        </tbody>
+                </tbody>
 
-    </table>
+            </table>
+
+            <h2>Sales Against</h2>
+            <table class="table table-bordered table-acubor">
+                <tr>
+                    <th>Card</th>
+                    <td data-bind="text: $root.card_sales.rows()[0].amount()"></td>
+                </tr>
+                <tr>
+                    <td>Card Commission Out</td>
+                    <td data-bind="text: $root.card_sales.rows()[0].commission_out()"></td>
+                </tr>
+                <!-- ko foreach:$root.cash_equivalent_sales.rows() -->
+                <!-- ko if:account -->
+                <tr>
+                    <th data-bind="text: $root.account_by_id(account()).name"></th>
+                    <td data-bind="text: amount()"></td>
+                </tr>
+                <!-- /ko -->
+                <!-- /ko -->
+                <tr>
+                    <th>Cash</th>
+                    <td data-bind="text: $root.sales_summary_cash()"></td>
+                </tr>
+                <tr>
+                    <th>TOTAL</th>
+                    <td data-bind="text: $root.actual_sales_amount()"></td>
+                </tr>
+            </table>
 
             <br class="page-break">
         </div>
