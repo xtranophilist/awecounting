@@ -192,15 +192,16 @@ ko.bindingHandlers.eval = {
         if (typeof value == 'undefined')
             return;
         try {
-            if (value.indexOf('%') > 0)
+            if (typeof value.indexOf == 'function' && value.indexOf('%') > 0)
                 value = calculate_percent(value);
             var val = eval(value);
             $(element).text(val);
             var observable = valueAccessor();
             observable(val);
-            $(element).removeClass('invalid-cell')
+            $(element).removeClass('invalid-cell');
         } catch (e) {
-            $(element).addClass('invalid-cell')
+            $(element).addClass('invalid-cell');
+            console.log(e);
         }
     }
 }
