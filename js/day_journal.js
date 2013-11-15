@@ -477,6 +477,10 @@ function DayJournal(data) {
             }
         }
     }
+    self.lotto_detail.scratch_off_sales_manual = ko.observable();
+    if (isAN(data['scratch_off_sales_manual'])) {
+        self.lotto_detail.scratch_off_sales_manual(parseFloat(data['scratch_off_sales_manual']));
+    }
 
     self.vendor_payout = new TableViewModel(key_to_options('vendor_payout'), VendorPayoutVM);
 
