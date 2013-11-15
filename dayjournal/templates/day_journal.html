@@ -64,9 +64,9 @@
     <div class="modal-body">
     <p>Under Construction</p>
 
-    <h2>Sales</h2>
 
-    <div class="row-fluid" data-bind="with: cash_sales">
+    <div class="row-fluid" data-bind="with: cash_sales, visible: cash_sales.has_real_rows('account_id')">
+        <h2>Sales</h2>
         <table class="table table-bordered table-acubor">
             <thead>
             <tr>
@@ -135,9 +135,8 @@
         </tbody>
     </table>
 
-    <h2>Transfer/Remittance</h2>
-
-    <div class="row-fluid" data-bind="with: summary_transfer">
+    <div class="row-fluid" data-bind="with: summary_transfer, visible: summary_transfer.has_real_rows('transfer_type')">
+        <h2>Transfer/Remittance</h2>
         <table class="table table-bordered table-acubor">
             <thead>
             <tr>
@@ -150,6 +149,7 @@
             </thead>
             <tbody>
             <!-- ko foreach: rows -->
+            <!-- ko if: transfer_type -->
             <tr data-bind="flash: true">
                 <td data-bind="text: $index()+1"></td>
                 <td data-bind="text: $root.account_by_id(transfer_type()).name">
@@ -158,6 +158,7 @@
                 <td data-bind="text: cheque()"></td>
                 <td data-bind="text: card()"></td>
             </tr>
+            <!-- /ko -->
             <!-- /ko -->
             <tr class="dont-validate">
                 <td colspan="2"><b>TOTAL</b> (<b>∑ = </b><span data-bind="text: total()"></span>)</td>
@@ -227,9 +228,8 @@
         </tr>
     </table>
 
-    <h2>Vendor Payouts</h2>
-
-    <div class="row-fluid" data-bind="with: vendor_payout">
+    <div class="row-fluid" data-bind="with: vendor_payout, visible: vendor_payout.has_real_rows('vendor')">
+        <h2>Vendor Payouts</h2>
         <table class="table table-bordered table-acubor">
             <thead>
             <tr>
