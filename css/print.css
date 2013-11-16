@@ -1,3 +1,6 @@
+body{
+    font-size: 12px;
+}
 .drag_handle, .select2-arrow, .btn, button, .navbar, #sidebar, #breadcrumbs {
     display: none !important;
 }
@@ -72,7 +75,17 @@ body, article {
 br.page-break {
     page-break-after: always;
 }
-
+.modal{
+    position: static;
+    margin-left: 0;
+    width: 100%;
+    border: 0;
+}
+.modal-body{
+    position: static;
+    width: 100%;
+    overflow: visible;
+}
 /*.modal-body, .print-preview, #page-content, #main-content, #main-container, body {*/
     /*float: none;*/
     /*display: block;*/
