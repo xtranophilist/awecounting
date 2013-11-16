@@ -415,10 +415,8 @@ def save_other_payout(request):
 @login_required
 def last_lotto_detail(request, journal_date):
     try:
-        last_journal =
-        DayJournal.objects.filter(date__lt=journal_date, lotto_detail__isnull=False, company=request.company).order_by(
-            '-date')[
-            0];
+        last_journal = DayJournal.objects.filter(date__lt=journal_date, lotto_detail__isnull=False,
+                                                 company=request.company).order_by('-date')[0];
         lotto_detail = last_journal.lotto_detail.all()
         lst = LottoDetailSerializer(lotto_detail).data
         return HttpResponse(json.dumps(lst), mimetype="application/json")
