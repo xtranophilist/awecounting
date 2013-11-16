@@ -250,6 +250,27 @@ def electronic_fund_transfer_in(request, id=None):
 
 
 @group_required('SuperOwner', 'Owner', 'Supervisor')
+def approve_eft_in(request):
+    params = json.loads(request.body)
+    dct = {}
+    if params.get('id'):
+        voucher = ElectronicFundTransferIn.objects.get(id=params.get('id'))
+    else:
+        dct['error_message'] = 'Voucher needs to be saved before being approved!'
+        return HttpResponse(json.dumps(dct), mimetype="application/json")
+    bank_account = Account.objects.get(id=params.get('bank_account'))
+    benefactor = Account.objects.get(id=params.get('benefactor'))
+    for row in voucher.rows.all():
+        set_transactions(row, params.get('date'),
+                         ['dr', bank_account, row.amount],
+                         ['cr', benefactor, row.amount],
+        )
+    voucher.status = 'Approved'
+    voucher.save()
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+@group_required('SuperOwner', 'Owner', 'Supervisor')
 def approve_cheque_deposit(request):
     params = json.loads(request.body)
     dct = {}

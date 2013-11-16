@@ -140,6 +140,10 @@
         <br/>
 
         <button type="submit" class="btn">Save</button>
+        {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
+            <input class="btn" type="submit" value="Approve"
+                   data-bind="click: $root.approve, visible: $root.id() && $root.status() == 'Unapproved'">
+        {% endifusergroup %}
         {% if scenario == 'Update' %}
             <a class="btn btn-danger" href="{% url 'delete_electronic_fund_transfer_in' form.instance.id %}">Delete!</a>
         {% endif %}
