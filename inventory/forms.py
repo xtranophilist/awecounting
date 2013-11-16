@@ -28,10 +28,9 @@ class ItemForm(KOModelForm):
                                            widget=forms.Select(
                                                attrs={'class': 'select2', 'data-name': 'Sales Account'}))
 
-    unit = forms.ModelChoiceField(Unit.objects.all(), empty_label=None,
-                                  widget=forms.Select(
-                                      attrs={'class': 'select2', 'data-name': 'Unit',
-                                             'data-url': reverse_lazy('create_unit')}))
+    unit = forms.ModelChoiceField(Unit.objects.all(), widget=forms.Select(
+        attrs={'class': 'select2', 'data-name': 'Unit',
+               'data-url': reverse_lazy('create_unit')}))
 
 
     def __init__(self, *args, **kwargs):

@@ -133,7 +133,7 @@ class Item(models.Model):
     category = models.ForeignKey(Category, null=True, blank=True)
     account = models.OneToOneField(InventoryAccount, related_name='item')
     opening_stock = models.FloatField(default=0)
-    unit = models.ForeignKey(Unit)
+    unit = models.ForeignKey(Unit, blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.pk is None:
