@@ -497,7 +497,7 @@
                     {#                            data-bind="options: $root.sales_sans_lotto(), optionsText: 'name', optionsValue: 'id', value: account_id, optionsCaption: 'Choose an account..', select2: {placeholderOption: 'first'}, event: {change: $root.account_changed}"></select>#}
                     <input type="hidden" data-url="{% url 'create_account' %}?category_id={{ sales_category.id }}"
                            data-to="accounts" data-name="Sales Ledger"
-                           data-bind="value: account_id, select2: $root.sales_sans_lotto()">
+                           data-bind="value: account_id, select2: $root.sales_sans_lotto(), event: {change: $root.account_changed}">
                 </td>
                 <td class="change-on-ready" data-bind="editableText: amount, eval: amount"></td>
                 <td data-bind="text: tax()"></td>
@@ -968,8 +968,9 @@
                         <td data-bind="text: $index()+1"></td>
                         <td class="with_ip">
                             <input type="hidden" data-name="Fuel and Gas Item" data-to="inventory_accounts"
+                                   class="change-on-ready"
                                    data-url="{% url 'create_inventory_item_returning_account' %}?category_id={{ fuel_and_gas.id }}"
-                                   data-bind="value: account_id, select2: $root.inventory_accounts_by_category('Fuel and Gas')">
+                                   data-bind="value: account_id, select2: $root.inventory_accounts_by_category('Fuel and Gas'), event:{change: $root.inventory_account_changed}">
                         </td>
                         <td data-bind="text: opening()"></td>
                         <td data-bind="editableText: purchase, eval: purchase"></td>
@@ -1024,8 +1025,9 @@
                         <td data-bind="text: $index()+1"></td>
                         <td class="with_ip">
                             <input type="hidden" data-name="Inventory Item" data-to="inventory_accounts"
+                                   class="change-on-ready"
                                    data-url="{% url 'create_inventory_item_returning_account' %}"
-                                   data-bind="value: account_id, select2: $root.inventory_accounts">
+                                   data-bind="value: account_id, select2: $root.inventory_accounts, event: {change: $root.inventory_account_changed}">
                         </td>
                         <td data-bind="text: opening()"></td>
                         <td data-bind="editableText: purchase, eval: purchase"></td>
