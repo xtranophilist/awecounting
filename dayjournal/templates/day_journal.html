@@ -339,12 +339,12 @@
             <tr data-bind="flash: true">
                 <td data-bind="text: $index()+1"></td>
                 <td data-bind="text: $root.inventory_account_by_id(account_id()).name"></td>
-                <td data-bind="text: opening()"></td>
-                <td data-bind="text: purchase()"></td>
-                <td data-bind="text: sales()"></td>
-                <td data-bind="text: closing()"></td>
-                <td data-bind="text: actual()"></td>
-                <td data-bind="text: difference()"></td>
+                <td data-bind="text: opening() + ' ' + $root.get_unit(account_id())"></td>
+                <td data-bind="text: purchase() + ' ' + $root.get_unit(account_id())"></td>
+                <td data-bind="text: sales() + ' ' + $root.get_unit(account_id())"></td>
+                <td data-bind="text: closing() + ' ' + $root.get_unit(account_id())"></td>
+                <td data-bind="text: actual() + ' ' + $root.get_unit(account_id())"></td>
+                <td data-bind="text: difference() + ' ' + $root.get_unit(account_id())"></td>
             </tr>
             <!-- /ko -->
             <!-- /ko -->
@@ -373,12 +373,12 @@
             <tr data-bind="flash: true">
                 <td data-bind="text: $index()+1"></td>
                 <td data-bind="text: $root.inventory_account_by_id(account_id()).name"></td>
-                <td data-bind="text: opening()"></td>
-                <td data-bind="text: purchase()"></td>
-                <td data-bind="text: sales()"></td>
-                <td data-bind="text: closing()"></td>
-                <td data-bind="text: actual()"></td>
-                <td data-bind="text: difference()"></td>
+                <td data-bind="text: opening() + ' ' + $root.get_unit(account_id())"></td>
+                <td data-bind="text: purchase() + ' ' + $root.get_unit(account_id())"></td>
+                <td data-bind="text: sales() + ' ' + $root.get_unit(account_id())"></td>
+                <td data-bind="text: closing() + ' ' + $root.get_unit(account_id())"></td>
+                <td data-bind="text: actual() + ' ' + $root.get_unit(account_id())"></td>
+                <td data-bind="text: difference() + ' ' + $root.get_unit(account_id())"></td>
             </tr>
             <!-- /ko -->
             <!-- /ko -->
