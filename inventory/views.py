@@ -13,7 +13,6 @@ from inventory.filters import InventoryItemFilter
 from tax.models import TaxScheme
 
 
-
 @login_required
 def accounts_as_json(request):
     accounts = InventoryAccount.objects.filter(company=request.company)
@@ -189,8 +188,8 @@ def unit_form(request, id=None):
             obj = form.save(commit=False)
             obj.company = request.company
             obj.save()
-            #if request.is_ajax():
-            #    return render(request, 'callback.html', {'obj': UnitSerializer(obj).data})
+            if request.is_ajax():
+                return render(request, 'callback.html', {'obj': {'name': obj.name, 'id': obj.id}})
             return redirect(reverse_lazy('list_units'))
     else:
         form = UnitForm(instance=obj)

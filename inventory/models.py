@@ -109,10 +109,14 @@ class InventoryAccount(models.Model):
             return transactions[0].current_dr
         return 0
 
+
 class Unit(models.Model):
     name = models.CharField(max_length=50)
     short_name = models.CharField(max_length=10)
     company = models.ForeignKey(Company)
+
+    def __str__(self):
+        return self.name
 
 
 class Item(models.Model):
