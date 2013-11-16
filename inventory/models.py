@@ -39,6 +39,17 @@ class InventoryAccount(models.Model):
     def get_absolute_url(self):
         return '/inventory_account/' + str(self.id)
 
+    def get_unit(self):
+        try:
+            item = self.item
+        except:
+            return None
+        try:
+            unit = self.item.unit
+        except:
+            return None
+        return unit.short_name
+
     def get_category(self):
         try:
             item = self.item
