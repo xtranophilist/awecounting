@@ -67,7 +67,10 @@ def create_item(request):
     @param id:
     @return: JSON for account for added Inventory Item
     """
-    item = Item()
+    item = Item(purchase_account=Account.objects.get(name='Purchase', company=request.company),
+                sales_account=Account.objects.get(name='Sales', company=request.company),
+                purchase_tax_scheme=TaxScheme.objects.get(name='No Tax', company=request.company),
+                sales_tax_scheme=TaxScheme.objects.get(name='No Tax', company=request.company))
     scenario = 'Create'
     for query in request.GET:
         setattr(item, query, request.GET[query])
