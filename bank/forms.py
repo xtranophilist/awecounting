@@ -137,7 +137,7 @@ class ChequePaymentForm(KOModelForm):
 
     class Meta:
         model = ChequePayment
-        exclude = ['company']
+        exclude = ['company', 'status']
 
 
 class ElectronicFundTransferOutForm(KOModelForm):

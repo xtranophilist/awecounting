@@ -276,6 +276,14 @@ def cheque_payment(request, id=None):
     else:
         payment = ChequePayment(date=date.today())
         scenario = 'New'
+    if request.POST.get('action') == 'Approve':
+        set_transactions(payment, payment.date,
+                         ['cr', payment.bank_account, payment.amount],
+                         ['dr', payment.beneficiary, payment.amount],
+        )
+        payment.status = 'Approved'
+        payment.save()
+        return redirect(reverse_lazy('update_cheque_payment', kwargs={'id': payment.id}))
     if request.POST:
         form = ChequePaymentForm(request.POST, request.FILES, instance=payment, company=request.company)
         if form.is_valid():
@@ -284,14 +292,9 @@ def cheque_payment(request, id=None):
             print request.POST
             if 'attachment' in request.FILES:
                 payment.attachment = request.FILES['attachment']
+            payment.status = 'Unapproved'
             payment.save()
-            bank_account = Account.objects.get(id=request.POST.get('bank_account'))
-            beneficiary = Account.objects.get(id=request.POST.get('beneficiary'))
-            set_transactions(payment, request.POST.get('date'),
-                             ['dr', bank_account, request.POST.get('amount')],
-                             ['cr', beneficiary, request.POST.get('amount')],
-            )
-            return redirect('/bank/cheque-payments/')
+            return redirect(reverse_lazy('update_cheque_payment', kwargs={'id': payment.id}))
     else:
         form = ChequePaymentForm(instance=payment, company=request.company)
     return render(request, 'cheque_payment.html', {'form': form, 'scenario': scenario})
