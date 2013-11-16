@@ -99,12 +99,12 @@ class BankCashDepositForm(KOModelForm):
     date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
     bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
                                           widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Bank Acc.',
-                                                                     'data-add-url': reverse_lazy(
+                                                                     'data-url': reverse_lazy(
                                                                          'create_bank_account')}),
                                           label='Beneficiary Account')
     benefactor = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
                                         widget=forms.Select(
-                                            attrs={'class': 'select2', 'data-add-url': reverse_lazy('create_account')}))
+                                            attrs={'class': 'select2', 'data-url': reverse_lazy('create_account')}))
     attachment = ExtFileField(
         label='Add an attachment',
         help_text='',
@@ -136,9 +136,12 @@ class BankCashDepositForm(KOModelForm):
 
 class ChequePaymentForm(KOModelForm):
     bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
-                                          widget=forms.Select(attrs={'class': 'select2'}))
+                                          widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Bank Acc.',
+                                                                     'data-url': reverse_lazy(
+                                                                         'create_bank_account')}))
     beneficiary = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
-                                         widget=forms.Select(attrs={'class': 'select2'}))
+                                         widget=forms.Select(
+                                             attrs={'class': 'select2', 'data-url': reverse_lazy('create_account')}))
     date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
     attachment = ExtFileField(
         label='Add an attachment',
@@ -160,9 +163,12 @@ class ChequePaymentForm(KOModelForm):
 
 class ElectronicFundTransferOutForm(KOModelForm):
     bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
-                                          widget=forms.Select(attrs={'class': 'select2'}))
+                                          widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Bank Acc.',
+                                                                     'data-url': reverse_lazy(
+                                                                         'create_bank_account')}))
     beneficiary = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
-                                         widget=forms.Select(attrs={'class': 'select2'}))
+                                         widget=forms.Select(
+                                             attrs={'class': 'select2', 'data-url': reverse_lazy('create_account')}))
     date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
     attachment = ExtFileField(
         label='Add an attachment',
