@@ -33,9 +33,11 @@
 
         <input class="btn" type="submit" value="Save" name="action">
         {% if scenario == 'Update' %}
-            {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
-                <input class="btn" type="submit" value="Approve" name="action">
-            {% endifusergroup %}
+            {% if form.instance.status == 'Unapproved' %}
+                {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
+                    <input class="btn" type="submit" value="Approve" name="action">
+                {% endifusergroup %}
+            {% endif %}
             <a class="btn btn-danger" href="{% url 'delete_cash_deposit' form.instance.id %}">Delete!</a>
         {% endif %}
 
