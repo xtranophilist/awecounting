@@ -45,10 +45,10 @@ class InventoryAccount(models.Model):
         except:
             return None
         try:
-            unit = self.item.unit
+            short_name = self.item.unit.short_name
         except:
             return None
-        return unit.short_name
+        return short_name
 
     def get_category(self):
         try:
@@ -148,7 +148,7 @@ class Item(models.Model):
 
     def save(self, *args, **kwargs):
         if self.pk is None:
-            account = InventoryAccount(code=self.code, name=self.name)
+            account = InventoryAccount(code=self.code, name=self.name, opening_balance=self.opening_stock)
             account.company = self.company
             account.save()
             # account.add_category('Bank')
