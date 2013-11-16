@@ -3,7 +3,7 @@ from django.core.urlresolvers import reverse_lazy
 from mptt.forms import TreeNodeChoiceField
 
 from acubor.lib import KOModelForm
-from models import Item, Category
+from models import Item, Category, Unit
 from ledger.models import Account, Category as AccountCategory
 from tax.models import TaxScheme
 
@@ -50,9 +50,9 @@ class ItemForm(KOModelForm):
 
 class CategoryForm(KOModelForm):
     parent = TreeNodeChoiceField(Category.objects.all(),
-                                   widget=forms.Select(attrs={'class': 'select2', 'data-name': 'Category',
-                                                              'data-url': reverse_lazy(
-                                                                  'create_inventory_category')}))
+                                 widget=forms.Select(attrs={'class': 'select2', 'data-name': 'Category',
+                                                            'data-url': reverse_lazy(
+                                                                'create_inventory_category')}))
 
     def __init__(self, *args, **kwargs):
         self.company = kwargs.pop('company', None)
@@ -74,3 +74,9 @@ class CategoryForm(KOModelForm):
 
         # Always return the full collection of cleaned data.
         return cleaned_data
+
+
+class UnitForm(KOModelForm):
+    class Meta:
+        model = Unit
+        exclude = ['company']

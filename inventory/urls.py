@@ -17,5 +17,10 @@ urlpatterns = patterns('',
                        url(r'^category/create/$', views.create_category, name='create_inventory_category'),
                        url(r'^category/(?P<id>[0-9]+)/$', views.update_category, name='update_inventory_category'),
                        url(r'^category/(?P<id>[0-9]+)/delete$', views.delete_category, name='delete_inventory_category'),
+
+                       url(r'^units/$', views.list_units, name='list_units'),
+                       url(r'^unit/create/$', views.unit_form, name='create_unit'),
+                       url(r'^unit/(?P<id>[0-9]+)/$', views.unit_form, name='update_unit'),
+                       url(r'^unit/(?P<id>[0-9]+)/delete$', views.delete_unit, name='delete_unit'),
 )
 

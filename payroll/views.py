@@ -82,11 +82,6 @@ def save_entry(request):
 
 
 @login_required
-def list_employees(request):
-    pass
-
-
-@login_required
 def employee_form(request, id=None):
     if id:
         obj = get_object_or_404(Employee, id=id, company=request.company)

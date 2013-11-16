@@ -1,15 +1,17 @@
 import json
+from django.core.urlresolvers import reverse_lazy
 
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
 from ledger.models import Account
 
-from models import Item, InventoryAccount, Category
+from models import Item, InventoryAccount, Category, Unit
 from serializers import ItemSerializer, InventoryAccountSerializer, InventoryCategorySerializer
-from forms import ItemForm, CategoryForm
+from forms import ItemForm, CategoryForm, UnitForm
 from inventory.filters import InventoryItemFilter
 from tax.models import TaxScheme
+
 
 
 @login_required
@@ -171,3 +173,46 @@ def delete_category(request, id):
     category = get_object_or_404(Category, id=id, company=request.company)
     category.delete()
     return redirect('/inventory/categories/')
+
+
+@login_required
+def unit_form(request, id=None):
+    if id:
+        obj = get_object_or_404(Unit, id=id, company=request.company)
+        scenario = 'Update'
+    else:
+        obj = Unit(company=request.company)
+        scenario = 'Create'
+    if request.POST:
+        form = UnitForm(data=request.POST, instance=obj)
+        if form.is_valid():
+            obj = form.save(commit=False)
+            obj.company = request.company
+            obj.save()
+            #if request.is_ajax():
+            #    return render(request, 'callback.html', {'obj': UnitSerializer(obj).data})
+            return redirect(reverse_lazy('list_units'))
+    else:
+        form = UnitForm(instance=obj)
+    if request.is_ajax():
+        base_template = 'modal.html'
+    else:
+        base_template = 'dashboard.html'
+    return render(request, 'unit_form.html', {
+        'scenario': scenario,
+        'form': form,
+        'base_template': base_template,
+    })
+
+
+@login_required
+def list_units(request):
+    objs = Unit.objects.filter(company=request.company)
+    return render(request, 'list_units.html', {'objects': objs})
+
+
+@login_required
+def delete_unit(request, id):
+    obj = get_object_or_404(Unit, id=id, company=request.company)
+    obj.delete()
+    return redirect(reverse_lazy('list_units'))
