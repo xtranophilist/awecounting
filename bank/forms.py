@@ -15,10 +15,11 @@ class BankAccountForm(KOModelForm):
 class ChequeDepositForm(KOModelForm):
     bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
                                           widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Bank Account',
-                                                                   'data-add-url': reverse_lazy('create_bank_account')}), label='Beneficiary Account')
+                                                                     'data-url': reverse_lazy('create_bank_account')}),
+                                          label='Beneficiary Account')
     benefactor = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
                                         widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Benefactor',
-                                                                   'data-add-url': reverse_lazy('create_account')}),
+                                                                   'data-url': reverse_lazy('create_account')}),
                                         label='Benefactor (Given By)')
     date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
     clearing_date = forms.DateField(
@@ -54,9 +55,13 @@ class ChequeDepositForm(KOModelForm):
 
 class ElectronicFundTransferInForm(KOModelForm):
     bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
-                                          widget=forms.Select(attrs={'class': 'select2'}), label='Beneficiary Account')
+                                          widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Bank Account',
+                                                                     'data-url': reverse_lazy('create_bank_account')}),
+                                          label='Beneficiary Account')
     benefactor = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
-                                        widget=forms.Select(attrs={'class': 'select2'}), label='Benefactor (Given By)')
+                                        widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Benefactor',
+                                                                   'data-url': reverse_lazy('create_account')}),
+                                        label='Benefactor (Given By)')
     date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
     clearing_date = forms.DateField(
         widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}), required=False)
@@ -67,15 +72,27 @@ class ElectronicFundTransferInForm(KOModelForm):
         ext_whitelist=('.jpg', '.png', '.gif', '.tif', '.pdf')
     )
 
+    def clean_voucher_no(self):
+        try:
+            existing = ElectronicFundTransferIn.objects.get(voucher_no=self.cleaned_data['voucher_no'],
+                                                            company=self.company)
+            if self.instance.id is not existing.id:
+                raise forms.ValidationError("The voucher no. " + str(
+                    self.cleaned_data['voucher_no']) + " is already in use. Suggested no. has been provided.")
+            return self.cleaned_data['voucher_no']
+        except ElectronicFundTransferIn.DoesNotExist:
+            return self.cleaned_data['voucher_no']
+
     def __init__(self, *args, **kwargs):
-        company = kwargs.pop('company', None)
+        self.company = kwargs.pop('company', None)
         super(ElectronicFundTransferInForm, self).__init__(*args, **kwargs)
-        self.fields['bank_account'].queryset = Account.objects.filter(company=company, category__name='Bank Account')
-        self.fields['benefactor'].queryset = Account.objects.filter(company=company)
+        self.fields['bank_account'].queryset = Account.objects.filter(company=self.company,
+                                                                      category__name='Bank Account')
+        self.fields['benefactor'].queryset = Account.objects.filter(company=self.company)
 
     class Meta:
         model = ElectronicFundTransferIn
-        exclude = ['company']
+        exclude = ['company', 'status']
 
 
 class BankCashDepositForm(KOModelForm):
@@ -98,7 +115,8 @@ class BankCashDepositForm(KOModelForm):
     def __init__(self, *args, **kwargs):
         self.company = kwargs.pop('company', None)
         super(BankCashDepositForm, self).__init__(*args, **kwargs)
-        self.fields['bank_account'].queryset = Account.objects.filter(company=self.company, category__name='Bank Account')
+        self.fields['bank_account'].queryset = Account.objects.filter(company=self.company,
+                                                                      category__name='Bank Account')
         self.fields['benefactor'].queryset = Account.objects.filter(company=self.company)
 
     def clean_voucher_no(self):
@@ -161,4 +179,4 @@ class ElectronicFundTransferOutForm(KOModelForm):
 
     class Meta:
         model = ElectronicFundTransferOut
-        exclude = ['company']
+        exclude = ['company', 'status']

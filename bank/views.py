@@ -135,6 +135,37 @@ def bank_account_form(request, id=None):
 
 
 @login_required
+def cash_deposit(request, id=None):
+    if id:
+        receipt = get_object_or_404(BankCashDeposit, id=id, company=request.company)
+        scenario = 'Update'
+    else:
+        receipt = BankCashDeposit(date=date.today(), company=request.company)
+        scenario = 'New'
+    if request.POST.get('action') == 'Approve':
+        set_transactions(receipt, receipt.date,
+                         ['dr', receipt.bank_account, receipt.amount],
+                         ['cr', receipt.benefactor, receipt.amount],
+        )
+        receipt.status = 'Approved'
+        receipt.save()
+        return redirect(reverse_lazy('update_cash_deposit', kwargs={'id': receipt.id}))
+    if request.POST:
+        form = BankCashDepositForm(request.POST, initial={'voucher_no': 20}, instance=receipt, company=request.company)
+        if form.is_valid():
+            receipt = form.save(commit=False)
+            receipt.company = request.company
+            if 'attachment' in request.FILES:
+                receipt.attachment = request.FILES['attachment']
+            receipt.status = 'Unapproved'
+            receipt.save()
+            return redirect(reverse_lazy('update_cash_deposit', kwargs={'id': receipt.id}))
+    else:
+        form = BankCashDepositForm(instance=receipt, company=request.company)
+    return render(request, 'cash_deposit.html', {'form': form, 'scenario': scenario})
+
+
+@login_required
 def cheque_deposit(request, id=None):
     if id:
         receipt = get_object_or_404(ChequeDeposit, id=id, company=request.company)
@@ -174,23 +205,15 @@ def cheque_deposit(request, id=None):
 
 
 @login_required
-def cash_deposit(request, id=None):
+def electronic_fund_transfer_in(request, id=None):
     if id:
-        receipt = get_object_or_404(BankCashDeposit, id=id, company=request.company)
+        receipt = get_object_or_404(ElectronicFundTransferIn, id=id, company=request.company)
         scenario = 'Update'
     else:
-        receipt = BankCashDeposit(date=date.today(), company=request.company)
+        receipt = ElectronicFundTransferIn(date=date.today(), company=request.company)
         scenario = 'New'
-    if request.POST.get('action') == 'Approve':
-        set_transactions(receipt, receipt.date,
-                         ['dr', receipt.bank_account, receipt.amount],
-                         ['cr', receipt.benefactor, receipt.amount],
-        )
-        receipt.status = 'Approved'
-        receipt.save()
-        return redirect(reverse_lazy('update_cash_deposit', kwargs={'id': receipt.id}))
     if request.POST:
-        form = BankCashDepositForm(request.POST, initial={'voucher_no': 20}, instance=receipt, company=request.company)
+        form = ElectronicFundTransferInForm(request.POST, request.FILES, instance=receipt, company=request.company)
         if form.is_valid():
             receipt = form.save(commit=False)
             receipt.company = request.company
@@ -198,10 +221,32 @@ def cash_deposit(request, id=None):
                 receipt.attachment = request.FILES['attachment']
             receipt.status = 'Unapproved'
             receipt.save()
-            return redirect(reverse_lazy('update_cash_deposit', kwargs={'id': receipt.id}))
+        if id or form.is_valid():
+            particulars = json.loads(request.POST['particulars'])
+            model = ElectronicFundTransferInRow
+            bank_account = Account.objects.get(id=request.POST.get('bank_account'))
+            benefactor = Account.objects.get(id=request.POST.get('benefactor'))
+            for index, row in enumerate(particulars.get('rows')):
+                if invalid(row, ['amount']):
+                    continue
+                values = {'sn': index + 1, 'transaction_number': row.get('transaction_number'),
+                          'transaction_date': row.get('transaction_date'),
+                          'drawee_bank': row.get('drawee_bank'), 'drawee_bank_address': row.get('drawee_bank_address'),
+                          'amount': row.get('amount'), 'electronic_fund_transfer_in': receipt}
+                submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
+                #set_transactions(submodel, request.POST.get('date'),
+                #                 ['dr', bank_account, row.get('amount')],
+                #                 ['cr', benefactor, row.get('amount')],
+                #)
+                if not created:
+                    submodel = save_model(submodel, values)
+            delete_rows(particulars.get('deleted_rows'), model)
+            return redirect(reverse_lazy('update_electronic_fund_transfer_in', kwargs={'id': receipt.id}))
     else:
-        form = BankCashDepositForm(instance=receipt, company=request.company)
-    return render(request, 'cash_deposit.html', {'form': form, 'scenario': scenario})
+        form = ElectronicFundTransferInForm(instance=receipt, company=request.company)
+    receipt_data = ElectronicFundTransferInSerializer(receipt).data
+    return render(request, 'electronic_fund_transfer_in.html',
+                  {'form': form, 'data': receipt_data, 'scenario': scenario})
 
 
 @group_required('SuperOwner', 'Owner', 'Supervisor')
@@ -223,49 +268,6 @@ def approve_cheque_deposit(request):
     voucher.status = 'Approved'
     voucher.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
-
-
-@login_required
-def electronic_fund_transfer_in(request, id=None):
-    if id:
-        receipt = get_object_or_404(ElectronicFundTransferIn, id=id, company=request.company)
-        scenario = 'Update'
-    else:
-        receipt = ElectronicFundTransferIn(date=date.today())
-        scenario = 'New'
-    if request.POST:
-        form = ElectronicFundTransferInForm(request.POST, request.FILES, instance=receipt, company=request.company)
-        if form.is_valid():
-            receipt = form.save(commit=False)
-            receipt.company = request.company
-            if 'attachment' in request.FILES:
-                receipt.attachment = request.FILES['attachment']
-            receipt.save()
-        if id or form.is_valid():
-            particulars = json.loads(request.POST['particulars'])
-            model = ElectronicFundTransferInRow
-            bank_account = Account.objects.get(id=request.POST.get('bank_account'))
-            benefactor = Account.objects.get(id=request.POST.get('benefactor'))
-            for index, row in enumerate(particulars.get('rows')):
-                if invalid(row, ['amount']):
-                    continue
-                values = {'sn': index + 1, 'transaction_number': row.get('transaction_number'),
-                          'transaction_date': row.get('transaction_date'),
-                          'drawee_bank': row.get('drawee_bank'), 'drawee_bank_address': row.get('drawee_bank_address'),
-                          'amount': row.get('amount'), 'electronic_fund_transfer_in': receipt}
-                submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-                set_transactions(submodel, request.POST.get('date'),
-                                 ['dr', bank_account, row.get('amount')],
-                                 ['cr', benefactor, row.get('amount')],
-                )
-                if not created:
-                    submodel = save_model(submodel, values)
-            delete_rows(particulars.get('deleted_rows'), model)
-            return redirect('/bank/electronic-fund-transfers-in/')
-    form = ElectronicFundTransferInForm(instance=receipt, company=request.company)
-    receipt_data = ElectronicFundTransferInSerializer(receipt).data
-    return render(request, 'electronic_fund_transfer_in.html',
-                  {'form': form, 'data': receipt_data, 'scenario': scenario})
 
 
 @login_required

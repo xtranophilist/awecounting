@@ -30,6 +30,10 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
+        {{ form.voucher_no.label_tag }}
+        {{ form.voucher_no }}
+        {{ form.voucher_no.errors }}
+
         <div class="row-fluid">
 
             <span class="span6">
