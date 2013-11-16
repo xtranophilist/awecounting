@@ -1,6 +1,8 @@
 $(document).ready(function () {
     vm = new DayJournal(ko_data);
     ko.applyBindings(vm);
+    $('.change-on-ready').trigger('change');
+
 
     if (window.location.hash != "") {
         $('a[href="' + window.location.hash + '"]').click();
@@ -622,6 +624,10 @@ function InventoryRow(row) {
     var self = this;
 
     self.account_id = ko.observable()
+
+//    self.opening = function (root) {
+//        return root.inventory_account_by_id(self.account_id()).opening;
+//    }
 
     self.opening = ko.observable();
 
