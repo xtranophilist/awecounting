@@ -6,13 +6,12 @@ from django.contrib.contenttypes.models import ContentType
 from django.db.models.signals import pre_delete
 from django.dispatch.dispatcher import receiver
 from django.db.models import F
+from mptt.models import MPTTModel, TreeForeignKey
 
 from tax.models import TaxScheme
 from ledger.models import Account
 from users.models import Company
 from acubor.lib import zero_for_none, none_for_zero
-
-from mptt.models import MPTTModel, TreeForeignKey
 
 
 class Category(MPTTModel):
@@ -110,6 +109,11 @@ class InventoryAccount(models.Model):
             return transactions[0].current_dr
         return 0
 
+class Unit(models.Model):
+    name = models.CharField(max_length=50)
+    short_name = models.CharField(max_length=10)
+    company = models.ForeignKey(Company)
+
 
 class Item(models.Model):
     code = models.CharField(max_length=10, blank=True, null=True)
@@ -124,6 +128,8 @@ class Item(models.Model):
     company = models.ForeignKey(Company)
     category = models.ForeignKey(Category, null=True, blank=True)
     account = models.OneToOneField(InventoryAccount, related_name='item')
+    opening_stock = models.FloatField(default=0)
+    unit = models.ForeignKey(Unit)
 
     def save(self, *args, **kwargs):
         if self.pk is None:
