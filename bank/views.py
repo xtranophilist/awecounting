@@ -312,7 +312,6 @@ def cheque_payment(request, id=None):
         if form.is_valid():
             payment = form.save(commit=False)
             payment.company = request.company
-            print request.POST
             if 'attachment' in request.FILES:
                 payment.attachment = request.FILES['attachment']
             payment.status = 'Unapproved'
@@ -331,6 +330,14 @@ def electronic_fund_transfer_out(request, id=None):
     else:
         payment = ElectronicFundTransferOut(date=date.today())
         scenario = 'New'
+    if request.POST.get('action') == 'Approve':
+        set_transactions(payment, payment.date,
+                         ['cr', payment.bank_account, payment.amount],
+                         ['dr', payment.beneficiary, payment.amount],
+        )
+        payment.status = 'Approved'
+        payment.save()
+        return redirect(reverse_lazy('update_electronic_fund_transfer_out', kwargs={'id': payment.id}))
     if request.POST:
         form = ElectronicFundTransferOutForm(request.POST, request.FILES, instance=payment, company=request.company)
         if form.is_valid():
@@ -339,14 +346,9 @@ def electronic_fund_transfer_out(request, id=None):
             print request.POST
             if 'attachment' in request.FILES:
                 payment.attachment = request.FILES['attachment']
+            payment.status = 'Unapproved'
             payment.save()
-            bank_account = Account.objects.get(id=request.POST.get('bank_account'))
-            beneficiary = Account.objects.get(id=request.POST.get('beneficiary'))
-            set_transactions(payment, request.POST.get('date'),
-                             ['dr', bank_account, request.POST.get('amount')],
-                             ['cr', beneficiary, request.POST.get('amount')],
-            )
-            return redirect('/bank/electronic-fund-transfers-out/')
+            return redirect(reverse_lazy('update_electronic_fund_transfer_out', kwargs={'id': payment.id}))
     else:
         form = ElectronicFundTransferOutForm(instance=payment, company=request.company)
     return render(request, 'electronic_fund_transfer_out.html', {'form': form, 'scenario': scenario})
