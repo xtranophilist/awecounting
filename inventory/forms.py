@@ -27,8 +27,7 @@ class ItemForm(KOModelForm):
     sales_account = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
                                            widget=forms.Select(
                                                attrs={'class': 'select2', 'data-name': 'Sales Account'}))
-
-    unit = forms.ModelChoiceField(Unit.objects.all(), widget=forms.Select(
+    unit = forms.ModelChoiceField(Unit.objects.all(), required=False, widget=forms.Select(
         attrs={'class': 'select2', 'data-name': 'Unit',
                'data-url': reverse_lazy('create_unit')}))
 
