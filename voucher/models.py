@@ -1,4 +1,5 @@
 from django.db import models
+from acubor.lib import get_next_voucher_no
 from inventory.models import Item
 from ledger.models import Account, Party
 from tax.models import TaxScheme
@@ -56,6 +57,7 @@ class InvoiceParticular(models.Model):
 
 
 class PurchaseVoucher(models.Model):
+    voucher_no = models.IntegerField()
     party = models.ForeignKey(Party, verbose_name=u'From')
     date = models.DateField()
     due_date = models.DateField(null=True, blank=True)
@@ -70,6 +72,11 @@ class PurchaseVoucher(models.Model):
     description = models.TextField(null=True, blank=True)
     statuses = [('Cancelled', 'Cancelled'), ('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
     status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
+
+    def __init__(self, *args, **kwargs):
+        super(PurchaseVoucher, self).__init__(*args, **kwargs)
+        if not self.pk and not self.voucher_no:
+            self.voucher_no = get_next_voucher_no(PurchaseVoucher, self.company)
 
     def get_voucher_no(self):
         return self.id
@@ -97,7 +104,8 @@ class PurchaseParticular(models.Model):
 
 
 class JournalVoucher(models.Model):
-    voucher_no = models.CharField(max_length=10)
+    #voucher_no = models.CharField(max_length=10)
+    voucher_no = models.IntegerField()
     date = models.DateField()
     company = models.ForeignKey(Company)
     narration = models.TextField()
@@ -106,6 +114,11 @@ class JournalVoucher(models.Model):
 
     def get_voucher_no(self):
         return self.voucher_no
+
+    def __init__(self, *args, **kwargs):
+        super(JournalVoucher, self).__init__(*args, **kwargs)
+        if not self.pk and not self.voucher_no:
+            self.voucher_no = get_next_voucher_no(JournalVoucher, self.company)
 
 
 class JournalVoucherRow(models.Model):
