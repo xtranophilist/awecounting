@@ -268,6 +268,8 @@ def purchase_voucher(request, id=None):
                 if not created:
                     submodel = save_model(submodel, values)
             delete_rows(particulars.get('deleted_rows'), model)
+            if request.POST.get('action') == 'Save and Continue':
+                return redirect(reverse_lazy('new_purchase_voucher'))
             return redirect(reverse_lazy('view_purchase_voucher', kwargs={'id': voucher.id}))
     else:
         form = PurchaseVoucherForm(instance=voucher, company=request.company)
