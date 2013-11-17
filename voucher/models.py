@@ -68,6 +68,8 @@ class PurchaseVoucher(models.Model):
     pending_amount = models.FloatField()
     total_amount = models.FloatField()
     description = models.TextField(null=True, blank=True)
+    statuses = [('Cancelled', 'Cancelled'), ('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
+    status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
 
     def get_voucher_no(self):
         return self.id
@@ -99,6 +101,8 @@ class JournalVoucher(models.Model):
     date = models.DateField()
     company = models.ForeignKey(Company)
     narration = models.TextField()
+    statuses = [('Cancelled', 'Cancelled'), ('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
+    status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
 
     def get_voucher_no(self):
         return self.voucher_no
