@@ -23,8 +23,6 @@
 
 {% block content %}
 
-    {{ data|jsonify }}
-
     <form method="post" action="#">
         {% csrf_token %}
 
@@ -33,7 +31,7 @@
             <div class="span3">
                 {{ form.party.label_tag }}
                 <input type="hidden" data-name="Customer"
-                       data-add-url="{% url 'create_party' %}"
+                       data-url="{% url 'create_party' %}?type=Customer"
                        data-bind="value: party, select2: $root.customers, event: {change: $root.customer_changed}">
                 <span class="print-only" data-bind="text: party_address()"></span>
             </div>
