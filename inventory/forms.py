@@ -53,7 +53,7 @@ class ItemForm(KOModelForm):
 
 
 class CategoryForm(KOModelForm):
-    parent = TreeNodeChoiceField(Category.objects.all(),
+    parent = TreeNodeChoiceField(Category.objects.all(), required=False,
                                  widget=forms.Select(attrs={'class': 'select2', 'data-name': 'Category',
                                                             'data-url': reverse_lazy(
                                                                 'create_inventory_category')}))
