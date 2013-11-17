@@ -162,7 +162,7 @@
             {% endif %}
             {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
                 <input class="btn" type="submit" value="Approve"
-                       data-bind="click: $root.approve, visible: $root.id && $root.status() == 'Unapproved'">
+                       data-bind="click: $root.approve, visible: $root.id() && $root.status() == 'Unapproved'">
             {% endifusergroup %}
             <input class="btn" type="submit" value="Cancel"
                    data-bind="click: $root.cancel, visible: $root.status() == 'Cancelled'">
