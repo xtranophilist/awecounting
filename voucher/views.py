@@ -322,7 +322,7 @@ def save_journal_voucher(request):
     dct['id'] = voucher.id
     model = JournalVoucherRow
     for index, row in enumerate(params.get('journal_voucher').get('rows')):
-        if invalid(row, ['account_id']):
+        if invalid(row, ['account']):
                     continue
         empty_to_None(row, ['dr_amount', 'cr_amount'])
         values = {'account_id': row.get('account'), 'dr_amount': row.get('dr_amount'),
@@ -341,13 +341,14 @@ def save_journal_voucher(request):
 @group_required('Owner', 'SuperOwner', 'Supervisor')
 def approve_journal_voucher(request):
     params = json.loads(request.body)
-    dct = {}
+    dct = {'rows': []}
     if params.get('id'):
         voucher = JournalVoucher.objects.get(id=params.get('id'))
     else:
         dct['error_message'] = 'Voucher needs to be saved before being approved!'
         return HttpResponse(json.dumps(dct), mimetype="application/json")
     for row in voucher.rows.all():
+
         if row.type == 'Dr':
             set_transactions(row, voucher.date,
                              ['dr', row.account, row.dr_amount],
@@ -356,6 +357,7 @@ def approve_journal_voucher(request):
             set_transactions(row, voucher.date,
                              ['cr', row.account, row.cr_amount],
             )
+        dct['rows'].append(row.id)
     voucher.status = 'Approved'
     voucher.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
