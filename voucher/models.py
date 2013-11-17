@@ -58,8 +58,8 @@ class InvoiceParticular(models.Model):
 
 class PurchaseVoucher(models.Model):
     voucher_no = models.IntegerField()
-    party = models.ForeignKey(Party, verbose_name=u'From')
-    date = models.DateField()
+    party = models.ForeignKey(Party, verbose_name=u'From', null=True)
+    date = models.DateField(null=True)
     due_date = models.DateField(null=True, blank=True)
     reference = models.CharField(max_length=100, null=True, blank=True)
     currency = models.ForeignKey(Currency)
@@ -67,8 +67,8 @@ class PurchaseVoucher(models.Model):
     tax = models.CharField(max_length=10, choices=tax_choices, default='inclusive')
     attachment = models.FileField(upload_to='purchase_vouchers/%Y/%m/%d', blank=True, null=True)
     company = models.ForeignKey(Company)
-    pending_amount = models.FloatField()
-    total_amount = models.FloatField()
+    pending_amount = models.FloatField(null=True)
+    total_amount = models.FloatField(null=True)
     description = models.TextField(null=True, blank=True)
     statuses = [('Cancelled', 'Cancelled'), ('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
     status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
