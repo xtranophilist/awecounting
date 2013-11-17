@@ -32,9 +32,9 @@
 
             <div class="span6">
                 Paid To:<br/>
-                <input type="hidden" data-field="Supplier"
-                       data-add-url="{% url 'create_party' %}?type=Supplier"
-                       data-bind="value: party, select2: {data: {results: $root.parties}},  event: {change: $root.party_changed}, lookupKey: 'id'">
+                <input type="hidden" data-name="Supplier"
+                       data-url="{% url 'create_party' %}?type=Supplier"
+                       data-bind="value: party, select2: $root.parties, event: {change: $root.party_changed}">
             </div>
 
             <div class="span6">

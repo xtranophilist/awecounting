@@ -32,8 +32,8 @@
 
             <div class="span6">
                 Receipt From:<br/>
-                <input type="hidden" data-field="Customer"
-                       data-add-url="{% url 'create_party' %}?type=Customer"
+                <input type="hidden" data-name="Customer"
+                       data-url="{% url 'create_party' %}?type=Customer"
                        data-bind="value: party, select2: $root.parties, event: {change: $root.party_changed}">
             </div>
 
