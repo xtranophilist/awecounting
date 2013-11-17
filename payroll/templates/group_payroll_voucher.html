@@ -65,9 +65,9 @@
 
                 <tr>
                     <td>
-                        <input type="hidden" data-field="Employee" data-add-url="{% url 'create_employee' %}"
+                        <input type="hidden" data-name="Employee" data-url="{% url 'create_employee' %}"
                                class="change-on-ready"
-                               data-bind="value: employee, select2: {data: {results: $root.employees}}, lookupKey: 'id', event: {change: $root.employee_changed}">
+                               data-bind="value: employee, select2: $root.employees, event: {change: $root.employee_changed}">
                     </td>
                     <td data-bind="text: present_days"></td>
                     <td data-bind="text: present_hours"></td>
@@ -79,8 +79,8 @@
                     <td data-bind="editableText: payroll_tax"></td>
                     <td data-bind="text: net()"></td>
                     <td>
-                        <input type="hidden" data-field="Account" data-add-url="{% url 'create_account' %}"
-                               data-bind="value: pay_head, select2: {data: {results: $root.accounts}}, lookupKey: 'id'">
+                        <input type="hidden" data-name="Account" data-url="{% url 'create_account' %}"
+                               data-bind="value: pay_head, select2: $root.accounts">
                     </td>
                     <td>
                         <button class="btn-none" data-bind="click: $parent.removeRow">

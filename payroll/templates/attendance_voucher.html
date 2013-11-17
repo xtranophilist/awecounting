@@ -44,8 +44,8 @@
         <table class="table table-bordered table-striped table-sortable">
             <tr>
                 <td>Employee:
-                    <input type="hidden" data-field="Employee" data-add-url="{% url 'create_employee' %}"
-                               data-bind="value: employee, select2: {data: {results: $root.employees}}, lookupKey: 'id'">
+                    <input type="hidden" data-name="Employee" data-url="{% url 'create_employee' %}"
+                               data-bind="value: employee, select2: $root.employees">
                 </td>
                 <td>
                     From : <input type="text" data-bind="value: from_date" class="date-picker"
