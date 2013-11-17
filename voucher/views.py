@@ -130,7 +130,7 @@ def approve_invoice(request):
     else:
         dct['error_message'] = 'Voucher needs to be saved before being approved!'
         return HttpResponse(json.dumps(dct), mimetype="application/json")
-    cash_account = Account.objects.get(name='Cash Account', company=request.company)
+    #cash_account = Account.objects.get(name='Cash Account', company=request.company)
     sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
     for row in voucher.particulars.all():
         #print row
@@ -150,7 +150,7 @@ def approve_invoice(request):
             net_amount = amt
         sales_account = row.item.sales_account
         set_transactions(row, voucher.date,
-                         ['dr', cash_account, amt],
+                         ['dr', voucher.party.customer_account, amt],
                          ['cr', sales_account, net_amount],
                          ['cr', sales_tax_account, tax_amount],
         )
