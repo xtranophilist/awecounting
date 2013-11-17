@@ -532,7 +532,7 @@ def approve_cash_receipt(request):
     #['cr', Account.objects.get(id=params.get('total_payment')), row.get('cr_amount')],
     #        )
     cash_account = Account.objects.get(name='Cash Account', company=request.company)
-    discount_expenses_account = Account.objects.get(name='Discounting Expenses', company=request.company)
+    discount_expenses_account = Account.objects.get(name='Discount Expenses', company=request.company)
     if params.get('table_vm') and params.get('table_vm').get('rows'):
         total = float(params.get('total_payment')) + float(params.get('total_discount'))
         set_transactions(voucher, params.get('receipt_on'),
