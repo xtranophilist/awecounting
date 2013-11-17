@@ -91,8 +91,9 @@ function InvoiceViewModel(data) {
 
     self.validate = function () {
         self.message('');
+        bs_alert.clear();
         if (!self.party) {
-            self.message('"To" field is required!')
+            bs_alert.error('"To" field is required!');
             self.state('error');
             return false;
         }
@@ -112,10 +113,10 @@ function InvoiceViewModel(data) {
                 data: ko.toJSON(self),
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
-                        self.message(msg.error_message);
+                        bs_alert.error(msg.error_message);
                     }
                     else {
-                        self.message('Saved!');
+                        bs_alert.success('Saved!');
                         if (msg.id) {
                             self.id(msg.id);
                             self.status('Unapproved');
@@ -151,10 +152,10 @@ function InvoiceViewModel(data) {
                 data: ko.toJSON(self),
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
-                        self.message(msg.error_message);
+                        bs_alert.error(msg.error_message);
                     }
                     else {
-                        self.message('Approved!')
+                        bs_alert.success('Approved!')
                         self.status('Approved');
                         self.state('success');
                     }
@@ -172,10 +173,10 @@ function InvoiceViewModel(data) {
             data: ko.toJSON(self),
             success: function (msg) {
                 if (typeof (msg.error_message) != 'undefined') {
-                    $('#message').html(msg.error_message);
+                    bs_alert.error(msg.error_message);
                 }
                 else {
-                    self.message('Cancelled!');
+                    bs_alert.success('Cancelled!');
                     self.status('Cancelled');
                     self.state('success');
                     if (msg.id)
@@ -195,10 +196,10 @@ function InvoiceViewModel(data) {
                 data: ko.toJSON(self),
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
-                        $('#message').html(msg.error_message);
+                        bs_alert.error(msg.error_message);
                     }
                     else {
-                        $('#message').html('Saved!');
+                        bs_alert.success('Saved!');
                         if (msg.id)
                             self.id = msg.id;
                         $("#particulars-body > tr").each(function (i) {
@@ -264,8 +265,8 @@ function InvoiceViewModel(data) {
         if (!selected_item) return;
         if (!row.description())
             row.description(selected_item.description);
-        if (!row.unit_price())
-            row.unit_price(selected_item.sales_price);
+//        if (!row.unit_price())
+//            row.unit_price(selected_item.sales_price);
         if (!row.tax_scheme())
             row.tax_scheme(selected_item.tax_scheme);
     }
