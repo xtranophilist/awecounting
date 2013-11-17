@@ -14,7 +14,6 @@ from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, Jo
 from acubor.lib import invalid, save_model, all_empty_in_dict
 from ledger.models import delete_rows, Account, set_transactions, Party, Category
 from voucher.filters import InvoiceFilter, PurchaseVoucherFilter
-from inventory.models import Item
 from voucher.templatetags.filters import handler
 
 
@@ -130,7 +129,7 @@ def approve_invoice(request):
     else:
         dct['error_message'] = 'Voucher needs to be saved before being approved!'
         return HttpResponse(json.dumps(dct), mimetype="application/json")
-    #cash_account = Account.objects.get(name='Cash Account', company=request.company)
+        #cash_account = Account.objects.get(name='Cash Account', company=request.company)
     sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
     for row in voucher.particulars.all():
         #print row
@@ -169,6 +168,37 @@ def cancel_invoice(request):
     return r
 
 
+@group_required('Owner', 'SuperOwner', 'Supervisor')
+def approve_purchase(request):
+    params = json.loads(request.body)
+    dct = {}
+    if params.get('id'):
+        voucher = PurchaseVoucher.objects.get(id=params.get('id'))
+    else:
+        dct['error_message'] = 'Voucher needs to be saved before being approved!'
+        return HttpResponse(json.dumps(dct), mimetype="application/json")
+    for row in voucher.particulars.all():
+        wo_discount = row.quantity * row.unit_price
+        amt = wo_discount - ((row.discount * wo_discount) / 100)
+        set_transactions(row, voucher.date,
+                         ['dr', voucher.party, amt],
+                         ['cr', row.item.purchase_account, amt],
+        )
+    voucher.status = 'Approved'
+    voucher.save()
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+
+@login_required
+def cancel_purchase(request):
+    r = save_invoice(request)
+    dct = json.loads(r.content)
+    obj = Invoice.objects.get(id=dct.get('id'))
+    obj.status = 'Cancelled'
+    obj.save()
+    return r
+
+
 @login_required
 def delete_invoice(request, invoice_no):
     obj = Invoice.objects.get(invoice_no=invoice_no, company=request.company)
@@ -196,7 +226,8 @@ def purchase_voucher(request, id=None):
         voucher = get_object_or_404(PurchaseVoucher, id=id, company=request.company)
         scenario = 'Update'
     else:
-        voucher = PurchaseVoucher(date=date.today(), currency=company_setting.default_currency, tax='no', company=request.company)
+        voucher = PurchaseVoucher(date=date.today(), currency=company_setting.default_currency, tax='no',
+                                  company=request.company)
         scenario = 'Create'
     if request.POST:
         form = PurchaseVoucherForm(request.POST, request.FILES, instance=voucher, company=request.company)
@@ -215,7 +246,7 @@ def purchase_voucher(request, id=None):
             voucher.status = 'Unapproved'
             voucher.save()
             model = PurchaseParticular
-            cash_account = Account.objects.get(name='Cash Account', company=request.company)
+
             for index, row in enumerate(particulars.get('rows')):
                 if invalid(row, ['item_id', 'unit_price', 'quantity']):
                     continue
@@ -223,13 +254,6 @@ def purchase_voucher(request, id=None):
                           'unit_price': row.get('unit_price'), 'quantity': row.get('quantity'),
                           'discount': row.get('discount'), 'purchase_voucher': voucher}
                 submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-                wo_discount = float(row.get('quantity')) * float(row.get('unit_price'))
-                amt = wo_discount - ((float(row.get('discount')) * wo_discount) / 100)
-                purchase_account = Item.objects.get(id=row.get('item_id')).purchase_account
-                set_transactions(submodel, request.POST['date'],
-                                 ['dr', cash_account, amt],
-                                 ['cr', purchase_account, amt],
-                )
                 if not created:
                     submodel = save_model(submodel, values)
             delete_rows(particulars.get('deleted_rows'), model)

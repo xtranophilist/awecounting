@@ -17,6 +17,9 @@ urlpatterns = patterns('',
                        url(r'^purchase/(?P<id>[0-9]+)/$', views.purchase_voucher, name='view_purchase_voucher'),
                        url(r'^purchase/party/(?P<id>[0-9]+).json$', views.party_purchase_vouchers,
                            name='party_purchase_vouchers'),
+                       url(r'^purchase/approve/$', views.approve_purchase, name='approve_purchase'),
+
+
                        url(r'^journals/$', views.list_journal_vouchers, name='list_journal_vouchers'),
                        url(r'^journal/$', views.journal_voucher, name='new_journal_voucher'),
                        url(r'^journal/(?P<id>[0-9]+)/$', views.journal_voucher, name='update_journal_voucher'),
