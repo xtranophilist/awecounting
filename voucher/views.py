@@ -288,6 +288,15 @@ def journal_voucher(request, id=None):
     data = JournalVoucherSerializer(voucher).data
     return render(request, 'journal_voucher.html', {'data': data, 'scenario': scenario})
 
+@login_required
+def cancel_journal_voucher(request):
+    r = save_journal_voucher(request)
+    dct = json.loads(r.content)
+    obj = JournalVoucher.objects.get(id=dct.get('id'))
+    obj.status = 'Cancelled'
+    obj.save()
+    return r
+
 
 def empty_to_None(dict, list_of_attr):
     for attr in list_of_attr:
@@ -348,7 +357,6 @@ def approve_journal_voucher(request):
         dct['error_message'] = 'Voucher needs to be saved before being approved!'
         return HttpResponse(json.dumps(dct), mimetype="application/json")
     for row in voucher.rows.all():
-
         if row.type == 'Dr':
             set_transactions(row, voucher.date,
                              ['dr', row.account, row.dr_amount],

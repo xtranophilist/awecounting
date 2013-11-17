@@ -88,6 +88,8 @@
                 <input class="btn" type="submit" value="Approve"
                        data-bind="click: $root.journal_voucher.approve, visible: $root.id() && $root.status() == 'Unapproved'">
             {% endifusergroup %}
+            <input class="btn" type="submit" value="Cancel"
+                   data-bind="click: $root.journal_voucher.cancel, visible: $root.status() != 'Cancelled'">
             {% if scenario == 'Update' %}
                 <a class="btn btn-danger" href="{% url 'delete_journal_voucher' data.id %}">Delete</a>
             {% endif %}
