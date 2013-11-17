@@ -129,7 +129,7 @@ function JournalVoucher(data) {
         return 'invalid-row';
     }
 
-    self.journal_voucher.save = function () {
+    self.journal_voucher.save = function (item, event) {
 
         self.journal_voucher.state('waiting');
 
@@ -143,33 +143,44 @@ function JournalVoucher(data) {
             valid = false;
         }
 
-        if (!self.date) {
-            message += 'Date field is required!';
-            valid = false;
-        }
+//        if (!self.date) {
+//            message += 'Date field is required!';
+//            valid = false;
+//        }
 
-        self.journal_voucher.message(message);
+//        self.journal_voucher.message(message);
         if (!valid) {
             self.journal_voucher.state('error');
+            bs_alert.error(message);
             return false;
         }
-        $.ajax({
-            type: "POST",
-            url: '/voucher/journal/save/',
-            data: ko.toJSON(self),
-            success: function (msg) {
-                self.journal_voucher.message('Saved!');
-                self.deleted_rows = [];
-                self.journal_voucher.state('success');
+        if (get_form(event).checkValidity()) {
 
-            },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                self.journal_voucher.message('Saving Failed!');
-                self.journal_voucher.state('error');
+            if ($(get_target(event)).data('continue')) {
+                self.continue = true;
             }
-        });
+            $.ajax({
+                type: "POST",
+                url: '/voucher/journal/save/',
+                data: ko.toJSON(self),
+                success: function (msg) {
+                    self.journal_voucher.message('Saved!');
+                    self.deleted_rows = [];
+                    self.journal_voucher.state('success');
+                    if (msg.redirect_to) {
+                        window.location = msg.redirect_to;
+                        return;
+                    }
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    self.journal_voucher.message('Saving Failed!');
+                    self.journal_voucher.state('error');
+                }
+            });
 
-
+        }
+        else
+            return true;
     }
 }
 
