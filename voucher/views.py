@@ -283,7 +283,7 @@ def journal_voucher(request, id=None):
         voucher = get_object_or_404(JournalVoucher, id=id, company=request.company)
         scenario = 'Update'
     else:
-        voucher = JournalVoucher(company=request.company)
+        voucher = JournalVoucher(company=request.company, date=date.today())
         scenario = 'Create'
     data = JournalVoucherSerializer(voucher).data
     return render(request, 'journal_voucher.html', {'data': data, 'scenario': scenario})
@@ -306,17 +306,24 @@ def list_journal_vouchers(request):
 def save_journal_voucher(request):
     params = json.loads(request.body)
     dct = {'rows': {}}
-
-    voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'),
-                      'narration': params.get('narration'), 'company': request.company}
     if params.get('id'):
         voucher = JournalVoucher.objects.get(id=params.get('id'))
     else:
-        voucher = JournalVoucher()
+        voucher = JournalVoucher(company=request.company)
+    try:
+        existing = JournalVoucher.objects.get(voucher_no=params.get('voucher_no'), company=request.company)
+        if voucher.id is not existing.id:
+            return HttpResponse(json.dumps({'error_message': 'Voucher no. already exists'}), mimetype="application/json")
+    except PurchaseVoucher.DoesNotExist:
+        pass
+    voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'),
+                      'narration': params.get('narration'), 'company': request.company}
     voucher = save_model(voucher, voucher_values)
     dct['id'] = voucher.id
     model = JournalVoucherRow
     for index, row in enumerate(params.get('journal_voucher').get('rows')):
+        if invalid(row, ['account_id']):
+                    continue
         empty_to_None(row, ['dr_amount', 'cr_amount'])
         values = {'account_id': row.get('account'), 'dr_amount': row.get('dr_amount'),
                   'cr_amount': row.get('cr_amount'), 'type': row.get('type'),
@@ -401,9 +408,9 @@ def save_journal_voucher(request):
 
 @login_required
 def delete_journal_voucher(request, id):
-    obj = JournalVoucher.objects.get(id=id, company=request.company)
+    obj = get_object_or_404(JournalVoucher, id=id, company=request.company)
     obj.delete()
-    return redirect(reverse('all_journal_vouchers'))
+    return redirect(reverse('list_journal_vouchers'))
 
 
 @login_required
