@@ -61,12 +61,13 @@ function PurchaseVoucherViewModel(data) {
         self[k] = data[k];
 
     self.tax = ko.observable(data['tax']);
+    self.id = ko.observable(data['id']);
+    self.status = ko.observable(data['status']);
 
     self.message = ko.observable('');
     self.state = ko.observable('standby');
 
     self.party_address = ko.observable('');
-
 
 
     var options = {
@@ -144,8 +145,9 @@ function PurchaseVoucherViewModel(data) {
     }
 
     self.validate = function () {
+        bs_alert.clear();
         if (!self.party) {
-            self.message('"From" field is required!');
+            bs_alert.error('"From" field is required!');
             self.state('error');
             return false;
         }
@@ -160,8 +162,8 @@ function PurchaseVoucherViewModel(data) {
         if (!selected_item) return;
         if (!row.description())
             row.description(selected_item.description);
-        if (!row.unit_price())
-            row.unit_price(selected_item.sales_price);
+//        if (!row.unit_price())
+//            row.unit_price(selected_item.sales_price);
         if (!row.tax_scheme())
             row.tax_scheme(selected_item.tax_scheme);
     }
@@ -179,6 +181,50 @@ function PurchaseVoucherViewModel(data) {
         }
         return round2(self.sub_total());
     }, self);
+
+    self.approve = function (item, event) {
+        if (!self.validate())
+            return false;
+        if (get_form(event).checkValidity()) {
+            $.ajax({
+                type: "POST",
+                url: '/voucher/purchase/approve/',
+                data: ko.toJSON(self),
+                success: function (msg) {
+                    if (typeof (msg.error_message) != 'undefined') {
+                        bs_alert.error(msg.error_message);
+                    }
+                    else {
+                        bs_alert.success('Approved!')
+                        self.status('Approved');
+                        self.state('success');
+                    }
+                }
+            });
+        }
+        else
+            return true;
+    }
+
+//    self.cancel = function (item, event) {
+//        $.ajax({
+//            type: "POST",
+//            url: '/voucher/purchase/cancel/',
+//            data: ko.toJSON(self),
+//            success: function (msg) {
+//                if (typeof (msg.error_message) != 'undefined') {
+//                    bs_alert.error(msg.error_message);
+//                }
+//                else {
+//                    bs_alert.success('Cancelled!');
+//                    self.status('Cancelled');
+//                    self.state('success');
+//                    if (msg.id)
+//                        self.id = msg.id;
+//                }
+//            }
+//        });
+//    }
 
 }
 
