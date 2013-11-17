@@ -334,6 +334,8 @@ def save_journal_voucher(request):
             submodel = save_model(submodel, values)
         dct['rows'][index] = submodel.id
     delete_rows(params.get('journal_voucher').get('deleted_rows'), model)
+    if params.get('continue'):
+        dct = {'redirect_to': str(reverse_lazy('new_journal_voucher'))}
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 @group_required('Owner', 'SuperOwner', 'Supervisor')
