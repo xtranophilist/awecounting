@@ -40,7 +40,7 @@ class Account(models.Model):
     opening_cr = models.FloatField(default=0)
 
     class Meta:
-        unique_together = (('company', 'name'), ('company', 'code'),)
+        unique_together = (('company', 'name'), )
 
     def get_absolute_url(self):
         return '/ledger/' + str(self.id)

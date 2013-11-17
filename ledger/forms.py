@@ -42,16 +42,17 @@ class AccountForm(KOModelForm):
             raise forms.ValidationError("You can't enter both Opening Dr and Cr amounts.")
 
         try:
-            object = Account.objects.get(name=name, company=self.company)
-            if not object.id == self.instance.id:
+            obj = Account.objects.get(name=name, company=self.company)
+            if not obj.id == self.instance.id:
                 raise forms.ValidationError("Account name already exists.")
         except Account.DoesNotExist:
             pass
 
         try:
-            object = Account.objects.get(code=code, company=self.company)
-            if not object.id == self.instance.id:
-                raise forms.ValidationError("Account code already exists.")
+            objs = Account.objects.filter(code=code, company=self.company)
+            if code != '':
+                if objs.exists() and not self.instance.id in [obj.id for obj in objs]:
+                    raise forms.ValidationError("Account code already exists.")
         except Account.DoesNotExist:
             pass
 
@@ -67,9 +68,9 @@ class PartyForm(KOModelForm):
 
 class CategoryForm(KOModelForm):
     parent = TreeNodeChoiceField(Category.objects.all(), empty_label=None,
-                                   widget=forms.Select(attrs={'class': 'select2', 'data-name': 'Category',
-                                                              'data-url': reverse_lazy(
-                                                                  'create_category')}))
+                                 widget=forms.Select(attrs={'class': 'select2', 'data-name': 'Category',
+                                                            'data-url': reverse_lazy(
+                                                                'create_category')}))
 
 
     def __init__(self, *args, **kwargs):
