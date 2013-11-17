@@ -115,7 +115,7 @@ function CashPaymentVM(data) {
                 data: data,
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
-                        self.message(msg.error_message);
+                        bs_alert.error(msg.error_message);
                         self.state('error');
                     }
                     else {
@@ -144,11 +144,11 @@ function CashPaymentVM(data) {
                 data: ko.toJSON(self),
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
-                        self.message(msg.error_message);
+                        bs_alert.error(msg.error_message);
                         self.state('error');
                     }
                     else {
-                        self.message('Approved!');
+                        bs_alert.success('Approved!');
                         self.state('success');
                         if (msg.id)
                             self.id(msg.id);

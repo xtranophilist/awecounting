@@ -43,7 +43,7 @@ function AttendanceVoucherVM(data) {
     self.validate = function () {
         self.message('');
         if (!self.employee()) {
-            self.message('Employee field is required!')
+            bs_alert.error('Employee field is required!')
             self.state('error');
             return false;
         }
@@ -73,7 +73,7 @@ function AttendanceVoucherVM(data) {
                 data: data,
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
-                        self.message(msg.error_message);
+                        bs_alert.error(msg.error_message);
                         self.state('error');
                     }
                     else {

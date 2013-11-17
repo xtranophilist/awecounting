@@ -134,7 +134,7 @@ function IndividualPayrollVoucherVM(data) {
                 data: data,
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
-                        self.message(msg.error_message);
+                        bs_alert.error(msg.error_message);
                         self.state('error');
                     }
                     else {
@@ -179,11 +179,11 @@ function IndividualPayrollVoucherVM(data) {
                 data: ko.toJSON(self),
                 success: function (msg) {
                     if (typeof (msg.error_message) != 'undefined') {
-                        self.message(msg.error_message);
+                        bs_alert.error(msg.error_message);
                         self.state('error');
                     }
                     else {
-                        self.message('Approved!');
+                        bs_alert.success('Approved!');
                         self.state('success');
                         self.status('Approved');
                         if (msg.id)
