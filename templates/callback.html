@@ -6,7 +6,7 @@
     $('#modal' + $('.modal').length).remove();
     el = $(window.last_active_select.pop());
 
-    var matches = el.data('bind').match(/\{results: \$root\.([a-z_]+)\}/);
+    var matches = el.data('bind').match(/select2: \$root\.([a-z_]+)/);
     if (el.data('to')) {
         {#        if (typeof vm[el.data('add-to')] == 'function')#}
         {#            vm[el.data('add-to')]().push(obj);#}
