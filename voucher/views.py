@@ -181,7 +181,7 @@ def approve_purchase(request):
         wo_discount = row.quantity * row.unit_price
         amt = wo_discount - ((row.discount * wo_discount) / 100)
         set_transactions(row, voucher.date,
-                         ['dr', voucher.party, amt],
+                         ['dr', voucher.party.supplier_account, amt],
                          ['cr', row.item.purchase_account, amt],
         )
     voucher.status = 'Approved'
