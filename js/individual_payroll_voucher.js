@@ -111,9 +111,9 @@ function IndividualPayrollVoucherVM(data) {
     self.deductions = new TableViewModel({rows: data.deductions}, IndividualPayrollVoucherRowVM);
 
     self.validate = function () {
-        self.message('');
+        bs_alert.clear()
         if (!self.employee()) {
-            self.message('"Employee" is required!')
+            bs_alert.error('"Employee" is required!')
             self.state('error');
             return false;
         }
@@ -138,7 +138,7 @@ function IndividualPayrollVoucherVM(data) {
                         self.state('error');
                     }
                     else {
-                        self.message('Saved!');
+                        bs_alert.success('Saved!');
                         self.state('success');
                         if (msg.id) {
                             self.id(msg.id);

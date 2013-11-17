@@ -41,7 +41,7 @@ function AttendanceVoucherVM(data) {
     }
 
     self.validate = function () {
-        self.message('');
+        bs_alert.clear()
         if (!self.employee()) {
             bs_alert.error('Employee field is required!')
             self.state('error');
@@ -77,7 +77,7 @@ function AttendanceVoucherVM(data) {
                         self.state('error');
                     }
                     else {
-                        self.message('Saved!');
+                        bs_alert.success('Saved!');
                         self.state('success');
                         if (msg.id)
                             self.id(msg.id);

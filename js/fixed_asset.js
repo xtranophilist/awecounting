@@ -65,7 +65,7 @@ function FixedAssetVM(data) {
 
     self.validate = function () {
         if (!self.from_account()) {
-            self.message('"From" field is required!')
+            bs_alert.error('"From" field is required!')
             self.state('error');
             return false;
         }
@@ -90,7 +90,7 @@ function FixedAssetVM(data) {
                         self.state('error');
                     }
                     else {
-                        self.message('Saved!');
+                        bs_alert.success('Saved!');
                         self.state('success');
                         if (msg.id) {
                             self.id(msg.id);

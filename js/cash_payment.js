@@ -67,11 +67,11 @@ function CashPaymentVM(data) {
                             rows: self.invoices
                         };
                         self.table_vm(new TableViewModel(options, CashPaymentRowVM));
-                        self.message('Purchase Vouchers loaded!');
+                        bs_alert.success('Purchase Vouchers loaded!');
                         self.state('success');
                     }
                     else {
-                        self.message('No pending purchase vouchers found for the supplier!');
+                        bs_alert.warning('No pending purchase vouchers found for the supplier!');
                         self.state('error');
                     }
                 }
@@ -94,7 +94,7 @@ function CashPaymentVM(data) {
 
     self.validate = function () {
         if (!self.party()) {
-            self.message('"Party" field is required!')
+            bs_alert.error('"Party" field is required!')
             self.state('error');
             return false;
         }
@@ -119,7 +119,7 @@ function CashPaymentVM(data) {
                         self.state('error');
                     }
                     else {
-                        self.message('Saved!');
+                        bs_alert.success('Saved!');
                         self.state('success');
                         if (msg.id)
                             self.id(msg.id);

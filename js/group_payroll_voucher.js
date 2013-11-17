@@ -72,7 +72,7 @@ function GroupPayrollVoucherVM(data) {
                         self.state('error');
                     }
                     else {
-                        self.message('Saved!');
+                        bs_alert.success('Saved!');
                         self.state('success');
                         if (msg.id){
                             self.id(msg.id);

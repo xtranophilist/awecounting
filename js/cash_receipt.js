@@ -97,7 +97,7 @@ function CashReceiptVM(data) {
 
     self.validate = function () {
         if (!self.party()) {
-            self.message('"Party" field is required!')
+            bs_alert.error('"Party" field is required!')
             self.state('error');
             return false;
         }
@@ -122,7 +122,7 @@ function CashReceiptVM(data) {
                         self.state('error');
                     }
                     else {
-                        self.message('Saved!');
+                        bs_alert.success('Saved!');
                         self.state('success');
                         if (msg.id)
                             self.id(msg.id);

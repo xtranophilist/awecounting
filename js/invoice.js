@@ -90,8 +90,7 @@ function InvoiceViewModel(data) {
 //    };
 
     self.validate = function () {
-        self.message('');
-        bs_alert.clear();
+        bs_alert.clear()
         if (!self.party) {
             bs_alert.error('"To" field is required!');
             self.state('error');
