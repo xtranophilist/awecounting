@@ -314,9 +314,9 @@ def save_journal_voucher(request):
         existing = JournalVoucher.objects.get(voucher_no=params.get('voucher_no'), company=request.company)
         if voucher.id is not existing.id:
             return HttpResponse(json.dumps({'error_message': 'Voucher no. already exists'}), mimetype="application/json")
-    except PurchaseVoucher.DoesNotExist:
+    except JournalVoucher.DoesNotExist:
         pass
-    voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'),
+    voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'), 'status': 'Unapproved',
                       'narration': params.get('narration'), 'company': request.company}
     voucher = save_model(voucher, voucher_values)
     dct['id'] = voucher.id
@@ -329,19 +329,35 @@ def save_journal_voucher(request):
                   'cr_amount': row.get('cr_amount'), 'type': row.get('type'),
                   'journal_voucher': voucher}
         submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
-        if row.get('type') == 'Dr':
-            set_transactions(submodel, params.get('date'),
-                             ['dr', Account.objects.get(id=row.get('account')), row.get('dr_amount')],
-            )
-        else:
-            set_transactions(submodel, params.get('date'),
-                             ['cr', Account.objects.get(id=row.get('account')), row.get('cr_amount')],
-            )
+
         if not created:
             submodel = save_model(submodel, values)
         dct['rows'][index] = submodel.id
     delete_rows(params.get('journal_voucher').get('deleted_rows'), model)
     return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+@group_required('Owner', 'SuperOwner', 'Supervisor')
+def approve_journal_voucher(request):
+    params = json.loads(request.body)
+    dct = {}
+    if params.get('id'):
+        voucher = JournalVoucher.objects.get(id=params.get('id'))
+    else:
+        dct['error_message'] = 'Voucher needs to be saved before being approved!'
+        return HttpResponse(json.dumps(dct), mimetype="application/json")
+    for row in voucher.rows.all():
+        if row.type == 'Dr':
+            set_transactions(row, voucher.date,
+                             ['dr', row.account, row.dr_amount],
+            )
+        else:
+            set_transactions(row, voucher.date,
+                             ['cr', row.account, row.cr_amount],
+            )
+    voucher.status = 'Approved'
+    voucher.save()
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
 
 #
 # def bank_voucher(request, id=None):
