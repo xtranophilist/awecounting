@@ -14,11 +14,11 @@ class BankAccountForm(KOModelForm):
 
 class ChequeDepositForm(KOModelForm):
     bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
-                                          widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Bank Account',
+                                          widget=forms.Select(attrs={'class': 'select2', 'data-name': 'Bank Account',
                                                                      'data-url': reverse_lazy('create_bank_account')}),
                                           label='Beneficiary Account')
     benefactor = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
-                                        widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Benefactor',
+                                        widget=forms.Select(attrs={'class': 'select2', 'data-name': 'Benefactor',
                                                                    'data-url': reverse_lazy('create_account')}),
                                         label='Benefactor (Given By)')
     date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
@@ -55,11 +55,11 @@ class ChequeDepositForm(KOModelForm):
 
 class ElectronicFundTransferInForm(KOModelForm):
     bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
-                                          widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Bank Account',
+                                          widget=forms.Select(attrs={'class': 'select2', 'data-name': 'Bank Account',
                                                                      'data-url': reverse_lazy('create_bank_account')}),
                                           label='Beneficiary Account')
     benefactor = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
-                                        widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Benefactor',
+                                        widget=forms.Select(attrs={'class': 'select2', 'data-name': 'Benefactor',
                                                                    'data-url': reverse_lazy('create_account')}),
                                         label='Benefactor (Given By)')
     date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
@@ -98,7 +98,7 @@ class ElectronicFundTransferInForm(KOModelForm):
 class BankCashDepositForm(KOModelForm):
     date = forms.DateField(widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
     bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
-                                          widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Bank Acc.',
+                                          widget=forms.Select(attrs={'class': 'select2', 'data-name': 'Bank Acc.',
                                                                      'data-url': reverse_lazy(
                                                                          'create_bank_account')}),
                                           label='Beneficiary Account')
@@ -136,7 +136,7 @@ class BankCashDepositForm(KOModelForm):
 
 class ChequePaymentForm(KOModelForm):
     bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
-                                          widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Bank Acc.',
+                                          widget=forms.Select(attrs={'class': 'select2', 'data-name': 'Bank Acc.',
                                                                      'data-url': reverse_lazy(
                                                                          'create_bank_account')}))
     beneficiary = forms.ModelChoiceField(Account.objects.all(), empty_label=None,
@@ -163,7 +163,7 @@ class ChequePaymentForm(KOModelForm):
 
 class ElectronicFundTransferOutForm(KOModelForm):
     bank_account = forms.ModelChoiceField(Account.objects.filter(category__name='Bank Account'), empty_label=None,
-                                          widget=forms.Select(attrs={'class': 'select2', 'data-field': 'Bank Acc.',
+                                          widget=forms.Select(attrs={'class': 'select2', 'data-name': 'Bank Acc.',
                                                                      'data-url': reverse_lazy(
                                                                          'create_bank_account')}))
     beneficiary = forms.ModelChoiceField(Account.objects.all(), empty_label=None,

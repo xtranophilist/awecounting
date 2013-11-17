@@ -9,8 +9,8 @@ from voucher.models import Invoice, PurchaseVoucher, CashReceipt
 
 class InvoiceForm(KOModelForm):
     party = forms.ModelChoiceField(Party.objects.all(), empty_label='Choose a customer',
-                                   widget=forms.Select(attrs={'class': 'select2 placehold', 'data-field': 'Customer',
-                                                              'data-add-url': reverse_lazy('create_party'),
+                                   widget=forms.Select(attrs={'class': 'select2 placehold', 'data-name': 'Customer',
+                                                              'data-url': reverse_lazy('create_party'),
                                    }),
                                    label='To')
     currency = forms.ModelChoiceField(Currency.objects.all(), empty_label=None,
