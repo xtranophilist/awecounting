@@ -30,13 +30,16 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
+        {{ form.voucher_no.label_tag }}
+        {{ form.voucher_no }}
+        {{ form.voucher_no.errors }}
+
         <div class="row-fluid">
 
             <div class="span3">
                 {{ form.party.label_tag }}
-                <input type="hidden" data-field="Supplier" name="party"
-                       data-add-url="{% url 'create_party' %}?type=Supplier"
-                       data-bind="value: party, select2: {data: {results: $root.suppliers}},  event: {change: $root.supplier_changed}, lookupKey: 'id'">
+                <input type="hidden" data-name="Supplier" name="party" data-url="{% url 'create_party' %}?type=Supplier"
+                       data-bind="value: party, select2: $root.suppliers, event: {change: $root.supplier_changed}">
                 <span class="print-only" data-bind="text: party_address()"></span>
             </div>
 
@@ -110,9 +113,9 @@
                         <span class="wid-pad pull-left" data-bind="text:  $index()+1"> </span>
                     </td>
                     <td class="with_ip">
-                        <input type="hidden" data-field="Item" data-add-url="{% url 'create_inventory_item' %}"
-                               data-bind="value: item_id, select2: {data: {results: $root.items}, formatSelection: return_name,
-formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-item'},  event: {change: $root.itemChanged}, lookupKey: 'id'">
+                        <input type="hidden" data-name="Item"
+                               data-url="{% url 'create_inventory_item' %}"
+                               data-bind="value: item_id, select2: $root.items, event: {change: $root.itemChanged}">
                     </td>
                     <td data-bind="editableText: description">
                     </td>
@@ -138,6 +141,7 @@ formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-
                 <i class="icon-plus-sign"></i> Add New Row
             </button>
             <br><br>
+
             <div>
                 Description: <textarea name="description" data-bind="value: $root.description"></textarea>
             </div>
@@ -145,7 +149,12 @@ formatResult: return_name, initSelection: init_select2, dropdownCssClass: 'drop-
             {% if scenario == 'Update' %}
                 <a class="btn btn-danger" href="{% url 'delete_purchase_voucher' form.instance.id %}">Delete</a>
             {% endif %}
-            <a class="btn" href="/voucher/purchase/new/">New</a>
+            {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
+                <input class="btn" type="submit" value="Approve"
+                       data-bind="click: $root.approve, visible: $root.id() && $root.status() == 'Unapproved'">
+            {% endifusergroup %}
+            <input class="btn" type="submit" value="Cancel"
+                   data-bind="click: $root.cancel, visible: $root.status() != 'Cancelled'">
         </div>
     </form>
 

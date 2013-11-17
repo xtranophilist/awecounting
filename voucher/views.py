@@ -196,7 +196,7 @@ def purchase_voucher(request, id=None):
         voucher = get_object_or_404(PurchaseVoucher, id=id, company=request.company)
         scenario = 'Update'
     else:
-        voucher = PurchaseVoucher(date=date.today(), currency=company_setting.default_currency, tax='no')
+        voucher = PurchaseVoucher(date=date.today(), currency=company_setting.default_currency, tax='no', company=request.company)
         scenario = 'Create'
     if request.POST:
         form = PurchaseVoucherForm(request.POST, request.FILES, instance=voucher, company=request.company)
@@ -212,9 +212,8 @@ def purchase_voucher(request, id=None):
                 voucher.total_amount = 0
             if voucher.pending_amount == '':
                 voucher.pending_amount = 0
+            voucher.status = 'Unapproved'
             voucher.save()
-
-        if id or form.is_valid():
             model = PurchaseParticular
             cash_account = Account.objects.get(name='Cash Account', company=request.company)
             for index, row in enumerate(particulars.get('rows')):
@@ -234,8 +233,9 @@ def purchase_voucher(request, id=None):
                 if not created:
                     submodel = save_model(submodel, values)
             delete_rows(particulars.get('deleted_rows'), model)
-            return redirect('/voucher/purchases/')
-    form = PurchaseVoucherForm(instance=voucher, company=request.company)
+            return redirect(reverse_lazy('view_purchase_voucher', kwargs={'id': voucher.id}))
+    else:
+        form = PurchaseVoucherForm(instance=voucher, company=request.company)
     purchase_voucher_data = PurchaseVoucherSerializer(voucher).data
     return render(request, 'purchase_voucher.html', {'form': form, 'data': purchase_voucher_data, 'scenario': scenario})
 

@@ -23,7 +23,7 @@ class InvoiceForm(KOModelForm):
 
     class Meta:
         model = Invoice
-        exclude = ['company']
+        exclude = ['company', 'status']
 
 
 class PurchaseVoucherForm(KOModelForm):
@@ -39,13 +39,23 @@ class PurchaseVoucherForm(KOModelForm):
     )
 
     def __init__(self, *args, **kwargs):
-        company = kwargs.pop('company', None)
+        self.company = kwargs.pop('company', None)
         super(PurchaseVoucherForm, self).__init__(*args, **kwargs)
-        self.fields['party'].queryset = Party.objects.filter(company=company, supplier_account__isnull=False)
+        self.fields['party'].queryset = Party.objects.filter(company=self.company, supplier_account__isnull=False)
+
+    def clean_voucher_no(self):
+        try:
+            existing = PurchaseVoucher.objects.get(voucher_no=self.cleaned_data['voucher_no'], company=self.company)
+            if self.instance.id is not existing.id:
+                raise forms.ValidationError("The voucher no. " + str(
+                    self.cleaned_data['voucher_no']) + " is already in use. Suggested voucher no. has been provided!")
+            return self.cleaned_data['voucher_no']
+        except PurchaseVoucher.DoesNotExist:
+            return self.cleaned_data['voucher_no']
 
     class Meta:
         model = PurchaseVoucher
-        exclude = ['company', 'pending_amount', 'total_amount']
+        exclude = ['company', 'pending_amount', 'total_amount', 'status']
 
 
 class CashReceiptForm(KOModelForm):
@@ -54,4 +64,4 @@ class CashReceiptForm(KOModelForm):
 
     class Meta:
         model = CashReceipt
-        exclude = ['company']
+        exclude = ['company', 'status']
