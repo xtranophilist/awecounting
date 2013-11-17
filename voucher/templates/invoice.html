@@ -165,7 +165,7 @@
                        data-bind="click: $root.approve, visible: $root.id() && $root.status() == 'Unapproved'">
             {% endifusergroup %}
             <input class="btn" type="submit" value="Cancel"
-                   data-bind="click: $root.cancel, visible: $root.status() == 'Cancelled'">
+                   data-bind="click: $root.cancel, visible: $root.status() != 'Cancelled'">
             <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
             <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save"
                    data-continue="true">
