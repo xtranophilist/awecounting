@@ -281,7 +281,7 @@ def journal_voucher(request, id=None):
         voucher = get_object_or_404(JournalVoucher, id=id, company=request.company)
         scenario = 'Update'
     else:
-        voucher = JournalVoucher()
+        voucher = JournalVoucher(company=request.company)
         scenario = 'Create'
     data = JournalVoucherSerializer(voucher).data
     return render(request, 'journal_voucher.html', {'data': data, 'scenario': scenario})
