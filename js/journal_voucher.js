@@ -12,6 +12,9 @@ function JournalVoucher(data) {
     for (var k in data)
         self[k] = data[k];
 
+    self.id = ko.observable(data['id']);
+    self.status = ko.observable(data['status']);
+
     $.ajax({
         url: '/ledger/accounts.json',
         dataType: 'json',
@@ -129,6 +132,24 @@ function JournalVoucher(data) {
         return 'invalid-row';
     }
 
+    self.journal_voucher.approve = function (item, event) {
+        $.ajax({
+            type: "POST",
+            url: '/voucher/journal/approve/',
+            data: ko.toJSON(self),
+            success: function (msg) {
+                if (typeof (msg.error_message) != 'undefined') {
+                    bs_alert.error(msg.error_message);
+                }
+                else {
+                    bs_alert.success('Approved!');
+                    self.status('Approved');
+                    self.journal_voucher.state('success');
+                }
+            }
+        });
+    }
+
     self.journal_voucher.save = function (item, event) {
 
         self.journal_voucher.state('waiting');
@@ -155,7 +176,6 @@ function JournalVoucher(data) {
             return false;
         }
         if (get_form(event).checkValidity()) {
-
             if ($(get_target(event)).data('continue')) {
                 self.continue = true;
             }
@@ -164,16 +184,25 @@ function JournalVoucher(data) {
                 url: '/voucher/journal/save/',
                 data: ko.toJSON(self),
                 success: function (msg) {
-                    self.journal_voucher.message('Saved!');
-                    self.deleted_rows = [];
-                    self.journal_voucher.state('success');
-                    if (msg.redirect_to) {
-                        window.location = msg.redirect_to;
-                        return;
+                    if (typeof (msg.error_message) != 'undefined') {
+                        bs_alert.error(msg.error_message);
+                    }
+                    else {
+                        bs_alert.success('Saved!');
+                        self.deleted_rows = [];
+                        self.journal_voucher.state('success');
+                        if (msg.id) {
+                            self.id(msg.id);
+                            self.status('Unapproved');
+                        }
+                        if (msg.redirect_to) {
+                            window.location = msg.redirect_to;
+                            return;
+                        }
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    self.journal_voucher.message('Saving Failed!');
+                    bs_alert.error('Saving Failed!');
                     self.journal_voucher.state('error');
                 }
             });
