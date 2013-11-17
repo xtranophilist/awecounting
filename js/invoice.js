@@ -180,7 +180,7 @@ function InvoiceViewModel(data) {
                     self.status('Cancelled');
                     self.state('success');
                     if (msg.id)
-                        self.id = msg.id;
+                        self.id(msg.id);
                 }
             }
         });
@@ -201,7 +201,7 @@ function InvoiceViewModel(data) {
                     else {
                         bs_alert.success('Saved!');
                         if (msg.id)
-                            self.id = msg.id;
+                            self.id(msg.id);
                         $("#particulars-body > tr").each(function (i) {
                             $($("#particulars-body > tr")[i]).addClass('invalid-row');
                         });

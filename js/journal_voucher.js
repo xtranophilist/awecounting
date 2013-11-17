@@ -150,6 +150,26 @@ function JournalVoucher(data) {
         });
     }
 
+    self.journal_voucher.cancel = function (item, event) {
+        $.ajax({
+            type: "POST",
+            url: '/voucher/journal/cancel/',
+            data: ko.toJSON(self),
+            success: function (msg) {
+                if (typeof (msg.error_message) != 'undefined') {
+                    bs_alert.error(msg.error_message);
+                }
+                else {
+                    bs_alert.success('Cancelled!');
+                    self.status('Cancelled');
+                    self.journal_voucher.state('success');
+                    if (msg.id)
+                        self.id(msg.id);
+                }
+            }
+        });
+    }
+
     self.journal_voucher.save = function (item, event) {
 
         self.journal_voucher.state('waiting');
