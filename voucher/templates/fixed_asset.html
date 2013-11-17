@@ -33,9 +33,9 @@
 
             <div class="span6">
                 From:<br/>
-                <input type="hidden" data-field="Fixed Asset Vendor" data-add-url="{% url 'create_vendor_account' %}"
+                <input type="hidden" data-name="Fixed Asset Vendor" data-url="{% url 'create_vendor_account' %}"
                        class="change-on-ready"
-                       data-bind="value: from_account, select2: {data: {results: $root.from_accounts}},  event: {change: $root.account_changed}, lookupKey: 'id'">
+                       data-bind="value: from_account, select2: $root.from_accounts, event: {change: $root.account_changed}">
             </div>
 
             <div class="span6">
@@ -82,9 +82,9 @@
                 <!-- ko foreach:rows -->
                 <tr>
                     <td class="with_ip">
-                        <input type="hidden" data-field="Asset Ledger"
-                               data-add-url="{% url 'create_account' %}?category_id={{ fixed_asset_category.id }}"
-                               data-bind="value: asset_ledger, select2: {data: {results: $root.fixed_assets}}, lookupKey: 'id'">
+                        <input type="hidden" data-name="Asset Ledger"
+                               data-url="{% url 'create_account' %}?category_id={{ fixed_asset_category.id }}"
+                               data-bind="value: asset_ledger, select2: $root.fixed_assets">
                     </td>
                     <td data-bind="editableText: description"></td>
                     <td data-bind="editableText: amount, numeric: true"></td>
