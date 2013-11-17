@@ -43,6 +43,9 @@ function CashReceiptVM(data) {
         })[0];
         self.party_address(selected_obj.address);
         self.current_balance(selected_obj.customer_balance);
+//        if (self.table_vm()){
+//            self.table_vm().rows(null);
+//        }
     }
 
     self.load_related_invoices = function () {
@@ -67,11 +70,11 @@ function CashReceiptVM(data) {
                             rows: self.invoices
                         };
                         self.table_vm(new TableViewModel(options, CashReceiptRowVM));
-                        self.message('Invoices loaded!');
+                        bs_alert.success('Invoices loaded!');
                         self.state('success');
                     }
                     else {
-                        self.message('No pending invoices found for the customer!');
+                        bs_alert.warning('No pending invoices found for the customer!');
                         self.state('error');
                     }
                 }
