@@ -189,14 +189,21 @@ def approve_purchase(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
-@login_required
-def cancel_purchase(request):
-    r = save_invoice(request)
-    dct = json.loads(r.content)
-    obj = Invoice.objects.get(id=dct.get('id'))
-    obj.status = 'Cancelled'
-    obj.save()
-    return r
+#@login_required
+#def cancel_purchase(request):
+#    params = json.loads(request.body)
+#    if params.get('id'):
+#        id = params.get('id')
+#    else:
+#        id = None
+#    r = purchase_voucher(request, id)
+#    import pdb
+#    pdb.set_trace()
+#    dct = json.loads(r.content)
+#    obj = PurchaseVoucher.objects.get(id=dct.get('id'))
+#    obj.status = 'Cancelled'
+#    obj.save()
+#    return r
 
 
 @login_required
@@ -217,7 +224,6 @@ def delete_purchase_voucher(request, id):
 @login_required
 def purchase_voucher(request, id=None):
     from core.models import CompanySetting
-
     try:
         company_setting = CompanySetting.objects.get(company=request.company)
     except CompanySetting.DoesNotExist:
@@ -229,6 +235,11 @@ def purchase_voucher(request, id=None):
         voucher = PurchaseVoucher(date=date.today(), currency=company_setting.default_currency, tax='no',
                                   company=request.company)
         scenario = 'Create'
+    if request.POST.get('action') == 'Cancel':
+        voucher.voucher_no = request.POST.get('voucher_no')
+        voucher.status = 'Cancelled'
+        voucher.save()
+        return redirect(reverse_lazy('view_purchase_voucher', kwargs={'id': voucher.id}))
     if request.POST:
         form = PurchaseVoucherForm(request.POST, request.FILES, instance=voucher, company=request.company)
         if form.is_valid():

@@ -18,6 +18,7 @@ urlpatterns = patterns('',
                        url(r'^purchase/party/(?P<id>[0-9]+).json$', views.party_purchase_vouchers,
                            name='party_purchase_vouchers'),
                        url(r'^purchase/approve/$', views.approve_purchase, name='approve_purchase'),
+                       #url(r'^purchase/cancel/$', views.cancel_purchase, name='cancel_purchase'),
 
 
                        url(r'^journals/$', views.list_journal_vouchers, name='list_journal_vouchers'),
