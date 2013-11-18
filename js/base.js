@@ -221,8 +221,9 @@ function intersection(arr1, arr2) {
     return temp;
 }
 
-function rnum(o) {
-    return isNaN(o) ? '' : o;
+function rnum(n) {
+//    return isAN(n) ? n : '';
+    return isAN(n) ? Math.round(n * Math.pow(10, global_settings.decimal_places)) / Math.pow(10, global_settings.decimal_places) : '';
 }
 
 function isAN(n) {

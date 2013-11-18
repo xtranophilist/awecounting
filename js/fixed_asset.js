@@ -151,7 +151,6 @@ function FixedAssetVM(data) {
     }
 }
 
-
 function FixedAssetRowVM(row) {
     var self = this;
 
