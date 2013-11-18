@@ -28,6 +28,8 @@
 
         <span data-bind="text: message(), css: state()"></span>
 
+        Voucher No.: <input type="text" name="voucher_no" data-bind="value: voucher_no()" required/>
+
         <div class="row-fluid">
 
             <div class="span6">
@@ -77,7 +79,7 @@
         </div>
 
         <a href="#" class="btn" data-bind="click: load_purchase_vouchers, visible: party() && !table_vm().rows()">Load
-           Purchase Vouchers</a>
+            Purchase Vouchers</a>
 
         <div class="row-fluid" data-bind="with: table_vm()">
             <table class="table table-bordered table-striped table-acubor table-sortable" id="voucher_table"

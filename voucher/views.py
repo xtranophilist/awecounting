@@ -511,9 +511,10 @@ def save_cash_receipt(request):
                 row['discount'] = 0
             if (row.get('payment') == '') | (row.get('payment') is None):
                 row['payment'] = 0
+            invoice = Invoice.objects.get(invoice_no=row.get('bill_no'), company=request.company)
             values = {'discount': row.get('discount'), 'receipt': row.get('payment'),
                       'cash_receipt': voucher,
-                      'invoice': Invoice.objects.get(invoice_no=row.get('bill_no'), company=request.company)}
+                      'invoice': invoice}
             submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
             if not created:
                 submodel = save_model(submodel, values)
@@ -524,6 +525,7 @@ def save_cash_receipt(request):
         voucher.save()
     else:
         voucher.amount = params.get('amount')
+        voucher.status = 'Unapproved'
         voucher.save()
     if params.get('continue'):
         dct = {'redirect_to': str(reverse_lazy('create_cash_receipt'))}
@@ -571,9 +573,8 @@ def cash_payment(request, id=None):
         voucher = get_object_or_404(CashPayment, id=id, company=request.company)
         scenario = 'Update'
     else:
-        voucher = CashPayment()
+        voucher = CashPayment(company=request.company, payment_on=date.today())
         scenario = 'Create'
-        #form = CashReceiptForm(instance=voucher)
     data = CashPaymentSerializer(voucher).data
     return render(request, 'cash_payment.html', {'scenario': scenario, 'data': data})
 
@@ -592,15 +593,22 @@ def party_purchase_vouchers(request, id):
 def save_cash_payment(request):
     params = json.loads(request.body)
     dct = {'rows': {}}
-    values = {'party_id': params.get('party'), 'payment_on': params.get('payment_on'),
-              'reference': params.get('reference'), 'company': request.company}
+
     # try:
     if params.get('id'):
         voucher = CashPayment.objects.get(id=params.get('id'))
     else:
-        voucher = CashPayment()
-        # if not created:
-
+        voucher = CashPayment(company=request.company)
+    try:
+        existing = CashPayment.objects.get(voucher_no=params.get('voucher_no'), company=request.company)
+        if voucher.id is not existing.id:
+            return HttpResponse(json.dumps({'error_message': 'Voucher no. already exists'}),
+                                mimetype="application/json")
+    except CashPayment.DoesNotExist:
+        pass
+    values = {'party_id': params.get('party'), 'payment_on': params.get('payment_on'),
+              'voucher_no': params.get('voucher_no'),
+              'reference': params.get('reference'), 'company': request.company}
     voucher = save_model(voucher, values)
     dct['id'] = voucher.id
     # except Exception as e:
@@ -610,8 +618,6 @@ def save_cash_payment(request):
     #     else:
     #         dct['error_message'] = 'Error in form data!'
     model = CashPaymentRow
-    #cash_account = Account.objects.get(name='Cash Account', company=request.company)
-    #sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
     if params.get('table_vm').get('rows'):
         for index, row in enumerate(params.get('table_vm').get('rows')):
             print row
@@ -621,18 +627,21 @@ def save_cash_payment(request):
                 row['discount'] = 0
             if (row.get('payment') == '') | (row.get('payment') is None):
                 row['payment'] = 0
+            purchase_voucher = PurchaseVoucher.objects.get(id=row.get('id'), company=request.company)
             values = {'discount': row.get('discount'), 'payment': row.get('payment'),
                       'cash_payment': voucher,
-                      'purchase_voucher': PurchaseVoucher.objects.get(id=row.get('id'), company=request.company)}
+                      'purchase_voucher': purchase_voucher}
             submodel, created = model.objects.get_or_create(id=row.get('id'), defaults=values)
             if not created:
                 submodel = save_model(submodel, values)
             dct['rows'][index] = submodel.id
         total = float(params.get('total_payment')) + float(params.get('total_discount'))
         voucher.amount = total
+        voucher.status = 'Unapproved'
         voucher.save()
     else:
         voucher.amount = params.get('amount')
+        voucher.status = 'Unapproved'
         voucher.save()
     if params.get('continue'):
         dct = {'redirect_to': str(reverse_lazy('create_cash_payment'))}
@@ -648,22 +657,21 @@ def approve_cash_payment(request):
     else:
         dct['error_message'] = 'Voucher needs to be saved before being approved!'
         return HttpResponse(json.dumps(dct), mimetype="application/json")
-        #set_transactions(voucher, params.get('receipt_on'),
-    #                         ['cr', Account.objects.get(id=params.get('total_payment')), row.get('cr_amount')],
-    #        )
     cash_account = Account.objects.get(name='Cash Account', company=request.company)
     discount_income_account = Account.objects.get(name='Discount Income', company=request.company)
-    if params.get('table_vm') and params.get('table_vm').get('rows'):
-        total = float(params.get('total_payment')) + float(params.get('total_discount'))
-        set_transactions(voucher, params.get('payment_on'),
-                         ['dr', Party.objects.get(id=params.get('party')).supplier_account, total],
-                         ['cr', discount_income_account, params.get('total_discount')],
-                         ['cr', cash_account, params.get('total_payment')]
+    if voucher.rows.all().count() > 0:
+        total_payment = sum(row.payment for row in voucher.rows.all())
+        total_discount = sum(row.discount for row in voucher.rows.all())
+        total = total_payment + total_discount
+        set_transactions(voucher, voucher.payment_on,
+                         ['dr', voucher.party.supplier_account, total],
+                         ['cr', discount_income_account, total_discount],
+                         ['cr', cash_account, total_payment]
         )
     else:
-        set_transactions(voucher, params.get('receipt_on'),
-                         ['dr', cash_account, params.get('amount')],
-                         ['cr', Party.objects.get(id=params.get('party')).customer_account, params.get('amount')]
+        set_transactions(voucher, voucher.payment_on,
+                         ['dr', cash_account, voucher.amount],
+                         ['cr', voucher.party.customer_account, voucher.amount]
         )
     voucher.status = 'Approved'
     voucher.save()
