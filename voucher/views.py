@@ -688,7 +688,7 @@ def fixed_asset(request, id=None):
         voucher = get_object_or_404(FixedAsset, id=id, company=request.company)
         scenario = 'Update'
     else:
-        voucher = FixedAsset(date=date.today())
+        voucher = FixedAsset(date=date.today(), company=request.company)
         scenario = 'Create'
     data = FixedAssetSerializer(voucher).data
     fixed_asset_category = Category.objects.get(name='Fixed Assets', company=request.company)
@@ -700,14 +700,20 @@ def fixed_asset(request, id=None):
 def save_fixed_asset(request):
     params = json.loads(request.body)
     dct = {'rows1': {}, 'rows2': {}}
-
-    voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'),
-                      'description': params.get('description'), 'company': request.company, 'status': 'Unapproved',
-                      'from_account_id': params.get('from_account'), 'reference': params.get('reference')}
     if params.get('id'):
         voucher = FixedAsset.objects.get(id=params.get('id'))
     else:
-        voucher = FixedAsset()
+        voucher = FixedAsset(company=request.company)
+    try:
+        existing = FixedAsset.objects.get(voucher_no=params.get('voucher_no'), company=request.company)
+        if voucher.id is not existing.id:
+            return HttpResponse(json.dumps({'error_message': 'Voucher no. already exists'}),
+                                mimetype="application/json")
+    except FixedAsset.DoesNotExist:
+        pass
+    voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'),
+                      'description': params.get('description'), 'company': request.company, 'status': 'Unapproved',
+                      'from_account_id': params.get('from_account'), 'reference': params.get('reference')}
     voucher = save_model(voucher, voucher_values)
     dct['id'] = voucher.id
     model = FixedAssetRow

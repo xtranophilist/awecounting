@@ -95,7 +95,7 @@
                     </td>
                 </tr>
                 <!-- /ko -->
-                <tr>
+                <tr class="dont-validate">
                     <td colspan="2"><b>TOTAL</b></td>
                     <td colspan="2" data-bind="text: get_total('amount')"></td>
                 </tr>
@@ -163,7 +163,7 @@
             <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
             {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
                 <input class="btn" type="submit" value="Approve"
-                       data-bind="click: $root.approve, visible: $root.id && $root.status() == 'Unapproved'">
+                       data-bind="click: $root.approve, visible: $root.id() && $root.status() == 'Unapproved'">
             {% endifusergroup %}
 
             <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save"
