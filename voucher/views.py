@@ -224,6 +224,7 @@ def delete_purchase_voucher(request, id):
 @login_required
 def purchase_voucher(request, id=None):
     from core.models import CompanySetting
+
     try:
         company_setting = CompanySetting.objects.get(company=request.company)
     except CompanySetting.DoesNotExist:
@@ -288,6 +289,7 @@ def journal_voucher(request, id=None):
     data = JournalVoucherSerializer(voucher).data
     return render(request, 'journal_voucher.html', {'data': data, 'scenario': scenario})
 
+
 @login_required
 def cancel_journal_voucher(request):
     r = save_journal_voucher(request)
@@ -322,7 +324,8 @@ def save_journal_voucher(request):
     try:
         existing = JournalVoucher.objects.get(voucher_no=params.get('voucher_no'), company=request.company)
         if voucher.id is not existing.id:
-            return HttpResponse(json.dumps({'error_message': 'Voucher no. already exists'}), mimetype="application/json")
+            return HttpResponse(json.dumps({'error_message': 'Voucher no. already exists'}),
+                                mimetype="application/json")
     except JournalVoucher.DoesNotExist:
         pass
     voucher_values = {'date': params.get('date'), 'voucher_no': params.get('voucher_no'), 'status': 'Unapproved',
@@ -332,7 +335,7 @@ def save_journal_voucher(request):
     model = JournalVoucherRow
     for index, row in enumerate(params.get('journal_voucher').get('rows')):
         if invalid(row, ['account']):
-                    continue
+            continue
         empty_to_None(row, ['dr_amount', 'cr_amount'])
         values = {'account_id': row.get('account'), 'dr_amount': row.get('dr_amount'),
                   'cr_amount': row.get('cr_amount'), 'type': row.get('type'),
@@ -346,6 +349,7 @@ def save_journal_voucher(request):
     if params.get('continue'):
         dct = {'redirect_to': str(reverse_lazy('new_journal_voucher'))}
     return HttpResponse(json.dumps(dct), mimetype="application/json")
+
 
 @group_required('Owner', 'SuperOwner', 'Supervisor')
 def approve_journal_voucher(request):
@@ -452,9 +456,9 @@ def cash_receipt(request, id=None):
         voucher = get_object_or_404(CashReceipt, id=id, company=request.company)
         scenario = 'Update'
     else:
-        voucher = CashReceipt()
+        voucher = CashReceipt(company=request.company, receipt_on=date.today())
         scenario = 'Create'
-    form = CashReceiptForm(instance=voucher)
+    form = CashReceiptForm(instance=voucher, company=request.company)
     data = CashReceiptSerializer(voucher).data
     return render(request, 'cash_receipt.html', {'form': form, 'scenario': scenario, 'data': data})
 
@@ -473,14 +477,23 @@ def party_invoices(request, id):
 def save_cash_receipt(request):
     params = json.loads(request.body)
     dct = {'rows': {}}
-    values = {'party_id': params.get('party'), 'receipt_on': params.get('receipt_on'),
-              'reference': params.get('reference'), 'company': request.company}
+
     # try:
     if params.get('id'):
-        voucher = CashReceipt.objects.get(id=params.get('id'))
+        voucher = CashReceipt.objects.get(id=params.get('id'), company=request.company)
     else:
-        voucher = CashReceipt()
+        voucher = CashReceipt(company=request.company)
         # if not created:
+    try:
+        existing = CashReceipt.objects.get(voucher_no=params.get('voucher_no'), company=request.company)
+        if voucher.id is not existing.id:
+            return HttpResponse(json.dumps({'error_message': 'Voucher no. already exists'}),
+                                mimetype="application/json")
+    except CashReceipt.DoesNotExist:
+        pass
+    values = {'party_id': params.get('party'), 'receipt_on': params.get('receipt_on'),
+              'voucher_no': params.get('voucher_no'),
+              'reference': params.get('reference'), 'company': request.company}
     voucher = save_model(voucher, values)
     dct['id'] = voucher.id
     # except Exception as e:
@@ -490,8 +503,6 @@ def save_cash_receipt(request):
     #     else:
     #         dct['error_message'] = 'Error in form data!'
     model = CashReceiptRow
-    #cash_account = Account.objects.get(name='Cash Account', company=request.company)
-    #sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
     if params.get('table_vm').get('rows'):
         for index, row in enumerate(params.get('table_vm').get('rows')):
             if invalid(row, ['payment']) and invalid(row, ['discount']):
@@ -500,7 +511,6 @@ def save_cash_receipt(request):
                 row['discount'] = 0
             if (row.get('payment') == '') | (row.get('payment') is None):
                 row['payment'] = 0
-            print row
             values = {'discount': row.get('discount'), 'receipt': row.get('payment'),
                       'cash_receipt': voucher,
                       'invoice': Invoice.objects.get(invoice_no=row.get('bill_no'), company=request.company)}
@@ -510,6 +520,7 @@ def save_cash_receipt(request):
             dct['rows'][index] = submodel.id
         total = float(params.get('total_payment')) + float(params.get('total_discount'))
         voucher.amount = total
+        voucher.status = 'Unapproved'
         voucher.save()
     else:
         voucher.amount = params.get('amount')

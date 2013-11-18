@@ -62,6 +62,20 @@ class CashReceiptForm(KOModelForm):
     receipt_on = forms.DateField(
         widget=forms.TextInput(attrs={'class': 'date-picker', 'data-date-format': "yyyy-mm-dd"}))
 
+    def __init__(self, *args, **kwargs):
+        self.company = kwargs.pop('company', None)
+        super(CashReceiptForm, self).__init__(*args, **kwargs)
+
+    def clean_voucher_no(self):
+        try:
+            existing = CashReceipt.objects.get(voucher_no=self.cleaned_data['voucher_no'], company=self.company)
+            if self.instance.id is not existing.id:
+                raise forms.ValidationError("The voucher no. " + str(
+                    self.cleaned_data['voucher_no']) + " is already in use. Suggested voucher no. has been provided!")
+            return self.cleaned_data['voucher_no']
+        except CashReceipt.DoesNotExist:
+            return self.cleaned_data['voucher_no']
+
     class Meta:
         model = CashReceipt
         exclude = ['company', 'status']
