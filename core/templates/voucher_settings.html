@@ -21,22 +21,6 @@
 
     <form method="post" action="" id="voucher_settings" class="col_3_form">{% csrf_token %}
 
-{#        <fieldset id="contact_details">#}
-{#            <legend>General</legend>#}
-{#            <ul>#}
-{#                {% get_fieldset voucher_number_start_date,voucher_number_restart_years,voucher_number_restart_months,voucher_number_restart_days as general from form %}#}
-{#                {{ general.as_ul }}#}
-{#            </ul>#}
-{#        </fieldset>#}
-{##}
-{#        <fieldset>#}
-{#            <legend>Address details</legend>#}
-{#            <ul>#}
-{#                {% get_fieldset street_address,post_code,city as address_fields from form %}#}
-{#                {{ address_fields.as_ul }}#}
-{#            </ul>#}
-{#        </fieldset>#}
-
 		{% for field in form %}
 		  <div class="control-group">
 		      <label class="control-label">{{ field.label }}</label>

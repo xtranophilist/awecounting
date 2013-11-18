@@ -1,8 +1,8 @@
 import copy
 import json
-from django.utils.datastructures import SortedDict
 from datetime import date, timedelta
 
+from django.utils.datastructures import SortedDict
 from django.core import serializers
 from django.db.models.query import QuerySet
 from django.utils.safestring import mark_safe
@@ -10,6 +10,7 @@ from django.db.models import Model
 from django import template
 from django.template import resolve_variable, NodeList
 from django.contrib.auth.models import Group
+
 
 register = template.Library()
 
@@ -55,6 +56,7 @@ def if_not_none(obj):
         return ''
     return obj
 
+
 @register.filter
 def if_not_zero(obj):
     if obj == 0:
@@ -74,9 +76,15 @@ def subtract(value, arg):
 @register.simple_tag
 def yesterday():
     today = date.today()
-    yesterday = today - timedelta(days=1)
-    return yesterday
+    return today - timedelta(days=1)
 
+
+@register.filter
+def get_settings(request):
+    return {
+        'decimal_places': request.company.settings.decimal_places,
+        'number_comma_system': request.company.settings.number_comma_system
+    }
 
 @register.filter
 def day_journal_id(obj):
@@ -120,7 +128,8 @@ def dr_or_cr(val):
 
 @register.filter
 def linkify(obj):
-    return mark_safe('<a href="'+obj.get_absolute_url()+'">'+str(obj)+'</a>')
+    return mark_safe('<a href="' + obj.get_absolute_url() + '">' + str(obj) + '</a>')
+
 
 @register.filter
 def remove_account(transactions, account):
