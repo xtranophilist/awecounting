@@ -39,7 +39,7 @@ function TrialBalance(data) {
             if (isAN(this.cr()))
                 total += parseFloat(this.cr());
         });
-        return rnum((total);
+        return rnum(total);
     };
 
     self.balanced = function () {
