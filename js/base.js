@@ -411,6 +411,9 @@ function TableViewModel(options, row_model) {
                         total += parseFloat(f());
                 }
             });
+            if (typeof rnum == 'function') {
+                return rnum(total);
+            }
             return total;
         }
     }
