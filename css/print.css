@@ -1,5 +1,5 @@
 body{
-    font-size: 12px;
+    font-size: 10px;
 }
 .drag_handle, .select2-arrow, .btn, button, .navbar, #sidebar, #breadcrumbs {
     display: none !important;
@@ -72,19 +72,37 @@ body, article {
     opacity: 1;
 }
 
-br.page-break {
-    page-break-after: always;
+.page-break {
+    display: block;
+    page-break-before: always;
 }
 .modal{
     position: static;
     margin-left: 0;
     width: 100%;
     border: 0;
+    left: 0;
 }
 .modal-body{
     position: static;
     width: 100%;
     overflow: visible;
+    padding: 0px;
+}
+h1{
+    font-size: 20px;
+}
+h2{
+    font-size: 14px;
+    margin: 0;
+    padding: 0px;
+    font-weight: bold;
+}
+table td, .table-acubor td{
+    padding: 2px;
+}
+table th, .table-acubor th{
+    padding: 3px;
 }
 /*.modal-body, .print-preview, #page-content, #main-content, #main-container, body {*/
     /*float: none;*/
