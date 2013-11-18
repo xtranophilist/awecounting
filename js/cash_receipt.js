@@ -28,6 +28,7 @@ function CashReceiptVM(data) {
     self.reference = ko.observable();
     self.current_balance = ko.observable();
     self.amount = ko.observable();
+    self.voucher_no = ko.observable();
     self.table_vm = ko.observable({'rows': function () {
     }, 'get_total': function () {
     }});
@@ -123,6 +124,7 @@ function CashReceiptVM(data) {
                     }
                     else {
                         bs_alert.success('Saved!');
+                        self.status('Unapproved');
                         self.state('success');
                         if (msg.id)
                             self.id(msg.id);
@@ -153,6 +155,7 @@ function CashReceiptVM(data) {
                     }
                     else {
                         bs_alert.success('Approved!');
+                        self.status('Approved');
                         self.state('success');
                         if (msg.id)
                             self.id(msg.id);
