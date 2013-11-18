@@ -973,6 +973,7 @@
                     <tr>
                         <th>SN</th>
                         <th>Particulars</th>
+                        <th>Unit</th>
                         <th>Opening</th>
                         <th>Purchase</th>
                         <th>Sales</th>
@@ -994,6 +995,7 @@
                                    data-url="{% url 'create_inventory_item_returning_account' %}?category_id={{ fuel_and_gas.id }}"
                                    data-bind="value: account_id, select2: $root.inventory_accounts_by_category('Fuel and Gas'), event:{change: $root.inventory_account_changed}">
                         </td>
+                        <td data-bind="text: $root.get_unit(account_id())"></td>
                         <td data-bind="text: fnum(opening())"></td>
                         <td data-bind="editableText: purchase, eval: purchase"></td>
                         <td data-bind="editableText: sales, eval: sales"></td>
@@ -1030,6 +1032,7 @@
                     <tr>
                         <th>SN</th>
                         <th>Particulars</th>
+                        <th>Unit</th>
                         <th>Opening</th>
                         <th>Purchase</th>
                         <th>Sales</th>
@@ -1051,6 +1054,7 @@
                                    data-url="{% url 'create_inventory_item_returning_account' %}"
                                    data-bind="value: account_id, select2: $root.inventory_accounts, event: {change: $root.inventory_account_changed}">
                         </td>
+                        <td data-bind="text: $root.get_unit(account_id())"></td>
                         <td data-bind="text: fnum(opening())"></td>
                         <td data-bind="editableText: purchase, eval: purchase"></td>
                         <td data-bind="editableText: sales, eval: sales"></td>
