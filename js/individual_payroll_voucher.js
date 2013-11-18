@@ -64,15 +64,15 @@ function IndividualPayrollVoucherVM(data) {
     }
 
     self.day_amount = function () {
-        return round2(self.days_worked() * self.day_rate());
+        return rnum(self.days_worked() * self.day_rate());
     }
 
     self.hour_amount = function () {
-        return round2(self.hours_worked() * self.hour_rate());
+        return rnum(self.hours_worked() * self.hour_rate());
     }
 
     self.ot_hour_amount = function () {
-        return round2(self.ot_hours_worked() * self.ot_hour_rate());
+        return rnum(self.ot_hours_worked() * self.ot_hour_rate());
     }
 
     self.total = function () {

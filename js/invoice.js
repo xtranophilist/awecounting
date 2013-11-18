@@ -222,7 +222,7 @@ function InvoiceViewModel(data) {
         self.particulars.rows().forEach(function (i) {
             sum += i.amount();
         });
-        return round2(sum);
+        return rnum(sum);
     }
 
     self.tax_amount = function () {
@@ -242,7 +242,7 @@ function InvoiceViewModel(data) {
                 sum += tax_amount;
             });
         }
-        return round2(sum);
+        return rnum(sum);
     }
 
     self.total_amount = 0;
@@ -251,7 +251,7 @@ function InvoiceViewModel(data) {
         if (self.tax() == 'exclusive') {
             self.total_amount = self.sub_total() + self.tax_amount();
         }
-        self.total_amount = round2(self.sub_total());
+        self.total_amount = rnum(self.sub_total());
         return self.total_amount;
     }
 

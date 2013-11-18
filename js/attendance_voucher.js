@@ -51,12 +51,12 @@ function AttendanceVoucherVM(data) {
     }
 
     self.total_present_day = function () {
-        return round2(parseFloat(self.full_present_day()) + (parseFloat(self.half_present_day()) * parseFloat(self.half_multiplier())) +
+        return rnum(parseFloat(self.full_present_day()) + (parseFloat(self.half_present_day()) * parseFloat(self.half_multiplier())) +
             (parseFloat(self.early_late_attendance_day()) * parseFloat(self.early_late_multiplier())));
     }
 
     self.total_absent_day = function () {
-        return round2(self.total_working_days() - self.total_present_day());
+        return rnum(self.total_working_days() - self.total_present_day());
     }
 
     self.save = function (item, event) {
