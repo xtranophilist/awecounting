@@ -668,7 +668,7 @@ def approve_cash_payment(request):
     else:
         set_transactions(voucher, voucher.payment_on,
                          ['dr', cash_account, voucher.amount],
-                         ['cr', voucher.party.customer_account, voucher.amount]
+                         ['cr', voucher.party.supplier_account, voucher.amount]
         )
     voucher.status = 'Approved'
     voucher.save()
