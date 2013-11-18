@@ -229,40 +229,6 @@
                     </table>
                 </div>
 
-                <!-- Fuel -->
-                <div data-bind="with: inventory_fuel, visible: inventory_fuel.has_real_rows('account_id')">
-                    <h2>Fuel</h2>
-                    <table class="table table-bordered table-acubor">
-                        <thead>
-                        <tr>
-                            <th>SN</th>
-                            <th>Particulars</th>
-                            <th>Opening</th>
-                            <th>Purchase</th>
-                            <th>Sales</th>
-                            <th>Closing</th>
-                            <th>Actual</th>
-                            <th>Difference</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <!-- ko foreach: rows -->
-                        <!-- ko if: account_id -->
-                        <tr data-bind="flash: true">
-                            <td data-bind="text: $index()+1"></td>
-                            <td data-bind="text: $root.inventory_account_by_id(account_id()).name"></td>
-                            <td data-bind="text: fnum(opening()) + ' ' + $root.get_unit(account_id())"></td>
-                            <td data-bind="text: fnum(purchase()) + ' ' + $root.get_unit(account_id())"></td>
-                            <td data-bind="text: fnum(sales()) + ' ' + $root.get_unit(account_id())"></td>
-                            <td data-bind="text: fnum(closing()) + ' ' + $root.get_unit(account_id())"></td>
-                            <td data-bind="text: fnum(actual()) + ' ' + $root.get_unit(account_id())"></td>
-                            <td data-bind="text: fnum(difference()) + ' ' + $root.get_unit(account_id())"></td>
-                        </tr>
-                        <!-- /ko -->
-                        <!-- /ko -->
-                        </tbody>
-                    </table>
-                </div>
             </div>
 
             <div class="print-half print-half-last">
@@ -362,6 +328,41 @@
                             <td colspan="2"><b>TOTAL</b></td>
                             <td colspan="4" data-bind="text: get_total('amount')"></td>
                         </tr>
+                        </tbody>
+                    </table>
+                </div>  
+
+                <!-- Fuel -->
+                <div data-bind="with: inventory_fuel, visible: inventory_fuel.has_real_rows('account_id')">
+                    <h2>Fuel</h2>
+                    <table class="table table-bordered table-acubor">
+                        <thead>
+                        <tr>
+                            <th>SN</th>
+                            <th>Particulars</th>
+                            <th>Opening</th>
+                            <th>Purchase</th>
+                            <th>Sales</th>
+                            <th>Closing</th>
+                            <th>Actual</th>
+                            <th>Difference</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- ko foreach: rows -->
+                        <!-- ko if: account_id -->
+                        <tr data-bind="flash: true">
+                            <td data-bind="text: $index()+1"></td>
+                            <td data-bind="text: $root.inventory_account_by_id(account_id()).name"></td>
+                            <td data-bind="text: fnum(opening()) + ' ' + $root.get_unit(account_id())"></td>
+                            <td data-bind="text: fnum(purchase()) + ' ' + $root.get_unit(account_id())"></td>
+                            <td data-bind="text: fnum(sales()) + ' ' + $root.get_unit(account_id())"></td>
+                            <td data-bind="text: fnum(closing()) + ' ' + $root.get_unit(account_id())"></td>
+                            <td data-bind="text: fnum(actual()) + ' ' + $root.get_unit(account_id())"></td>
+                            <td data-bind="text: fnum(difference()) + ' ' + $root.get_unit(account_id())"></td>
+                        </tr>
+                        <!-- /ko -->
+                        <!-- /ko -->
                         </tbody>
                     </table>
                 </div>
