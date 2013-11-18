@@ -139,42 +139,6 @@
                     </table>
                 </div>
 
-                <!-- Transfer/Remittance -->
-                <div data-bind="with: summary_transfer, visible: summary_transfer.has_real_rows('transfer_type')">
-                    <h2>Transfer/Remittance</h2>
-                    <table class="table table-bordered table-acubor">
-                        <thead>
-                        <tr>
-                            <th>SN</th>
-                            <th>Transfer Type</th>
-                            <th>Cash</th>
-                            <th>Cheque</th>
-                            <th>Card</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <!-- ko foreach: rows -->
-                        <!-- ko if: transfer_type -->
-                        <tr data-bind="flash: true">
-                            <td data-bind="text: $index()+1"></td>
-                            <td data-bind="text: $root.account_by_id(transfer_type()).name">
-                            </td>
-                            <td data-bind="text: cash()"></td>
-                            <td data-bind="text: cheque()"></td>
-                            <td data-bind="text: card()"></td>
-                        </tr>
-                        <!-- /ko -->
-                        <!-- /ko -->
-                        <tr class="dont-validate">
-                            <td colspan="2"><b>TOTAL</b> (<b>∑ = </b><span data-bind="text: total()"></span>)</td>
-                            <td data-bind="text: get_total('cash')"></td>
-                            <td data-bind="text: get_total('cheque')"></td>
-                            <td data-bind="text: get_total('card')"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-
                 <!-- Sales Summary -->
                 <div>
                     <h2>Sales Summary</h2>
@@ -380,6 +344,42 @@
             </div>
 
             <div class="span6">
+
+                <!-- Transfer/Remittance -->
+                <div data-bind="with: summary_transfer, visible: summary_transfer.has_real_rows('transfer_type')">
+                    <h2>Transfer/Remittance</h2>
+                    <table class="table table-bordered table-acubor">
+                        <thead>
+                        <tr>
+                            <th>SN</th>
+                            <th>Transfer Type</th>
+                            <th>Cash</th>
+                            <th>Cheque</th>
+                            <th>Card</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- ko foreach: rows -->
+                        <!-- ko if: transfer_type -->
+                        <tr data-bind="flash: true">
+                            <td data-bind="text: $index()+1"></td>
+                            <td data-bind="text: $root.account_by_id(transfer_type()).name">
+                            </td>
+                            <td data-bind="text: cash()"></td>
+                            <td data-bind="text: cheque()"></td>
+                            <td data-bind="text: card()"></td>
+                        </tr>
+                        <!-- /ko -->
+                        <!-- /ko -->
+                        <tr class="dont-validate">
+                            <td colspan="2"><b>TOTAL</b> (<b>∑ = </b><span data-bind="text: total()"></span>)</td>
+                            <td data-bind="text: get_total('cash')"></td>
+                            <td data-bind="text: get_total('cheque')"></td>
+                            <td data-bind="text: get_total('card')"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
 
                 <!-- Vendor Payouts -->
                 <div data-bind="with: vendor_payout, visible: vendor_payout.has_real_rows('vendor')">
