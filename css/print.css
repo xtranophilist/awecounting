@@ -1,5 +1,5 @@
 body{
-    font-size: 10px;
+    font-size: 60%;
 }
 .drag_handle, .select2-arrow, .btn, button, .navbar, #sidebar, #breadcrumbs {
     display: none !important;
@@ -109,3 +109,12 @@ table th, .table-acubor th{
     /*display: block;*/
     /*border: none;*/
 /*}*/
+.print-wrap{
+    width: 1200px;
+    margin: 0 auto;
+}
+.print-half{
+    width: 560px;
+    float: left;
+    margin: 0 10px;
+}

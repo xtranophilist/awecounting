@@ -703,3 +703,18 @@ table select{
 .col_3_form .controls{
     padding-left: 0;
 }
+.do-print{
+    /* new custom width */
+    width: 1000px;
+    /* must be half of the width, minus scrollbar on the left (30px) */
+    margin-left: -470px;
+}
+.print-wrap{
+    width: 1000px;
+    margin: 0 auto;
+}
+.print-half{
+    width: 460px;
+    float: left;
+    margin: 0 10px;
+}
