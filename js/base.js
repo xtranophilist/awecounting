@@ -229,6 +229,8 @@ function rnum(n) {
 }
 
 function fnum(n){
+    if (typeof n=='undefined')
+        return '';
     if (global_settings.number_comma_system == 'no')
         return n;
     else if (global_settings.number_comma_system == '120,000')
