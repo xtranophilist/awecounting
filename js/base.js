@@ -222,8 +222,44 @@ function intersection(arr1, arr2) {
 }
 
 function rnum(n) {
-//    return isAN(n) ? n : '';
-    return isAN(n) ? Math.round(n * Math.pow(10, global_settings.decimal_places)) / Math.pow(10, global_settings.decimal_places) : '';
+    if (!isAN(n))
+        return '';
+    //round-off
+    return Math.round(n * Math.pow(10, global_settings.decimal_places)) / Math.pow(10, global_settings.decimal_places);
+}
+
+function fnum(n) {
+    if (typeof n == 'undefined')
+        return '';
+    if (global_settings.number_comma_system == 'no')
+        return n;
+    else if (global_settings.number_comma_system == '120,000')
+        return comma_in_thou(n);
+    else
+        return comma_in_indian(n);
+}
+
+function comma_in_thou(x) {
+    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function comma_in_indian(x) {
+    x = x.toString();
+    var afterPoint = '';
+    if (x.indexOf('.') > 0)
+        afterPoint = x.substring(x.indexOf('.'), x.length);
+    x = Math.floor(x);
+    x = x.toString();
+    var lastThree = x.substring(x.length - 3);
+    var otherNumbers = x.substring(0, x.length - 3);
+    if (otherNumbers != '')
+        lastThree = ',' + lastThree;
+    var res = otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+    return res;
+}
+
+function strip_commas(n) {
+    return parseFloat(n.replace(/,/g, ''))
 }
 
 function isAN(n) {

@@ -187,7 +187,7 @@ function DayJournal(data) {
         if (scratch_off_tax == 0) {
             scratch_off_tax = self.scratch_off_sales_register_tax();
         }
-        return rnum(self.cash_sales.get_total('tax') + parseFloat(self.lotto_sales_dispenser_tax()) + scratch_off_tax);
+        return rnum(self.cash_sales.get_total('tax') + empty_to_zero(self.lotto_sales_dispenser_tax()) + scratch_off_tax);
     }
 
     self.sales_summary_cash = function () {
@@ -346,7 +346,9 @@ function DayJournal(data) {
         var account = $.grep(self.inventory_accounts, function (i) {
             return i.id == id;
         });
-        return account[0].unit || '';
+        if (account[0]) {
+            return account[0].unit || '';
+        }
     }
 
     self.save_lotto_sales_as_per_dispenser = function () {
