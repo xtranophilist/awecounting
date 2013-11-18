@@ -121,7 +121,7 @@ function PurchaseVoucherViewModel(data) {
         self.particulars.rows().forEach(function (i) {
             sum += i.amount();
         });
-        return round2(sum);
+        return rnum(sum);
     }
 
     self.tax_amount = function () {
@@ -141,7 +141,7 @@ function PurchaseVoucherViewModel(data) {
                 sum += tax_amount;
             });
         }
-        return round2(sum);
+        return rnum(sum);
     }
 
     self.validate = function () {
@@ -179,7 +179,7 @@ function PurchaseVoucherViewModel(data) {
         if (self.tax() == 'exclusive') {
             return self.sub_total() + self.tax_amount();
         }
-        return round2(self.sub_total());
+        return rnum(self.sub_total());
     }, self);
 
     self.approve = function (item, event) {

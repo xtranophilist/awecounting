@@ -251,7 +251,7 @@ function round2(n) {
 }
 
 function round2z(n) {
-    return isAN(n) ? Math.round(parseFloat(n) * 100) / 100 : 0;
+    return isAN(n) ? rnum(n) : 0;
 }
 
 function get_target(e) {

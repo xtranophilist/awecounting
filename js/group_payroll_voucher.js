@@ -137,7 +137,7 @@ function GroupPayrollVoucherRowVM(data) {
             self[k] = ko.observable(data[k]);
 
     self.amount = function () {
-        return round2z(self.present_days()) * round2z(self.rate_day()) + round2z(self.present_hours()) * round2z(self.rate_hour()) + round2z(self.present_ot_hours()) * round2z(self.rate_ot_hour());
+        return rnum(round2z(self.present_days()) * round2z(self.rate_day()) + round2z(self.present_hours()) * round2z(self.rate_hour()) + round2z(self.present_ot_hours()) * round2z(self.rate_ot_hour()));
     }
 
     self.net = function () {

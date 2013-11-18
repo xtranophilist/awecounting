@@ -30,7 +30,7 @@ function TrialBalance(data) {
             if (isAN(this.dr()))
                 total += parseFloat(this.dr());
         });
-        return rnum(round2(total));
+        return rnum(total);
     };
 
     self.cr_total = function () {
@@ -39,7 +39,7 @@ function TrialBalance(data) {
             if (isAN(this.cr()))
                 total += parseFloat(this.cr());
         });
-        return rnum(round2(total));
+        return rnum((total);
     };
 
     self.balanced = function () {
@@ -79,7 +79,7 @@ function CategoryViewModel(data, parent_id) {
             if (isAN(this.dr()))
                 total += parseFloat(this.dr());
         });
-        return rnum(round2(total));
+        return rnum(total);
     }
 
     self.cr = function () {
@@ -92,7 +92,7 @@ function CategoryViewModel(data, parent_id) {
             if (isAN(this.cr()))
                 total += parseFloat(this.cr());
         });
-        return rnum(round2(total));
+        return rnum(total);
     }
 
     self.net_dr = function () {
