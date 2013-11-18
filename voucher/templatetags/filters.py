@@ -81,6 +81,8 @@ def yesterday():
 
 @register.filter
 def get_settings(request):
+    if not request.company:
+        return {}
     return {
         'decimal_places': request.company.settings.decimal_places,
         'number_comma_system': request.company.settings.number_comma_system
