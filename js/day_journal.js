@@ -346,7 +346,9 @@ function DayJournal(data) {
         var account = $.grep(self.inventory_accounts, function (i) {
             return i.id == id;
         });
-        return account[0].unit || '';
+        if (account[0]) {
+            return account[0].unit || '';
+        }
     }
 
     self.save_lotto_sales_as_per_dispenser = function () {
