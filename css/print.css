@@ -76,6 +76,7 @@ body, article {
 .page-break {
     display: block;
     page-break-before: always;
+    height:1px !important;
 }
 .modal{
     position: static;
@@ -114,10 +115,13 @@ table td, .table-acubor td, table th, .table-acubor th{
 .print-wrap{
     width: 100% !important;
     margin: 0 auto;
+    position: relative;
+    page-break-inside: avoid;
+    -webkit-region-break-inside: avoid;
 }
 .do-print .print-half{
     width: 49%;
-    float: left;
+    display: inline-block;
     margin-right: 1%;
     margin-left: 0;
 }
@@ -127,4 +131,15 @@ table td, .table-acubor td, table th, .table-acubor th{
 #print-preview{
     width: 100%;
     margin-left: 0;
+}
+table {
+    page-break-inside:avoid;
+    position:relative;
+}
+*{
+    float: none;
+}
+html{
+     overflow-x: hidden;
+     overflow: visible !important;
 }

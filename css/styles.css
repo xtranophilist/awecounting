@@ -718,3 +718,6 @@ table select{
     float: left;
     margin: 0 10px;
 }
+.page-break {
+    clear: both;
+}
