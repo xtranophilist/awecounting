@@ -152,6 +152,7 @@ class JournalVoucherRow(models.Model):
 
 
 class CashReceipt(models.Model):
+    voucher_no = models.IntegerField()
     party = models.ForeignKey(Party, verbose_name='Receipt From')
     receipt_on = models.DateField()
     reference = models.CharField(max_length=50, null=True, blank=True)
@@ -160,6 +161,11 @@ class CashReceipt(models.Model):
     company = models.ForeignKey(Company)
     statuses = [('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
     status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
+
+    def __init__(self, *args, **kwargs):
+        super(CashReceipt, self).__init__(*args, **kwargs)
+        if not self.pk and not self.voucher_no:
+            self.voucher_no = get_next_voucher_no(CashReceipt, self.company)
 
 
 class CashReceiptRow(models.Model):
@@ -170,6 +176,7 @@ class CashReceiptRow(models.Model):
 
 
 class CashPayment(models.Model):
+    voucher_no = models.IntegerField()
     party = models.ForeignKey(Party, verbose_name='Paid To')
     payment_on = models.DateField()
     reference = models.CharField(max_length=50, null=True, blank=True)
@@ -178,6 +185,11 @@ class CashPayment(models.Model):
     company = models.ForeignKey(Company)
     statuses = [('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
     status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
+
+    def __init__(self, *args, **kwargs):
+        super(CashPayment, self).__init__(*args, **kwargs)
+        if not self.pk and not self.voucher_no:
+            self.voucher_no = get_next_voucher_no(CashPayment, self.company)
 
 
 class CashPaymentRow(models.Model):
@@ -189,13 +201,18 @@ class CashPaymentRow(models.Model):
 
 class FixedAsset(models.Model):
     from_account = models.ForeignKey(Account)
-    voucher_no = models.CharField(max_length=50)
+    voucher_no = models.IntegerField()
     date = models.DateField()
     reference = models.CharField(max_length=50, null=True, blank=True)
     description = models.TextField()
     company = models.ForeignKey(Company)
     statuses = [('Approved', 'Approved'), ('Unapproved', 'Unapproved')]
     status = models.CharField(max_length=10, choices=statuses, default='Unapproved')
+
+    def __init__(self, *args, **kwargs):
+        super(FixedAsset, self).__init__(*args, **kwargs)
+        if not self.pk and not self.voucher_no:
+            self.voucher_no = get_next_voucher_no(FixedAsset, self.company)
 
 
 class FixedAssetRow(models.Model):

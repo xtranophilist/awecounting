@@ -28,6 +28,10 @@
 
         <span data-bind="text: message(), css: state()"></span>
 
+        {{ form.voucher_no.label_tag }}
+        {{ form.voucher_no }}
+        {{ form.voucher_no.errors }}
+
         <div class="row-fluid">
 
             <div class="span6">
@@ -76,7 +80,8 @@
 
         </div>
 
-        <a href="#" class="btn" data-bind="click: load_related_invoices, visible: party() && !table_vm().rows()">Load Invoices</a>
+        <a href="#" class="btn" data-bind="click: load_related_invoices, visible: party() && !table_vm().rows()">Load
+            Invoices</a>
 
         <div class="row-fluid" data-bind="with: table_vm()">
             <table class="table table-bordered table-striped table-acubor table-sortable" id="voucher_table"
@@ -137,7 +142,6 @@
 
             </div>
         </div>
-
 
 
     </form>
