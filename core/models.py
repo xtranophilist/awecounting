@@ -20,7 +20,7 @@ class CompanySetting(models.Model):
     company = models.OneToOneField(Company, related_name='settings')
     default_currency = models.ForeignKey(Currency, default=144)
     decimal_places = models.IntegerField(default=2)
-    number_comma_system = models.CharField(choices=[('1,20,000', '1,20,000'), ('120,000', '120,000')], max_length=8,
+    number_comma_system = models.CharField(choices=[('120,000', '120,000'), ('1,20,000', '1,20,000'), ('no', 'No Commas')], max_length=8,
                                            default='120,000')
     region_setting = models.CharField(
         choices=[('North America', 'North America'), ('South America', 'South America'), ('Europe', 'Europe'),
