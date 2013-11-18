@@ -109,27 +109,27 @@ function DayJournal(data) {
 
     self.lotto_sales_dispenser_amount = ko.observable();
     if (isAN(data['lotto_sales_dispenser_amount'])) {
-        self.lotto_sales_dispenser_amount(parseFloat(data['lotto_sales_dispenser_amount']));
+        self.lotto_sales_dispenser_amount(rnum(parseFloat(data['lotto_sales_dispenser_amount'])));
     }
 
     self.lotto_sales_register_amount = ko.observable();
     if (data['lotto_sales_register_amount']) {
-        self.lotto_sales_register_amount(parseFloat(data['lotto_sales_register_amount']));
+        self.lotto_sales_register_amount(rnum(parseFloat(data['lotto_sales_register_amount'])));
     }
 
     self.scratch_off_sales_register_amount = ko.observable();
     if (data['scratch_off_sales_register_amount']) {
-        self.scratch_off_sales_register_amount(parseFloat(data['scratch_off_sales_register_amount']));
+        self.scratch_off_sales_register_amount(rnum(parseFloat(data['scratch_off_sales_register_amount'])));
     }
 
     self.register_sales_amount = ko.observable();
     if (data['register_sales_amount']) {
-        self.register_sales_amount(parseFloat(data['register_sales_amount']));
+        self.register_sales_amount(rnum(parseFloat(data['register_sales_amount'])));
     }
 
     self.register_sales_tax = ko.observable();
     if (data['register_sales_tax']) {
-        self.register_sales_tax(parseFloat(data['register_sales_tax']));
+        self.register_sales_tax(rnum(parseFloat(data['register_sales_tax'])));
     }
 
     $.ajax({
@@ -157,7 +157,7 @@ function DayJournal(data) {
         return account[0];
     }
 
-    self.lotto_sales_dispenser_tax = ko.observable(parseFloat(self.account_by_name('Lotto Sales').tax_rate) * empty_to_zero(self.lotto_sales_dispenser_amount()) / 100);
+    self.lotto_sales_dispenser_tax = ko.observable(rnum(parseFloat(self.account_by_name('Lotto Sales').tax_rate) * empty_to_zero(self.lotto_sales_dispenser_amount()) / 100));
 
     self.lotto_sales_register_tax = function () {
         return rnum(parseFloat(self.account_by_name('Lotto Sales').tax_rate) * round2(parseFloat(self.lotto_sales_register_amount())) / 100);
@@ -171,7 +171,7 @@ function DayJournal(data) {
         if (isAN(self.lotto_detail.scratch_off_sales_manual()))
             return parseFloat(self.lotto_detail.scratch_off_sales_manual());
         else
-            return self.lotto_detail.get_total('sales');
+            return rnum(self.lotto_detail.get_total('sales'));
     }
 
     self.actual_sales_amount = function () {
@@ -191,7 +191,7 @@ function DayJournal(data) {
     }
 
     self.sales_summary_cash = function () {
-        return self.actual_sales_amount() - empty_to_zero(self.card_sales.rows()[0].amount()) - self.cash_equivalent_sales.get_total('amount');
+        return rnum(self.actual_sales_amount() - empty_to_zero(self.card_sales.rows()[0].amount()) - self.cash_equivalent_sales.get_total('amount'));
     }
 
 //    self.register_sales_amount = function () {
@@ -452,7 +452,7 @@ function DayJournal(data) {
     }
 
     self.summary_transfer.total = function () {
-        return self.summary_transfer.get_total('cash') + self.summary_transfer.get_total('card') + self.summary_transfer.get_total('cheque');
+        return rnum(self.summary_transfer.get_total('cash') + self.summary_transfer.get_total('card') + self.summary_transfer.get_total('cheque'));
     }
 
     self.summary_sales_tax = new TableViewModel(key_to_options('summary_sales_tax'), SummaryTaxRow);
@@ -475,7 +475,7 @@ function DayJournal(data) {
     }
 
     self.summary_cash = new TableViewModel(key_to_options('summary_cash'), SummaryCashRow);
-    self.summary_cash.rows()[0].actual(self.cash_actual);
+    self.summary_cash.rows()[0].actual(rnum(self.cash_actual));
 
     var lotto_detail_options = key_to_options('lotto_detail');
     lotto_detail_options.auto_add_first = false;
@@ -506,7 +506,7 @@ function DayJournal(data) {
     }
     self.lotto_detail.scratch_off_sales_manual = ko.observable();
     if (isAN(data['scratch_off_sales_manual'])) {
-        self.lotto_detail.scratch_off_sales_manual(parseFloat(data['scratch_off_sales_manual']));
+        self.lotto_detail.scratch_off_sales_manual(rnum(parseFloat(data['scratch_off_sales_manual'])));
     }
 
     self.vendor_payout = new TableViewModel(key_to_options('vendor_payout'), VendorPayoutVM);
@@ -704,7 +704,7 @@ function SummaryCashRow(row) {
             if (element.name == 'Cash Account')
                 return element;
         })[0];
-        return round2(cash_account.opening);
+        return rnum(cash_account.opening);
     };
 
     self.inward = function (root) {
@@ -774,13 +774,13 @@ function SummaryCashRow(row) {
     };
 
     self.closing = function (root) {
-        return round2(self.opening(root) + self.inward(root) - self.outward(root));
+        return rnum(self.opening(root) + self.inward(root) - self.outward(root));
     };
 
     self.actual = ko.observable();
 
     self.difference = function (root) {
-        return round2(self.actual() - self.closing(root));
+        return rnum(self.actual() - self.closing(root));
     };
 
 
@@ -812,7 +812,7 @@ function SummaryLotto(root) {
         return total;
     }
     self.diff = function () {
-        return round2(self.disp() - self.reg());
+        return rnum(self.disp() - self.reg());
     };
 }
 
