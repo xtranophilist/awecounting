@@ -37,6 +37,7 @@ function FixedAssetVM(data) {
     self.party_address = ko.observable();
     self.date = ko.observable();
     self.reference = ko.observable();
+    self.voucher_no = ko.observable();
 
     for (var k in data) {
         self[k] = ko.observable(data[k]);
