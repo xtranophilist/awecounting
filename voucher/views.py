@@ -532,36 +532,6 @@ def save_cash_receipt(request):
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
-@group_required('SuperOwner', 'Owner', "supervisor")
-def approve_cash_receipt(request):
-    params = json.loads(request.body)
-    dct = {}
-    if params.get('id'):
-        voucher = CashReceipt.objects.get(id=params.get('id'))
-    else:
-        dct['error_message'] = 'Voucher needs to be saved before being approved!'
-        return HttpResponse(json.dumps(dct), mimetype="application/json")
-        #set_transactions(voucher, params.get('receipt_on'),
-    #['cr', Account.objects.get(id=params.get('total_payment')), row.get('cr_amount')],
-    #        )
-    cash_account = Account.objects.get(name='Cash Account', company=request.company)
-    discount_expenses_account = Account.objects.get(name='Discount Expenses', company=request.company)
-    if params.get('table_vm') and params.get('table_vm').get('rows'):
-        total = float(params.get('total_payment')) + float(params.get('total_discount'))
-        set_transactions(voucher, params.get('receipt_on'),
-                         ['dr', cash_account, params.get('total_payment')],
-                         ['dr', discount_expenses_account, params.get('total_discount')],
-                         ['cr', Party.objects.get(id=params.get('party')).customer_account, total]
-        )
-    else:
-        set_transactions(voucher, params.get('receipt_on'),
-                         ['dr', cash_account, params.get('amount')],
-                         #['dr', discount_expenses_account, params.get('total_payment')],
-                         ['cr', Party.objects.get(id=params.get('party')).customer_account, params.get('amount')]
-        )
-    return HttpResponse(json.dumps(dct), mimetype="application/json")
-
-
 @login_required
 def list_cash_payments(request):
     pass
@@ -645,6 +615,33 @@ def save_cash_payment(request):
         voucher.save()
     if params.get('continue'):
         dct = {'redirect_to': str(reverse_lazy('create_cash_payment'))}
+    return HttpResponse(json.dumps(dct), mimetype="application/json")
+
+@group_required('SuperOwner', 'Owner', "supervisor")
+def approve_cash_receipt(request):
+    params = json.loads(request.body)
+    dct = {}
+    if params.get('id'):
+        voucher = CashReceipt.objects.get(id=params.get('id'))
+    else:
+        dct['error_message'] = 'Voucher needs to be saved before being approved!'
+        return HttpResponse(json.dumps(dct), mimetype="application/json")
+    cash_account = Account.objects.get(name='Cash Account', company=request.company)
+    discount_expenses_account = Account.objects.get(name='Discount Expenses', company=request.company)
+    if voucher.rows.all().count() > 0:
+        total_receipt = sum(row.receipt for row in voucher.rows.all())
+        total_discount = sum(row.discount for row in voucher.rows.all())
+        total = total_receipt + total_discount
+        set_transactions(voucher, voucher.receipt_on,
+                         ['dr', cash_account, total_receipt],
+                         ['dr', discount_expenses_account, total_discount],
+                         ['cr', voucher.party.customer_account, total]
+        )
+    else:
+        set_transactions(voucher, voucher.receipt_on,
+                         ['dr', cash_account, voucher.amount],
+                         ['cr', voucher.party.customer_account, voucher.amount]
+        )
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
