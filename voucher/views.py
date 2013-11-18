@@ -758,11 +758,10 @@ def approve_fixed_asset(request):
     else:
         dct['error_message'] = 'Voucher needs to be saved before being approved!'
         return HttpResponse(json.dumps(dct), mimetype="application/json")
-    from_account = Account.objects.get(id=params.get('from_account'))
     for row in voucher.rows.all():
-        set_transactions(row, params.get('date'),
+        set_transactions(row, voucher.date,
                          ['dr', row.asset_ledger, row.amount],
-                         ['cr', from_account, row.amount])
+                         ['cr', voucher.from_account, row.amount])
     voucher.status = 'Approved'
     voucher.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
