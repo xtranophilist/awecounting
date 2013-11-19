@@ -716,8 +716,15 @@ table select{
 .print-half{
     width: 460px;
     float: left;
-    margin: 0 10px;
+    margin: 0 20px 10px 0px;
+}
+.print-wrap .print-half:last-child{
+    margin-right: 0;
 }
 .page-break {
     clear: both;
+}
+.modal-body h2{
+    font-size: 16px;
+    line-height: 22px
 }

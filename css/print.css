@@ -6,6 +6,10 @@ body{
     display: none !important;
 }
 
+.page-header{
+    display: none;
+}
+
 #page-contnet {
     padding: 0;
 }
@@ -91,11 +95,9 @@ body, article {
     overflow: visible;
     padding: 0px;
 }
-h1{
-    font-size: 20pt;
-}
+h1,
 h2{
-    font-size: 8pt;
+    font-size: 10pt !important;
     margin: 0;
     padding: 0px;
     line-height: 20px;
@@ -114,11 +116,6 @@ table td, .table-acubor td, table th, .table-acubor th{
     padding: 2pt !important;
     font-size: 8pt !important;
 }
-/*.modal-body, .print-preview, #page-content, #main-content, #main-container, body {*/
-    /*float: none;*/
-    /*display: block;*/
-    /*border: none;*/
-/*}*/
 .print-wrap{
     width: 100% !important;
     margin: 0 auto;
@@ -129,7 +126,7 @@ table td, .table-acubor td, table th, .table-acubor th{
 .do-print .print-half{
     width: 49%;
     display: inline-block;
-    margin-right: 1%;
+    margin-right: 2%;
     margin-left: 0;
 }
 .do-print .print-half-last{
@@ -139,16 +136,8 @@ table td, .table-acubor td, table th, .table-acubor th{
     width: 100%;
     margin-left: 0;
 }
-
 *{
     float: none;
-}
-html{
-     overflow-x: hidden;
-     overflow: visible !important;
-}
-table{
-    width: 100%;
 }
 thead {
     display: table-header-group;
