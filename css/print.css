@@ -1,5 +1,6 @@
 body{
     font-size: 10pt;
+    font-family: arial;
 }
 .drag_handle, .select2-arrow, .btn, button, .navbar, #sidebar, #breadcrumbs {
     display: none !important;
@@ -91,15 +92,17 @@ body, article {
     padding: 0px;
 }
 h1{
-    font-size: 20px;
+    font-size: 20pt;
 }
 h2{
-    font-size: 14px;
+    font-size: 8pt;
     margin: 0;
     padding: 0px;
+    line-height: 20px;
     font-weight: bold;
     page-break-after: avoid;
     position: relative;
+    margin-bottom: 6pt;
 }
 table{
     page-break-inside: avoid;
