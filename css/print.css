@@ -64,7 +64,7 @@ body, article {
 }
 
 .do-print {
-    display: inline-block !important;
+    display: block !important;
     opacity: 1;
 }
 
@@ -86,7 +86,6 @@ body, article {
     left: 0;
 }
 .modal-body{
-    position: static;
     width: 100%;
     overflow: visible;
     padding: 0px;
@@ -99,6 +98,11 @@ h2{
     margin: 0;
     padding: 0px;
     font-weight: bold;
+    page-break-after: avoid;
+    position: relative;
+}
+table{
+    page-break-inside: avoid;
 }
 .table-acubor{
     font-size: 60%;
@@ -132,14 +136,25 @@ table td, .table-acubor td, table th, .table-acubor th{
     width: 100%;
     margin-left: 0;
 }
-table {
-    page-break-inside:avoid;
-    position:relative;
-}
+
 *{
     float: none;
 }
 html{
      overflow-x: hidden;
      overflow: visible !important;
+}
+table{
+    width: 100%;
+}
+thead {
+    display: table-header-group;
+    text-align: center;
+}
+tbody {
+    display: table-row-group;
+}
+tr{
+    page-break-inside: avoid;
+    margin-top: 10px;
 }
