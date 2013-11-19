@@ -61,7 +61,7 @@
         <h3 id="modal-label">Print Preview</h3>
     </div>
     <div class="modal-body">
-        <p>Under Construction</p>
+        <p>Voucher No.: <b data-bind="text: voucher_no"></b>
 
         <div class="print-wrap">
             <div class="print-half">
@@ -139,100 +139,6 @@
                     </table>
                 </div>
 
-                <!-- Sales Summary -->
-                <div>
-                    <h2>Sales Summary</h2>
-                    <table class="table table-bordered table-striped table-acubor table-sortable">
-                        <thead>
-                        <tr>
-                            <th></th>
-                            <th>Amount</th>
-                            <th>Tax</th>
-                        </tr>
-                        </thead>
-                        <tr>
-                            <th>Actual Sales</th>
-                            <td data-bind="text: actual_sales_amount()"></td>
-                            <td data-bind="text: actual_sales_tax()"></td>
-                        </tr>
-                        <tr>
-                            <th>Sales shown by Register</th>
-                            <td data-bind="text: register_sales_amount()"></td>
-                            <td data-bind="text: register_sales_tax()"></td>
-                        </tr>
-                        <tr class="diff">
-                            <th>Difference</th>
-                            <td data-bind="text: diff_sales_amount()"></td>
-                            <td data-bind="text: diff_sales_tax()"></td>
-                        </tr>
-                        <tbody>
-
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Sales Against -->
-                <div>
-                    <h2>Sales Against</h2>
-                    <table class="table table-bordered table-acubor">
-                        <tr>
-                            <th>Card</th>
-                            <td data-bind="text: $root.card_sales.rows()[0].amount()"></td>
-                        </tr>
-                        <tr>
-                            <td>Card Commission Out</td>
-                            <td data-bind="text: $root.card_sales.rows()[0].commission_out()"></td>
-                        </tr>
-                        <!-- ko foreach:$root.cash_equivalent_sales.rows() -->
-                        <!-- ko if:account -->
-                        <tr>
-                            <th data-bind="text: $root.account_by_id(account()).name"></th>
-                            <td data-bind="text: amount()"></td>
-                        </tr>
-                        <!-- /ko -->
-                        <!-- /ko -->
-                        <tr>
-                            <th>Cash</th>
-                            <td data-bind="text: $root.sales_summary_cash()"></td>
-                        </tr>
-                        <tr>
-                            <th>TOTAL</th>
-                            <td data-bind="text: $root.actual_sales_amount()"></td>
-                        </tr>
-                    </table>
-                </div>
-
-                <!-- Cash Summary -->
-                <div data-bind="with: summary_cash">
-                    <h2>Cash Summary</h2>
-                    <table class="table table-bordered table-acubor">
-                        <thead>
-                        <tr>
-                            <th class="span2">Opening</th>
-                            <th class="span2">Inward</th>
-                            <th class="span2">Outward</th>
-                            <th class="span2">Closing</th>
-                            <th class="span2">Actual</th>
-                            <th class="span2">Difference</th>
-                        </tr>
-                        </thead>
-                        <tbody id="summary-cash">
-                        <tr>
-                            <td data-bind="text: rows()[0].opening($root)"></td>
-                            <td data-bind="text: rows()[0].inward($root)"></td>
-                            <td data-bind="text: rows()[0].outward($root)"></td>
-                            <td data-bind="text: rows()[0].closing($root)"></td>
-                            <td data-bind="text: rows()[0].actual()"></td>
-                            <td data-bind="text: rows()[0].difference($root)"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-
-            <div class="print-half print-half-last">
-
                 <!-- Transfer/Remittance -->
                 <div data-bind="with: summary_transfer, visible: summary_transfer.has_real_rows('transfer_type')">
                     <h2>Transfer/Remittance</h2>
@@ -266,6 +172,135 @@
                             <td data-bind="text: get_total('card')"></td>
                         </tr>
                         </tbody>
+                    </table>
+                </div>
+
+                <!-- Sales Summary -->
+                <div>
+                    <h2>Sales Summary</h2>
+                    <table class="table table-bordered table-striped table-acubor table-sortable">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th>Amount</th>
+                            <th>Tax</th>
+                        </tr>
+                        </thead>
+                        <tr>
+                            <th>Actual Sales</th>
+                            <td data-bind="text: actual_sales_amount()"></td>
+                            <td data-bind="text: actual_sales_tax()"></td>
+                        </tr>
+                        <tr>
+                            <th>Sales shown by Register</th>
+                            <td data-bind="text: register_sales_amount()"></td>
+                            <td data-bind="text: register_sales_tax()"></td>
+                        </tr>
+                        <tr class="diff">
+                            <th>Difference</th>
+                            <td data-bind="text: diff_sales_amount()"></td>
+                            <td data-bind="text: diff_sales_tax()"></td>
+                        </tr>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Cash Summary -->
+                <div data-bind="with: summary_cash">
+                    <h2>Cash Summary</h2>
+                    <table class="table table-bordered table-acubor">
+                        <thead>
+                        <tr>
+                            <th class="span2">Opening</th>
+                            <th class="span2">Inward</th>
+                            <th class="span2">Outward</th>
+                            <th class="span2">Closing</th>
+                            <th class="span2">Actual</th>
+                            <th class="span2">Difference</th>
+                        </tr>
+                        </thead>
+                        <tbody id="summary-cash">
+                        <tr>
+                            <td data-bind="text: rows()[0].opening($root)"></td>
+                            <td data-bind="text: rows()[0].inward($root)"></td>
+                            <td data-bind="text: rows()[0].outward($root)"></td>
+                            <td data-bind="text: rows()[0].closing($root)"></td>
+                            <td data-bind="text: rows()[0].actual()"></td>
+                            <td data-bind="text: rows()[0].difference($root)"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Fuel -->
+                <div data-bind="with: inventory_fuel, visible: inventory_fuel.has_real_rows('account_id')">
+                    <h2>Fuel</h2>
+                    <table class="table table-bordered table-acubor">
+                        <thead>
+                        <tr>
+                            <th>SN</th>
+                            <th>Particulars</th>
+                            <th>Opening</th>
+                            <th>Purchase</th>
+                            <th>Sales</th>
+                            <th>Closing</th>
+                            <th>Actual</th>
+                            <th>Difference</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- ko foreach: rows -->
+                        <!-- ko if: account_id -->
+                        <tr data-bind="flash: true">
+                            <td data-bind="text: $index()+1"></td>
+                            <td data-bind="text: $root.inventory_account_by_id(account_id()).name"></td>
+                            <td data-bind="text: fnum(opening()) + ' ' + $root.get_unit(account_id())"></td>
+                            <td data-bind="text: fnum(purchase()) + ' ' + $root.get_unit(account_id())"></td>
+                            <td data-bind="text: fnum(sales()) + ' ' + $root.get_unit(account_id())"></td>
+                            <td data-bind="text: fnum(closing()) + ' ' + $root.get_unit(account_id())"></td>
+                            <td data-bind="text: fnum(actual()) + ' ' + $root.get_unit(account_id())"></td>
+                            <td data-bind="text: fnum(difference()) + ' ' + $root.get_unit(account_id())"></td>
+                        </tr>
+                        <!-- /ko -->
+                        <!-- /ko -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+            <div class="print-half print-half-last">
+
+                <!-- Sales Against -->
+                <div>
+                    <h2>Sales Against</h2>
+                    <table class="table table-bordered table-acubor">
+                        <tr>
+                            <th>Card</th>
+                            <td data-bind="text: $root.card_sales.rows()[0].amount()"></td>
+                        </tr>
+                        <tr>
+                            <td>Card Commission Out</td>
+                            <td data-bind="text: $root.card_sales.rows()[0].commission_out()"></td>
+                        </tr>
+                        <!-- ko foreach:$root.cash_equivalent_sales.rows() -->
+                        <!-- ko if:account -->
+                        <tr>
+                            <th data-bind="text: $root.account_by_id(account()).name"></th>
+                            <td data-bind="text: amount()"></td>
+                        </tr>
+                        <!-- /ko -->
+                        <!-- /ko -->
+                        <tr>
+                            <th>Cash</th>
+                            <td data-bind="text: $root.sales_summary_cash()"></td>
+                        </tr>
+                        <tr>
+                            <th>TOTAL</th>
+                            <td data-bind="text: $root.actual_sales_amount()"></td>
+                        </tr>
                     </table>
                 </div>
 
@@ -330,76 +365,6 @@
                         </tr>
                         </tbody>
                     </table>
-                </div>  
-
-                <!-- Fuel -->
-                <div data-bind="with: inventory_fuel, visible: inventory_fuel.has_real_rows('account_id')">
-                    <h2>Fuel</h2>
-                    <table class="table table-bordered table-acubor">
-                        <thead>
-                        <tr>
-                            <th>SN</th>
-                            <th>Particulars</th>
-                            <th>Opening</th>
-                            <th>Purchase</th>
-                            <th>Sales</th>
-                            <th>Closing</th>
-                            <th>Actual</th>
-                            <th>Difference</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <!-- ko foreach: rows -->
-                        <!-- ko if: account_id -->
-                        <tr data-bind="flash: true">
-                            <td data-bind="text: $index()+1"></td>
-                            <td data-bind="text: $root.inventory_account_by_id(account_id()).name"></td>
-                            <td data-bind="text: fnum(opening()) + ' ' + $root.get_unit(account_id())"></td>
-                            <td data-bind="text: fnum(purchase()) + ' ' + $root.get_unit(account_id())"></td>
-                            <td data-bind="text: fnum(sales()) + ' ' + $root.get_unit(account_id())"></td>
-                            <td data-bind="text: fnum(closing()) + ' ' + $root.get_unit(account_id())"></td>
-                            <td data-bind="text: fnum(actual()) + ' ' + $root.get_unit(account_id())"></td>
-                            <td data-bind="text: fnum(difference()) + ' ' + $root.get_unit(account_id())"></td>
-                        </tr>
-                        <!-- /ko -->
-                        <!-- /ko -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Other Inventories -->
-                <div class="row-fluid" data-bind="with: summary_inventory, visible: summary_inventory.has_real_rows('account_id')">
-                        <h2>Other Inventories</h2>
-                        <table class="table table-bordered table-acubor">
-                            <thead>
-                            <tr>
-                                <th>SN</th>
-                                <th>Particulars</th>
-                                <th>Opening</th>
-                                <th>Purchase</th>
-                                <th>Sales</th>
-                                <th>Closing</th>
-                                <th>Actual</th>
-                                <th>Difference</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <!-- ko foreach: rows -->
-                            <!-- ko if: account_id -->
-                            <tr data-bind="flash: true">
-                                <td data-bind="text: $index()+1"></td>
-                                <td data-bind="text: $root.inventory_account_by_id(account_id()).name"></td>
-                                <td data-bind="text: fnum(opening()) + ' ' + $root.get_unit(account_id())"></td>
-                                <td data-bind="text: fnum(purchase()) + ' ' + $root.get_unit(account_id())"></td>
-                                <td data-bind="text: fnum(sales()) + ' ' + $root.get_unit(account_id())"></td>
-                                <td data-bind="text: fnum(closing()) + ' ' + $root.get_unit(account_id())"></td>
-                                <td data-bind="text: fnum(actual()) + ' ' + $root.get_unit(account_id())"></td>
-                                <td data-bind="text: fnum(difference()) + ' ' + $root.get_unit(account_id())"></td>
-                            </tr>
-                            <!-- /ko -->
-                            <!-- /ko -->
-                            </tbody>
-                        </table>
                 </div>
 
             </div>
@@ -448,6 +413,45 @@
                 </div>
             </div>
         </div>
+        <div class="page-break"></div>
+        <div class="print-wrap">
+            <div class="print-half">
+                <!-- Other Inventories -->
+                <div class="row-fluid" data-bind="with: summary_inventory, visible: summary_inventory.has_real_rows('account_id')">
+                        <h2>Other Inventories</h2>
+                        <table class="table table-bordered table-acubor">
+                            <thead>
+                            <tr>
+                                <th>SN</th>
+                                <th>Particulars</th>
+                                <th>Opening</th>
+                                <th>Purchase</th>
+                                <th>Sales</th>
+                                <th>Closing</th>
+                                <th>Actual</th>
+                                <th>Difference</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!-- ko foreach: rows -->
+                            <!-- ko if: account_id -->
+                            <tr data-bind="flash: true">
+                                <td data-bind="text: $index()+1"></td>
+                                <td data-bind="text: $root.inventory_account_by_id(account_id()).name"></td>
+                                <td data-bind="text: fnum(opening()) + ' ' + $root.get_unit(account_id())"></td>
+                                <td data-bind="text: fnum(purchase()) + ' ' + $root.get_unit(account_id())"></td>
+                                <td data-bind="text: fnum(sales()) + ' ' + $root.get_unit(account_id())"></td>
+                                <td data-bind="text: fnum(closing()) + ' ' + $root.get_unit(account_id())"></td>
+                                <td data-bind="text: fnum(actual()) + ' ' + $root.get_unit(account_id())"></td>
+                                <td data-bind="text: fnum(difference()) + ' ' + $root.get_unit(account_id())"></td>
+                            </tr>
+                            <!-- /ko -->
+                            <!-- /ko -->
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+        </div>
 
     </div>
     <div class="modal-footer no-print">
@@ -455,9 +459,9 @@
         <a href="javascript:window.print();" class="btn btn-primary">Print</a>
     </div>
 </div>
-
+    <div class="no-print">
     Voucher No.: <input type="text" data-bind="value: voucher_no">
-
+    </div>
     {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
         <input class="btn" type="submit" value="Approve"
                data-bind="click: $root.approve, visible: $root.status() == 'Unapproved'">
