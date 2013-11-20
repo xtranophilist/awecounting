@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block pageheader %}
-    {{ scenario }} Fixed Asset
+    {{ request.company.voucher_settings.fixed_assets_heading }}
 {% endblock %}
 
 {% block content %}
@@ -40,7 +40,12 @@
 
             <div class="span6">
                 Voucher No:<br/>
-                <input type="text" data-bind="value: voucher_no" required>
+
+                <div class="input-append input-prepend input-mini dissolve">
+                    <span class="add-on">{{ request.company.voucher_settings.fixed_assets_prefix }}</span>
+                    <input type="text" data-bind="value: voucher_no" required>
+                    <span class="add-on">{{ request.company.voucher_settings.fixed_assets_suffix }}</span>
+                </div>
             </div>
 
 
