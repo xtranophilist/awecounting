@@ -43,57 +43,57 @@ class VoucherSetting(models.Model):
     invoice_heading = models.CharField(max_length=100, default='Invoice')
     invoice_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
     invoice_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
-    invoice_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in unique Invoice #')
+    #invoice_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in unique Invoice #')
 
     purchase_voucher_heading = models.CharField(default='Purchase Voucher', max_length=100)
     purchase_voucher_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
     purchase_voucher_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
-    purchase_voucher_digit_count = models.IntegerField(default=4,
-                                                       verbose_name='Number of digits in unique Purchase Voucher#')
+    #purchase_voucher_digit_count = models.IntegerField(default=4,
+    #                                                   verbose_name='Number of digits in unique Purchase Voucher#')
 
     fixed_assets_purchase_voucher_heading = models.CharField(default='Fixed Assets Purchase Voucher', max_length=100)
     fixed_assets_purchase_voucher_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
     fixed_assets_purchase_voucher_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
-    fixed_assets_purchase_voucher_digit_count = models.IntegerField(default=4,
-                                                                    verbose_name='Number of digits in Fixed Assets Purchase Voucher#')
+    #fixed_assets_purchase_voucher_digit_count = models.IntegerField(default=4,
+    #                                                                verbose_name='Number of digits in Fixed Assets Purchase Voucher#')
 
     journal_voucher_heading = models.CharField(default='Journal Voucher', max_length=100)
-    journal_voucher_purchase_voucher_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
-    journal_voucher_purchase_voucher_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
-    journal_voucher_purchase_voucher_digit_count = models.IntegerField(default=4,
-                                                                       verbose_name='Number of digits in Journal Voucher#')
+    journal_voucher_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
+    journal_voucher_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
+    #journal_voucher_digit_count = models.IntegerField(default=4,
+    #                                                                   verbose_name='Number of digits in Journal Voucher#')
 
     cash_receipt_heading = models.CharField(default='Cash Receipt', max_length=100)
     cash_receipt_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
     cash_receipt_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
-    cash_receipt_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in Cash Receipt#')
+    #cash_receipt_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in Cash Receipt#')
 
     cash_payment_heading = models.CharField(default='Cash Payment', max_length=100)
     cash_payment_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
     cash_payment_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
-    cash_payment_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in Cash Payment#')
+    #cash_payment_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in Cash Payment#')
 
     bank_cash_deposit_heading = models.CharField(default='Bank Cash Deposit', max_length=100)
     bank_cash_deposit_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
     bank_cash_deposit_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
-    bank_cash_deposit_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in Cash Deposit#')
+    #bank_cash_deposit_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in Cash Deposit#')
 
     cheque_deposit_heading = models.CharField(default='Cheque Deposit', max_length=100)
     cheque_deposit_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
     cheque_deposit_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
-    cheque_deposit_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in Cheque Deposit#')
+    #cheque_deposit_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in Cheque Deposit#')
 
     cheque_payment_heading = models.CharField(default='Cheque Payment', max_length=100)
     cheque_payment_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
     cheque_payment_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
-    cheque_payment_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in Cheque Payment#')
+    #cheque_payment_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in Cheque Payment#')
 
     eft_in_heading = models.CharField(default='EFT In', max_length=100)
     eft_in_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
     eft_in_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
-    eft_in_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in EFT In#')
+    #eft_in_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in EFT In#')
 
     eft_out_heading = models.CharField(default='EFT Out', max_length=100)
     eft_out_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
     eft_out_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
-    eft_out_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in EFT Out#')
+    #eft_out_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in EFT Out#')

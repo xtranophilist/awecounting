@@ -25,13 +25,18 @@
 
         <div data-bind="with: journal_voucher">
             <div>
-                <h2 data-bind="css: state()">{{ scenario }} Journal Voucher</h2>
+                <h2 data-bind="css: state()">{{ request.company.voucher_settings.journal_voucher_heading }}</h2>
                 <span data-bind="text: message()"></span>
             </div>
 
             {% csrf_token %}
 
-            Voucher No.: <input type="text" name="voucher_no" data-bind="value: $root.voucher_no" required/>
+            Voucher No.:
+        <div class="input-append input-prepend input-mini dissolve">
+            <span class="add-on">{{ request.company.voucher_settings.journal_voucher_prefix }}</span>
+            <input type="text" name="voucher_no" data-bind="value: $root.voucher_no" required/>
+            <span class="add-on">{{ request.company.voucher_settings.journal_voucher_suffix }}</span>
+        </div>
 
             <div class="pull-right">
                 Date:

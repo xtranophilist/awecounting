@@ -32,9 +32,9 @@
 
         {{ form.voucher_no.label_tag }}
         <div class="input-append input-prepend input-mini dissolve">
-                    <span class="add-on">{{ request.company.voucher_settings.purchase_voucher_prefix }}</span>
+            <span class="add-on">{{ request.company.voucher_settings.purchase_voucher_prefix }}</span>
             {{ form.voucher_no }}
-                    <span class="add-on">{{ request.company.voucher_settings.purchase_voucher_suffix }}</span>
+            <span class="add-on">{{ request.company.voucher_settings.purchase_voucher_suffix }}</span>
         </div>
         {{ form.voucher_no.errors }}
 
