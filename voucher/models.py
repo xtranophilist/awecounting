@@ -12,7 +12,7 @@ class Invoice(models.Model):
     party = models.ForeignKey(Party, verbose_name=u'To', null=True, blank=True)
     date = models.DateField(null=True, blank=True)
     due_date = models.DateField(null=True, blank=True)
-    invoice_no = models.CharField(max_length=20)
+    voucher_no = models.IntegerField()
     reference = models.CharField(max_length=100, null=True, blank=True)
     currency = models.ForeignKey(Currency, null=True, blank=True)
     tax = models.CharField(max_length=10, choices=tax_choices, default='inclusive', null=True, blank=True)
@@ -25,10 +25,15 @@ class Invoice(models.Model):
 
     class Meta:
         db_table = 'invoice'
-        unique_together = ('invoice_no', 'company')
+        #unique_together = ('invoice_no', 'company')
 
     def get_voucher_no(self):
         return self.invoice_no
+
+    def __init__(self, *args, **kwargs):
+        super(Invoice, self).__init__(*args, **kwargs)
+        if not self.pk and not self.voucher_no:
+            self.voucher_no = get_next_voucher_no(Invoice, self.company)
 
         #def total_amount(self):
         #    total = 0;
