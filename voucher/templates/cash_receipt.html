@@ -18,7 +18,7 @@
 {% endblock %}
 
 {% block pageheader %}
-    {{ scenario }} Cash Receipt
+    {{ request.company.voucher_settings.cash_receipt_heading }}
 {% endblock %}
 
 {% block content %}
@@ -29,7 +29,11 @@
         <span data-bind="text: message(), css: state()"></span>
 
         {{ form.voucher_no.label_tag }}
-        {{ form.voucher_no }}
+        <div class="input-append input-prepend input-mini dissolve">
+                    <span class="add-on">{{ request.company.voucher_settings.cash_receipt_prefix }}</span>
+                    {{ form.voucher_no }}
+                    <span class="add-on">{{ request.company.voucher_settings.cash_receipt_suffix }}</span>
+                </div>
         {{ form.voucher_no.errors }}
 
         <div class="row-fluid">
