@@ -51,9 +51,9 @@ class VoucherSetting(models.Model):
     #purchase_voucher_digit_count = models.IntegerField(default=4,
     #                                                   verbose_name='Number of digits in unique Purchase Voucher#')
 
-    fixed_assets_purchase_voucher_heading = models.CharField(default='Fixed Assets Purchase Voucher', max_length=100)
-    fixed_assets_purchase_voucher_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
-    fixed_assets_purchase_voucher_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
+    fixed_assets_heading = models.CharField(default='Fixed Assets Voucher', max_length=100)
+    fixed_assets_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
+    fixed_assets_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
     #fixed_assets_purchase_voucher_digit_count = models.IntegerField(default=4,
     #                                                                verbose_name='Number of digits in Fixed Assets Purchase Voucher#')
 
