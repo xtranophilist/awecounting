@@ -17,14 +17,14 @@
     <script>
         $(document).ready(function () {
             var ko_data = {{data|jsonify}}
-            vm = new ChequeReceiptViewModel(ko_data);
+                    vm = new ChequeReceiptViewModel(ko_data);
             ko.applyBindings(vm);
         });
     </script>
 {% endblock %}
 
 {% block pageheader %}
-    {{ scenario }} Cheque Deposit
+    {{ request.company.voucher_settings.cheque_deposit_heading }}
 {% endblock %}
 
 {% block content %}
@@ -39,7 +39,11 @@
 
             <span class="span6">
             {{ form.voucher_no.label_tag }}
-            {{ form.voucher_no }}
+                <div class="input-append input-prepend input-mini dissolve">
+                    <span class="add-on">{{ request.company.voucher_settings.cheque_deposit_prefix }}</span>
+                    {{ form.voucher_no }}
+                    <span class="add-on">{{ request.company.voucher_settings.cheque_deposit_suffix }}</span>
+                </div>
             {{ form.voucher_no.errors }}
             </span>
 

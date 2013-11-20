@@ -94,6 +94,6 @@ class VoucherSetting(models.Model):
     #eft_in_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in EFT In#')
 
     eft_out_heading = models.CharField(default='EFT Out', max_length=100)
-    eft_out_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
-    eft_out_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
+    #eft_out_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
+    #eft_out_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
     #eft_out_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in EFT Out#')
