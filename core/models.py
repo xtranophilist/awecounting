@@ -34,7 +34,7 @@ class CompanySetting(models.Model):
 
 
 class VoucherSetting(models.Model):
-    company = models.ForeignKey(Company)
+    company = models.OneToOneField(Company, related_name='voucher_settings')
     voucher_number_start_date = models.DateField(default=datetime.date.today())
     voucher_number_restart_years = models.IntegerField(default=1)
     voucher_number_restart_months = models.IntegerField(default=0)
