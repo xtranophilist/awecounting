@@ -84,8 +84,8 @@ class VoucherSetting(models.Model):
     #cheque_deposit_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in Cheque Deposit#')
 
     cheque_payment_heading = models.CharField(default='Cheque Payment', max_length=100)
-    cheque_payment_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
-    cheque_payment_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
+    #cheque_payment_prefix = models.CharField(max_length=5, default='', blank=True, null=True)
+    #cheque_payment_suffix = models.CharField(max_length=5, default='', blank=True, null=True)
     #cheque_payment_digit_count = models.IntegerField(default=4, verbose_name='Number of digits in Cheque Payment#')
 
     eft_in_heading = models.CharField(default='EFT In', max_length=100)
