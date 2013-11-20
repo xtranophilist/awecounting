@@ -17,9 +17,19 @@ class InvoiceForm(KOModelForm):
                                       widget=forms.Select(attrs={'class': 'select2'}))
 
     def __init__(self, *args, **kwargs):
-        company = kwargs.pop('company', None)
+        self.company = kwargs.pop('company', None)
         super(InvoiceForm, self).__init__(*args, **kwargs)
-        self.fields['party'].queryset = Party.objects.filter(company=company, customer_account__isnull=False)
+        self.fields['party'].queryset = Party.objects.filter(company=self.company, customer_account__isnull=False)
+
+    def clean_voucher_no(self):
+        try:
+            existing = Invoice.objects.get(voucher_no=self.cleaned_data['voucher_no'], company=self.company)
+            if self.instance.id is not existing.id:
+                raise forms.ValidationError("The voucher no. " + str(
+                    self.cleaned_data['voucher_no']) + " is already in use. Suggested voucher no. has been provided!")
+            return self.cleaned_data['voucher_no']
+        except Invoice.DoesNotExist:
+            return self.cleaned_data['voucher_no']
 
     class Meta:
         model = Invoice
