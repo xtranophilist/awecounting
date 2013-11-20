@@ -20,7 +20,7 @@
 {% endblock %}
 
 {% block pageheader %}
-    {{ scenario }} Purchase Voucher
+    {{ request.company.voucher_settings.purchase_voucher_heading }}
 {% endblock %}
 
 {% block content %}
@@ -31,7 +31,11 @@
         {% csrf_token %}
 
         {{ form.voucher_no.label_tag }}
-        {{ form.voucher_no }}
+        <div class="input-append input-prepend input-mini dissolve">
+                    <span class="add-on">{{ request.company.voucher_settings.purchase_voucher_prefix }}</span>
+            {{ form.voucher_no }}
+                    <span class="add-on">{{ request.company.voucher_settings.purchase_voucher_suffix }}</span>
+        </div>
         {{ form.voucher_no.errors }}
 
         <div class="row-fluid">
@@ -151,7 +155,7 @@
 
             </div>
             <input class="btn" type="submit" value="Save" name="action" data-bind="click: $root.validate">
-        <input class="btn" type="submit" value="Save and Continue" name="action" data-bind="click: $root.validate">
+            <input class="btn" type="submit" value="Save and Continue" name="action" data-bind="click: $root.validate">
             {% if scenario == 'Update' %}
                 <a class="btn btn-danger" href="{% url 'delete_purchase_voucher' form.instance.id %}">Delete</a>
             {% endif %}
