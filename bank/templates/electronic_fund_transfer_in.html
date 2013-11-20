@@ -22,7 +22,7 @@
 {% endblock %}
 
 {% block pageheader %}
-    {{ scenario }} Electronic Fund Transfer In
+    {{ request.company.voucher_settings.eft_in_heading }}
 {% endblock %}
 
 {% block content %}
@@ -31,7 +31,12 @@
         {% csrf_token %}
 
         {{ form.voucher_no.label_tag }}
-        {{ form.voucher_no }}
+        <div class="input-append input-prepend input-mini dissolve">
+            <span class="add-on">{{ request.company.voucher_settings.eft_in_prefix }}</span>
+            {{ form.voucher_no }}
+            <span class="add-on">{{ request.company.voucher_settings.eft_in_suffix }}</span>
+        </div>
+
         {{ form.voucher_no.errors }}
 
         <div class="row-fluid">
