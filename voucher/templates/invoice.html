@@ -37,11 +37,11 @@
             </div>
 
             <div class="span3">
-                {{ form.invoice_no.label_tag }}
+                {{ form.voucher_no.label_tag }}
                 <div class="input-append input-prepend input-mini dissolve">
                     <span class="add-on"
                           data-bind="text: read_only.invoice_prefix, visible: read_only.invoice_prefix"></span>
-                    {{ form.invoice_no }}
+                    {{ form.voucher_no }}
                     <span class="add-on"
                           data-bind="text: read_only.invoice_suffix, visible: read_only.invoice_suffix"></span>
                 </div>
@@ -158,7 +158,7 @@
             </div>
 
             {% if scenario == 'Update' %}
-                <a class="btn btn-danger" href="{% url 'delete_invoice' form.instance.invoice_no %}">Delete</a>
+                <a class="btn btn-danger" href="{% url 'delete_invoice' form.instance.id %}">Delete</a>
             {% endif %}
             {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
                 <input class="btn" type="submit" value="Approve"

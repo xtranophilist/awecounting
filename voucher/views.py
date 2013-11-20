@@ -48,7 +48,7 @@ def invoice(request, id=None):
     else:
         invoice = Invoice(date=date.today(),
                           currency=company_setting.default_currency,
-                          company= request.company
+                          company=request.company
         )
         scenario = 'Create'
     form = InvoiceForm(data=request.POST, instance=invoice, company=request.company)
@@ -65,18 +65,26 @@ def invoice(request, id=None):
 def save_invoice(request):
     params = json.loads(request.body)
     dct = {'rows': {}}
+
+    # try:
+    if params.get('id'):
+        invoice = Invoice.objects.get(id=params.get('id'), company=request.company)
+    else:
+        invoice = Invoice(company=request.company)
+        # if not created:
+    try:
+        existing = Invoice.objects.get(voucher_no=params.get('voucher_no'), company=request.company)
+        if invoice.id is not existing.id:
+            return HttpResponse(json.dumps({'error_message': 'Invoice No. already exists'}),
+                                mimetype="application/json")
+    except Invoice.DoesNotExist:
+        pass
     invoice_values = {'party_id': params.get('party'), 'invoice_no': params.get('invoice_no'),
                       'description': params.get('description'),
                       'reference': params.get('reference'), 'date': params.get('date'),
                       'due_date': params.get('due_date'), 'tax': params.get('tax'),
                       'currency_id': params.get('currency'), 'company': request.company, 'status': 'Unapproved',
                       'pending_amount': params.get('total_amount'), 'total_amount': params.get('total_amount')}
-    # try:
-    if params.get('id'):
-        invoice = Invoice.objects.get(id=params.get('id'))
-    else:
-        invoice = Invoice()
-        # if not created:
     if invoice_values['total_amount'] == '':
         invoice_values['total_amount'] = 0
     if invoice_values['pending_amount'] == '':
@@ -604,6 +612,7 @@ def save_cash_payment(request):
     if params.get('continue'):
         dct = {'redirect_to': str(reverse_lazy('create_cash_payment'))}
     return HttpResponse(json.dumps(dct), mimetype="application/json")
+
 
 @group_required('SuperOwner', 'Owner', "supervisor")
 def approve_cash_receipt(request):

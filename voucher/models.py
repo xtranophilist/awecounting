@@ -12,7 +12,7 @@ class Invoice(models.Model):
     party = models.ForeignKey(Party, verbose_name=u'To', null=True, blank=True)
     date = models.DateField(null=True, blank=True)
     due_date = models.DateField(null=True, blank=True)
-    voucher_no = models.IntegerField()
+    voucher_no = models.IntegerField(verbose_name='Invoice No.')
     reference = models.CharField(max_length=100, null=True, blank=True)
     currency = models.ForeignKey(Currency, null=True, blank=True)
     tax = models.CharField(max_length=10, choices=tax_choices, default='inclusive', null=True, blank=True)
