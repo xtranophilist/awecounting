@@ -290,9 +290,9 @@ def handle_new_user(sender, user, request, **kwargs):
     create_default(company)
 
 
-from registration.signals import user_registered
-
-user_registered.connect(handle_new_user)
+# from registration.signals import user_registered
+# 
+# user_registered.connect(handle_new_user)
 
 
 def group_required(*groups):

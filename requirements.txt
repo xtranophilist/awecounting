@@ -3,5 +3,5 @@ djangorestframework==2.3.8
 django-mptt
 django-filter
  -e git://github.com/camilonova/django-sorting.git#egg=django_sorting
-PIL
+Pillow
 django-wysiwyg-redactor

@@ -26,7 +26,7 @@ router.register(r'users', UserViewSet)
 urlpatterns = patterns('',
 
                        url(r'^$', users_views.index, name='home'),
-                       (r'^user/', include('users.urls')),
+                       # (r'^user/', include('users.urls')),
                        (r'^voucher/', include('voucher.urls')),
                        (r'^tax/', include('tax.urls')),
                        (r'^inventory/', include('inventory.urls')),
