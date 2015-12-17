@@ -46,4 +46,6 @@ urlpatterns = patterns('',
                        url(r'^', include(router.urls)),
                        url(r'^acubor-admin/doc/', include('django.contrib.admindocs.urls')),
                        url(r'^acubor-admin/', include(admin.site.urls)),
-)
+                       (r'^logout/$', 'django.contrib.auth.views.logout',),
+                       url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
+                       )

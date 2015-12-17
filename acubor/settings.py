@@ -92,7 +92,7 @@ MIDDLEWARE_CLASSES = (
     'pagination.middleware.PaginationMiddleware',
     'django_sorting.middleware.SortingMiddleware',
     'users.middleware.RoleMiddleware',
-    # 'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
@@ -130,7 +130,7 @@ INSTALLED_APPS = (
     # 'blog',
     'redactor',
     'mptt',
-    # 'debug_toolbar',
+    'debug_toolbar',
     'pagination',
     'django_sorting',
     # 'gunicorn',

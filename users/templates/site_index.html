@@ -34,18 +34,18 @@
 
                 <p>
                     <input type="submit" value="Log In" class="btn"/>
-                    <a href="{% url 'auth_password_reset' %}">Forgot Password</a>
+{#                    <a href="{% url 'auth_password_reset' %}">Forgot Password</a>#}
                 </p>
             </form>
         </div>
         <div class="span6">
             <h2 class="intro">Don't have an account? Register now</h2>
 
-            <form method='post' action='{% url 'registration_register' %}' id="user_registration_new">{% csrf_token %}
-                {{ registration_form.as_p }}
-                <br>
-                <input type="submit" value="Register" class="btn"/>
-            </form>
+{#            <form method='post' action='{% url 'registration_register' %}' id="user_registration_new">{% csrf_token %}#}
+{#                {{ registration_form.as_p }}#}
+{#                <br>#}
+{#                <input type="submit" value="Register" class="btn"/>#}
+{#            </form>#}
         </div>
     </div>
 {% endblock %}
