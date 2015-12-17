@@ -49,14 +49,14 @@ USE_TZ = True
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = SITE_ROOT + '/static_files/'
+# STATIC_ROOT = SITE_ROOT + '/static_files/'
 
 ADMIN_MEDIA_PREFIX = '/admin_media/'
 
 # Additional locations of static files
-STATICFILES_DIRS = (
-    SITE_ROOT + '/static/',
-)
+# STATICFILES_DIRS = (
+#     SITE_ROOT + '/static/',
+# )
 
 # List of finder classes that know how to find static files in
 # various locations.
