@@ -1,12 +1,6 @@
-django
-gunicorn
-psycopg2
-south
-django-registration
-djangorestframework
-django-debug-toolbar
+django==1.5.4
+djangorestframework==2.3.8
 django-mptt
-django-pagination
 django-filter
  -e git://github.com/camilonova/django-sorting.git#egg=django_sorting
 PIL
