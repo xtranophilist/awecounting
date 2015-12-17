@@ -594,9 +594,9 @@ $(document).ready(function () {
                 to_href = in_col_box.siblings('.col-box-header')
             }
         }
-        $('html, body').stop().animate({
-            'scrollTop': to_href.offset().top
-        }, 900, 'swing');
+        //$('html, body').stop().animate({
+        //    'scrollTop': to_href.offset().top
+        //}, 900, 'swing');
 
         to_href.tab('show');
     }
