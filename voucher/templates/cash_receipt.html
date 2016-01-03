@@ -133,12 +133,12 @@
                     {#                    <a class="btn btn-danger" href="{% url 'delete_invoice' form.instance.voucher_no %}">Delete</a>#}
                 {% endif %}
                 <input class="btn" type="submit" value="Save" data-bind="click: $root.save">
-                {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
+{#                {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}#}
                     {% if data.status == 'Unapproved' %}
                         <input class="btn" type="submit" value="Approve"
                                data-bind="click: $root.approve, visible: $root.id">
                     {% endif %}
-                {% endifusergroup %}
+{#                {% endifusergroup %}#}
 
                 <input class="btn" type="submit" value="Save & Continue" data-bind="click: $root.save"
                        data-continue="true">
