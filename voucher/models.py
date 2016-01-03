@@ -25,19 +25,23 @@ class Invoice(models.Model):
 
     class Meta:
         db_table = 'invoice'
-        #unique_together = ('invoice_no', 'company')
+        # unique_together = ('voucher_no', 'company')
+
+    @property
+    def invoice_no(self):
+        return self.voucher_no
 
     def get_voucher_no(self):
-        return self.invoice_no
+        return self.voucher_no
 
     def __init__(self, *args, **kwargs):
         super(Invoice, self).__init__(*args, **kwargs)
         if not self.pk and not self.voucher_no:
             self.voucher_no = get_next_voucher_no(Invoice, self.company)
 
-        #def total_amount(self):
-        #    total = 0;
-        #    for particular in self.particulars:
+            # def total_amount(self):
+            #    total = 0;
+            #    for particular in self.particulars:
 
 
 class InvoiceParticular(models.Model):
@@ -52,10 +56,10 @@ class InvoiceParticular(models.Model):
     invoice = models.ForeignKey(Invoice, related_name='particulars')
 
     def get_absolute_url(self):
-        return '/voucher/invoice/' + self.invoice.invoice_no + '/'
+        return '/voucher/invoice/' + self.invoice.voucher_no + '/'
 
     def get_voucher_no(self):
-        return self.invoice.invoice_no
+        return self.invoice.voucher_no
 
     class Meta:
         db_table = 'invoice_particular'
@@ -109,7 +113,7 @@ class PurchaseParticular(models.Model):
 
 
 class JournalVoucher(models.Model):
-    #voucher_no = models.CharField(max_length=10)
+    # voucher_no = models.CharField(max_length=10)
     voucher_no = models.IntegerField()
     date = models.DateField()
     company = models.ForeignKey(Company)

@@ -61,7 +61,7 @@
 
     <table class="table table-bordered table-striped table-sortable">
         <thead>
-        <th>{% anchor invoice_no 'Invoice No' %}</th>
+        <th>{% anchor voucher_no 'Invoice No' %}</th>
         <th>{% anchor party 'To' %}</th>
         <th>{% anchor date 'Date' %}</th>
         <th>{% anchor due_date 'Due Date' %}</th>
@@ -73,8 +73,8 @@
         {% for item in paginated_objects %}
             <tr>
                 <td>
-                    <a href="{% url "view_invoice" item.invoice_no %}">
-                        {{ item.invoice_no }}
+                    <a href="{% url "view_invoice" item.voucher_no %}">
+                        {{ item.voucher_no }}
                     </a>
                 </td>
                 <td>{{ item.party }}</td>

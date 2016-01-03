@@ -79,7 +79,7 @@ def save_invoice(request):
                                 mimetype="application/json")
     except Invoice.DoesNotExist:
         pass
-    invoice_values = {'party_id': params.get('party'), 'invoice_no': params.get('invoice_no'),
+    invoice_values = {'party_id': params.get('party'), 'voucher_no': params.get('voucher_no'),
                       'description': params.get('description'),
                       'reference': params.get('reference'), 'date': params.get('date'),
                       'due_date': params.get('due_date'), 'tax': params.get('tax'),
@@ -203,8 +203,8 @@ def approve_purchase(request):
 
 
 @login_required
-def delete_invoice(request, invoice_no):
-    obj = Invoice.objects.get(invoice_no=invoice_no, company=request.company)
+def delete_invoice(request, voucher_no):
+    obj = Invoice.objects.get(voucher_no=voucher_no, company=request.company)
     obj.delete()
     return redirect(reverse('all_invoices'))
     #return redirect('/voucher/invoices/')
@@ -464,7 +464,7 @@ def party_invoices(request, id):
     objs = Invoice.objects.filter(company=request.company, party=Party.objects.get(id=id), pending_amount__gt=0)
     lst = []
     for obj in objs:
-        lst.append({'id': obj.id, 'bill_no': obj.invoice_no, 'date': obj.date, 'total_amount': obj.total_amount,
+        lst.append({'id': obj.id, 'bill_no': obj.voucher_no, 'date': obj.date, 'total_amount': obj.total_amount,
                     'pending_amount': obj.pending_amount, 'due_date': obj.due_date})
     return HttpResponse(json.dumps(lst, default=handler), mimetype="application/json")
 
@@ -507,7 +507,7 @@ def save_cash_receipt(request):
                 row['discount'] = 0
             if (row.get('payment') == '') | (row.get('payment') is None):
                 row['payment'] = 0
-            invoice = Invoice.objects.get(invoice_no=row.get('bill_no'), company=request.company)
+            invoice = Invoice.objects.get(voucher_no=row.get('bill_no'), company=request.company)
             values = {'discount': row.get('discount'), 'receipt': row.get('payment'),
                       'cash_receipt': voucher,
                       'invoice': invoice}
