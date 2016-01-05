@@ -10,7 +10,8 @@ from forms import InvoiceForm, PurchaseVoucherForm, CashReceiptForm
 from users.models import group_required
 from voucher.models import Invoice, PurchaseVoucher, InvoiceParticular, PurchaseParticular, JournalVoucher, \
     JournalVoucherRow, CashReceipt, CashReceiptRow, CashPayment, CashPaymentRow, FixedAsset, FixedAssetRow, AdditionalDetail
-from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, JournalVoucherSerializer, CashReceiptSerializer, CashPaymentSerializer, FixedAssetSerializer
+from voucher.serializers import InvoiceSerializer, PurchaseVoucherSerializer, JournalVoucherSerializer, CashReceiptSerializer, \
+    CashPaymentSerializer, FixedAssetSerializer
 from acubor.lib import invalid, save_model, all_empty_in_dict
 from ledger.models import delete_rows, Account, set_transactions, Party, Category
 from voucher.filters import InvoiceFilter, PurchaseVoucherFilter
@@ -40,7 +41,7 @@ def invoice(request, id=None):
         voucher_setting = VoucherSetting.objects.get(company=request.company)
         company_setting = CompanySetting.objects.get(company=request.company)
     except CompanySetting.DoesNotExist:
-        #TODO Add a flash message
+        # TODO Add a flash message
         return redirect('/settings/company')
     if id:
         invoice = get_object_or_404(Invoice, id=id, company=request.company)
@@ -49,7 +50,7 @@ def invoice(request, id=None):
         invoice = Invoice(date=date.today(),
                           currency=company_setting.default_currency,
                           company=request.company
-        )
+                          )
         scenario = 'Create'
     form = InvoiceForm(data=request.POST, instance=invoice, company=request.company)
     invoice_data = InvoiceSerializer(invoice).data
@@ -125,12 +126,12 @@ def approve_invoice(request):
     else:
         dct['error_message'] = 'Voucher needs to be saved before being approved!'
         return HttpResponse(json.dumps(dct), mimetype="application/json")
-        #cash_account = Account.objects.get(name='Cash Account', company=request.company)
+        # cash_account = Account.objects.get(name='Cash Account', company=request.company)
     sales_tax_account = Account.objects.get(name='Sales Tax', company=request.company)
     for row in voucher.particulars.all():
-        #print row
+        # print row
         ##sales-cr;tax-cr;cash-dr
-        #TODO reduce db query by sending tax rate from client
+        # TODO reduce db query by sending tax rate from client
         tax_percent = row.tax_scheme.percent
         wo_discount = row.quantity * row.unit_price
         amt = wo_discount - ((row.discount * wo_discount) / 100)
@@ -148,7 +149,7 @@ def approve_invoice(request):
                          ['dr', voucher.party.customer_account, amt],
                          ['cr', sales_account, net_amount],
                          ['cr', sales_tax_account, tax_amount],
-        )
+                         )
     voucher.status = 'Approved'
     voucher.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
@@ -179,14 +180,14 @@ def approve_purchase(request):
         set_transactions(row, voucher.date,
                          ['dr', voucher.party.supplier_account, amt],
                          ['cr', row.item.purchase_account, amt],
-        )
+                         )
     voucher.status = 'Approved'
     voucher.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
-#@login_required
-#def cancel_purchase(request):
+# @login_required
+# def cancel_purchase(request):
 #    params = json.loads(request.body)
 #    if params.get('id'):
 #        id = params.get('id')
@@ -207,7 +208,7 @@ def delete_invoice(request, voucher_no):
     obj = Invoice.objects.get(voucher_no=voucher_no, company=request.company)
     obj.delete()
     return redirect(reverse('all_invoices'))
-    #return redirect('/voucher/invoices/')
+    # return redirect('/voucher/invoices/')
 
 
 @login_required
@@ -360,11 +361,11 @@ def approve_journal_voucher(request):
         if row.type == 'Dr':
             set_transactions(row, voucher.date,
                              ['dr', row.account, row.dr_amount],
-            )
+                             )
         else:
             set_transactions(row, voucher.date,
                              ['cr', row.account, row.cr_amount],
-            )
+                             )
         dct['rows'].append(row.id)
     voucher.status = 'Approved'
     voucher.save()
@@ -633,12 +634,12 @@ def approve_cash_receipt(request):
                          ['dr', cash_account, total_receipt],
                          ['dr', discount_expenses_account, total_discount],
                          ['cr', voucher.party.customer_account, total]
-        )
+                         )
     else:
         set_transactions(voucher, voucher.receipt_on,
                          ['dr', cash_account, voucher.amount],
                          ['cr', voucher.party.customer_account, voucher.amount]
-        )
+                         )
     return HttpResponse(json.dumps(dct), mimetype="application/json")
 
 
@@ -661,12 +662,12 @@ def approve_cash_payment(request):
                          ['dr', voucher.party.supplier_account, total],
                          ['cr', discount_income_account, total_discount],
                          ['cr', cash_account, total_payment]
-        )
+                         )
     else:
         set_transactions(voucher, voucher.payment_on,
                          ['dr', cash_account, voucher.amount],
                          ['cr', voucher.party.supplier_account, voucher.amount]
-        )
+                         )
     voucher.status = 'Approved'
     voucher.save()
     return HttpResponse(json.dumps(dct), mimetype="application/json")
@@ -675,7 +676,7 @@ def approve_cash_payment(request):
 @login_required
 def list_fixed_assets(request):
     objs = FixedAsset.objects.filter(company=request.company)
-    #filtered_items = InvoiceFilter(request.GET, queryset=objs, company=request.company)
+    # filtered_items = InvoiceFilter(request.GET, queryset=objs, company=request.company)
     return render(request, 'list_fixed_assets.html', {'objects': objs})
 
 
