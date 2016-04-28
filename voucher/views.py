@@ -147,7 +147,7 @@ def approve_invoice(request):
         sales_account = row.item.sales_account
         set_transactions(row, voucher.date,
                          ['dr', voucher.party.customer_account, amt],
-                         ['cr', sales_account, net_amount],
+                               ['cr', sales_account, net_amount],
                          ['cr', sales_tax_account, tax_amount],
                          )
     voucher.status = 'Approved'

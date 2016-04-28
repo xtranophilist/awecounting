@@ -159,10 +159,10 @@
             {% if scenario == 'Update' %}
                 <a class="btn btn-danger" href="{% url 'delete_purchase_voucher' form.instance.id %}">Delete</a>
             {% endif %}
-            {% ifusergroup 'Owner' 'SuperOwner' 'Supervisor' %}
+            
                 <input class="btn" type="submit" value="Approve"
                        data-bind="click: $root.approve, visible: $root.id() && $root.status() == 'Unapproved'">
-            {% endifusergroup %}
+            
             <input class="btn" type="submit" value="Cancel" name="action"
                    data-bind="visible: $root.status() != 'Cancelled'">
         </div>

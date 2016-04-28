@@ -40,7 +40,7 @@ class Account(models.Model):
     opening_cr = models.FloatField(default=0)
 
     class Meta:
-        unique_together = (('company', 'name'), )
+        unique_together = (('company', 'name'),)
 
     def get_absolute_url(self):
         return '/ledger/' + str(self.id)
@@ -103,7 +103,7 @@ class Account(models.Model):
     categories = property(get_all_categories)
 
     def get_cr_amount(self, day):
-        #journal_entry= JournalEntry.objects.filter(date__lt=day,transactions__account=self).order_by('-id','-date')[:1]
+        # journal_entry= JournalEntry.objects.filter(date__lt=day,transactions__account=self).order_by('-id','-date')[:1]
         transactions = Transaction.objects.filter(journal_entry__date__lt=day, account=self).order_by(
             '-journal_entry__id', '-journal_entry__date')[:1]
         if len(transactions) > 0:
@@ -111,7 +111,7 @@ class Account(models.Model):
         return 0
 
     def get_dr_amount(self, day):
-        #journal_entry= JournalEntry.objects.filter(date__lt=day,transactions__account=self).order_by('-id','-date')[:1]
+        # journal_entry= JournalEntry.objects.filter(date__lt=day,transactions__account=self).order_by('-id','-date')[:1]
         transactions = Transaction.objects.filter(journal_entry__date__lt=day, account=self).order_by(
             '-journal_entry__id', '-journal_entry__date')[:1]
         if len(transactions) > 0:
@@ -233,8 +233,8 @@ class Party(models.Model):
     phone_no = models.CharField(max_length=20, null=True, blank=True)
     email = models.EmailField(max_length=254, null=True, blank=True)
     fax = models.CharField(max_length=20, null=True, blank=True)
-    #debtor_choices = [(1, 'Good'), (2, 'Bad'), (3, 'Ugly')]
-    #debtor_level = models.IntegerField(choices=debtor_choices, default=1, null=True, blank=True)
+    # debtor_choices = [(1, 'Good'), (2, 'Bad'), (3, 'Ugly')]
+    # debtor_level = models.IntegerField(choices=debtor_choices, default=1, null=True, blank=True)
     types = [('Customer', 'Customer'), ('Supplier', 'Supplier'), ('Customer/Supplier', 'Customer/Supplier')]
     type = models.CharField(choices=types, max_length=17, default='Customer')
     company = models.ForeignKey(Company)
@@ -358,7 +358,7 @@ def set_transactions(submodel, date, *args):
             transaction.account.current_cr = none_for_zero(
                 zero_for_none(transaction.account.current_cr) + cr_difference)
 
-        #the following code lies outside if,else block, inside for loop
+        # the following code lies outside if,else block, inside for loop
         transaction.account.save()
         journal_entry.transactions.add(transaction)
 
